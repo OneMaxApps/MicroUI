@@ -2,6 +2,7 @@ package microUI.layouts;
 
 import static processing.core.PApplet.ceil;
 import static processing.core.PApplet.map;
+import static processing.core.PApplet.min;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public class GridLayout extends Layout {
 	  private int rows,columns;
 	  private ArrayList<BaseForm> elementList;
 	  private ArrayList<Integer> elementRowList,elementColumnList;
+	  private ArrayList<Float> elementDefaultWidth,elementDefaultHeight;
 	  
 	  public GridLayout(PApplet app, int cells) {
 		  this(app,0,0,app.width,app.height,cells,cells);
@@ -37,6 +39,9 @@ public class GridLayout extends Layout {
 	    elementList = new ArrayList<BaseForm>();
 	    elementRowList = new ArrayList<Integer>();
 	    elementColumnList = new ArrayList<Integer>();
+	    elementDefaultWidth = new ArrayList<Float>();
+	    elementDefaultHeight = new ArrayList<Float>();
+	    
 	  }
 	  
 	  @Override
@@ -82,10 +87,11 @@ public class GridLayout extends Layout {
 	  
 	  public GridLayout add(BaseForm baseForm, int row, int column) {
 		  if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
-		    baseForm.setPosition(
+		    
+		  baseForm.setPosition(
 		    		map(row,0,this.rows,x,x+w)+((getW()/getRows())/2)-baseForm.getW()/2,
 		    		map(column,0,this.columns,y,y+h)+((getH()/getColumns())/2)-baseForm.getH()/2
-		    );
+		  );
 		    
 		    
 		    if(baseForm instanceof CircleSeekBar) {
@@ -163,6 +169,8 @@ public class GridLayout extends Layout {
 		    	elementList.add(baseForm);
 		    	elementRowList.add(row);
 				elementColumnList.add(column);
+				elementDefaultWidth.add(baseForm.getW());
+				elementDefaultHeight.add(baseForm.getH());
 		    }
 	  }
 	  
@@ -184,11 +192,11 @@ public class GridLayout extends Layout {
 			        
 			      } else {
 			    	  if(getRows() >= getColumns()) {
-			    		  if(baseForm.getW() > getW()/getRows() || baseForm.getW() < getW()/getRows()/2) { baseForm.setSize(getW()/getRows(),getW()/getRows()); }
-			    		  if(baseForm.getH() > getH()/getColumns() || baseForm.getH() < getH()/getColumns()/2) { baseForm.setSize(getW()/getRows(),getW()/getRows()); }
+			    		  if(baseForm.getW() > getW()/getRows() || baseForm.getW() < getW()/getRows()/2 ||
+			    		     baseForm.getH() > getH()/getColumns() || baseForm.getH() < getH()/getColumns()/2) { baseForm.setSize(getW()/getRows(),getW()/getRows()); }
 			    	  } else {
-			    		  if(baseForm.getW() > getW()/getRows() || baseForm.getW() < getW()/getRows()/2) { baseForm.setSize(getH()/getColumns(),getH()/getColumns()); }
-			    		  if(baseForm.getH() > getH()/getColumns() || baseForm.getH() < getH()/getColumns()/2) { baseForm.setSize(getH()/getColumns(),getH()/getColumns()); }
+			    		  if(baseForm.getW() > getW()/getRows() || baseForm.getW() < getW()/getRows()/2 ||
+			    		     baseForm.getH() > getH()/getColumns() || baseForm.getH() < getH()/getColumns()/2) { baseForm.setSize(getH()/getColumns(),getH()/getColumns()); }
 			    	  }
 			      }
 			    }
@@ -197,8 +205,7 @@ public class GridLayout extends Layout {
 			      if(isFillTheGrid()) {
 			        baseForm.setSize(w/getRows(),h/getColumns());
 			      } else {
-			        if(baseForm.getW() > getW()/getRows() || baseForm.getW() < getW()/getRows()/2) { baseForm.setW(getW()/getRows()); }
-			        if(baseForm.getH() > getH()/getColumns() || baseForm.getH() < getH()/getColumns()/2) { baseForm.setH(getH()/getColumns()); }
+			        baseForm.setSize(min(elementDefaultWidth.get(index),w/getRows()), min(elementDefaultHeight.get(index),h/getColumns()));
 			      }
 			    }
 		    }
@@ -211,6 +218,8 @@ public class GridLayout extends Layout {
 		    		elementRowList.remove(i);
 					elementColumnList.remove(i);
 		    		elementList.remove(i);
+		    		elementDefaultWidth.remove(i);
+					elementDefaultHeight.remove(i);
 		    	}
 		    }
 	  }
@@ -221,6 +230,8 @@ public class GridLayout extends Layout {
 		  elementList.remove(index);
 		  elementRowList.remove(index);
 		  elementColumnList.remove(index);
+		  elementDefaultWidth.remove(index);
+		  elementDefaultHeight.remove(index);
 	  }
 	  
 	  public ArrayList<BaseForm> getElementList() { return elementList; }

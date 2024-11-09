@@ -56,10 +56,11 @@ public class EdgeLayout extends Layout {
 		}
 	}
 	
-	public void set(BaseForm form) {
+	public EdgeLayout set(BaseForm form) {
 		this.form = form;
 		defaultWidthOfElement = form.getW();
 		defaultHeightOfElement = form.getH();
+		return this;
 	}
 
 	public boolean isLeft() {
