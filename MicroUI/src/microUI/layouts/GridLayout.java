@@ -15,9 +15,14 @@ import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public class GridLayout extends Layout {
+	  private boolean fillTheGrid;
 	  private int rows,columns;
 	  private ArrayList<BaseForm> elementList;
 	  private ArrayList<Integer> elementRowList,elementColumnList;
+	  
+	  public GridLayout(PApplet app, int cells) {
+		  this(app,0,0,app.width,app.height,cells,cells);
+	  }
 	  
 	  public GridLayout(PApplet app, int rows, int columns) {
 		  this(app,0,0,app.width,app.height,rows,columns);
@@ -240,4 +245,29 @@ public class GridLayout extends Layout {
 		  }
 	  }
 	  
+	  public boolean isFillTheGrid() {
+			return fillTheGrid;
+	  }
+
+	  public void setFillTheGrid(boolean f) {
+			fillTheGrid = f;
+	  }
+	  
+	  public void setVisibleTotal(boolean visible) {
+		  setVisible(visible);
+		  for(BaseForm form : elementList) {
+			  if(form instanceof Layout) {
+				  ((Layout) (form)).setVisible(visible);
+			  }
+			  
+			  
+			  if(form instanceof GridLayout) {
+				  for(BaseForm formInner : ((GridLayout) (form)).getElementList()) {
+					  if(formInner instanceof GridLayout)
+					  ((GridLayout) (formInner)).setVisible(visible);
+				  }
+			  }
+			  
+		  }
+	  }
 } 

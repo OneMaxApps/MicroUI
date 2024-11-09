@@ -5,7 +5,7 @@ import microUI.utils.Color;
 import processing.core.PApplet;
 
 public abstract class Layout extends BaseForm {
-	private boolean isVisible, isElementsResizable, fillTheGrid;
+	private boolean isVisible, isElementsResizable;
 	protected PApplet applet;
 	public Color fill;
 	public Margin margin;
@@ -34,14 +34,6 @@ public abstract class Layout extends BaseForm {
 
 	public void setElementsResizable(boolean r) {
 		isElementsResizable = r;
-	}
-
-	public boolean isFillTheGrid() {
-		return fillTheGrid;
-	}
-
-	public void setFillTheGrid(boolean f) {
-		fillTheGrid = f;
 	}
 
 	public boolean isVisible() {
