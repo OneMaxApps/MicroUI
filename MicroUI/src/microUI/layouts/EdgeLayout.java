@@ -25,7 +25,7 @@ public class EdgeLayout extends Layout {
 		
 		if(form != null) {
 			updateSize();
-			updatePosition();
+			updatePosition();	
 			form.draw();
 		}
 	}

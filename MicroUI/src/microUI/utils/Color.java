@@ -30,19 +30,19 @@ public class Color {
 		this.hex = hex;
 	}
 
-	public int r() {
+	public int getRed() {
 		return (int) app.red(hex);
 	}
 
-	public int g() {
+	public int getGreen() {
 		return (int) app.green(hex);
 	}
 
-	public int b() {
+	public int getBlue() {
 		return (int) app.blue(hex);
 	}
 
-	public int a() {
+	public int getAlpha() {
 		return (int) app.alpha(hex);
 	}
 

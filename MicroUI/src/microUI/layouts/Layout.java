@@ -22,6 +22,8 @@ public abstract class Layout extends BaseForm {
 	public void draw() {
 		if (isVisible()) {
 			applet.pushStyle();
+			applet.stroke(0);
+			applet.strokeWeight(1);
 			applet.fill(fill.get());
 			applet.rect(getX(), getY(), getW(), getH());
 			applet.popStyle();

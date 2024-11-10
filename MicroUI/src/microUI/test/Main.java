@@ -1,15 +1,12 @@
 package microUI.test;
 
 import microUI.Button;
-import microUI.Scroll;
-import microUI.Slider;
-import microUI.layouts.EdgeLayout;
-import microUI.layouts.GridLayout;
+import microUI.utils.FX;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
-	public GridLayout grid;
-	
+	Button button;
+	FX fx;
 	public static void main(String[] args) {
 		PApplet.main("microUI.test.Main");
 	}
@@ -17,20 +14,15 @@ public class Main extends PApplet {
 	public void settings() { size(400,400); }
 	
 	public void setup() {
-		grid = new GridLayout(this,3);
-		
+		button = new Button(this);
+		fx = new FX(this);
+		fx.add(button);
 	}
-	
 	public void draw() {
 		background(128);
-		grid.draw();
-		if(mouseButton == LEFT) {
-			grid.setSize(mouseX, mouseY);
-		}
-		
-		if(mouseButton == RIGHT) {
-			grid.setPosition(mouseX, mouseY);
-		}
+		fx.init();
+		button.draw();
+	
 	}
 	
 }

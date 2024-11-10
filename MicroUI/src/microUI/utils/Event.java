@@ -17,11 +17,9 @@ public class Event {
 	    y = form.getY();
 	    w = form.getW();
 	    h = form.getH();
-	    if(!pressed()) {
-	        if(wasPressed != 0) { wasPressed = 0; }
-	      }
 	      
 	    if(moving && !app.mousePressed) { moving = false; }
+	    if(pressed()) { wasPressed = 1; }
 	  }
 	  
 	  public boolean inside() { return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; }
@@ -29,8 +27,11 @@ public class Event {
 	  public boolean pressed() {  return inside() && app.mousePressed; }
 	  public boolean moving() { if(pressed()) { return moving = true; } else { return moving; } }
 	  public boolean clicked() {
-	    if(pressed()) { wasPressed = 1; }
-	    return inside() && !pressed() && wasPressed == 1;
+	    if(inside() & !pressed() & wasPressed == 1) {
+	    	wasPressed = 0;
+	    	return true;
+	    }
+	    return false;
 	  }
 	  
 	}
