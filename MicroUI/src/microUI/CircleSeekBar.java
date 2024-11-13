@@ -91,7 +91,7 @@ public class CircleSeekBar extends Rectangle {
 		}
 	}
 	
-	private class Circle {
+	public class Circle {
 		public Color fill;
 		public Arrow arrow;
 		
