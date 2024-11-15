@@ -1,28 +1,31 @@
 package microUI.test;
 
-import microUI.Spinner;
+import microUI.Button;
+import microUI.layouts.ColumnLayout;
 import microUI.layouts.GridLayout;
+import microUI.layouts.RowLayout;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
 	
 	GridLayout grid;
-	Spinner spinner;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.test.Main");
 	}
 	
-	public void settings() { size(400,400); }
+	public void settings() { size(600,400); }
 	
 	public void setup() {
-		grid = new GridLayout(this,3,9);
-		grid.add(new Spinner(this,"Spinner").add("One","Two","Three"), 2,1);
+		grid = new GridLayout(this,3,1);
+		grid.add(new ColumnLayout(this).add(new Button(this), .1f).add(new RowLayout(this).add(new Button(this), .5f), .9f), 0, 0);
+		grid.setVisibleTotal(false);
 	}
 	
 	public void draw() {
 		background(234);
 		grid.draw();
+		if(mouseButton == RIGHT) { grid.setSize(mouseX, mouseY); }
 	}
 	
 }
