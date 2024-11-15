@@ -23,8 +23,8 @@ public class CircleSeekBar extends Rectangle {
 	
 	public CircleSeekBar(PApplet app, float x, float y, float size) {
 		super(app,x,y,size,size);
-		fill.set(app.color(255,0));
-		stroke.fill.set(app.color(255,0));
+		fill.setHEX(app.color(255,0));
+		stroke.fill.setHEX(app.color(255,0));
 		shadowDestroy();
 		setBasicFX(false);
 		circle = new Circle();
@@ -50,7 +50,7 @@ public class CircleSeekBar extends Rectangle {
 		super.draw();
 		circle.draw();
 		if(title.isVisible()) {
-			if(event.inside() || event.moving()) {
+			if(event.inside() || event.moved()) {
 				app.fill(title.fill.get());
 				app.textSize(title.getTextSize());
 				app.textAlign(CENTER,CENTER);
@@ -120,7 +120,7 @@ public class CircleSeekBar extends Rectangle {
 			
 			
 			
-			if(event.moving()) { value.append(app.pmouseY-app.mouseY); }
+			if(event.moved()) { value.append(app.pmouseY-app.mouseY); }
 		}
 		
 		public class Arrow {

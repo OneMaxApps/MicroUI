@@ -14,7 +14,7 @@ public abstract class Layout extends BaseForm {
 		super(x, y, w, h);
 		this.applet = app;
 		fill = new Color(app);
-		fill.set(app.color(0, 32));
+		fill.setHEX(app.color(0, 32));
 		margin = new Margin();
 		setVisible(true);
 	}

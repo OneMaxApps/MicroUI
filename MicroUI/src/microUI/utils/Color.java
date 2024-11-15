@@ -19,15 +19,35 @@ public class Color {
 
 	public Color(PApplet app, Color c) {
 		this.app = app;
-		set(c.get());
+		set(c);
 	}
 
 	public int get() {
 		return hex;
 	}
-
-	public void set(int hex) {
+	
+	public void set(Color c) {
+		this.hex = c.get();
+	}
+	
+	public void setHEX(int hex) {
 		this.hex = hex;
+	}
+	
+	public void set(float gray) {
+		hex = app.color(gray);
+	}
+	
+	public void set(float gray, float alpha) {
+		hex = app.color(gray, alpha);
+	}
+	
+	public void set(float red, float green, float blue) {
+		hex = app.color(red,green,blue);
+	}
+	
+	public void set(float red, float green, float blue, float alpha) {
+		hex = app.color(red,green,blue,alpha);
 	}
 
 	public int getRed() {

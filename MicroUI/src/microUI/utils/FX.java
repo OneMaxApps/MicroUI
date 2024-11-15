@@ -13,15 +13,18 @@ import processing.core.PApplet;
 
 public class FX {
 	private PApplet app;
-	private int duration;
+
+	private final int EVENTS_COUNT = 5;
+	
+	private int duration, eventType;
+	private boolean basicFX,changedTypeOfEvent;
+	private ArrayList<Rectangle> elementList;
+	private ArrayList<Integer> posList;
 	public Buttons buttons;
 	public CheckBoxs checkBoxs;
 	public CircleSeekBars circleSeekBars;
 	public Scrolls scrolls;
 	public Sliders sliders;
-	private boolean basicFX;
-	private ArrayList<Rectangle> elementList;
-	private ArrayList<Integer> posList;
 	
 	public FX(PApplet app) {
 		this.app = app;
@@ -39,11 +42,18 @@ public class FX {
 	public void init() {
 		for(int i = 0; i < elementList.size(); i++) {
 			
-		if(elementList.get(i).event.moving()) {
-			if(posList.get(i) != duration) { posList.set(i,posList.get(i)+1); }
+		if(!changedTypeOfEvent) {
+			initEvent(i,elementList.get(i).event.moved());
 		} else {
-			if(posList.get(i) != 0) { posList.set(i,posList.get(i)-1); }
+			switch(eventType) {
+			case Event.PRESSED : initEvent(i,elementList.get(i).event.pressed()); break;
+			case Event.CLICKED : initEvent(i,elementList.get(i).event.clicked()); break;
+			case Event.MOVED : initEvent(i,elementList.get(i).event.moved()); break;
+			case Event.INSIDE : initEvent(i,elementList.get(i).event.inside()); break;
+			case Event.OUTSIDE : initEvent(i,elementList.get(i).event.outside()); break;
 			}
+			
+		}
 		
 		elementList.get(i).setBasicFX(basicFX);
 			app.pushStyle();
@@ -61,7 +71,7 @@ public class FX {
 			app.pushStyle();
 			if(elementList.get(i) instanceof CircleSeekBar) {
 				convertingRectangle(i, elementList.get(i), circleSeekBars.before, circleSeekBars.after);
-				((CircleSeekBar) (elementList.get(i))).circle.fill.set(convertingColor(i,circleSeekBars.before.circle.fill,circleSeekBars.after.circle.fill));
+				((CircleSeekBar) (elementList.get(i))).circle.fill.setHEX(convertingColor(i,circleSeekBars.before.circle.fill,circleSeekBars.after.circle.fill));
 			}
 			app.popStyle();
 			
@@ -83,6 +93,20 @@ public class FX {
 			}
 			app.popStyle();
 	 }
+	}
+	
+	public void setEventType(int eventType) {
+		if(eventType < 0 || eventType > EVENTS_COUNT) { return; }
+		this.eventType = eventType;
+		changedTypeOfEvent = true;
+	}
+	
+	private void initEvent(int index, boolean typeOfEvent) {
+		if(typeOfEvent) {
+			if(posList.get(index) != duration) { posList.set(index,posList.get(index)+1); }
+		} else {
+			if(posList.get(index) != 0) { posList.set(index,posList.get(index)-1); }
+			}
 	}
 	
 	public void add(Rectangle... form) {
@@ -122,19 +146,22 @@ public class FX {
 	}
 	
 	private void convertingRectangle(int index, Rectangle main, Rectangle before, Rectangle after) {
-		main.fill.set(convertingColor(index,before.fill,after.fill));
-		main.stroke.fill.set(convertingColor(index,before.stroke.fill,after.stroke.fill));
+		//main.setPosition(convertingValue(index,before.getX(),after.getX()),convertingValue(index,before.getY(),after.getY()));
+		//main.setSize(convertingValue(index,before.getW(),after.getW()),convertingValue(index,before.getH(),after.getH()));
+		
+		main.fill.setHEX(convertingColor(index,before.fill,after.fill));
+		main.stroke.fill.setHEX(convertingColor(index,before.stroke.fill,after.stroke.fill));
 		main.stroke.setWeight(convertingValue(index,before.stroke.getWeight(),buttons.after.stroke.getWeight()));		
-		main.corners.set(convertingValue(index,before.corners.get()[0],after.corners.get()[0]),
-					 	 convertingValue(index,before.corners.get()[1],after.corners.get()[1]),
-						 convertingValue(index,before.corners.get()[2],after.corners.get()[2]),
-						 convertingValue(index,before.corners.get()[3],after.corners.get()[3]));
+		main.corners.set(convertingValue(index,before.corners.get(0),after.corners.get(0)),
+					 	 convertingValue(index,before.corners.get(1),after.corners.get(1)),
+						 convertingValue(index,before.corners.get(2),after.corners.get(2)),
+						 convertingValue(index,before.corners.get(3),after.corners.get(3)));
 	
 	}
 	
 	private void convertingButton(int index, Button main, Button before, Button after) {
 		convertingRectangle(index,main,before,after);
-		main.text.fill.set(convertingColor(index,buttons.before.text.fill,buttons.after.text.fill));
+		main.text.fill.setHEX(convertingColor(index,buttons.before.text.fill,buttons.after.text.fill));
 		main.text.setTextSize(convertingValue(index,buttons.before.text.getTextSize(),buttons.after.text.getTextSize()));
 		
 	}
@@ -160,9 +187,9 @@ public class FX {
 			before = new Button(app);
 			after = new Button(app);
 			
-			after.fill.set(app.color(0,164,0));
+			after.fill.set(34);
 			after.text.setTextSize(20);
-			after.stroke.fill.set(app.color(0,64,0));
+			after.stroke.fill.setHEX(app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
 			before.corners.set(10);
@@ -179,8 +206,8 @@ public class FX {
 			before = new CheckBox(app);
 			after = new CheckBox(app);
 			
-			after.fill.set(app.color(0,164,0));
-			after.stroke.fill.set(app.color(0,64,0));
+			after.fill.setHEX(app.color(0,164,0));
+			after.stroke.fill.setHEX(app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
 			before.corners.set(10);
@@ -197,14 +224,14 @@ public class FX {
 			before = new CircleSeekBar(app);
 			after = new CircleSeekBar(app);
 			
-			after.fill.set(app.color(0,164,0));
-			after.stroke.fill.set(app.color(0,64,0));
+			after.fill.setHEX(app.color(0,164,0));
+			after.stroke.fill.setHEX(app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
 			before.corners.set(10);
 			after.corners.set(100,0,100,0);
 			
-			after.circle.fill.set(app.color(0,164,0));
+			after.circle.fill.setHEX(app.color(0,164,0));
 		}
 		
 	}
@@ -217,9 +244,9 @@ public class FX {
 			before = new Scroll(app);
 			after = new Scroll(app);
 			
-			after.fill.set(app.color(0,164,0));
-			after.button.fill.set(app.color(0,164,0));
-			after.stroke.fill.set(app.color(0,64,0));
+			after.fill.setHEX(app.color(0,164,0));
+			after.button.fill.setHEX(app.color(0,164,0));
+			after.stroke.fill.setHEX(app.color(0,64,0));
 			//after.stroke.setWeight(4);
 			
 			before.corners.set(10);
@@ -239,9 +266,9 @@ public class FX {
 			before = new Slider(app);
 			after = new Slider(app);
 			
-			after.fill.set(app.color(0,164,0));
-			after.button.fill.set(app.color(0,164,0));
-			after.stroke.fill.set(app.color(0,64,0));
+			after.fill.setHEX(app.color(0,164,0));
+			after.button.fill.setHEX(app.color(0,164,0));
+			after.stroke.fill.setHEX(app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
 			before.corners.set(10);

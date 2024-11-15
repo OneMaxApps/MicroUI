@@ -4,6 +4,13 @@ import processing.core.PApplet;
 
 public class Event {
    	  protected PApplet app;
+
+	  public static final int PRESSED = 1;
+	  public static final int CLICKED = 2;
+	  public static final int MOVED = 3;
+	  public static final int INSIDE = 4;
+	  public static final int OUTSIDE = 5;
+   	  
 	  private float x,y,w,h;
 	  private byte wasPressed;
 	  private boolean moving;
@@ -20,18 +27,21 @@ public class Event {
 	      
 	    if(moving && !app.mousePressed) { moving = false; }
 	    if(pressed()) { wasPressed = 1; }
+	    if(outside()) { wasPressed = 0; }
 	  }
 	  
 	  public boolean inside() { return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; }
 	  public boolean outside() { return !inside(); }
 	  public boolean pressed() {  return inside() && app.mousePressed; }
-	  public boolean moving() { if(pressed()) { return moving = true; } else { return moving; } }
+	  public boolean moved() { if(pressed()) { return moving = true; } else { return moving; } }
 	  public boolean clicked() {
-	    if(inside() & !pressed() & wasPressed == 1) {
+	    if(inside() && !pressed() && wasPressed == 1) {
 	    	wasPressed = 0;
+	    	action();
 	    	return true;
 	    }
 	    return false;
 	  }
 	  
+	  public void action() {}
 	}

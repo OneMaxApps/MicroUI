@@ -16,7 +16,7 @@ public class Button extends Rectangle {
 	  }
 	  public Button(PApplet app, float x, float y, float w, float h) { this(app,"",x,y,w,h); }
 	  public Button(PApplet app, String titie) { this(app,titie,0,0,app.width,app.height); }
-	  public Button(PApplet app) { this(app,"Button",app.width*.3f,app.height*.4f,app.width*.4f,app.height*.2f); }
+	  public Button(PApplet app) { this(app,"Button",app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
 	  
 	  public void draw() {
 	    super.draw();

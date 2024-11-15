@@ -1,11 +1,13 @@
 package microUI;
 
 import microUI.utils.Color;
+import microUI.utils.Event;
 import microUI.utils.Rectangle;
 import processing.core.PApplet;
 
 public class CheckBox extends Rectangle {
 	private boolean included;
+
 	public Color colorIncluded,colorNotIncluded;
 	
 	public CheckBox(PApplet app, float x, float y, float w, float h) {
@@ -22,19 +24,26 @@ public class CheckBox extends Rectangle {
 		super(app, app.width*.4f,app.height*.4f,app.width*.2f,app.height*.2f);
 		colorIncluded = new Color(app);
 		colorNotIncluded = new Color(app);
-		colorIncluded.set(app.color(0,128,0));
-		colorNotIncluded.set(app.color(64,0,0));
+		colorIncluded.set(0,128,0);
+		colorNotIncluded.set(0,34,34);
+		event = new Event(app) {
+			@Override
+			public void action() {
+				included = !included;
+			}
+		};
 	}
 	
 	
 	
 	@Override
 	public void draw() {
-		if(event.clicked()) { included = !included; }
-		if(included) { fill.set(colorIncluded.get()); } else { fill.set(colorNotIncluded.get()); }
+		if(included) { fill.set(colorIncluded); } else { fill.set(colorNotIncluded); }
 		super.draw();
 		
 	}
+	
+	
 
 	public boolean isIncluded() {
 		return included;

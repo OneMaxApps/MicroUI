@@ -48,7 +48,7 @@ public class Scroll extends Rectangle {
 	    buttonDown.draw(); if(buttonDown.event.pressed()) { appendValue(1); }
 	    button.draw();
 	    
-	    if(button.event.moving()) {
+	    if(button.event.moved()) {
 	      if(!isVerticalMode) {
 	        button.setX(constrain(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()));
 	        value = constrain(map(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);

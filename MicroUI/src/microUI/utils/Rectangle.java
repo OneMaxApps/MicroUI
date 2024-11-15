@@ -67,6 +67,7 @@ public class Rectangle extends Form {
       }
       
       public float[] get() { return corns; }
+      public float get(int index) { if(index < 0 || index > 3) { throw new IndexOutOfBoundsException("index out of corners count exception"); } return corns[index]; }
     }
     
     public class Image {

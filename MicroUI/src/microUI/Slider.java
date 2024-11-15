@@ -32,7 +32,7 @@ public class Slider extends Rectangle {
 	    button.shadow.setVisible(false);
 	    
 	    level = new Rectangle(app,x,y,button.getX()-getX(),h);
-	    level.fill.set(app.color(0,128,234,234));
+	    level.fill.setHEX(app.color(0,128,234,234));
 	    level.shadowDestroy();
 	    
 	    scrolling = new Scrolling(event);
@@ -46,7 +46,7 @@ public class Slider extends Rectangle {
 	    level.draw();
 	    button.draw();
 	    
-	    if(button.event.moving()) {
+	    if(button.event.moved()) {
 	      if(!isVerticalMode) {
 	        button.setX(constrain(app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW()));
 	        value = constrain(map(app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW(),min,max),min,max);
@@ -65,7 +65,7 @@ public class Slider extends Rectangle {
 	    }
 	    
 	    if(showText) {
-	      if(event.inside() || scrolling.isScrolling() || button.event.moving()) { button.text.set((int) value); } else { button.text.clear(); }
+	      if(event.inside() || scrolling.isScrolling() || button.event.moved()) { button.text.set((int) value); } else { button.text.clear(); }
 	    }
 	    
 	    if(isVerticalMode) {
