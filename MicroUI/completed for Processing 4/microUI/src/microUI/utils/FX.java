@@ -9,7 +9,6 @@ import microUI.CheckBox;
 import microUI.CircleSeekBar;
 import microUI.Scroll;
 import microUI.Slider;
-import microUI.Spinner;
 import processing.core.PApplet;
 
 public class FX {
@@ -18,7 +17,7 @@ public class FX {
 	private final int EVENTS_COUNT = 5;
 	
 	private int duration, eventType;
-	private boolean basicFX,changedTypeOfEvent,includedPosition,includedSize;
+	private boolean basicFX,changedTypeOfEvent;
 	private ArrayList<Rectangle> elementList;
 	private ArrayList<Integer> posList;
 	public Buttons buttons;
@@ -26,7 +25,6 @@ public class FX {
 	public CircleSeekBars circleSeekBars;
 	public Scrolls scrolls;
 	public Sliders sliders;
-	public Spinners spinners;
 	
 	public FX(PApplet app) {
 		this.app = app;
@@ -35,7 +33,6 @@ public class FX {
 		circleSeekBars = new CircleSeekBars(app);
 		scrolls = new Scrolls(app);
 		sliders = new Sliders(app);
-		spinners = new Spinners(app);
 		duration = 10;
 		basicFX = true;
 		elementList = new ArrayList<Rectangle>();
@@ -59,7 +56,6 @@ public class FX {
 		}
 		
 		elementList.get(i).setBasicFX(basicFX);
-		
 			app.pushStyle();
 			if(elementList.get(i) instanceof Button) {
 				convertingButton(i,(Button) elementList.get(i),buttons.before,buttons.after);
@@ -92,19 +88,8 @@ public class FX {
 			app.pushStyle();
 			if(elementList.get(i) instanceof Slider) {
 				convertingRectangle(i, elementList.get(i), sliders.before, sliders.after);
-				
-				convertingRectangle(i, ((Slider) (elementList.get(i))).level, sliders.before.level, sliders.after.level);
 
 				convertingButton(i, ((Slider) (elementList.get(i))).button, sliders.before.button, sliders.after.button);
-			}
-			app.popStyle();
-			
-			app.pushStyle();
-			if(elementList.get(i) instanceof Spinner) {
-				convertingRectangle(i,(Spinner) elementList.get(i),spinners.before,spinners.after);
-				((Spinner) (elementList.get(i))).text.fill.setHEX(convertingColor(i,spinners.before.text.fill,spinners.after.text.fill));
-				((Spinner) (elementList.get(i))).text.setTextSize(convertingValue(i,spinners.before.text.getTextSize(),spinners.after.text.getTextSize()));
-				
 			}
 			app.popStyle();
 	 }
@@ -126,8 +111,10 @@ public class FX {
 	
 	public void add(Rectangle... form) {
 		for(int i = 0; i < form.length; i++) {
+			if(elementList.isEmpty()) {
 			elementList.add(form[i]);
 			posList.add(0);
+			}
 		  }
 	}
 	
@@ -159,12 +146,8 @@ public class FX {
 	}
 	
 	private void convertingRectangle(int index, Rectangle main, Rectangle before, Rectangle after) {
-		if(includedPosition) {
-			main.setPosition(convertingValue(index,before.getX(),after.getX()),convertingValue(index,before.getY(),after.getY()));
-		}
-		if(includedSize) {
-			main.setSize(convertingValue(index,before.getW(),after.getW()),convertingValue(index,before.getH(),after.getH()));
-		}
+		//main.setPosition(convertingValue(index,before.getX(),after.getX()),convertingValue(index,before.getY(),after.getY()));
+		//main.setSize(convertingValue(index,before.getW(),after.getW()),convertingValue(index,before.getH(),after.getH()));
 		
 		main.fill.setHEX(convertingColor(index,before.fill,after.fill));
 		main.stroke.fill.setHEX(convertingColor(index,before.stroke.fill,after.stroke.fill));
@@ -206,12 +189,11 @@ public class FX {
 			
 			after.fill.set(34);
 			after.text.setTextSize(20);
-			after.stroke.fill.set(0,64,0);
+			after.stroke.fill.setHEX(app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
 			before.corners.set(10);
-			after.corners.set(0);
-			
+			after.corners.set(100,0,100,0);
 		}
 		
 	}
@@ -284,57 +266,19 @@ public class FX {
 			before = new Slider(app);
 			after = new Slider(app);
 			
-			before.fill.set(44);
-
-			after.fill.set(32);
-			before.level.fill.set(0,128,0);
-			after.level.fill.set(0,234,0);
-			after.button.fill.set(32);
-			after.stroke.setWeight(4);
-			
-			// before.corners.set(0);
-			
-			
-		}
-		
-	}
-
-	public class Spinners {
-		public Spinner before,after;
-
-		public Spinners(PApplet app) {
-			super();
-			before = new Spinner(app);
-			after = new Spinner(app);
-			
-			after.fill.set(34);
-			after.text.setTextSize(20);
+			after.fill.setHEX(app.color(0,164,0));
+			after.button.fill.setHEX(app.color(0,164,0));
 			after.stroke.fill.setHEX(app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
-			before.corners.set(0);
+			before.corners.set(10);
 			after.corners.set(100,0,100,0);
+			after.button.corners.set(100,0,100,0);
+			
+			after.level.corners.set(100,0,100,0);
+			after.level.corners.set(100,0,100,0);
+			
 		}
 		
-	}
-	
-	public boolean isIncludedPosition() {
-		return includedPosition;
-	}
-
-	public void setIncludedPosition(boolean includedPosition) {
-		this.includedPosition = includedPosition;
-	}
-
-	public boolean isIncludedSize() {
-		return includedSize;
-	}
-
-	public void setIncludedSize(boolean includedSize) {
-		this.includedSize = includedSize;
-	}
-	
-	public void setIncludedTransforms(boolean i) {
-		includedPosition = includedSize = i;
 	}
 }

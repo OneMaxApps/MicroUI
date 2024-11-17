@@ -2,7 +2,6 @@ package microUI.utils;
 
 public class BaseForm {
 	protected float x,y,w,h;
-	protected  boolean isVisible;
 	
 	public BaseForm(float x, float y, float w, float h) {
 		super();
@@ -64,8 +63,4 @@ public class BaseForm {
 	}
 	
 	public void draw() {}
-	
-	public void setVisible(boolean v) { isVisible = v; }
-    
-    public boolean isVisible() { return isVisible; }
 }

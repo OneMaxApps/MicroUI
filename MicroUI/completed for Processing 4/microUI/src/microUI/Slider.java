@@ -16,9 +16,6 @@ public class Slider extends Rectangle {
 	  
 	  public Slider(PApplet app) { this(app,0,0,0,0); }
 	  
-	  public Slider(PApplet app, float w, float h) { this(app,0,0,w,h); }
-
-	  
 	  public Slider(PApplet app, float min, float max, float value) {
 		this(app);
 		this.min = min;
@@ -81,26 +78,27 @@ public class Slider extends Rectangle {
 	  
 	  public void setMin(float min) {
 	    this.min = min;
-	    update();
-
+	    updateDataOfValue();
+	    buttonTransformsUpdate();
 	  }
 	  public float getMin() { return min; }
 	  
 	  public void setMax(float max) {
 	    this.max = max;
-	    update();
+	    updateDataOfValue();
+	    buttonTransformsUpdate();
 	  }
 	  public float getMax() { return max; }
 	  
 	  public void setValue(float value) {
 	    this.value = value;
-	    update();
-
+	    buttonTransformsUpdate();
+	    updateLevelTransforms();
 	  }
 	  
 	  public void appendValue(float a) {
 	    if(a < -.01f || a > .01f) {
-	      setValue(constrain(getValue() + a,min,max));
+	      setValue(constrain(getValue() - a,min,max));
 	    }
 	  }
 	  
@@ -136,12 +134,15 @@ public class Slider extends Rectangle {
 	  public void setX(float x) {
 	    super.setX(x);
 	    update();
+	    updateLevelTransforms();
+
 	  }
 	  
 	  @Override
 	  public void setY(float y) {
 	    super.setY(y);
 	    update();
+	    updateLevelTransforms();
 
 	  }
 	  
@@ -192,14 +193,14 @@ public class Slider extends Rectangle {
 	  private void updateDataOfValue() {
 	    if(button == null) { return; }
 	    if(!isVerticalMode) {
-	      value = constrain(map(button.getX(),getX(),getX()+getW()-button.getW(),min,max),min,max);
+	      value = constrain(map(app.mouseX-button.getW()/2,getX(),getX()+getW()-button.getW(),min,max),min,max);
 	    } else {
 	      value = constrain(map(app.mouseY-button.getH()/2,getY(),getY()+getH()-button.getH(),min,max),min,max);
 	    }
 	  }
 	  
 	  private void update() {
-	    setSize(getW(),getH());
+	    setSize(getH(),getW());
 	    buttonTransformsUpdate();
 	  }
 	  

@@ -12,7 +12,7 @@ public class Event {
 	  public static final int OUTSIDE = 5;
    	  
 	  private float x,y,w,h;
-	  private byte wasPressed,longPressed;
+	  private byte wasPressed;
 	  private boolean moving;
 
 	  public Event(PApplet app) {
@@ -26,28 +26,13 @@ public class Event {
 	    h = form.getH();
 	      
 	    if(moving && !app.mousePressed) { moving = false; }
-	    if(pressed()) {
-	    	wasPressed = 1;
-	    	if(app.frameCount%60 == 0) { longPressed++; }
-		     
-	    } else {
-	    	longPressed = 0;
-	     }
-	    
+	    if(pressed()) { wasPressed = 1; }
 	    if(outside()) { wasPressed = 0; }
-	    
-
-	    	
-	    
 	  }
 	  
 	  public boolean inside() { return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; }
 	  public boolean outside() { return !inside(); }
 	  public boolean pressed() {  return inside() && app.mousePressed; }
-	  public boolean longPressed(int seconds) {
-		  if(pressed() && longPressed >= seconds) { return true; }
-		  return false;
-	  }
 	  public boolean moved() { if(pressed()) { return moving = true; } else { return moving; } }
 	  public boolean clicked() {
 	    if(inside() && !pressed() && wasPressed == 1) {

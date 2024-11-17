@@ -9,6 +9,7 @@ public class Form extends BaseForm {
     public Color fill;
     public Stroke stroke;
     public Event event;
+    private boolean isVisible;
     
     public Form(PApplet app) {
       this(app,0,0,0,0);
@@ -22,6 +23,10 @@ public class Form extends BaseForm {
       stroke = new Stroke();
       event = new Event(app);
     }
+    
+    public void setVisible(boolean v) { isVisible = v; }
+    
+    public boolean isVisible() { return isVisible; }
     
 
   public class Stroke {

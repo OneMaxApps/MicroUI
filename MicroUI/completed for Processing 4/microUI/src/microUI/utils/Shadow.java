@@ -10,12 +10,12 @@ import processing.core.PApplet;
 public class Shadow {
 	  protected PApplet app;
 	  public Color fill;
-	  private BaseForm form;
+	  private Rectangle form;
 	  private int leftSize,rightSize,upSize,downSize;
 	  private byte absoluteSize;
 	  private boolean isVisible;
 	  
-	  public Shadow(PApplet app, BaseForm form) {
+	  public Shadow(PApplet app, Rectangle form) {
 		this.app = app;
 	    this.form = form;
 	    fill = new Color(app,34);
@@ -37,21 +37,14 @@ public class Shadow {
 	    	  app.stroke(fill.get(),constrain(164-i*20,0,255));
 	    	  app.noFill();
 	    	  app.rectMode(CORNERS);
-	    	  if(form instanceof BaseForm) {
-	    		  app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
+	    	  app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
 	             form.getY()-map(i,0f,absoluteSize,0f,upSize),
 	             form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),
-	             form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize));
-	    	  } else {
-	    		  app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
-	    		  form.getY()-map(i,0f,absoluteSize,0f,upSize),
-	    		  form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),
-	    		  form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize),
-	    		  ((Rectangle) (form)).corners.get()[0],
-	    		  ((Rectangle) (form)).corners.get()[1],
-	    		  ((Rectangle) (form)).corners.get()[2],
-	    		  ((Rectangle) (form)).corners.get()[3]);
-	    	  }
+	             form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize),
+	             form.corners.get()[0],
+	             form.corners.get()[1],
+	             form.corners.get()[2],
+	             form.corners.get()[3]);
 	      }
 	      app.popStyle();
 	    }

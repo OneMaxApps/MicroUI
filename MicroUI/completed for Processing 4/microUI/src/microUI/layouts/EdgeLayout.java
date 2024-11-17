@@ -1,11 +1,8 @@
 package microUI.layouts;
 
-import static processing.core.PApplet.min;
-
-import microUI.Scroll;
-import microUI.Slider;
 import microUI.utils.BaseForm;
 import processing.core.PApplet;
+import static processing.core.PApplet.min;
 
 public class EdgeLayout extends Layout {
 	private BaseForm form;
@@ -27,36 +24,35 @@ public class EdgeLayout extends Layout {
 		super.draw();
 		
 		if(form != null) {
-			updateSize(form);
-			updatePosition(form);
+			updateSize();
+			updatePosition();	
 			form.draw();
 		}
 	}
 	
-	public void updatePosition(BaseForm form) {
-		
-		if(left) { form.setX(getX()); }
-		if(up) { form.setY(getY()); }
-		if(right) { form.setX(getX()+getW()-form.getW()); }
-		if(down) { form.setY(getY()+getH()-form.getH()); }
+	public void updatePosition() {
+		if(left) { form.setX(x); }
+		if(up) { form.setY(y); }
+		if(right) { form.setX(x+w-form.getW()); }
+		if(down) { form.setY(y+h-form.getH()); }
 		
 		if(center) {
-			form.setPosition(getX()+getW()/2-form.getW()/2,getY()+getH()/2-form.getH()/2);
+			form.setPosition(x+w/2-form.getW()/2,y+h/2-form.getH()/2);
 		}
 		
 		if(centerHorizontal) {
-			form.setX(getX()+getW()/2-form.getW()/2);
+			form.setX(x+w/2-form.getW()/2);
 		}
 		
 		if(centerVertical) {
-			form.setY(getY()+getH()/2-form.getH()/2);
+			form.setY(y+h/2-form.getH()/2);
 		}
-		
 	}
 	
-	public void updateSize(BaseForm f) {
+	public void updateSize() {
 		if(isElementsResizable()) {
-			f.setSize(min(getW(),defaultWidthOfElement), min(getH(),defaultHeightOfElement));
+			form.setSize(min(w,defaultWidthOfElement), min(h,defaultHeightOfElement));
+			
 		}
 	}
 	

@@ -2,8 +2,6 @@ package microUI.layouts;
 
 import microUI.utils.BaseForm;
 import microUI.utils.Color;
-import microUI.utils.Form;
-import microUI.utils.Shadow;
 import processing.core.PApplet;
 
 public abstract class Layout extends BaseForm {
@@ -11,7 +9,6 @@ public abstract class Layout extends BaseForm {
 	protected PApplet applet;
 	public Color fill;
 	public Margin margin;
-	public Shadow shadow;
 
 	public Layout(PApplet app, float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -30,35 +27,7 @@ public abstract class Layout extends BaseForm {
 			applet.fill(fill.get());
 			applet.rect(getX(), getY(), getW(), getH());
 			applet.popStyle();
-			
-			applet.pushStyle();
-			if(shadow != null) {
-				shadow.draw();
-			}
-			applet.popStyle();
 		}
-	}
-	
-	
-
-	@Override
-	public float getX() {
-		return super.getX()+margin.getLeft();
-	}
-
-	@Override
-	public float getY() {
-		return super.getY()+margin.getUp();
-	}
-
-	@Override
-	public float getW() {
-		return super.getW()-margin.getRight();
-	}
-
-	@Override
-	public float getH() {
-		return super.getH()-margin.getDown();
 	}
 
 	public boolean isElementsResizable() {
@@ -75,12 +44,6 @@ public abstract class Layout extends BaseForm {
 
 	public void setVisible(boolean v) {
 		isVisible = v;
-	}
-	
-	public void initShadow() {
-		if(shadow == null) {
-			shadow = new Shadow(applet,this);
-		}
 	}
 
 	public class Margin {
@@ -111,19 +74,23 @@ public abstract class Layout extends BaseForm {
 		}
 
 		public void setLeft(float left) {
+			setX(getX() + left);
 			this.left = left;
 		}
 
 		public void setUp(float up) {
+			setY(getY() + up);
 			this.up = up;
 			
 		}
 
 		public void setRight(float right) {
+			setW(getW() - right);
 			this.right = right;
 		}
 
 		public void setDown(float down) {
+			setH(getH() - down);
 			this.down = down;
 		}
 

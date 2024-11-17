@@ -14,22 +14,15 @@ public class Scroll extends Rectangle {
 	  public Scrolling scrolling;
 	  private float distOfMouseToButton;
 	  
-	public Scroll(PApplet app, float w, float h) {
-		this(app,0,0,w,h);
-		setMinMax(0,1);
-		setValue(0);
-	}  
-	  
 	public Scroll(PApplet app) {
 		this(app,0,100,0);
-		setTransforms(app.width*.2f,app.height*.45f,app.width*.6f,app.height*.1f);
 	}
 
 	public Scroll(PApplet app, int min, int max, int value) {
 		this(app,0,0,0,0);
 		setMinMax(min,max);
 		setValue(value);
-	}
+	  }
 
 	public Scroll(PApplet app, float x, float y, float w, float h) {
 	    super(app,x,y,w,h);
@@ -141,11 +134,11 @@ public class Scroll extends Rectangle {
 	  
 	  public boolean isVerticalMode() { return isVerticalMode; }
 	  
-	  
 	  @Override
 	  public void setX(float x) {
 	    super.setX(x);
 	    update();
+
 	  }
 	  
 	  @Override
@@ -205,7 +198,7 @@ public class Scroll extends Rectangle {
 	  }
 	  
 	  private void update() {
-	    setSize(getW(),getH());
+	    setSize(getH(),getW());
 	    buttonsTransformsUpdate();
 	  }
 	  
