@@ -182,12 +182,20 @@ public class GridLayout extends Layout {
 	  
 	  public void updateTransforms(BaseForm baseForm, int index) {
 		  if(elementRowList.get(index) < 0 || elementRowList.get(index) > getRows()-1 || elementColumnList.get(index) < 0 || elementColumnList.get(index) > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
-		    baseForm.setPosition(
-		    		map(elementRowList.get(index),0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,
-		    		map(elementColumnList.get(index),0,this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseForm.getH()/2
-		    );
-		    
-		    if(baseForm instanceof CircleSeekBar) {		    	
+		    if(baseForm instanceof Layout) {
+		    	////////
+		    	Layout l = ((Layout) (baseForm));
+			  	l.setPosition(
+			    		map(elementRowList.get(index),0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-l.getW()/2-l.margin.getLeft(),
+			    		map(elementColumnList.get(index),0,this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-l.getH()/2-l.margin.getUp()
+			    );
+		    } else {
+		    	baseForm.setPosition(
+			    		map(elementRowList.get(index),0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,
+			    		map(elementColumnList.get(index),0,this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseForm.getH()/2
+			    );
+		    }
+		    if(baseForm instanceof CircleSeekBar) {	    	
 			    if(isElementsResizable()) {
 			      if(isFillTheGrid()) {
 			    	if(getRows() >= getColumns()) {
@@ -211,9 +219,9 @@ public class GridLayout extends Layout {
 			      if(isFillTheGrid()) {
 			        baseForm.setSize(getW()/getRows(),getH()/getColumns());
 			      } else {
-			        baseForm.setSize(min(elementDefaultWidth.get(index),getW()/getRows()), min(elementDefaultHeight.get(index),getH()/getColumns()));
-			      }
+			    	baseForm.setSize(min(elementDefaultWidth.get(index),getW()/getRows()), min(elementDefaultHeight.get(index),getH()/getColumns()));
 			    }
+			  }
 		    }
 	  }
 	  

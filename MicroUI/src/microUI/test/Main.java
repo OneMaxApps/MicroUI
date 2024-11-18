@@ -96,6 +96,10 @@ public class Main extends PApplet {
 				sl.appendValue(1);
 			}
 		}
+		
+		if(mouseButton == RIGHT) {
+			mainLayout.setSize(mouseX, mouseY);
+		}
 	}
 	
 	class Wave extends View {
@@ -119,7 +123,7 @@ public class Main extends PApplet {
 			rect(x,y,w,h);
 			
 			beginShape();
-			for(int i = 0; i < waveX.length-1; i++) {
+			for(int i = 0; i < getW(); i++) {
 				noFill();
 				stroke(0,234,0);
 				vertex(getX()+waveX[i],getY()+getH()/2+sin(frameCount*.1f+(frameCount+i)*sl.getValue()*.0002f)*getH()/2);
