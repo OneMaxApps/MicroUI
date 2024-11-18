@@ -11,6 +11,7 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.TWO_PI;
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.SQUARE;
+import static processing.core.PApplet.min;
 
 import static processing.core.PApplet.map;
 
@@ -23,8 +24,8 @@ public class CircleSeekBar extends Rectangle {
 	
 	public CircleSeekBar(PApplet app, float x, float y, float size) {
 		super(app,x,y,size,size);
-		fill.setHEX(app.color(255,0));
-		stroke.fill.setHEX(app.color(255,0));
+		fill.set(255,0);
+		stroke.fill.set(255,0);
 		shadowDestroy();
 		setBasicFX(false);
 		circle = new Circle();
@@ -84,13 +85,22 @@ public class CircleSeekBar extends Rectangle {
 	
 	@Override
 	public void setSize(float w, float h) {
-		super.setSize(w,h);
+		float size = min(w,h);
+		super.setSize(size,size);
 		if(title != null) {
-			title.setPosition(x, y+h/2-h/4);
-			title.setSize(w,h/2);
+			title.setPosition(x, y+size/2-size/4);
+			title.setSize(size,size/2);
 		}
 	}
 	
+	
+	
+	@Override
+	public void setTransforms(float x, float y, float w, float h) {
+		float size = min(w,h);
+		super.setTransforms(x, y, size,size);
+	}
+
 	public class Circle {
 		public Color fill;
 		public Arrow arrow;

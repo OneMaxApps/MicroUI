@@ -4,6 +4,7 @@ import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 
+import microUI.CircleSeekBar;
 import microUI.utils.BaseForm;
 import processing.core.PApplet;
 
@@ -27,15 +28,20 @@ public class ColumnLayout extends Layout {
 		if(!elementList.isEmpty()) {
 			for(int i = 0; i < elementList.size(); i++) {
 				BaseForm form = elementList.get(i);
-				if(i == 0) {
-				form.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
-				} else {
-					form.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
-				}
+				initTransforms(form, i);
+				
 				form.draw();
 			}
 		}
 		
+	}
+	
+	private void initTransforms(BaseForm form, int index) {
+		if(index == 0) {
+			form.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
+			} else {
+				form.setTransforms(getX(),elementList.get(index-1).getY()+elementList.get(index-1).getH(),getW(),getH()*weightList.get(index));
+			}
 	}
 	
 	public ColumnLayout add(BaseForm form, float weight) {

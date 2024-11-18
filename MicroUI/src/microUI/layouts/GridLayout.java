@@ -103,26 +103,14 @@ public class GridLayout extends Layout {
 		  );
 		    
 		    
-		    if(baseForm instanceof CircleSeekBar) {
+		  if(baseForm instanceof CircleSeekBar) {
 			    if(isElementsResizable()) {
 			      if(isFillTheGrid()) {
-			    	if(getRows() >= getColumns()) {
-			    		baseForm.setSize(getW()/getRows(),getW()/getRows());
-			    	} else {
-			    		baseForm.setSize(getH()/getColumns(),getH()/getColumns());
-			    	}
-			        
-			      } else {
-			    	  if(getRows() >= getColumns()) {
-			    		  if(baseForm.getW() > getW()/getRows() || baseForm.getW() < getW()/getRows()/2) { baseForm.setSize(getW()/getRows(),getW()/getRows()); }
-			    		  if(baseForm.getH() > getH()/getColumns() || baseForm.getH() < getH()/getColumns()/2) { baseForm.setSize(getW()/getRows(),getW()/getRows()); }
-			    	  } else {
-			    		  if(baseForm.getW() > getW()/getRows() || baseForm.getW() < getW()/getRows()/2) { baseForm.setSize(getH()/getColumns(),getH()/getColumns()); }
-			    		  if(baseForm.getH() > getH()/getColumns() || baseForm.getH() < getH()/getColumns()/2) { baseForm.setSize(getH()/getColumns(),getH()/getColumns()); }
-			    	  }
+			    	baseForm.setSize(getW()/getRows(),getH()/getColumns());
 			      }
 			    }
 		    } else {
+		 
 			    if(isElementsResizable()) {
 			      if(isFillTheGrid()) {
 			        baseForm.setSize(getW()/getRows(),getH()/getColumns());
@@ -195,23 +183,12 @@ public class GridLayout extends Layout {
 			    		map(elementColumnList.get(index),0,this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseForm.getH()/2
 			    );
 		    }
-		    if(baseForm instanceof CircleSeekBar) {	    	
+		    if(baseForm instanceof CircleSeekBar) {
 			    if(isElementsResizable()) {
 			      if(isFillTheGrid()) {
-			    	if(getRows() >= getColumns()) {
-			    		baseForm.setSize(getW()/getRows(),getW()/getRows());
-			    	} else {
-			    		baseForm.setSize(getH()/getColumns(),getH()/getColumns());
-			    	}
-			        
+			    	baseForm.setSize(getW()/getRows(),getH()/getColumns());
 			      } else {
-			    	  if(getRows() >= getColumns()) {
-			    		  if(baseForm.getW() > getW()/getRows() || baseForm.getW() < getW()/getRows()/2 ||
-			    		     baseForm.getH() > getH()/getColumns() || baseForm.getH() < getH()/getColumns()/2) { baseForm.setSize(getW()/getRows(),getW()/getRows()); }
-			    	  } else {
-			    		  if(baseForm.getW() > getW()/getRows() || baseForm.getW() < getW()/getRows()/2 ||
-			    		     baseForm.getH() > getH()/getColumns() || baseForm.getH() < getH()/getColumns()/2) { baseForm.setSize(getH()/getColumns(),getH()/getColumns()); }
-			    	  }
+			    	  baseForm.setSize(min(getW()/getRows(),elementDefaultWidth.get(index)),min(getH()/getColumns(),elementDefaultHeight.get(index)));
 			      }
 			    }
 		    } else {

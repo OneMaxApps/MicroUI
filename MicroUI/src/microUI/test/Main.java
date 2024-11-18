@@ -128,7 +128,7 @@ public class Main extends PApplet {
 				stroke(0,234,0);
 				vertex(getX()+waveX[i],getY()+getH()/2+sin(frameCount*.1f+(frameCount+i)*sl.getValue()*.0002f)*getH()/2);
 			}
-			endShape();
+			endShape(CLOSE);
 			
 			popStyle();
 			
