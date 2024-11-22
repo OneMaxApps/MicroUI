@@ -5,6 +5,7 @@ import static processing.core.PApplet.map;
 import static processing.core.PConstants.CORNERS;
 import static processing.core.PConstants.SQUARE;
 
+import microUI.layouts.Layout;
 import processing.core.PApplet;
 
 public class Shadow {
@@ -37,20 +38,19 @@ public class Shadow {
 	    	  app.stroke(fill.get(),constrain(164-i*20,0,255));
 	    	  app.noFill();
 	    	  app.rectMode(CORNERS);
-	    	  if(form instanceof BaseForm) {
-	    		  app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
-	             form.getY()-map(i,0f,absoluteSize,0f,upSize),
-	             form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),
-	             form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize));
-	    	  } else {
-	    		  app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
+	    	  if(form instanceof Layout) {
+    			  app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
 	    		  form.getY()-map(i,0f,absoluteSize,0f,upSize),
 	    		  form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),
-	    		  form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize),
-	    		  ((Rectangle) (form)).corners.get()[0],
-	    		  ((Rectangle) (form)).corners.get()[1],
-	    		  ((Rectangle) (form)).corners.get()[2],
-	    		  ((Rectangle) (form)).corners.get()[3]);
+	    		  form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize));
+    		  } else {
+		    	  if(form instanceof BaseForm) {
+		    		 app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
+		             form.getY()-map(i,0f,absoluteSize,0f,upSize),
+		             form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),
+		             form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize),leftSize,upSize,rightSize,downSize);
+		    	  } 
+	    		  
 	    	  }
 	      }
 	      app.popStyle();
