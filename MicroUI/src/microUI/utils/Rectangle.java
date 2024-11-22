@@ -32,13 +32,16 @@ public class Rectangle extends Form {
 	        stroke.get();
 	        app.fill(fill.get());
 	        app.rect(x,y,w,h,corners.corns[0],corners.corns[1],corners.corns[2],corners.corns[3]);
+    	} else {
+    		image.draw();
     	}
-        if(basicFX && event != null) {
+    	
+        if(basicFX && event != null && !image.isLoaded()) {
         	app.fill(0,event.inside() && !event.pressed() ? 34 : event.pressed() ? 128 : 0);
         	app.rect(x,y,w,h,corners.get()[0],corners.get()[1],corners.get()[2],corners.get()[3]);
         }
         
-        image.draw();
+        
       }
     }
     
@@ -73,12 +76,60 @@ public class Rectangle extends Form {
     public class Image {
       private PImage image;
       private boolean isVisible;
+      public Color tint;
+      private boolean tintUsed;
+      
+      public Image() {
+    	  
+    	  tint = new Color(app) {
+    		@Override
+    		public void set(Color c) {
+    			super.set(c);
+    			tintUsed = true;
+    		}
+    		
+    		@Override
+    		public void setHEX(int hex) {
+    			super.setHEX(hex);
+    			tintUsed = true;
+    		}
+    		
+    		@Override
+    		public void set(float gray) {
+    			super.set(gray);
+    			tintUsed = true;
+    		}
+    		
+    		@Override
+    		public void set(float gray, float alpha) {
+    			super.set(gray,alpha);
+    			tintUsed = true;
+    		}
+    		
+    		@Override
+    		public void set(float red, float green, float blue) {
+    			super.set(red,green,blue);
+    			tintUsed = true;
+    		}
+    		
+    		@Override
+    		public void set(float red, float green, float blue, float alpha) {
+    			super.set(red,green,blue,alpha);
+    			tintUsed = true;
+    		}
+    	  };
+    	  
+      }
       
       public void draw() {
     	app.pushStyle();
         if(image != null && isVisible()) {
-        	if(basicFX && event != null) {
-        		app.tint(event.inside() && !event.pressed() ? 94 : event.pressed() ? 0 : 128);
+        	if(tintUsed) {
+        		app.tint(tint.get());
+        	} else {
+	        	if(basicFX && event != null) {
+	        		app.tint(event.inside() && !event.pressed() ? 94 : event.pressed() ? 0 : 128);
+	        	}
         	}
         	app.image(image,x,y,w,h);
         }
