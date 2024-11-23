@@ -8,5 +8,17 @@ public class Main extends PApplet {
 		PApplet.main("microUI.test.Main");
 
 	}
+	
+	@Override
+	public void settings() { size(400,400); }
 
+	@Override
+	public void setup() {
+		
+	}
+	
+	@Override
+	public void draw() {
+		
+	}
 }
