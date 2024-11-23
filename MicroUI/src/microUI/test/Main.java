@@ -19,6 +19,6 @@ public class Main extends PApplet {
 	
 	@Override
 	public void draw() {
-		background(234);
+		System.out.println("inside method draw");
 	}
 }
