@@ -1,10 +1,11 @@
 package microUI;
 
+import static processing.core.PApplet.constrain;
+import static processing.core.PApplet.map;
+
 import microUI.utils.Rectangle;
 import microUI.utils.Scrolling;
 import processing.core.PApplet;
-import static processing.core.PApplet.constrain;
-import static processing.core.PApplet.map;
 
 public class Slider extends Rectangle {
 	  private float min,max,value;

@@ -1,5 +1,12 @@
 package microUI;
 
+import static processing.core.PApplet.map;
+import static processing.core.PApplet.min;
+import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.PI;
+import static processing.core.PConstants.SQUARE;
+import static processing.core.PConstants.TWO_PI;
+
 import microUI.utils.Color;
 import microUI.utils.Rectangle;
 import microUI.utils.Scrolling;
@@ -7,13 +14,6 @@ import microUI.utils.Text;
 import microUI.utils.Value;
 import processing.core.PApplet;
 import processing.core.PImage;
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.TWO_PI;
-import static processing.core.PConstants.PI;
-import static processing.core.PConstants.SQUARE;
-import static processing.core.PApplet.min;
-
-import static processing.core.PApplet.map;
 
 public class CircleSeekBar extends Rectangle {
 	public Circle circle;

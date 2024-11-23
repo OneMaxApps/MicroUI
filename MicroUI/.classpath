@@ -6,7 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="lib" path="jlayer-1.0.1.4.jar"/>
 	<classpathentry kind="lib" path="mp3spi-1.9.5.4.jar"/>
 	<classpathentry kind="lib" path="javamp3-1.0.4.jar"/>
