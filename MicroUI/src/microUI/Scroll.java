@@ -34,8 +34,11 @@ public class Scroll extends Rectangle {
 	public Scroll(PApplet app, float x, float y, float w, float h) {
 	    super(app,x,y,w,h);
 	    
+	    
+	    
 	    button = new Button(app,x,y,buttonsWeight(),h);
 	    button.shadow.setVisible(false);
+	    button.fill.set(32);
 	    
 	    scrolling = new Scrolling(event);
 	    
@@ -44,6 +47,11 @@ public class Scroll extends Rectangle {
 	    
 	    buttonUp.shadow.setVisible(false);
 	    buttonDown.shadow.setVisible(false);
+	    
+	    setBasicFX(false);
+	    button.setBasicFX(false);
+	    buttonUp.setBasicFX(false);
+	    buttonDown.setBasicFX(false);
 	    
 	    buttonsTransformsUpdate();
 	  }
@@ -65,10 +73,11 @@ public class Scroll extends Rectangle {
 	      }
 	    }
 	    
-	    if(event.inside() || scrolling.isScrolling()) {
-	      appendValue(scrolling.get());
+	    if(event != null) {
+	    	if(event.inside() || scrolling.isScrolling()) {
+	    		appendValue(scrolling.get());
+	    	}
 	    }
-	    
 	    if(isVerticalMode) {
 	      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
 	    } else {
@@ -78,6 +87,8 @@ public class Scroll extends Rectangle {
 	  
 	  
 	  public void setMin(float min) {
+		if(min > max) { return; }
+		if(min > value) { value = min; }
 	    this.min = min;
 	    updateDataOfValue();
 	    buttonsTransformsUpdate();
@@ -85,13 +96,15 @@ public class Scroll extends Rectangle {
 	  public float getMin() { return min; }
 	  
 	  public void setMax(float max) {
-	    this.max = max;
+	    if(value > max) { value = max; }
+		this.max = max;
 	    updateDataOfValue();
 	    buttonsTransformsUpdate();
 	  }
 	  public float getMax() { return max; }
 	  
 	  public void setValue(float value) {
+		if(value < min || value > max) { return; }
 	    this.value = value;
 	    buttonsTransformsUpdate();
 	  }

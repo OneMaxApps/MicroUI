@@ -14,7 +14,7 @@ public class Slider extends Rectangle {
 	  public Scrolling scrolling;
 	  private float distOfMouseToButton;
 	  
-	  public Slider(PApplet app) { this(app,0,0,0,0); }
+	  public Slider(PApplet app) { this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
 	  
 	  public Slider(PApplet app, float w, float h) { this(app,0,0,w,h); }
 
@@ -33,10 +33,14 @@ public class Slider extends Rectangle {
 	    
 	    button = new Button(app,x,y,buttonsWeight(),h);
 	    button.shadow.setVisible(false);
+	    button.setBasicFX(false);
+	    button.fill.set(32);
+	    setBasicFX(false);
 	    
 	    level = new Rectangle(app,x,y,button.getX()-getX(),h);
 	    level.fill.setHEX(app.color(0,128,234,234));
 	    level.shadowDestroy();
+	    level.eventDestroy();
 	    
 	    scrolling = new Scrolling(event);
 	    
@@ -63,12 +67,15 @@ public class Slider extends Rectangle {
 	      }
 	    }
 	    
-	    if(event.inside() || scrolling.isScrolling()) {
-	      appendValue(scrolling.get());
-	    }
+	    if(event != null) {
+		    if(event.inside() || scrolling.isScrolling()) {
+		      appendValue(scrolling.get());
+		    }
 	    
 	    if(showText) {
 	      if(event.inside() || scrolling.isScrolling() || button.event.moved()) { button.text.set((int) value); } else { button.text.clear(); }
+	    }
+	    
 	    }
 	    
 	    if(isVerticalMode) {
@@ -80,6 +87,8 @@ public class Slider extends Rectangle {
 	  
 	  
 	  public void setMin(float min) {
+		if(min > max) { return; }
+		if(value < min) { value = min; }
 	    this.min = min;
 	    update();
 
@@ -88,12 +97,14 @@ public class Slider extends Rectangle {
 	  
 	  public void setMax(float max) {
 	    this.max = max;
+	    if(value > max) { value = max; }
 	    update();
 	  }
 	  public float getMax() { return max; }
 	  
 	  public void setValue(float value) {
-	    this.value = value;
+	    if(value < min || value > max) { return; }
+		this.value = value;
 	    update();
 
 	  }
@@ -107,8 +118,12 @@ public class Slider extends Rectangle {
 	  public float getValue() { return value; }
 	  
 	  public void setMinMax(float min, float max) {
-	    setMin(min);
-	    setMax(max);
+	    this.min = min;
+	    this.max = max;
+	    if(value < min) { value = min; }
+	    if(value > max) { value = max; }
+	    
+	    update();
 	    if(min > max) { System.out.println("min value not must be more than max value"); }
 	  }
 	  
@@ -186,15 +201,6 @@ public class Slider extends Rectangle {
 	    } else {
 	      level.setPosition(getX(),button.getY());
 	      level.setSize(button.getX()-getX(),getH());
-	    }
-	  }
-	  
-	  private void updateDataOfValue() {
-	    if(button == null) { return; }
-	    if(!isVerticalMode) {
-	      value = constrain(map(button.getX(),getX(),getX()+getW()-button.getW(),min,max),min,max);
-	    } else {
-	      value = constrain(map(app.mouseY-button.getH()/2,getY(),getY()+getH()-button.getH(),min,max),min,max);
 	    }
 	  }
 	  
