@@ -5,26 +5,24 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 
 public class Spinner extends Button {
-	private PApplet app;
 	private boolean open,showSelectedItem;
 	private ArrayList<Button> itemList;
 	private int select;
 	private float listHeight;
 
-	public Spinner(PApplet app, String title, float x, float y, float w, float h) {
-		super(app,title,x,y,w,h);
-		this.app = app;
+	public Spinner(String title, float x, float y, float w, float h) {
+		super(title,x,y,w,h);
 		corners.set(0);
 		shadowDestroy();
 		itemList = new ArrayList<Button>();
 	}
 	
-	public Spinner(PApplet app, String title) {
-		this(app,title,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
+	public Spinner(String title) {
+		this(title,MicroUI.app.width*.3f,MicroUI.app.height*.45f,MicroUI.app.width*.4f,MicroUI.app.height*.1f);
 	}
 	
-	public Spinner(PApplet app) {
-		this(app,"Spinner",app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
+	public Spinner() {
+		this("Spinner",MicroUI.app.width*.3f,MicroUI.app.height*.45f,MicroUI.app.width*.4f,MicroUI.app.height*.1f);
 	}
 	
 	public void draw() {
@@ -81,7 +79,17 @@ public class Spinner extends Button {
 	
 	public Spinner add(String... title) {
 		for(int i = 0; i < title.length; i++) {
-			itemList.add(new Button(app,title[i],getX(),getY()+getH()+listHeight,getW(),getH()));
+			itemList.add(new Button(title[i],getX(),getY()+getH()+listHeight,getW(),getH()));
+			listHeight += getH();
+			itemList.get(i).shadowDestroy();
+		}
+		
+		return this;
+	}
+	
+	public Spinner add(int... nums) {
+		for(int i = 0; i < nums.length; i++) {
+			itemList.add(new Button(String.valueOf(nums[i]),getX(),getY()+getH()+listHeight,getW(),getH()));
 			listHeight += getH();
 			itemList.get(i).shadowDestroy();
 		}

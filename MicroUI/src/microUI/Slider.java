@@ -15,24 +15,24 @@ public class Slider extends Rectangle {
 	  public Scrolling scrolling;
 	  private float distOfMouseToButton;
 	  
-	  public Slider(PApplet app) { this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
+	  public Slider() { this(MicroUI.app.width*.3f,MicroUI.app.height*.45f,MicroUI.app.width*.4f,MicroUI.app.height*.1f); }
 	  
-	  public Slider(PApplet app, float w, float h) { this(app,0,0,w,h); }
+	  public Slider(float w, float h) { this(0,0,w,h); }
 
 	  
-	  public Slider(PApplet app, float min, float max, float value) {
-		this(app);
+	  public Slider(float min, float max, float value) {
+		this(MicroUI.app.width*.3f,MicroUI.app.height*.45f,MicroUI.app.width*.4f,MicroUI.app.height*.1f);
 		this.min = min;
 		this.max = max;
 		this.value = value;
 	  }
 	  
-	  public Slider(PApplet app, float x, float y, float w, float h) {
-	    super(app,x,y,w,h);
+	  public Slider(float x, float y, float w, float h) {
+	    super(MicroUI.app,x,y,w,h);
 
 	    setMinMax(0,1);
 	    
-	    button = new Button(app,x,y,buttonsWeight(),h);
+	    button = new Button(x,y,buttonsWeight(),h);
 	    button.shadow.setVisible(false);
 	    button.setBasicFX(false);
 	    button.fill.set(32);

@@ -1,21 +1,17 @@
 package microUI.layouts;
 
 import static processing.core.PApplet.ceil;
+import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.min;
-import static processing.core.PApplet.constrain;
-
 
 import java.util.ArrayList;
 
 import microUI.Button;
 import microUI.CircleSeekBar;
-import microUI.Scroll;
-import microUI.Slider;
+import microUI.MicroUI;
 import microUI.utils.BaseForm;
 import microUI.utils.Text;
-import processing.core.PApplet;
-import processing.event.MouseEvent;
 
 public class GridLayout extends Layout {
 	  private boolean fillTheGrid;
@@ -23,18 +19,18 @@ public class GridLayout extends Layout {
 	  private ArrayList<Integer> elementRowList,elementColumnList;
 	  private ArrayList<Float> elementDefaultWidth,elementDefaultHeight;
 	  
-	  public GridLayout(PApplet app, int cells) {
-		  this(app,0,0,app.width,app.height,cells,cells);
+	  public GridLayout(int cells) {
+		  this(0,0,MicroUI.app.width,MicroUI.app.height,cells,cells);
 	  }
 	  
-	  public GridLayout(PApplet app, int rows, int columns) {
-		  this(app,0,0,app.width,app.height,rows,columns);
+	  public GridLayout(int rows, int columns) {
+		  this(0,0,MicroUI.app.width,MicroUI.app.height,rows,columns);
 	  }
 	  
-	  public GridLayout(PApplet app, float x, float y, float w, float h) { this(app,x,y,w,h,3,3); }
+	  public GridLayout(float x, float y, float w, float h) { this(x,y,w,h,3,3); }
 	  
-	  public GridLayout(PApplet app, float x, float y, float w, float h, int rows, int columns) {
-	    super(app,x,y,w,h);
+	  public GridLayout(float x, float y, float w, float h, int rows, int columns) {
+	    super(MicroUI.app,x,y,w,h);
 	    setGrid(rows,columns);
 	    setElementsResizable(true);
 	    

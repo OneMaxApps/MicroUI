@@ -45,8 +45,8 @@ public abstract class Layout extends BaseForm {
 			}
 			applet.popStyle();
 		}
+		
 	}
-	
 	
 
 	@Override

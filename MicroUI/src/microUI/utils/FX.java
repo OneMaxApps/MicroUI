@@ -7,13 +7,12 @@ import java.util.ArrayList;
 import microUI.Button;
 import microUI.CheckBox;
 import microUI.CircleSeekBar;
+import microUI.MicroUI;
 import microUI.Scroll;
 import microUI.Slider;
 import microUI.Spinner;
-import processing.core.PApplet;
 
 public class FX {
-	private PApplet app;
 
 	private final int EVENTS_COUNT = 5;
 	
@@ -28,14 +27,13 @@ public class FX {
 	public Sliders sliders;
 	public Spinners spinners;
 	
-	public FX(PApplet app) {
-		this.app = app;
-		buttons = new Buttons(app);
-		checkBoxs = new CheckBoxs(app);
-		circleSeekBars = new CircleSeekBars(app);
-		scrolls = new Scrolls(app);
-		sliders = new Sliders(app);
-		spinners = new Spinners(app);
+	public FX() {
+		buttons = new Buttons();
+		checkBoxs = new CheckBoxs();
+		circleSeekBars = new CircleSeekBars();
+		scrolls = new Scrolls();
+		sliders = new Sliders();
+		spinners = new Spinners();
 		duration = 10;
 		basicFX = true;
 		elementList = new ArrayList<Rectangle>();
@@ -60,26 +58,26 @@ public class FX {
 		
 		elementList.get(i).setBasicFX(basicFX);
 		
-			app.pushStyle();
+			MicroUI.app.pushStyle();
 			if(elementList.get(i) instanceof Button) {
 				convertingButton(i,(Button) elementList.get(i),buttons.before,buttons.after);
 			}
-			app.popStyle();
+			MicroUI.app.popStyle();
 			
-			app.pushStyle();
+			MicroUI.app.pushStyle();
 			if(elementList.get(i) instanceof CheckBox) {
 				convertingRectangle(i, elementList.get(i), checkBoxs.before, checkBoxs.after);
 			}
-			app.popStyle();
+			MicroUI.app.popStyle();
 			
-			app.pushStyle();
+			MicroUI.app.pushStyle();
 			if(elementList.get(i) instanceof CircleSeekBar) {
 				convertingRectangle(i, elementList.get(i), circleSeekBars.before, circleSeekBars.after);
 				((CircleSeekBar) (elementList.get(i))).circle.fill.setHEX(convertingColor(i,circleSeekBars.before.circle.fill,circleSeekBars.after.circle.fill));
 			}
-			app.popStyle();
+			MicroUI.app.popStyle();
 			
-			app.pushStyle();
+			MicroUI.app.pushStyle();
 			if(elementList.get(i) instanceof Scroll) {
 				convertingRectangle(i, elementList.get(i), scrolls.before, scrolls.after);
 
@@ -87,9 +85,9 @@ public class FX {
 				convertingButton(i, ((Scroll) (elementList.get(i))).buttonDown, scrolls.before.buttonDown, scrolls.after.buttonDown);
 				convertingButton(i, ((Scroll) (elementList.get(i))).buttonUp, scrolls.before.buttonUp, scrolls.after.buttonUp);	
 			}
-			app.popStyle();
+			MicroUI.app.popStyle();
 			
-			app.pushStyle();
+			MicroUI.app.pushStyle();
 			if(elementList.get(i) instanceof Slider) {
 				convertingRectangle(i, elementList.get(i), sliders.before, sliders.after);
 				
@@ -97,16 +95,16 @@ public class FX {
 
 				convertingButton(i, ((Slider) (elementList.get(i))).button, sliders.before.button, sliders.after.button);
 			}
-			app.popStyle();
+			MicroUI.app.popStyle();
 			
-			app.pushStyle();
+			MicroUI.app.pushStyle();
 			if(elementList.get(i) instanceof Spinner) {
 				convertingRectangle(i,(Spinner) elementList.get(i),spinners.before,spinners.after);
 				((Spinner) (elementList.get(i))).text.fill.setHEX(convertingColor(i,spinners.before.text.fill,spinners.after.text.fill));
 				((Spinner) (elementList.get(i))).text.setTextSize(convertingValue(i,spinners.before.text.getTextSize(),spinners.after.text.getTextSize()));
 				
 			}
-			app.popStyle();
+			MicroUI.app.popStyle();
 	 }
 	}
 	
@@ -147,7 +145,7 @@ public class FX {
 	}
 
 	private int convertingColor(int index, Color before, Color after) {
-		return app.color(map(posList.get(index),0,duration,before.getRed(),after.getRed()),
+		return MicroUI.app.color(map(posList.get(index),0,duration,before.getRed(),after.getRed()),
 			   map(posList.get(index),0,duration,before.getGreen(),after.getGreen()),
 		       map(posList.get(index),0,duration,before.getBlue(),after.getBlue()),
 			   map(posList.get(index),0,duration,before.getAlpha(),after.getAlpha()));
@@ -199,10 +197,10 @@ public class FX {
 	public class Buttons {
 		public Button before,after;
 
-		public Buttons(PApplet app) {
+		public Buttons() {
 			super();
-			before = new Button(app);
-			after = new Button(app);
+			before = new Button();
+			after = new Button();
 			
 			after.fill.set(34);
 			after.text.setTextSize(20);
@@ -219,13 +217,13 @@ public class FX {
 	public class CheckBoxs {
 		public CheckBox before,after;
 
-		public CheckBoxs(PApplet app) {
+		public CheckBoxs() {
 			super();
-			before = new CheckBox(app);
-			after = new CheckBox(app);
+			before = new CheckBox();
+			after = new CheckBox();
 			
-			after.fill.setHEX(app.color(0,164,0));
-			after.stroke.fill.setHEX(app.color(0,64,0));
+			after.fill.setHEX(MicroUI.app.color(0,164,0));
+			after.stroke.fill.setHEX(MicroUI.app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
 			before.corners.set(10);
@@ -237,19 +235,19 @@ public class FX {
 	public class CircleSeekBars {
 		public CircleSeekBar before,after;
 
-		public CircleSeekBars(PApplet app) {
+		public CircleSeekBars() {
 			super();
-			before = new CircleSeekBar(app);
-			after = new CircleSeekBar(app);
+			before = new CircleSeekBar();
+			after = new CircleSeekBar();
 			
-			after.fill.setHEX(app.color(0,164,0));
-			after.stroke.fill.setHEX(app.color(0,64,0));
+			after.fill.setHEX(MicroUI.app.color(0,164,0));
+			after.stroke.fill.setHEX(MicroUI.app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
 			before.corners.set(10);
 			after.corners.set(100,0,100,0);
 			
-			after.circle.fill.setHEX(app.color(0,164,0));
+			after.circle.fill.setHEX(MicroUI.app.color(0,164,0));
 		}
 		
 	}
@@ -257,14 +255,14 @@ public class FX {
 	public class Scrolls {
 		public Scroll before,after;
 
-		public Scrolls(PApplet app) {
+		public Scrolls() {
 			super();
-			before = new Scroll(app);
-			after = new Scroll(app);
+			before = new Scroll();
+			after = new Scroll();
 			
-			after.fill.setHEX(app.color(0,164,0));
-			after.button.fill.setHEX(app.color(0,164,0));
-			after.stroke.fill.setHEX(app.color(0,64,0));
+			after.fill.setHEX(MicroUI.app.color(0,164,0));
+			after.button.fill.setHEX(MicroUI.app.color(0,164,0));
+			after.stroke.fill.setHEX(MicroUI.app.color(0,64,0));
 			//after.stroke.setWeight(4);
 			
 			before.corners.set(10);
@@ -279,10 +277,10 @@ public class FX {
 	public class Sliders {
 		public Slider before,after;
 
-		public Sliders(PApplet app) {
+		public Sliders() {
 			super();
-			before = new Slider(app);
-			after = new Slider(app);
+			before = new Slider();
+			after = new Slider();
 			
 			before.fill.set(44);
 
@@ -302,14 +300,14 @@ public class FX {
 	public class Spinners {
 		public Spinner before,after;
 
-		public Spinners(PApplet app) {
+		public Spinners() {
 			super();
-			before = new Spinner(app);
-			after = new Spinner(app);
+			before = new Spinner();
+			after = new Spinner();
 			
 			after.fill.set(34);
 			after.text.setTextSize(20);
-			after.stroke.fill.setHEX(app.color(0,64,0));
+			after.stroke.fill.setHEX(MicroUI.app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
 			before.corners.set(0);
