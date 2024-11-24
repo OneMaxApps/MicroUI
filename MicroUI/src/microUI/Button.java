@@ -19,9 +19,11 @@ public class Button extends Rectangle {
 	  public Button(PApplet app) { this(app,"Button",app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
 	  
 	  public void draw() {
-	    super.draw();
-	    text.setTransforms(this);
-	    text.draw();
+		if(isVisible()) {
+		    super.draw();
+		    text.setTransforms(this);
+		    text.draw();
+		}
 	  }
 	  
 	}

@@ -50,40 +50,42 @@ public class Slider extends Rectangle {
 	  
 	  
 	  public void draw() {
-	    super.draw();
-	    level.draw();
-	    button.draw();
-	    
-	    if(button.event.moved()) {
-	      if(!isVerticalMode) {
-	        button.setX(constrain(app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW()));
-	        value = constrain(map(app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW(),min,max),min,max);
-	        level.setPosition(getX(),button.getY());
-	        level.setSize(button.getX()-getX(),getH());
-	      } else {
-	        button.setY(constrain(app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH()));
-	        value = constrain(map(app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH(),max,min),min,max);
-	        level.setPosition(getX(),button.getY()+button.getH());
-	        level.setSize(getW(),getY()+getH()-button.getY()-button.getH());
-	      }
-	    }
-	    
-	    if(event != null) {
-		    if(event.inside() || scrolling.isScrolling()) {
-		      appendValue(scrolling.get());
+		if(isVisible()) {
+		    super.draw();
+		    level.draw();
+		    button.draw();
+		    
+		    if(button.event.moved()) {
+		      if(!isVerticalMode) {
+		        button.setX(constrain(app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW()));
+		        value = constrain(map(app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW(),min,max),min,max);
+		        level.setPosition(getX(),button.getY());
+		        level.setSize(button.getX()-getX(),getH());
+		      } else {
+		        button.setY(constrain(app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH()));
+		        value = constrain(map(app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH(),max,min),min,max);
+		        level.setPosition(getX(),button.getY()+button.getH());
+		        level.setSize(getW(),getY()+getH()-button.getY()-button.getH());
+		      }
 		    }
-	    
-	    if(showText) {
-	      if(event.inside() || scrolling.isScrolling() || button.event.moved()) { button.text.set((int) value); } else { button.text.clear(); }
-	    }
-	    
-	    }
-	    
-	    if(isVerticalMode) {
-	      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
-	    } else {
-	      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
-	    }
+		    
+		    if(event != null) {
+			    if(event.inside() || scrolling.isScrolling()) {
+			      appendValue(scrolling.get());
+			    }
+		    
+		    if(showText) {
+		      if(event.inside() || scrolling.isScrolling() || button.event.moved()) { button.text.set((int) value); } else { button.text.clear(); }
+		    }
+		    
+		    }
+		    
+		    if(isVerticalMode) {
+		      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
+		    } else {
+		      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
+		    }
+		}
 	  }
 	  
 	  

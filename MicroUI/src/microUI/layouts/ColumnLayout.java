@@ -9,12 +9,10 @@ import microUI.utils.BaseForm;
 import processing.core.PApplet;
 
 public class ColumnLayout extends Layout {
-	private ArrayList<BaseForm> elementList;
 	private ArrayList<Float> weightList;
 
 	public ColumnLayout(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
-		elementList = new ArrayList<BaseForm>();
 		weightList = new ArrayList<Float>();
 	}
 	

@@ -24,7 +24,7 @@ public class EdgeLayout extends Layout {
 	}
 	
 	public void draw() {
-		super.draw();
+	super.draw();
 		
 		if(form != null) {
 			updateSize(form);
@@ -141,4 +141,5 @@ public class EdgeLayout extends Layout {
 		return this;
 	}
 	
+	public BaseForm getElement() { return form; }
 }

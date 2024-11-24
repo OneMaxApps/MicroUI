@@ -58,31 +58,33 @@ public class Scroll extends Rectangle {
 	  
 	  
 	  public void draw() {
-	    super.draw();
-	    buttonUp.draw(); if(buttonUp.event.pressed()) { appendValue(-1); }
-	    buttonDown.draw(); if(buttonDown.event.pressed()) { appendValue(1); }
-	    button.draw();
-	    
-	    if(button.event.moved()) {
-	      if(!isVerticalMode) {
-	        button.setX(constrain(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()));
-	        value = constrain(map(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
-	      } else {
-	        button.setY(constrain(app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight()));
-	        value = constrain(map(app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight(),max,min),min,max);
-	      }
-	    }
-	    
-	    if(event != null) {
-	    	if(event.inside() || scrolling.isScrolling()) {
-	    		appendValue(scrolling.get());
-	    	}
-	    }
-	    if(isVerticalMode) {
-	      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
-	    } else {
-	      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
-	    }
+		if(isVisible()) {
+		    super.draw();
+		    buttonUp.draw(); if(buttonUp.event.pressed()) { appendValue(-1); }
+		    buttonDown.draw(); if(buttonDown.event.pressed()) { appendValue(1); }
+		    button.draw();
+		    
+		    if(button.event.moved()) {
+		      if(!isVerticalMode) {
+		        button.setX(constrain(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()));
+		        value = constrain(map(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
+		      } else {
+		        button.setY(constrain(app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight()));
+		        value = constrain(map(app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight(),max,min),min,max);
+		      }
+		    }
+		    
+		    if(event != null) {
+		    	if(event.inside() || scrolling.isScrolling()) {
+		    		appendValue(scrolling.get());
+		    	}
+		    }
+		    if(isVerticalMode) {
+		      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
+		    } else {
+		      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
+		    }
+		}
 	  }
 	  
 	  

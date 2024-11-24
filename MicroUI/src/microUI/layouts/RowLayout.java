@@ -10,12 +10,10 @@ import processing.core.PApplet;
 
 
 public class RowLayout extends Layout {
-	private ArrayList<BaseForm> elementList;
 	private ArrayList<Float> weightList;
 	
 	public RowLayout(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
-		elementList = new ArrayList<BaseForm>();
 		weightList = new ArrayList<Float>();
 	}
 	

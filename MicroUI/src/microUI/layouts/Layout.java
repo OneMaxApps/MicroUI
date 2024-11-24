@@ -1,14 +1,21 @@
 package microUI.layouts;
 
+import java.util.ArrayList;
+
+import microUI.CircleSeekBar;
+import microUI.Scroll;
+import microUI.Slider;
 import microUI.utils.BaseForm;
 import microUI.utils.Color;
-import microUI.utils.Form;
 import microUI.utils.Shadow;
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 
 public abstract class Layout extends BaseForm {
 	private boolean isVisible, isElementsResizable;
 	protected PApplet applet;
+	protected ArrayList<BaseForm> elementList;
+
 	public Color fill;
 	public Margin margin;
 	public Shadow shadow;
@@ -16,6 +23,7 @@ public abstract class Layout extends BaseForm {
 	public Layout(PApplet app, float x, float y, float w, float h) {
 		super(x, y, w, h);
 		this.applet = app;
+		elementList = new ArrayList<BaseForm>();
 		fill = new Color(app);
 		fill.setHEX(app.color(0, 32));
 		margin = new Margin();
@@ -77,11 +85,49 @@ public abstract class Layout extends BaseForm {
 		isVisible = v;
 	}
 	
+	public void setVisibleTotal(boolean v) {
+		setVisible(v);
+		for(BaseForm form : elementList) {
+			if(form instanceof EdgeLayout) {
+				form.setVisible(v);
+				EdgeLayout e = (EdgeLayout) form;
+				if(e.getElement() instanceof Layout) {
+					((Layout) (e.getElement())).setVisibleTotal(v);
+				}
+			} else {
+				if(form instanceof Layout) {
+					((Layout) (form)).setVisibleTotal(v);
+				} 	
+			}
+		}
+	}
+	
+	public void mouseWheelInit(MouseEvent e) {
+		  for(int i = 0; i < elementList.size(); i++) {
+			  if(elementList.get(i) instanceof Slider) {
+				  ((Slider) elementList.get(i)).scrolling.init(e);
+			  }
+			  
+			  if(elementList.get(i) instanceof Scroll) {
+				  ((Scroll) elementList.get(i)).scrolling.init(e);
+			  }
+
+			  if(elementList.get(i) instanceof CircleSeekBar) {
+				  ((CircleSeekBar) elementList.get(i)).scrolling.init(e);
+			  }
+			  
+			  if(elementList.get(i) instanceof Layout) {
+				  ((Layout) elementList.get(i)).mouseWheelInit(e);
+			  }
+		  }
+	  }
+	
 	public void initShadow() {
 		if(shadow == null) {
 			shadow = new Shadow(applet,this);
 		}
 	}
+	
 
 	public class Margin {
 		private float left, up, right, down;

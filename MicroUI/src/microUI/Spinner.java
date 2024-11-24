@@ -28,33 +28,34 @@ public class Spinner extends Button {
 	}
 	
 	public void draw() {
-		super.draw();
-		if(event.clicked()) { open = !open; }
-		
-		if(open) {
-			if(!itemList.isEmpty()) {
-				for(int i = 0; i < itemList.size(); i++) {
-					Button item = itemList.get(i);
-					item.text.setTextSize(text.getTextSize());
-					item.draw();
-					if(item.event.clicked()) { select = i; }
-					
-					
-					
-				}
-				if(select >= 0 && select < itemList.size()) {
-					if(showSelectedItem) {
-						app.pushStyle();
-						app.fill(0,234,0,32);
-						app.rect(itemList.get(select).getX(),itemList.get(select).getY(),itemList.get(select).getW(),itemList.get(select).getH());
-						app.popStyle();
+		if(isVisible()) {
+			super.draw();
+			if(event.clicked()) { open = !open; }
+			
+			if(open) {
+				if(!itemList.isEmpty()) {
+					for(int i = 0; i < itemList.size(); i++) {
+						Button item = itemList.get(i);
+						item.text.setTextSize(text.getTextSize());
+						item.draw();
+						if(item.event.clicked()) { select = i; }
+						
+						
+						
+					}
+					if(select >= 0 && select < itemList.size()) {
+						if(showSelectedItem) {
+							app.pushStyle();
+							app.fill(0,234,0,32);
+							app.rect(itemList.get(select).getX(),itemList.get(select).getY(),itemList.get(select).getW(),itemList.get(select).getH());
+							app.popStyle();
+						}
 					}
 				}
+				
+				
 			}
-			
-			
 		}
-		;
 	}
 	
 	public boolean isOpen() {

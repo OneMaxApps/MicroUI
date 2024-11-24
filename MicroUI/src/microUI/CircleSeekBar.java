@@ -47,26 +47,28 @@ public class CircleSeekBar extends Rectangle {
 	
 	@Override
 	public void draw() {
-		app.pushStyle();
-		super.draw();
-		circle.draw();
-		if(title.isVisible()) {
-			if(event.inside() || event.moved()) {
-				app.fill(title.fill.get());
-				app.textSize(title.getTextSize());
-				app.textAlign(CENTER,CENTER);
-				app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
-			} else {
-				title.setPosition(x, y+h/2-h/4);
-				title.setSize(w, h/2);
-				title.draw();
+		if(isVisible()) {
+			app.pushStyle();
+			super.draw();
+			circle.draw();
+			if(title.isVisible()) {
+				if(event.inside() || event.moved()) {
+					app.fill(title.fill.get());
+					app.textSize(title.getTextSize());
+					app.textAlign(CENTER,CENTER);
+					app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
+				} else {
+					title.setPosition(x, y+h/2-h/4);
+					title.setSize(w, h/2);
+					title.draw();
+				}
 			}
+			
+			if(event.inside() || scrolling.isScrolling()) {
+				value.append(-scrolling.get());
+			}
+			app.popStyle();
 		}
-		
-		if(event.inside() || scrolling.isScrolling()) {
-			value.append(-scrolling.get());
-		}
-		app.popStyle();
 	}
 	
 	public PImage getTexture() {
