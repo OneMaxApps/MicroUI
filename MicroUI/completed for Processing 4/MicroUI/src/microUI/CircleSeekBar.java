@@ -22,8 +22,8 @@ public class CircleSeekBar extends Rectangle {
 	public Scrolling scrolling;
 	private PImage texture;
 	
-	public CircleSeekBar(PApplet app, float x, float y, float size) {
-		super(app,x,y,size,size);
+	public CircleSeekBar(float x, float y, float size) {
+		super(MicroUI.app,x,y,size,size);
 		fill.set(255,0);
 		stroke.fill.set(255,0);
 		shadowDestroy();
@@ -34,39 +34,41 @@ public class CircleSeekBar extends Rectangle {
 		scrolling = new Scrolling(event);
 	}
 	
-	public CircleSeekBar(PApplet app, String text, float x, float y, float size) {
-		this(app,x,y,size);
+	public CircleSeekBar(String text, float x, float y, float size) {
+		this(x,y,size);
 		this.title.setVisible(true);
 		this.title.set(text);
 	}
 	
-	public CircleSeekBar(PApplet app) {
-		this(app,0,0,app.width*.1f+app.height*.1f);
+	public CircleSeekBar() {
+		this(0,0,MicroUI.app.width*.1f+MicroUI.app.height*.1f);
 		setPosition(app.width/2-getW()/2,app.height/2-getH()/2);
 	}
 	
 	@Override
 	public void draw() {
-		app.pushStyle();
-		super.draw();
-		circle.draw();
-		if(title.isVisible()) {
-			if(event.inside() || event.moved()) {
-				app.fill(title.fill.get());
-				app.textSize(title.getTextSize());
-				app.textAlign(CENTER,CENTER);
-				app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
-			} else {
-				title.setPosition(x, y+h/2-h/4);
-				title.setSize(w, h/2);
-				title.draw();
+		if(isVisible()) {
+			app.pushStyle();
+			super.draw();
+			circle.draw();
+			if(title.isVisible()) {
+				if(event.inside() || event.moved()) {
+					app.fill(title.fill.get());
+					app.textSize(title.getTextSize());
+					app.textAlign(CENTER,CENTER);
+					app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
+				} else {
+					title.setPosition(x, y+h/2-h/4);
+					title.setSize(w, h/2);
+					title.draw();
+				}
 			}
+			
+			if(event.inside() || scrolling.isScrolling()) {
+				value.append(-scrolling.get());
+			}
+			app.popStyle();
 		}
-		
-		if(event.inside() || scrolling.isScrolling()) {
-			value.append(-scrolling.get());
-		}
-		app.popStyle();
 	}
 	
 	public PImage getTexture() {

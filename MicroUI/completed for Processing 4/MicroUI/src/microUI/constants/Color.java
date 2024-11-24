@@ -1,4 +1,4 @@
-package microUI.Constants;
+package microUI.constants;
 
 public class Color {
 public final static int WHITE = 0xFFFFFFFF;

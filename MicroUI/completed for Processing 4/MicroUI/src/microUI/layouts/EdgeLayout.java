@@ -2,10 +2,11 @@ package microUI.layouts;
 
 import static processing.core.PApplet.min;
 
-import microUI.Scroll;
-import microUI.Slider;
+import microUI.MicroUI;
 import microUI.utils.BaseForm;
-import processing.core.PApplet;
+
+
+
 
 public class EdgeLayout extends Layout {
 	private BaseForm form;
@@ -13,18 +14,18 @@ public class EdgeLayout extends Layout {
 	private float defaultWidthOfElement,defaultHeightOfElement;
 	
 
-	public EdgeLayout(PApplet app, float x, float y, float w, float h) {
-		super(app, x, y, w, h);
+	public EdgeLayout(float x, float y, float w, float h) {
+		super(MicroUI.app, x, y, w, h);
 		setCenter(true);
 		setElementsResizable(true);
 	}
 	
-	public EdgeLayout(PApplet app) {
-		this(app, 0,0,app.width,app.height);
+	public EdgeLayout() {
+		this(0,0,MicroUI.app.width,MicroUI.app.height);
 	}
 	
 	public void draw() {
-		super.draw();
+	super.draw();
 		
 		if(form != null) {
 			updateSize(form);
@@ -141,4 +142,5 @@ public class EdgeLayout extends Layout {
 		return this;
 	}
 	
+	public BaseForm getElement() { return form; }
 }

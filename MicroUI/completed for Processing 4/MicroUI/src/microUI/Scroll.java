@@ -14,36 +14,34 @@ public class Scroll extends Rectangle {
 	  public Scrolling scrolling;
 	  private float distOfMouseToButton;
 	  
-	public Scroll(PApplet app, float w, float h) {
-		this(app,0,0,w,h);
+	public Scroll(float w, float h) {
+		this(0,0,w,h);
 		setMinMax(0,1);
 		setValue(0);
 	}  
 	  
-	public Scroll(PApplet app) {
-		this(app,0,100,0);
+	public Scroll() {
+		this(0,100,0);
 		setTransforms(app.width*.2f,app.height*.45f,app.width*.6f,app.height*.1f);
 	}
 
-	public Scroll(PApplet app, int min, int max, int value) {
-		this(app,0,0,0,0);
+	public Scroll(int min, int max, int value) {
+		this(0,0,0,0);
 		setMinMax(min,max);
 		setValue(value);
 	}
 
-	public Scroll(PApplet app, float x, float y, float w, float h) {
-	    super(app,x,y,w,h);
+	public Scroll(float x, float y, float w, float h) {
+	    super(MicroUI.app,x,y,w,h);
 	    
-	    
-	    
-	    button = new Button(app,x,y,buttonsWeight(),h);
+	    button = new Button(x,y,buttonsWeight(),h);
 	    button.shadow.setVisible(false);
 	    button.fill.set(32);
 	    
 	    scrolling = new Scrolling(event);
 	    
-	    buttonUp = new Button(app,"+",x+w-buttonsWeight(),y,buttonsWeight(),h);
-	    buttonDown = new Button(app,"-",x,y,buttonsWeight(),h);
+	    buttonUp = new Button("+",x+w-buttonsWeight(),y,buttonsWeight(),h);
+	    buttonDown = new Button("-",x,y,buttonsWeight(),h);
 	    
 	    buttonUp.shadow.setVisible(false);
 	    buttonDown.shadow.setVisible(false);
@@ -58,31 +56,33 @@ public class Scroll extends Rectangle {
 	  
 	  
 	  public void draw() {
-	    super.draw();
-	    buttonUp.draw(); if(buttonUp.event.pressed()) { appendValue(-1); }
-	    buttonDown.draw(); if(buttonDown.event.pressed()) { appendValue(1); }
-	    button.draw();
-	    
-	    if(button.event.moved()) {
-	      if(!isVerticalMode) {
-	        button.setX(constrain(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()));
-	        value = constrain(map(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
-	      } else {
-	        button.setY(constrain(app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight()));
-	        value = constrain(map(app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight(),max,min),min,max);
-	      }
-	    }
-	    
-	    if(event != null) {
-	    	if(event.inside() || scrolling.isScrolling()) {
-	    		appendValue(scrolling.get());
-	    	}
-	    }
-	    if(isVerticalMode) {
-	      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
-	    } else {
-	      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
-	    }
+		if(isVisible()) {
+		    super.draw();
+		    buttonUp.draw(); if(buttonUp.event.pressed()) { appendValue(-1); }
+		    buttonDown.draw(); if(buttonDown.event.pressed()) { appendValue(1); }
+		    button.draw();
+		    
+		    if(button.event.moved()) {
+		      if(!isVerticalMode) {
+		        button.setX(constrain(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()));
+		        value = constrain(map(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
+		      } else {
+		        button.setY(constrain(app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight()));
+		        value = constrain(map(app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight(),max,min),min,max);
+		      }
+		    }
+		    
+		    if(event != null) {
+		    	if(event.inside() || scrolling.isScrolling()) {
+		    		appendValue(scrolling.get());
+		    	}
+		    }
+		    if(isVerticalMode) {
+		      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
+		    } else {
+		      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
+		    }
+		}
 	  }
 	  
 	  

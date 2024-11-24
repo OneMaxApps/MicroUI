@@ -4,23 +4,21 @@ import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 
-import microUI.Spinner;
+import microUI.MicroUI;
 import microUI.utils.BaseForm;
 import processing.core.PApplet;
 
 
 public class RowLayout extends Layout {
-	private ArrayList<BaseForm> elementList;
 	private ArrayList<Float> weightList;
 	
-	public RowLayout(PApplet app, float x, float y, float w, float h) {
-		super(app, x, y, w, h);
-		elementList = new ArrayList<BaseForm>();
+	public RowLayout(float x, float y, float w, float h) {
+		super(MicroUI.app, x, y, w, h);
 		weightList = new ArrayList<Float>();
 	}
 	
-	public RowLayout(PApplet app) {
-		this(app, 0,0, app.width, app.height);
+	public RowLayout() {
+		this(0,0, MicroUI.app.width, MicroUI.app.height);
 	}
 
 	@Override

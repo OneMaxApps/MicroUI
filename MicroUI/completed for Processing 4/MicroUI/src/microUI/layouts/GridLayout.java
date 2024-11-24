@@ -1,44 +1,39 @@
 package microUI.layouts;
 
 import static processing.core.PApplet.ceil;
+import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.min;
-import static processing.core.PApplet.constrain;
-
 
 import java.util.ArrayList;
 
 import microUI.Button;
 import microUI.CircleSeekBar;
-import microUI.Scroll;
-import microUI.Slider;
+import microUI.MicroUI;
 import microUI.utils.BaseForm;
 import microUI.utils.Text;
-import processing.core.PApplet;
-import processing.event.MouseEvent;
 
 public class GridLayout extends Layout {
 	  private boolean fillTheGrid;
 	  private int rows,columns;
-	  private ArrayList<BaseForm> elementList;
 	  private ArrayList<Integer> elementRowList,elementColumnList;
 	  private ArrayList<Float> elementDefaultWidth,elementDefaultHeight;
 	  
-	  public GridLayout(PApplet app, int cells) {
-		  this(app,0,0,app.width,app.height,cells,cells);
+	  public GridLayout(int cells) {
+		  this(0,0,MicroUI.app.width,MicroUI.app.height,cells,cells);
 	  }
 	  
-	  public GridLayout(PApplet app, int rows, int columns) {
-		  this(app,0,0,app.width,app.height,rows,columns);
+	  public GridLayout(int rows, int columns) {
+		  this(0,0,MicroUI.app.width,MicroUI.app.height,rows,columns);
 	  }
 	  
-	  public GridLayout(PApplet app, float x, float y, float w, float h) { this(app,x,y,w,h,3,3); }
+	  public GridLayout(float x, float y, float w, float h) { this(x,y,w,h,3,3); }
 	  
-	  public GridLayout(PApplet app, float x, float y, float w, float h, int rows, int columns) {
-	    super(app,x,y,w,h);
+	  public GridLayout(float x, float y, float w, float h, int rows, int columns) {
+	    super(MicroUI.app,x,y,w,h);
 	    setGrid(rows,columns);
 	    setElementsResizable(true);
-	    elementList = new ArrayList<BaseForm>();
+	    
 	    elementRowList = new ArrayList<Integer>();
 	    elementColumnList = new ArrayList<Integer>();
 	    elementDefaultWidth = new ArrayList<Float>();
@@ -226,50 +221,11 @@ public class GridLayout extends Layout {
 	  
 	  public ArrayList<BaseForm> getElementList() { return elementList; }
 	  
-	  public void mouseWheelInit(MouseEvent e) {
-		  for(int i = 0; i < elementList.size(); i++) {
-			  if(elementList.get(i) instanceof Slider) {
-				  ((Slider) elementList.get(i)).scrolling.init(e);
-			  }
-			  
-			  if(elementList.get(i) instanceof Scroll) {
-				  ((Scroll) elementList.get(i)).scrolling.init(e);
-			  }
-
-			  if(elementList.get(i) instanceof CircleSeekBar) {
-				  ((CircleSeekBar) elementList.get(i)).scrolling.init(e);
-			  }
-			  
-			  if(elementList.get(i) instanceof GridLayout) {
-				  ((GridLayout) elementList.get(i)).mouseWheelInit(e);
-			  }
-		  }
-	  }
-	  
 	  public boolean isFillTheGrid() {
 			return fillTheGrid;
 	  }
 
 	  public void setFillTheGrid(boolean f) {
 			fillTheGrid = f;
-	  }
-	  
-	  public GridLayout setVisibleTotal(boolean visible) {
-		  setVisible(visible);
-		  for(BaseForm form : elementList) {
-			  if(form instanceof Layout) {
-				  ((Layout) (form)).setVisible(visible);
-			  }
-			  
-			  
-			  if(form instanceof GridLayout) {
-				  for(BaseForm formInner : ((GridLayout) (form)).getElementList()) {
-					  if(formInner instanceof GridLayout)
-					  ((GridLayout) (formInner)).setVisible(visible);
-				  }
-			  }
-			  
-		  }
-		  return this;
 	  }
 } 

@@ -9,21 +9,21 @@ import processing.core.PApplet;
 
 public class CheckBox extends Rectangle {
 	private boolean included;
-
+	
 	public Color colorIncluded,colorNotIncluded;
 	
-	public CheckBox(PApplet app, float x, float y, float w, float h) {
-		this(app);
+	public CheckBox(float x, float y, float w, float h) {
+		this();
 		setTransforms(x,y,w,h);
 	}
 	
-	public CheckBox(PApplet app, boolean include) {
-		this(app);
+	public CheckBox(boolean include) {
+		this();
 		setIncluded(include);
 	}
 	
-	public CheckBox(PApplet app) {
-		super(app, app.width*.4f,app.height*.4f,app.width*.2f,app.height*.2f);
+	public CheckBox() {
+		super(MicroUI.app, MicroUI.app.width*.4f,MicroUI.app.height*.4f,MicroUI.app.width*.2f,MicroUI.app.height*.2f);
 		colorIncluded = new Color(app);
 		colorNotIncluded = new Color(app);
 		colorIncluded.set(0,128,0);
