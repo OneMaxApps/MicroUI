@@ -2,22 +2,23 @@ package microUI;
 
 import microUI.utils.Rectangle;
 import microUI.utils.Text;
+import processing.core.PApplet;
 
 public class Button extends Rectangle {
 	  public Text text;
 	  
-	  public Button(String text, float x, float y, float w, float h) {
-	    super(x,y,w,h);
+	  public Button(PApplet app, String text, float x, float y, float w, float h) {
+	    super(app,x,y,w,h);
 	    
-	    this.text = new Text(text,x,y,w,h);
+	    this.text = new Text(app,text,x,y,w,h);
 	    this.text.setTextSize(h/2);
 	    corners.set(10);
 	  }
-	  public Button(float x, float y, float w, float h) { this("",x,y,w,h); }
-	  public Button(String titie) { this(titie,MicroUI.app.width*.3f,MicroUI.app.height*.45f,MicroUI.app.width*.4f,MicroUI.app.height*.1f); }
+	  public Button(PApplet app, float x, float y, float w, float h) { this(app,"",x,y,w,h); }
+	  public Button(PApplet app, String titie) { this(app,titie,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
 	  
-	  public Button() {
-		  this("Button");
+	  public Button(PApplet app) {
+		  this(app,"Button");
 	  }
 	  
 	  public void draw() {

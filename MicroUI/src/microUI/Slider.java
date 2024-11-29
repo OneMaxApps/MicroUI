@@ -15,31 +15,31 @@ public class Slider extends Rectangle {
 	  public Scrolling scrolling;
 	  private float distOfMouseToButton;
 	  
-	  public Slider() { this(MicroUI.app.width*.3f,MicroUI.app.height*.45f,MicroUI.app.width*.4f,MicroUI.app.height*.1f); }
+	  public Slider(PApplet app) { this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
 	  
-	  public Slider(float w, float h) { this(0,0,w,h); }
+	  public Slider(PApplet app,float w, float h) { this(app,0,0,w,h); }
 
 	  
-	  public Slider(float min, float max, float value) {
-		this(MicroUI.app.width*.3f,MicroUI.app.height*.45f,MicroUI.app.width*.4f,MicroUI.app.height*.1f);
+	  public Slider(PApplet app, float min, float max, float value) {
+		this(app, app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
 		this.min = min;
 		this.max = max;
 		this.value = value;
 	  }
 	  
-	  public Slider(float x, float y, float w, float h) {
-	    super(x,y,w,h);
+	  public Slider(PApplet app,float x, float y, float w, float h) {
+	    super(app,x,y,w,h);
 
 	    setMinMax(0,1);
 	    
-	    button = new Button(x,y,buttonsWeight(),h);
+	    button = new Button(app,x,y,buttonsWeight(),h);
 	    button.shadow.setVisible(false);
 	    button.setBasicFX(false);
 	    button.fill.set(32);
 	    setBasicFX(false);
 	    
-	    level = new Rectangle(x,y,button.getX()-getX(),h);
-	    level.fill.setHEX(MicroUI.app.color(0,128,234,234));
+	    level = new Rectangle(app,x,y,button.getX()-getX(),h);
+	    level.fill.setHEX(app.color(0,128,234,234));
 	    level.shadowDestroy();
 	    level.eventDestroy();
 	    
@@ -57,13 +57,13 @@ public class Slider extends Rectangle {
 		    
 		    if(button.event.moved()) {
 		      if(!isVerticalMode) {
-		        button.setX(constrain(MicroUI.app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW()));
-		        value = constrain(map(MicroUI.app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW(),min,max),min,max);
+		        button.setX(constrain(app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW()));
+		        value = constrain(map(app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW(),min,max),min,max);
 		        level.setPosition(getX(),button.getY());
 		        level.setSize(button.getX()-getX(),getH());
 		      } else {
-		        button.setY(constrain(MicroUI.app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH()));
-		        value = constrain(map(MicroUI.app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH(),max,min),min,max);
+		        button.setY(constrain(app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH()));
+		        value = constrain(map(app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH(),max,min),min,max);
 		        level.setPosition(getX(),button.getY()+button.getH());
 		        level.setSize(getW(),getY()+getH()-button.getY()-button.getH());
 		      }
@@ -81,9 +81,9 @@ public class Slider extends Rectangle {
 		    }
 		    
 		    if(isVerticalMode) {
-		      if(button.event.inside()) { distOfMouseToButton = button.getY()-MicroUI.app.mouseY; }
+		      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
 		    } else {
-		      if(button.event.inside()) { distOfMouseToButton = button.getX()-MicroUI.app.mouseX; }
+		      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
 		    }
 		}
 	  }

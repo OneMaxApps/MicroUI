@@ -4,21 +4,21 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PConstants.CORNERS;
 import static processing.core.PConstants.SQUARE;
-
-import microUI.MicroUI;
 import microUI.layouts.Layout;
 import processing.core.PApplet;
 
 public class Shadow {
 	  public Color fill;
+	  private PApplet app;
 	  private BaseForm form;
 	  private int leftSize,rightSize,upSize,downSize;
 	  private byte absoluteSize;
 	  private boolean isVisible;
 	  
-	  public Shadow(BaseForm form) {
+	  public Shadow(PApplet app, BaseForm form) {
 	    this.form = form;
-	    fill = new Color(34);
+	    this.app = app;
+	    fill = new Color(app,34);
 	    leftSize = 10;
 	    upSize = 10;
 	    rightSize = 10;
@@ -29,22 +29,22 @@ public class Shadow {
 	  
 	  public void draw() {
 	    if(form.isVisible() && isVisible) {
-	      MicroUI.app.pushStyle();
+	      app.pushStyle();
 	      
 	      for(int i = 0; i < absoluteSize; i++) {
-	    	  MicroUI.app.strokeWeight(2);
-	    	  MicroUI.app.strokeCap(SQUARE);
-	    	  MicroUI.app.stroke(fill.get(),constrain(164-i*20,0,255));
-	    	  MicroUI.app.noFill();
-	    	  MicroUI.app.rectMode(CORNERS);
+	    	  app.strokeWeight(2);
+	    	  app.strokeCap(SQUARE);
+	    	  app.stroke(fill.get(),constrain(164-i*20,0,255));
+	    	  app.noFill();
+	    	  app.rectMode(CORNERS);
 	    	  if(form instanceof Layout) {
-    			  MicroUI.app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
+    			  app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
 	    		  form.getY()-map(i,0f,absoluteSize,0f,upSize),
 	    		  form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),
 	    		  form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize));
     		  } else {
 		    	  if(form instanceof BaseForm) {
-		    		 MicroUI.app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
+		    		 app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
 		             form.getY()-map(i,0f,absoluteSize,0f,upSize),
 		             form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),
 		             form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize),leftSize,upSize,rightSize,downSize);
@@ -52,7 +52,7 @@ public class Shadow {
 	    		  
 	    	  }
 	      }
-	      MicroUI.app.popStyle();
+	      app.popStyle();
 	    }
 	  }
 	  

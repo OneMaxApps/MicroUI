@@ -1,15 +1,16 @@
 package microUI.utils;
 
-import microUI.MicroUI;
+import processing.core.PApplet;
 
 public class BaseForm {
+	protected PApplet app;
 	protected float x,y,w,h;
 	protected  boolean isVisible;
 	
-	public BaseForm(float x, float y, float w, float h) {
+	public BaseForm(PApplet app, float x, float y, float w, float h) {
 		super();
+		this.app = app;
 		setTransforms(x,y,w,h);
-		MicroUI.createdFormsCount++;
 	}
 	
 	public float getX() {

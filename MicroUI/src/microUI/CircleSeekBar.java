@@ -22,41 +22,41 @@ public class CircleSeekBar extends Rectangle {
 	public Scrolling scrolling;
 	private PImage texture;
 	
-	public CircleSeekBar(float x, float y, float size) {
-		super(x,y,size,size);
+	public CircleSeekBar(PApplet app, float x, float y, float size) {
+		super(app,x,y,size,size);
 		fill.set(255,0);
 		stroke.fill.set(255,0);
 		shadowDestroy();
 		setBasicFX(false);
 		circle = new Circle();
 		value = new Value(0,100,0);
-		this.title = new Text("",x,y+h/2-h/4,w,h/2);
+		this.title = new Text(app,"",x,y+h/2-h/4,w,h/2);
 		scrolling = new Scrolling(event);
 	}
 	
-	public CircleSeekBar(String text, float x, float y, float size) {
-		this(x,y,size);
+	public CircleSeekBar(PApplet app, String text, float x, float y, float size) {
+		this(app,x,y,size);
 		this.title.setVisible(true);
 		this.title.set(text);
 	}
 	
-	public CircleSeekBar() {
-		this(0,0,MicroUI.app.width*.1f+MicroUI.app.height*.1f);
-		setPosition(MicroUI.app.width/2-getW()/2,MicroUI.app.height/2-getH()/2);
+	public CircleSeekBar(PApplet app) {
+		this(app,0,0,app.width*.1f+app.height*.1f);
+		setPosition(app.width/2-getW()/2,app.height/2-getH()/2);
 	}
 	
 	@Override
 	public void draw() {
 		if(isVisible()) {
-			MicroUI.app.pushStyle();
+			app.pushStyle();
 			super.draw();
 			circle.draw();
 			if(title.isVisible()) {
 				if(event.inside() || event.moved()) {
-					MicroUI.app.fill(title.fill.get());
-					MicroUI.app.textSize(title.getTextSize());
-					MicroUI.app.textAlign(CENTER,CENTER);
-					MicroUI.app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
+					app.fill(title.fill.get());
+					app.textSize(title.getTextSize());
+					app.textAlign(CENTER,CENTER);
+					app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
 				} else {
 					title.setPosition(x, y+h/2-h/4);
 					title.setSize(w, h/2);
@@ -67,7 +67,7 @@ public class CircleSeekBar extends Rectangle {
 			if(event.inside() || scrolling.isScrolling()) {
 				value.append(-scrolling.get());
 			}
-			MicroUI.app.popStyle();
+			app.popStyle();
 		}
 	}
 	
@@ -108,31 +108,31 @@ public class CircleSeekBar extends Rectangle {
 		public Arrow arrow;
 		
 		public Circle() {
-			this.fill = new Color(MicroUI.app.color(34));
+			this.fill = new Color(app,app.color(34));
 			arrow = new Arrow();
 		}
 
 		public void draw() {
 			if(texture != null) {
-				MicroUI.app.push();
-				MicroUI.app.translate(x+w/2,y+h/2);
-				MicroUI.app.rotate(map(value.getValue(), value.getMin(), value.getMax(), 0, TWO_PI-PI/4));
-				MicroUI.app.image(texture, -w/2,-h/2,w,h);
-				MicroUI.app.pop();
+				app.push();
+				app.translate(x+w/2,y+h/2);
+				app.rotate(map(value.getValue(), value.getMin(), value.getMax(), 0, TWO_PI-PI/4));
+				app.image(texture, -w/2,-h/2,w,h);
+				app.pop();
 			}
 			
-			MicroUI.app.push();
-			MicroUI.app.strokeCap(SQUARE);
+			app.push();
+			app.strokeCap(SQUARE);
 			if(texture == null) {
-				MicroUI.app.fill(fill.get());
-				MicroUI.app.ellipse(x+w/2,y+h/2,w,h);
+				app.fill(fill.get());
+				app.ellipse(x+w/2,y+h/2,w,h);
 			}
 			arrow.draw();
-			MicroUI.app.pop();
+			app.pop();
 			
 			
 			
-			if(event.moved()) { value.append(MicroUI.app.pmouseY-MicroUI.app.mouseY); }
+			if(event.moved()) { value.append(app.pmouseY-app.mouseY); }
 		}
 		
 		public class Arrow {
@@ -143,20 +143,20 @@ public class CircleSeekBar extends Rectangle {
 			
 			public Arrow() {
 				setWeight(8);
-				fill = new Color(MicroUI.app.color(234));
+				fill = new Color(app,app.color(234));
 				setVisible(true);
 			}
 			
 			public void draw() {
 				if(isVisible) {
-					MicroUI.app.push();
-					MicroUI.app.strokeCap(SQUARE);
-					MicroUI.app.stroke(fill.get());
-					MicroUI.app.strokeWeight(weight);
-					MicroUI.app.translate(getX()+getW()/2,getY()+getH()/2);
-					MicroUI.app.rotate(map(value.getValue(), value.getMin(), value.getMax(), PI/4, TWO_PI-PI/4));
-					MicroUI.app.line(0,getH()/3,0,getH()/2);
-					MicroUI.app.pop();
+					app.push();
+					app.strokeCap(SQUARE);
+					app.stroke(fill.get());
+					app.strokeWeight(weight);
+					app.translate(getX()+getW()/2,getY()+getH()/2);
+					app.rotate(map(value.getValue(), value.getMin(), value.getMax(), PI/4, TWO_PI-PI/4));
+					app.line(0,getH()/3,0,getH()/2);
+					app.pop();
 				}
 			}
 			

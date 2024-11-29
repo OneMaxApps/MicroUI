@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 import microUI.Button;
 import microUI.CircleSeekBar;
-import microUI.MicroUI;
 import microUI.utils.BaseForm;
 import microUI.utils.Text;
+import processing.core.PApplet;
 
 public class GridLayout extends Layout {
 	  private boolean fillTheGrid;
@@ -19,18 +19,18 @@ public class GridLayout extends Layout {
 	  private ArrayList<Integer> elementRowList,elementColumnList;
 	  private ArrayList<Float> elementDefaultWidth,elementDefaultHeight;
 	  
-	  public GridLayout(int cells) {
-		  this(0,0,MicroUI.app.width,MicroUI.app.height,cells,cells);
+	  public GridLayout(PApplet app, int cells) {
+		  this(app,0,0,app.width,app.height,cells,cells);
 	  }
 	  
-	  public GridLayout(int rows, int columns) {
-		  this(0,0,MicroUI.app.width,MicroUI.app.height,rows,columns);
+	  public GridLayout(PApplet app, int rows, int columns) {
+		  this(app,0,0,app.width,app.height,rows,columns);
 	  }
 	  
-	  public GridLayout(float x, float y, float w, float h) { this(x,y,w,h,3,3); }
+	  public GridLayout(PApplet app, float x, float y, float w, float h) { this(app,x,y,w,h,3,3); }
 	  
-	  public GridLayout(float x, float y, float w, float h, int rows, int columns) {
-	    super(x,y,w,h);
+	  public GridLayout(PApplet app, float x, float y, float w, float h, int rows, int columns) {
+	    super(app,x,y,w,h);
 	    setGrid(rows,columns);
 	    setElementsResizable(true);
 	    
@@ -51,31 +51,31 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  private void elementsDraw() {
-			MicroUI.app.pushStyle();
+			app.pushStyle();
 			if(!elementList.isEmpty()) {
 			    for(int i = elementList.size()-1; i >= 0; i--) {
 			    	updateTransforms(elementList.get(i),i);
 			    	elementList.get(i).draw();
 			    }
 			}
-		    MicroUI.app.popStyle();
+		    app.popStyle();
 	  }
 	  
 	  private void gridDraw() {
-		  MicroUI.app.pushStyle();
+		  app.pushStyle();
 		    if(isVisible()) {
 			  super.draw();
-			  MicroUI.app.noFill();
-			  MicroUI.app.stroke(0);
+			  app.noFill();
+			  app.stroke(0);
 		      for(float x = getX(); x < getX()+getW(); x += getW()/getRows()) {
 		        for(float y = getY(); y < getY()+getH(); y += getH()/getColumns()) {
 		          if(ceil(x) < getX()+getW() && ceil(y) < getY()+getH()) {
-		        	  MicroUI.app.rect(x,y,getW()/rows,getH()/columns);
+		        	  app.rect(x,y,getW()/rows,getH()/columns);
 		          }
 		        }
 		      }
 		    }
-		    MicroUI.app.popStyle();
+		    app.popStyle();
 	  }
 	  
 	  public void setRows(int rows) { this.rows = rows; }
@@ -126,7 +126,7 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  public GridLayout add(String txt, int row, int column) {
-		  Text baseForm = new Text(txt,0,0,0,0);
+		  Text baseForm = new Text(app,txt,0,0,0,0);
 		  if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
 		    baseForm.setPosition(
 		    		map(row,0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,

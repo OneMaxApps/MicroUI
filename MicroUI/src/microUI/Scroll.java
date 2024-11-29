@@ -14,34 +14,34 @@ public class Scroll extends Rectangle {
 	  public Scrolling scrolling;
 	  private float distOfMouseToButton;
 	  
-	public Scroll(float w, float h) {
-		this(0,0,w,h);
+	public Scroll(PApplet app, float w, float h) {
+		this(app,0,0,w,h);
 		setMinMax(0,1);
 		setValue(0);
 	}  
 	  
-	public Scroll() {
-		this(0,100,0);
-		setTransforms(MicroUI.app.width*.2f,MicroUI.app.height*.45f,MicroUI.app.width*.6f,MicroUI.app.height*.1f);
+	public Scroll(PApplet app) {
+		this(app,0,100,0);
+		setTransforms(app.width*.2f,app.height*.45f,app.width*.6f,app.height*.1f);
 	}
 
-	public Scroll(int min, int max, int value) {
-		this(0,0,0,0);
+	public Scroll(PApplet app, int min, int max, int value) {
+		this(app, 0,0,0,0);
 		setMinMax(min,max);
 		setValue(value);
 	}
 
-	public Scroll(float x, float y, float w, float h) {
-	    super(x,y,w,h);
+	public Scroll(PApplet app, float x, float y, float w, float h) {
+	    super(app,x,y,w,h);
 	    
-	    button = new Button(x,y,buttonsWeight(),h);
+	    button = new Button(app,x,y,buttonsWeight(),h);
 	    button.shadow.setVisible(false);
 	    button.fill.set(32);
 	    
 	    scrolling = new Scrolling(event);
 	    
-	    buttonUp = new Button("+",x+w-buttonsWeight(),y,buttonsWeight(),h);
-	    buttonDown = new Button("-",x,y,buttonsWeight(),h);
+	    buttonUp = new Button(app,"+",x+w-buttonsWeight(),y,buttonsWeight(),h);
+	    buttonDown = new Button(app,"-",x,y,buttonsWeight(),h);
 	    
 	    buttonUp.shadow.setVisible(false);
 	    buttonDown.shadow.setVisible(false);
@@ -64,11 +64,11 @@ public class Scroll extends Rectangle {
 		    
 		    if(button.event.moved()) {
 		      if(!isVerticalMode) {
-		        button.setX(constrain(MicroUI.app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()));
-		        value = constrain(map(MicroUI.app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
+		        button.setX(constrain(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()));
+		        value = constrain(map(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
 		      } else {
-		        button.setY(constrain(MicroUI.app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight()));
-		        value = constrain(map(MicroUI.app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight(),max,min),min,max);
+		        button.setY(constrain(app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight()));
+		        value = constrain(map(app.mouseY+distOfMouseToButton,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight(),max,min),min,max);
 		      }
 		    }
 		    
@@ -78,9 +78,9 @@ public class Scroll extends Rectangle {
 		    	}
 		    }
 		    if(isVerticalMode) {
-		      if(button.event.inside()) { distOfMouseToButton = button.getY()-MicroUI.app.mouseY; }
+		      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
 		    } else {
-		      if(button.event.inside()) { distOfMouseToButton = button.getX()-MicroUI.app.mouseX; }
+		      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
 		    }
 		}
 	  }
@@ -211,9 +211,9 @@ public class Scroll extends Rectangle {
 	  private void updateDataOfValue() {
 	    if(button == null) { return; }
 	    if(!isVerticalMode) {
-	      value = constrain(map(MicroUI.app.mouseX-button.getW()/2,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
+	      value = constrain(map(app.mouseX-button.getW()/2,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
 	    } else {
-	      value = constrain(map(MicroUI.app.mouseY-button.getH()/2,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight(),min,max),min,max);
+	      value = constrain(map(app.mouseY-button.getH()/2,getY()+buttonsWeight(),getY()+getH()-button.getH()-buttonsWeight(),min,max),min,max);
 	    }
 	  }
 	  
