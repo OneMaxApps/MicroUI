@@ -28,7 +28,7 @@ public class Slider extends Rectangle {
 	  }
 	  
 	  public Slider(float x, float y, float w, float h) {
-	    super(MicroUI.app,x,y,w,h);
+	    super(x,y,w,h);
 
 	    setMinMax(0,1);
 	    
@@ -38,8 +38,8 @@ public class Slider extends Rectangle {
 	    button.fill.set(32);
 	    setBasicFX(false);
 	    
-	    level = new Rectangle(app,x,y,button.getX()-getX(),h);
-	    level.fill.setHEX(app.color(0,128,234,234));
+	    level = new Rectangle(x,y,button.getX()-getX(),h);
+	    level.fill.setHEX(MicroUI.app.color(0,128,234,234));
 	    level.shadowDestroy();
 	    level.eventDestroy();
 	    
@@ -57,13 +57,13 @@ public class Slider extends Rectangle {
 		    
 		    if(button.event.moved()) {
 		      if(!isVerticalMode) {
-		        button.setX(constrain(app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW()));
-		        value = constrain(map(app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW(),min,max),min,max);
+		        button.setX(constrain(MicroUI.app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW()));
+		        value = constrain(map(MicroUI.app.mouseX+distOfMouseToButton,getX(),getX()+getW()-button.getW(),min,max),min,max);
 		        level.setPosition(getX(),button.getY());
 		        level.setSize(button.getX()-getX(),getH());
 		      } else {
-		        button.setY(constrain(app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH()));
-		        value = constrain(map(app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH(),max,min),min,max);
+		        button.setY(constrain(MicroUI.app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH()));
+		        value = constrain(map(MicroUI.app.mouseY+distOfMouseToButton,getY(),getY()+getH()-button.getH(),max,min),min,max);
 		        level.setPosition(getX(),button.getY()+button.getH());
 		        level.setSize(getW(),getY()+getH()-button.getY()-button.getH());
 		      }
@@ -81,9 +81,9 @@ public class Slider extends Rectangle {
 		    }
 		    
 		    if(isVerticalMode) {
-		      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
+		      if(button.event.inside()) { distOfMouseToButton = button.getY()-MicroUI.app.mouseY; }
 		    } else {
-		      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
+		      if(button.event.inside()) { distOfMouseToButton = button.getX()-MicroUI.app.mouseX; }
 		    }
 		}
 	  }

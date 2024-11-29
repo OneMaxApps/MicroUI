@@ -5,9 +5,6 @@ import static processing.core.PApplet.min;
 import microUI.MicroUI;
 import microUI.utils.BaseForm;
 
-
-
-
 public class EdgeLayout extends Layout {
 	private BaseForm form;
 	private boolean left,up,right,down,center,centerHorizontal,centerVertical;
@@ -15,7 +12,7 @@ public class EdgeLayout extends Layout {
 	
 
 	public EdgeLayout(float x, float y, float w, float h) {
-		super(MicroUI.app, x, y, w, h);
+		super(x, y, w, h);
 		setCenter(true);
 		setElementsResizable(true);
 	}

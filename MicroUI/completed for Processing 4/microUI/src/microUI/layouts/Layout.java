@@ -3,6 +3,7 @@ package microUI.layouts;
 import java.util.ArrayList;
 
 import microUI.CircleSeekBar;
+import microUI.MicroUI;
 import microUI.Scroll;
 import microUI.Slider;
 import microUI.utils.BaseForm;
@@ -13,37 +14,35 @@ import processing.event.MouseEvent;
 
 public abstract class Layout extends BaseForm {
 	private boolean isVisible, isElementsResizable;
-	protected PApplet applet;
 	protected ArrayList<BaseForm> elementList;
 
 	public Color fill;
 	public Margin margin;
 	public Shadow shadow;
 
-	public Layout(PApplet app, float x, float y, float w, float h) {
+	public Layout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		this.applet = app;
 		elementList = new ArrayList<BaseForm>();
-		fill = new Color(app);
-		fill.setHEX(app.color(0, 32));
+		fill = new Color();
+		fill.setHEX(MicroUI.app.color(0, 32));
 		margin = new Margin();
 		setVisible(true);
 	}
 
 	public void draw() {
 		if (isVisible()) {
-			applet.pushStyle();
-			applet.stroke(0);
-			applet.strokeWeight(1);
-			applet.fill(fill.get());
-			applet.rect(getX(), getY(), getW(), getH());
-			applet.popStyle();
+			MicroUI.app.pushStyle();
+			MicroUI.app.stroke(0);
+			MicroUI.app.strokeWeight(1);
+			MicroUI.app.fill(fill.get());
+			MicroUI.app.rect(getX(), getY(), getW(), getH());
+			MicroUI.app.popStyle();
 			
-			applet.pushStyle();
+			MicroUI.app.pushStyle();
 			if(shadow != null) {
 				shadow.draw();
 			}
-			applet.popStyle();
+			MicroUI.app.popStyle();
 		}
 		
 	}
@@ -124,7 +123,7 @@ public abstract class Layout extends BaseForm {
 	
 	public void initShadow() {
 		if(shadow == null) {
-			shadow = new Shadow(applet,this);
+			shadow = new Shadow(this);
 		}
 	}
 	

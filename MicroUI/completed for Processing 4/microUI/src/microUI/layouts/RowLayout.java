@@ -6,16 +6,18 @@ import java.util.ArrayList;
 
 import microUI.MicroUI;
 import microUI.utils.BaseForm;
+import processing.core.PApplet;
 
-public class ColumnLayout extends Layout {
+
+public class RowLayout extends Layout {
 	private ArrayList<Float> weightList;
-
-	public ColumnLayout(float x, float y, float w, float h) {
-		super(MicroUI.app,x, y, w, h);
+	
+	public RowLayout(float x, float y, float w, float h) {
+		super(x, y, w, h);
 		weightList = new ArrayList<Float>();
 	}
 	
-	public ColumnLayout() {
+	public RowLayout() {
 		this(0,0, MicroUI.app.width, MicroUI.app.height);
 	}
 
@@ -25,23 +27,18 @@ public class ColumnLayout extends Layout {
 		if(!elementList.isEmpty()) {
 			for(int i = 0; i < elementList.size(); i++) {
 				BaseForm form = elementList.get(i);
-				initTransforms(form, i);
+					if(i == 0) {
+					form.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
+					} else {
+						form.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
+					}
 				
 				form.draw();
 			}
-		}
-		
+		};
 	}
 	
-	private void initTransforms(BaseForm form, int index) {
-		if(index == 0) {
-			form.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
-			} else {
-				form.setTransforms(getX(),elementList.get(index-1).getY()+elementList.get(index-1).getH(),getW(),getH()*weightList.get(index));
-			}
-	}
-	
-	public ColumnLayout add(BaseForm form, float weight) {
+	public RowLayout add(BaseForm form, float weight) {
 		elementList.add(form);
 		
 		if(weightList.isEmpty()) {
