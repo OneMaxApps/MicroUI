@@ -30,7 +30,7 @@ public class GridLayout extends Layout {
 	  public GridLayout(float x, float y, float w, float h) { this(x,y,w,h,3,3); }
 	  
 	  public GridLayout(float x, float y, float w, float h, int rows, int columns) {
-	    super(MicroUI.app,x,y,w,h);
+	    super(x,y,w,h);
 	    setGrid(rows,columns);
 	    setElementsResizable(true);
 	    
@@ -51,31 +51,31 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  private void elementsDraw() {
-			applet.pushStyle();
+			MicroUI.app.pushStyle();
 			if(!elementList.isEmpty()) {
 			    for(int i = elementList.size()-1; i >= 0; i--) {
 			    	updateTransforms(elementList.get(i),i);
 			    	elementList.get(i).draw();
 			    }
 			}
-		    applet.popStyle();
+		    MicroUI.app.popStyle();
 	  }
 	  
 	  private void gridDraw() {
-		  applet.pushStyle();
+		  MicroUI.app.pushStyle();
 		    if(isVisible()) {
 			  super.draw();
-			  applet.noFill();
-			  applet.stroke(0);
+			  MicroUI.app.noFill();
+			  MicroUI.app.stroke(0);
 		      for(float x = getX(); x < getX()+getW(); x += getW()/getRows()) {
 		        for(float y = getY(); y < getY()+getH(); y += getH()/getColumns()) {
 		          if(ceil(x) < getX()+getW() && ceil(y) < getY()+getH()) {
-		        	  applet.rect(x,y,getW()/rows,getH()/columns);
+		        	  MicroUI.app.rect(x,y,getW()/rows,getH()/columns);
 		          }
 		        }
 		      }
 		    }
-		    applet.popStyle();
+		    MicroUI.app.popStyle();
 	  }
 	  
 	  public void setRows(int rows) { this.rows = rows; }
@@ -126,7 +126,7 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  public GridLayout add(String txt, int row, int column) {
-		  Text baseForm = new Text(applet,txt,0,0,0,0);
+		  Text baseForm = new Text(txt,0,0,0,0);
 		  if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
 		    baseForm.setPosition(
 		    		map(row,0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,
@@ -166,7 +166,6 @@ public class GridLayout extends Layout {
 	  public void updateTransforms(BaseForm baseForm, int index) {
 		  if(elementRowList.get(index) < 0 || elementRowList.get(index) > getRows()-1 || elementColumnList.get(index) < 0 || elementColumnList.get(index) > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
 		    if(baseForm instanceof Layout) {
-		    	////////
 		    	Layout l = ((Layout) (baseForm));
 			  	l.setPosition(
 			    		map(elementRowList.get(index),0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-l.getW()/2-l.margin.getLeft(),

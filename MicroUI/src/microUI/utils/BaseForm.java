@@ -1,5 +1,7 @@
 package microUI.utils;
 
+import microUI.MicroUI;
+
 public class BaseForm {
 	protected float x,y,w,h;
 	protected  boolean isVisible;
@@ -7,6 +9,7 @@ public class BaseForm {
 	public BaseForm(float x, float y, float w, float h) {
 		super();
 		setTransforms(x,y,w,h);
+		MicroUI.createdFormsCount++;
 	}
 	
 	public float getX() {

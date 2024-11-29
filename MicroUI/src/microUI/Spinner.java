@@ -43,10 +43,10 @@ public class Spinner extends Button {
 					}
 					if(select >= 0 && select < itemList.size()) {
 						if(showSelectedItem) {
-							app.pushStyle();
-							app.fill(0,234,0,32);
-							app.rect(itemList.get(select).getX(),itemList.get(select).getY(),itemList.get(select).getW(),itemList.get(select).getH());
-							app.popStyle();
+							MicroUI.app.pushStyle();
+							MicroUI.app.fill(0,234,0,32);
+							MicroUI.app.rect(itemList.get(select).getX(),itemList.get(select).getY(),itemList.get(select).getW(),itemList.get(select).getH());
+							MicroUI.app.popStyle();
 						}
 					}
 				}

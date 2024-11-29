@@ -7,9 +7,9 @@ public class Button extends Rectangle {
 	  public Text text;
 	  
 	  public Button(String text, float x, float y, float w, float h) {
-	    super(MicroUI.app,x,y,w,h);
+	    super(x,y,w,h);
 	    
-	    this.text = new Text(app,text,x,y,w,h);
+	    this.text = new Text(text,x,y,w,h);
 	    this.text.setTextSize(h/2);
 	    corners.set(10);
 	  }

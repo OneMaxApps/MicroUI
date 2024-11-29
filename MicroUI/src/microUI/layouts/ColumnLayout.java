@@ -11,7 +11,7 @@ public class ColumnLayout extends Layout {
 	private ArrayList<Float> weightList;
 
 	public ColumnLayout(float x, float y, float w, float h) {
-		super(MicroUI.app,x, y, w, h);
+		super(x, y, w, h);
 		weightList = new ArrayList<Float>();
 	}
 	

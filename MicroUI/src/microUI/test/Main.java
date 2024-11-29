@@ -20,6 +20,7 @@ public class Main extends PApplet {
 	public void setup() {
 		MicroUI.init(this);
 		button = new Button();
+		System.out.println(MicroUI.getCreatedFormsCount());
 	}
 	
 	@Override
@@ -27,5 +28,6 @@ public class Main extends PApplet {
 		background(128);
 		button.draw();
 		
+		if(mouseButton == RIGHT) { button.setSize(mouseX, mouseY); }
 	}
 }

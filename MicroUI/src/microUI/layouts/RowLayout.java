@@ -13,7 +13,7 @@ public class RowLayout extends Layout {
 	private ArrayList<Float> weightList;
 	
 	public RowLayout(float x, float y, float w, float h) {
-		super(MicroUI.app, x, y, w, h);
+		super(x, y, w, h);
 		weightList = new ArrayList<Float>();
 	}
 	

@@ -23,12 +23,12 @@ public class CheckBox extends Rectangle {
 	}
 	
 	public CheckBox() {
-		super(MicroUI.app, MicroUI.app.width*.4f,MicroUI.app.height*.4f,MicroUI.app.width*.2f,MicroUI.app.height*.2f);
-		colorIncluded = new Color(app);
-		colorNotIncluded = new Color(app);
+		super(MicroUI.app.width*.4f,MicroUI.app.height*.4f,MicroUI.app.width*.2f,MicroUI.app.height*.2f);
+		colorIncluded = new Color();
+		colorNotIncluded = new Color();
 		colorIncluded.set(0,128,0);
 		colorNotIncluded.set(0,34,34);
-		event = new Event(app) {
+		event = new Event() {
 			@Override
 			public void action() {
 				included = !included;
