@@ -1,7 +1,7 @@
 package microUI.utils;
 
 import processing.event.MouseEvent;
-
+ 
 public class Scrolling {
 	private Event event;
     private float speed;
