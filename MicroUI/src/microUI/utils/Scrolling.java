@@ -14,12 +14,14 @@ public class Scrolling {
     public void init(MouseEvent e) {
       if(!event.inside()) { return; }
       
+      System.out.println(e.getCount());
+      
         if(e.getCount() > 0) {
-          if(speed < 0) { speed = 0; }
-            speed += e.getCount()*.1f;
-        } else {
           if(speed > 0) { speed = 0; }
-            speed += e.getCount()*.1f;
+            speed -= e.getCount()*.1f;
+        } else {
+          if(speed < 0) { speed = 0; }
+            speed -= e.getCount()*.1f;
         }
     }
     
