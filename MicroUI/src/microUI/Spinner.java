@@ -82,6 +82,7 @@ public class Spinner extends Button {
 			itemList.add(new Button(app,title[i],getX(),getY()+getH()+listHeight,getW(),getH()));
 			listHeight += getH();
 			itemList.get(i).shadowDestroy();
+			itemList.get(i).corners.set(0);
 		}
 		
 		return this;
@@ -92,6 +93,8 @@ public class Spinner extends Button {
 			itemList.add(new Button(app,String.valueOf(nums[i]),getX(),getY()+getH()+listHeight,getW(),getH()));
 			listHeight += getH();
 			itemList.get(i).shadowDestroy();
+			itemList.get(i).corners.set(0);
+
 		}
 		
 		return this;

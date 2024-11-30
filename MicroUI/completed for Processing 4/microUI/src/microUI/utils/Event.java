@@ -1,6 +1,6 @@
 package microUI.utils;
 
-import microUI.MicroUI;
+import processing.core.PApplet;
 
 public class Event {
 
@@ -13,19 +13,21 @@ public class Event {
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed;
 	  private boolean moving;
+	  private PApplet app;
 
-	  public Event() { }
+	  public Event(PApplet app) { this.app = app; }
 	  
 	  public void listen(Form form) {
+		
 	    x = form.getX();
 	    y = form.getY();
 	    w = form.getW();
 	    h = form.getH();
 	      
-	    if(moving && !MicroUI.app.mousePressed) { moving = false; }
+	    if(moving && !app.mousePressed) { moving = false; }
 	    if(pressed()) {
 	    	wasPressed = 1;
-	    	if(MicroUI.app.frameCount%60 == 0) { longPressed++; }
+	    	if(app.frameCount%60 == 0) { longPressed++; }
 		     
 	    } else {
 	    	longPressed = 0;
@@ -38,9 +40,9 @@ public class Event {
 	    
 	  }
 	  
-	  public boolean inside() { return MicroUI.app.mouseX > x && MicroUI.app.mouseX < x+w && MicroUI.app.mouseY > y && MicroUI.app.mouseY < y+h; }
+	  public boolean inside() { return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; }
 	  public boolean outside() { return !inside(); }
-	  public boolean pressed() {  return inside() && MicroUI.app.mousePressed; }
+	  public boolean pressed() {  return inside() && app.mousePressed; }
 	  public boolean longPressed(int seconds) {
 		  if(pressed() && longPressed >= seconds) { return true; }
 		  return false;

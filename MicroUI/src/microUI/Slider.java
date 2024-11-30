@@ -114,7 +114,7 @@ public class Slider extends Rectangle {
 	  
 	  public void appendValue(float a) {
 	    if(a < -.01f || a > .01f) {
-	      setValue(constrain(getValue() + a,min,max));
+	      setValue(constrain(getValue() - a,min,max));
 	    }
 	  }
 	  
@@ -130,8 +130,8 @@ public class Slider extends Rectangle {
 	    if(min > max) { System.out.println("min value not must be more than max value"); }
 	  }
 	  
-	  public void setVerticalMode(boolean v) {
-	    if(isVerticalMode == v) { return; }
+	  public Slider setVerticalMode(boolean v) {
+	    if(isVerticalMode == v) { return this; }
 	    isVerticalMode = v;
 	    
 	    if(isVerticalMode) {
@@ -145,7 +145,7 @@ public class Slider extends Rectangle {
 	    }
 	    
 	    updateLevelTransforms();
-	  
+	    return this;
 	  }
 	  
 	  public boolean isVerticalMode() { return isVerticalMode; }

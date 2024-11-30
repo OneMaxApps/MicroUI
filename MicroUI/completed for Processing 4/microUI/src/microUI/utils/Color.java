@@ -1,19 +1,23 @@
 package microUI.utils;
 
-import microUI.MicroUI;
+import processing.core.PApplet;
 
 public class Color {
+	private PApplet app;
 	private int hex;
 
-	public Color() {
-		MicroUI.app.color(128);
+	public Color(PApplet app) {
+		this.app = app;
+		app.color(128);
 	}
 
-	public Color(int hex) {
+	public Color(PApplet app, int hex) {
+		this.app = app;
 		this.hex = hex;
 	}
 
-	public Color(Color c) {
+	public Color(PApplet app, Color c) {
+		this.app = app;
 		set(c);
 	}
 
@@ -30,35 +34,35 @@ public class Color {
 	}
 	
 	public void set(float gray) {
-		hex = MicroUI.app.color(gray);
+		hex = app.color(gray);
 	}
 	
 	public void set(float gray, float alpha) {
-		hex = MicroUI.app.color(gray, alpha);
+		hex = app.color(gray, alpha);
 	}
 	
 	public void set(float red, float green, float blue) {
-		hex = MicroUI.app.color(red,green,blue);
+		hex = app.color(red,green,blue);
 	}
 	
 	public void set(float red, float green, float blue, float alpha) {
-		hex = MicroUI.app.color(red,green,blue,alpha);
+		hex = app.color(red,green,blue,alpha);
 	}
 
 	public int getRed() {
-		return (int) MicroUI.app.red(hex);
+		return (int) app.red(hex);
 	}
 
 	public int getGreen() {
-		return (int) MicroUI.app.green(hex);
+		return (int) app.green(hex);
 	}
 
 	public int getBlue() {
-		return (int) MicroUI.app.blue(hex);
+		return (int) app.blue(hex);
 	}
 
 	public int getAlpha() {
-		return (int) MicroUI.app.alpha(hex);
+		return (int) app.alpha(hex);
 	}
 
 }

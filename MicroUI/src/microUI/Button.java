@@ -3,6 +3,7 @@ package microUI;
 import microUI.utils.Rectangle;
 import microUI.utils.Text;
 import processing.core.PApplet;
+import static processing.core.PApplet.min;
 
 public class Button extends Rectangle {
 	  public Text text;
@@ -28,5 +29,20 @@ public class Button extends Rectangle {
 		    text.draw();
 		}
 	  }
+	  
+	  @Override
+	  public void setW(float w) {
+	    super.setW(w);
+	    if(text == null) { return; }
+	    text.setTextSize(min(w,h)/2);
+	  }
+	  
+	  @Override
+	  public void setH(float h) {
+		super.setH(h);
+		if(text == null) { return; }
+		text.setTextSize(min(w,h)/2);
+	  }
+	  
 	  
 	}

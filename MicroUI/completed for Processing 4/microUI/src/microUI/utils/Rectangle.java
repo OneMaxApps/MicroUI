@@ -1,6 +1,6 @@
 package microUI.utils;
 
-import microUI.MicroUI;
+import processing.core.PApplet;
 import processing.core.PImage;
 
 public class Rectangle extends Form {
@@ -9,17 +9,17 @@ public class Rectangle extends Form {
     private boolean basicFX;
     public Shadow shadow;
   
-    public Rectangle() {
-      this(0,0,10,10);
+    public Rectangle(PApplet app) {
+      this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
     }
     
-    public Rectangle(float x, float y, float w, float h) {
-      super(x,y,w,h);
+    public Rectangle(PApplet app,float x, float y, float w, float h) {
+      super(app,x,y,w,h);
       corners = new Corners();
       image = new Image();
       setVisible(true);
       setBasicFX(true);
-      shadow = new Shadow(this);
+      shadow = new Shadow(app,this);
     }
     
     @Override
@@ -30,16 +30,16 @@ public class Rectangle extends Form {
       if(isVisible()) {
     	if(!image.isLoaded()) {
 	        stroke.get();
-	        MicroUI.app.fill(fill.get());
-	        MicroUI.app.rect(x,y,w,h,corners.corns[0],corners.corns[1],corners.corns[2],corners.corns[3]);
+	        app.fill(fill.get());
+	        app.rect(x,y,w,h,corners.corns[0],corners.corns[1],corners.corns[2],corners.corns[3]);
     	} else {
     		image.draw();
     	}
     	
         if(basicFX && event != null && !image.isLoaded()) {
-        	MicroUI.app.noStroke();
-        	MicroUI.app.fill(0,event.inside() && !event.pressed() ? 34 : event.pressed() ? 128 : 0);
-        	MicroUI.app.rect(x,y,w,h,corners.get()[0],corners.get()[1],corners.get()[2],corners.get()[3]);
+        	app.noStroke();
+        	app.fill(0,event.inside() && !event.pressed() ? 34 : event.pressed() ? 128 : 0);
+        	app.rect(x,y,w,h,corners.get()[0],corners.get()[1],corners.get()[2],corners.get()[3]);
         }
         
         
@@ -57,7 +57,7 @@ public class Rectangle extends Form {
       
       public void set(float corns) {
         for(int i = 0; i < this.corns.length; i++) { this.corns[i] = corns; }
-        shadow.set(corns);
+        if(shadow != null) { shadow.set(corns); }
       }
       
       public void set(float c, float c1, float c2, float c3) {
@@ -66,7 +66,7 @@ public class Rectangle extends Form {
         corns[2] = c2;
         corns[3] = c3;
         
-        shadow.set(c,c1,c2,c3);
+        if(shadow != null) { shadow.set(c,c1,c2,c3); }
       }
       
       public void set(int[] corns) {
@@ -85,7 +85,7 @@ public class Rectangle extends Form {
       
       public Image() {
     	  
-    	  tint = new Color() {
+    	  tint = new Color(app) {
     		@Override
     		public void set(Color c) {
     			super.set(c);
@@ -126,18 +126,18 @@ public class Rectangle extends Form {
       }
       
       public void draw() {
-    	MicroUI.app.pushStyle();
+    	app.pushStyle();
         if(image != null && isVisible()) {
         	if(tintUsed) {
-        		MicroUI.app.tint(tint.get());
+        		app.tint(tint.get());
         	} else {
 	        	if(basicFX && event != null) {
-	        		MicroUI.app.tint(event.inside() && !event.pressed() ? 94 : event.pressed() ? 0 : 128);
+	        		app.tint(event.inside() && !event.pressed() ? 94 : event.pressed() ? 0 : 128);
 	        	}
         	}
-        	MicroUI.app.image(image,x,y,w,h);
+        	app.image(image,x,y,w,h);
         }
-       MicroUI.app.popStyle();
+       app.popStyle();
       }
       
       public void setVisible(boolean isVisible) { this.isVisible = isVisible; }

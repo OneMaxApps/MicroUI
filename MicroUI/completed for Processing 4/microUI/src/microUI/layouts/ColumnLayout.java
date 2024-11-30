@@ -4,19 +4,19 @@ import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 
-import microUI.MicroUI;
 import microUI.utils.BaseForm;
+import processing.core.PApplet;
 
 public class ColumnLayout extends Layout {
 	private ArrayList<Float> weightList;
 
-	public ColumnLayout(float x, float y, float w, float h) {
-		super(x, y, w, h);
+	public ColumnLayout(PApplet app, float x, float y, float w, float h) {
+		super(app, x, y, w, h);
 		weightList = new ArrayList<Float>();
 	}
 	
-	public ColumnLayout() {
-		this(0,0, MicroUI.app.width, MicroUI.app.height);
+	public ColumnLayout(PApplet app) {
+		this(app,0,0, app.width, app.height);
 	}
 
 	@Override

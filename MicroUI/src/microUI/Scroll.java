@@ -123,8 +123,8 @@ public class Scroll extends Rectangle {
 	    if(min > max) { System.out.println("min value not must be more than max value"); }
 	  }
 	  
-	  public void setVerticalMode(boolean v) {
-	    if(isVerticalMode == v) { return; }
+	  public Scroll setVerticalMode(boolean v) {
+	    if(isVerticalMode == v) { return this; }
 	    isVerticalMode = v;
 	    
 	    if(isVerticalMode) {
@@ -149,7 +149,7 @@ public class Scroll extends Rectangle {
 	      buttonDown.setPosition(getX(),getY());
 	      buttonDown.setSize(buttonsWeight(),getH());
 	    }
-	  
+	    return this;
 	  }
 	  
 	  public boolean isVerticalMode() { return isVerticalMode; }

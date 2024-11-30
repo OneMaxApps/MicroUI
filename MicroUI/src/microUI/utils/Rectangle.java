@@ -57,7 +57,7 @@ public class Rectangle extends Form {
       
       public void set(float corns) {
         for(int i = 0; i < this.corns.length; i++) { this.corns[i] = corns; }
-        shadow.set(corns);
+        if(shadow != null) { shadow.set(corns); }
       }
       
       public void set(float c, float c1, float c2, float c3) {
@@ -66,7 +66,7 @@ public class Rectangle extends Form {
         corns[2] = c2;
         corns[3] = c3;
         
-        shadow.set(c,c1,c2,c3);
+        if(shadow != null) { shadow.set(c,c1,c2,c3); }
       }
       
       public void set(int[] corns) {
