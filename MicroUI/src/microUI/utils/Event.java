@@ -17,7 +17,7 @@ public class Event {
 
 	  public Event(PApplet app) { this.app = app; }
 	  
-	  public void listen(Form form) {
+	  public void listen(BaseForm form) {
 		
 	    x = form.getX();
 	    y = form.getY();

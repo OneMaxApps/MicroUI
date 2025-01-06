@@ -4,6 +4,7 @@ import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 import microUI.utils.BaseForm;
+import microUI.utils.Text;
 import processing.core.PApplet;
 
 
@@ -50,6 +51,11 @@ public class RowLayout extends Layout {
 		
 		weightList.add(constrain(weight,0,1f-maxSize));
 		}
+		return this;
+	}
+	
+	public RowLayout add(String text, float weight) {
+		add(new Text(app,text,x,y,w,weight),weight);
 		return this;
 	}
 	

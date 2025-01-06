@@ -3,7 +3,7 @@ package microUI.utils;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class Rectangle extends Form {
+public class Rectangle extends BaseView {
     public Corners corners;
     public Image image;
     private boolean basicFX;

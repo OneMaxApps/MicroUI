@@ -99,6 +99,10 @@ public abstract class Layout extends BaseForm {
 		}
 	}
 	
+	public ArrayList<BaseForm> getElements() {
+		return elementList;
+	}
+	
 	public void mouseWheelInit(MouseEvent e) {
 		  for(int i = 0; i < elementList.size(); i++) {
 			  if(elementList.get(i) instanceof Slider) {

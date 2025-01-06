@@ -84,8 +84,8 @@ public class FX {
 				convertingRectangle(i, elementList.get(i), scrolls.before, scrolls.after);
 
 				convertingButton(i, ((Scroll) (elementList.get(i))).button, scrolls.before.button, scrolls.after.button);
-				convertingButton(i, ((Scroll) (elementList.get(i))).buttonDown, scrolls.before.buttonDown, scrolls.after.buttonDown);
-				convertingButton(i, ((Scroll) (elementList.get(i))).buttonUp, scrolls.before.buttonUp, scrolls.after.buttonUp);	
+				convertingButton(i, ((Scroll) (elementList.get(i))).buttonMinus, scrolls.before.buttonMinus, scrolls.after.buttonMinus);
+				convertingButton(i, ((Scroll) (elementList.get(i))).buttonPlus, scrolls.before.buttonPlus, scrolls.after.buttonPlus);	
 			}
 			app.popStyle();
 			
@@ -269,8 +269,8 @@ public class FX {
 			before.corners.set(10);
 			after.corners.set(100,0,100,0);
 			after.button.corners.set(100,0,100,0);
-			after.buttonDown.corners.set(100,0,100,0);
-			after.buttonUp.corners.set(100,0,100,0);
+			after.buttonMinus.corners.set(100,0,100,0);
+			after.buttonPlus.corners.set(100,0,100,0);
 		}
 		
 	}

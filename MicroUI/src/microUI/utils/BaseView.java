@@ -4,16 +4,16 @@ import static processing.core.PConstants.SQUARE;
 
 import processing.core.PApplet;
 
-public class Form extends BaseForm {
+public class BaseView extends BaseForm {
     public Color fill;
     public Stroke stroke;
     public Event event;
     
-    public Form(PApplet app) {
+    public BaseView(PApplet app) {
       this(app,0,0,0,0);
     }
     
-    public Form(PApplet app, float x, float y, float w, float h) {
+    public BaseView(PApplet app, float x, float y, float w, float h) {
       super(app, x, y, w, h);
       setTransforms(this);
       fill = new Color(app,app.color(44));
@@ -21,7 +21,8 @@ public class Form extends BaseForm {
       event = new Event(app);
     }
     
-
+  public void draw() {}
+    
   public class Stroke {
     public Color fill;
     private int weight;

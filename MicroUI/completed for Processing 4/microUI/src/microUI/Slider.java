@@ -8,12 +8,12 @@ import microUI.utils.Scrolling;
 import processing.core.PApplet;
 
 public class Slider extends Rectangle {
-	  private float min,max,value;
-	  private boolean isVerticalMode,showText;
 	  public Button button;
 	  public Rectangle level;
 	  public Scrolling scrolling;
 	  private float distOfMouseToButton;
+	  private float min,max,value;
+	  private boolean isVerticalMode,showText;
 	  
 	  public Slider(PApplet app) { this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
 	  
@@ -114,7 +114,7 @@ public class Slider extends Rectangle {
 	  
 	  public void appendValue(float a) {
 	    if(a < -.01f || a > .01f) {
-	      setValue(constrain(getValue() - a,min,max));
+	      setValue(constrain(getValue() + a,min,max));
 	    }
 	  }
 	  

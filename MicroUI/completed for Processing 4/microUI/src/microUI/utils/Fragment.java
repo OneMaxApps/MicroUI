@@ -3,24 +3,24 @@ package microUI.utils;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class View extends BaseForm {
+public class Fragment extends BaseForm {
 private PImage image;
 
-public View(PApplet app) {
+public Fragment(PApplet app) {
 	super(app,0,0,0,0);
 	
 }
 
-public View(PApplet app, PImage image) {
+public Fragment(PApplet app, PImage image) {
 	super(app,0,0,0,0);
 	this.image = image;
 }
 
-public View(PApplet app, int x, int y, int w, int h) {
+public Fragment(PApplet app, float x, float y, float w, float h) {
 	super(app,x,y,w,h);
 }
 
-public View(PApplet app, PImage image, float x, float y, float w, float h) {
+public Fragment(PApplet app, PImage image, float x, float y, float w, float h) {
 	super(app, x, y, w, h);
 	this.image = image;
 }

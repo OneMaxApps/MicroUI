@@ -10,7 +10,7 @@ import processing.core.PApplet;
 public class Scroll extends Rectangle {
 	  private float min,max,value;
 	  private boolean isVerticalMode;
-	  public Button button,buttonUp,buttonDown;
+	  public Button button,buttonPlus,buttonMinus;
 	  public Scrolling scrolling;
 	  private float distOfMouseToButton;
 	  
@@ -40,16 +40,16 @@ public class Scroll extends Rectangle {
 	    
 	    scrolling = new Scrolling(event);
 	    
-	    buttonUp = new Button(app,"+",x+w-buttonsWeight(),y,buttonsWeight(),h);
-	    buttonDown = new Button(app,"-",x,y,buttonsWeight(),h);
+	    buttonPlus = new Button(app,"+",x+w-buttonsWeight(),y,buttonsWeight(),h);
+	    buttonMinus = new Button(app,"-",x,y,buttonsWeight(),h);
 	    
-	    buttonUp.shadow.setVisible(false);
-	    buttonDown.shadow.setVisible(false);
+	    buttonPlus.shadow.setVisible(false);
+	    buttonMinus.shadow.setVisible(false);
 	    
 	    setBasicFX(false);
 	    button.setBasicFX(false);
-	    buttonUp.setBasicFX(false);
-	    buttonDown.setBasicFX(false);
+	    buttonPlus.setBasicFX(false);
+	    buttonMinus.setBasicFX(false);
 	    
 	    buttonsTransformsUpdate();
 	  }
@@ -58,8 +58,8 @@ public class Scroll extends Rectangle {
 	  public void draw() {
 		if(isVisible()) {
 		    super.draw();
-		    buttonUp.draw(); if(buttonUp.event.pressed()) { appendValue(-1); }
-		    buttonDown.draw(); if(buttonDown.event.pressed()) { appendValue(1); }
+		    buttonPlus.draw(); if(buttonPlus.event.pressed()) { appendValue(1); }
+		    buttonMinus.draw(); if(buttonMinus.event.pressed()) { appendValue(-1); }
 		    button.draw();
 		    
 		    if(button.event.moved()) {
@@ -111,7 +111,7 @@ public class Scroll extends Rectangle {
 	  
 	  public void appendValue(float a) {
 	    if(a < -.01f || a > .01f) {
-	      setValue(constrain(getValue() - a,min,max));
+	      setValue(constrain(getValue() + a,min,max));
 	    }
 	  }
 	  
@@ -132,22 +132,22 @@ public class Scroll extends Rectangle {
 	      button.setSize(getW(),buttonsWeight());
 	      button.setPosition(getX(),map(value,min,max,getY()+getH()-button.getH()-buttonsWeight(),getY()+buttonsWeight()));
 	      
-	      buttonUp.setPosition(getX(),getY());
-	      buttonUp.setSize(getW(),buttonsWeight());
+	      buttonPlus.setPosition(getX(),getY());
+	      buttonPlus.setSize(getW(),buttonsWeight());
 	      
-	      buttonDown.setPosition(getX(),getY()+getH()-buttonsWeight());
-	      buttonDown.setSize(getW(),buttonsWeight());
+	      buttonMinus.setPosition(getX(),getY()+getH()-buttonsWeight());
+	      buttonMinus.setSize(getW(),buttonsWeight());
 	      
 	    } else {
 	      setSize(getH(),getW());
 	      button.setSize(getW()/10,getH());
 	      button.setPosition(map(value,min,max,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()),getY());
 	      
-	      buttonUp.setPosition(getX()+getW()-buttonsWeight(),getY());
-	      buttonUp.setSize(buttonsWeight(),getH());
+	      buttonPlus.setPosition(getX()+getW()-buttonsWeight(),getY());
+	      buttonPlus.setSize(buttonsWeight(),getH());
 	      
-	      buttonDown.setPosition(getX(),getY());
-	      buttonDown.setSize(buttonsWeight(),getH());
+	      buttonMinus.setPosition(getX(),getY());
+	      buttonMinus.setSize(buttonsWeight(),getH());
 	    }
 	    return this;
 	  }
@@ -185,26 +185,26 @@ public class Scroll extends Rectangle {
 	  }
 	  
 	  private void buttonsTransformsUpdate() {
-	      if(button == null || buttonUp == null || buttonDown == null) { return; }
+	      if(button == null || buttonPlus == null || buttonMinus == null) { return; }
 	      
 	      if(isVerticalMode) {
 	        button.setSize(getW(),buttonsWeight());
 	        button.setPosition(getX(),constrain( map(value,min,max,getY()+getH()-button.getH()-buttonsWeight(),getY()+buttonsWeight()) ,getY(),getY()+getH()-button.getH()));
 	        
-	        buttonUp.setPosition(getX(),getY());
-	        buttonUp.setSize(getW(),buttonsWeight());
+	        buttonPlus.setPosition(getX(),getY());
+	        buttonPlus.setSize(getW(),buttonsWeight());
 	        
-	        buttonDown.setPosition(getX(),getY()+getH()-buttonsWeight());
-	        buttonDown.setSize(getW(),buttonsWeight());
+	        buttonMinus.setPosition(getX(),getY()+getH()-buttonsWeight());
+	        buttonMinus.setSize(getW(),buttonsWeight());
 	      } else {
 	        button.setSize(buttonsWeight(),getH());
 	        button.setPosition(constrain( map(value,min,max,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()) ,getX(),getX()+getW()-button.getW()),getY());
 	        
-	        buttonUp.setPosition(getX()+getW()-buttonsWeight(),getY());
-	        buttonUp.setSize(buttonsWeight(),getH());
+	        buttonPlus.setPosition(getX()+getW()-buttonsWeight(),getY());
+	        buttonPlus.setSize(buttonsWeight(),getH());
 	        
-	        buttonDown.setPosition(getX(),getY());
-	        buttonDown.setSize(buttonsWeight(),getH());
+	        buttonMinus.setPosition(getX(),getY());
+	        buttonMinus.setSize(buttonsWeight(),getH());
 	      }
 	  }
 	  

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 
 public class Spinner extends Button {
-	private boolean open,showSelectedItem;
+	private boolean open,showSelectedItem,autoCloseable;
 	private ArrayList<Button> itemList;
 	private int select;
 	private float listHeight;
@@ -15,6 +15,8 @@ public class Spinner extends Button {
 		corners.set(0);
 		shadowDestroy();
 		itemList = new ArrayList<Button>();
+		showSelectedItem = autoCloseable = true;
+		
 	}
 	
 	public Spinner(PApplet app, String title) {
@@ -36,7 +38,10 @@ public class Spinner extends Button {
 						Button item = itemList.get(i);
 						item.text.setTextSize(text.getTextSize());
 						item.draw();
-						if(item.event.clicked()) { select = i; }
+						if(item.event.clicked()) {
+							select = i;
+							if(autoCloseable) { close(); }
+						}
 						
 						
 						
@@ -56,12 +61,23 @@ public class Spinner extends Button {
 		}
 	}
 	
+	public Spinner setAutoCloseable(boolean a) {
+		autoCloseable = a;
+		return this;
+	}
+	
 	public boolean isOpen() {
 		return open;
 	}
 
-	public void setOpen(boolean open) {
-		this.open = open;
+	public Spinner open() {
+		this.open = true;
+		return this;
+	}
+	
+	public Spinner close() {
+		this.open = false;
+		return this;
 	}
 	
 	public int getSelect() {
