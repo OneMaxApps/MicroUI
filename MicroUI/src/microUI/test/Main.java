@@ -1,10 +1,10 @@
 package microUI.test;
 
-import microUI.InputText;
+import microUI.layouts.GridLayout;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
-	InputText inputText;
+	GridLayout grid;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.test.Main");
@@ -16,13 +16,13 @@ public class Main extends PApplet {
 
 	@Override
 	public void setup() {
-		inputText = new InputText(this);
-
+		grid = new GridLayout(this,3);
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
-		inputText.draw();
+		grid.draw();
 	}
+	
 }

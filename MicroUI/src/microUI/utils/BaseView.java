@@ -22,7 +22,7 @@ public class BaseView extends BaseForm {
     }
     
   public void draw() {}
-    
+  
   public class Stroke {
     public Color fill;
     private int weight;

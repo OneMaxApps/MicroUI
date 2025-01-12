@@ -9,15 +9,17 @@ import microUI.utils.BaseForm;
 import microUI.utils.Color;
 import microUI.utils.Shadow;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.event.MouseEvent;
 
 public abstract class Layout extends BaseForm {
-	private boolean isVisible, isElementsResizable;
+	private boolean isElementsResizable;
 	protected ArrayList<BaseForm> elementList;
 	public Color fill;
 	public Margin margin;
 	public Shadow shadow;
-
+	public Background background;
+	
 	public Layout(PApplet app, float x, float y, float w, float h) {
 		super(app,x, y, w, h);
 		elementList = new ArrayList<BaseForm>();
@@ -25,16 +27,21 @@ public abstract class Layout extends BaseForm {
 		fill.setHEX(app.color(0, 32));
 		margin = new Margin();
 		setVisible(true);
+		background = new Background();
 	}
 
 	public void draw() {
 		if (isVisible()) {
-			app.pushStyle();
-				app.stroke(0);
-				app.strokeWeight(1);
-				app.fill(fill.get());
-				app.rect(getX(), getY(), getW(), getH());
-			app.popStyle();
+			if(background.isLoaded()) {
+					background.draw();
+			} else {
+				app.pushStyle();
+					app.stroke(0);
+					app.strokeWeight(1);
+					app.fill(fill.get());
+					app.rect(getX(), getY(), getW(), getH());
+				app.popStyle();
+			}
 			
 			app.pushStyle();
 				if(shadow != null) {
@@ -72,14 +79,6 @@ public abstract class Layout extends BaseForm {
 
 	public void setElementsResizable(boolean r) {
 		isElementsResizable = r;
-	}
-
-	public boolean isVisible() {
-		return isVisible;
-	}
-
-	public void setVisible(boolean v) {
-		isVisible = v;
 	}
 	
 	public void setVisibleTotal(boolean v) {
@@ -129,6 +128,35 @@ public abstract class Layout extends BaseForm {
 		}
 	}
 	
+	public class Background {
+		  public Color tint;
+		  private PImage background;
+		  
+		  public Background() {
+			  tint = new Color(app,app.color(255));
+		  }
+		  
+		  private void draw() {
+			  if(background != null) {
+				  app.pushStyle();
+				  app.tint(tint.get());
+				  app.image(background,x,y,w,h);
+				  app.popStyle();
+			  }
+		  }
+		  
+		  public void set(PImage background) {
+			  this.background = background;
+		  }
+		  
+		  public void load(String path) {
+			  background = app.loadImage(path);
+		  }
+		  
+		  public PImage get() { return background; }
+		  
+		  public boolean isLoaded() { return background != null; }
+	  }
 
 	public class Margin {
 		private float left, up, right, down;
@@ -153,7 +181,7 @@ public abstract class Layout extends BaseForm {
 		}
 
 		public void set(float margin) {
-			set(margin, margin, margin * 2, margin * 2);
+			set(margin, margin, margin, margin);
 			
 		}
 
@@ -167,11 +195,11 @@ public abstract class Layout extends BaseForm {
 		}
 
 		public void setRight(float right) {
-			this.right = right;
+			this.right = left == 0 ? right : right+left;
 		}
 
 		public void setDown(float down) {
-			this.down = down;
+			this.down = up == 0 ? down : down+up;
 		}
 
 		public float getLeft() {

@@ -39,7 +39,7 @@ public class Rectangle extends BaseView {
         if(basicFX && event != null && !image.isLoaded()) {
         	app.noStroke();
         	app.fill(0,event.inside() && !event.pressed() ? 34 : event.pressed() ? 128 : 0);
-        	app.rect(x,y,w,h,corners.get()[0],corners.get()[1],corners.get()[2],corners.get()[3]);
+        	app.rect(x,y,w,h,corners.get(0),corners.get(1),corners.get(2),corners.get(3));
         }
         
         
