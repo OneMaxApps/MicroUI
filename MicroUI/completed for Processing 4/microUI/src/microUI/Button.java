@@ -11,7 +11,7 @@ public class Button extends Rectangle {
 	  public Button(PApplet app, String text, float x, float y, float w, float h) {
 	    super(app,x,y,w,h);
 	    
-	    this.text = new Text(app,text,x,y,w,h);
+	    this.text = new Text(app,text.toUpperCase(),x,y,w,h);
 	    this.text.setTextSize(h/2);
 	    corners.set(10);
 	  }

@@ -35,10 +35,27 @@ public class Event {
 	    
 	    if(outside()) { wasPressed = 0; }
 	    
-
-	    	
-	    
 	  }
+	  
+	  public void listen(float x, float y, float w, float h) {
+			
+		    this.x = x;
+		    this.y = y;
+		    this.w = w;
+		    this.h = h;
+		      
+		    if(moving && !app.mousePressed) { moving = false; }
+		    if(pressed()) {
+		    	wasPressed = 1;
+		    	if(app.frameCount%60 == 0) { longPressed++; }
+			     
+		    } else {
+		    	longPressed = 0;
+		     }
+		    
+		    if(outside()) { wasPressed = 0; }
+		    
+		  }
 	  
 	  public boolean inside() { return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; }
 	  public boolean outside() { return !inside(); }

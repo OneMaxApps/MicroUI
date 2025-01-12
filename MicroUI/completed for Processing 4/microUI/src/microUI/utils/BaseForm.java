@@ -13,6 +13,18 @@ public class BaseForm {
 		setTransforms(x,y,w,h);
 	}
 	
+	public BaseForm(PApplet app, float x, float y, float size) {
+		this(app,x,y,size,size);
+	}
+	
+	public BaseForm(PApplet app, float w, float h) {
+		this(app,0,0,w,h);
+	}
+	
+	public BaseForm(PApplet app) {
+		this(app,0,0,0,0);
+	}
+	
 	public float getX() {
 		return x;
 	}
@@ -67,9 +79,10 @@ public class BaseForm {
 		setTransforms(baseForm.getX(),baseForm.getY(),baseForm.getW(),baseForm.getH());
 	}
 	
+	public void setVisible(boolean v) { isVisible = v; }
+	  
+	public boolean isVisible() { return isVisible; }
+	
 	public void draw() {}
 	
-	public void setVisible(boolean v) { isVisible = v; }
-    
-    public boolean isVisible() { return isVisible; }
 }

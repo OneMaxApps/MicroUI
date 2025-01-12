@@ -6,10 +6,11 @@ import static processing.core.PConstants.CORNER;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PGraphics;
 
 public class Text extends BaseView {
-	  private PFont font;
 	  public Color fill;
+	  private PFont font;
 	  private StringBuilder text;
 	  private int textSize;
 	  private boolean center;
@@ -22,8 +23,15 @@ public class Text extends BaseView {
 	    center = true;
 	  }
 	  
+	  public Text(PApplet app, float x, float y, float w, float h) {
+		super(app,x,y,w,h);
+		this.text = new StringBuilder();
+		fill = new Color(app,255);
+		textSize = (int) (h/3 > 0 ? h/3 : h/2);
+	  }
+	  
 	  public Text(PApplet app, String text) {
-		this(app,text,app.width*.2f,app.height*.4f,app.width*.6f,app.height*.2f);
+			this(app,text,app.width*.2f,app.height*.4f,app.width*.6f,app.height*.2f);
 	  }
 	  
 	  public void draw() {
@@ -42,9 +50,22 @@ public class Text extends BaseView {
 		  app.popStyle();
 	  }
 	  
-	  
-	  
-	  
+	  public void draw(PGraphics pg) {
+		  pg.pushStyle();
+		  pg.fill(fill.get());
+		  if(font != null) {
+			  pg.textFont(font,textSize);
+		  }
+		  pg.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
+		  if(center) {
+			  pg.textAlign(CENTER,CENTER);
+		  } else {
+			  pg.textAlign(CORNER,CENTER);
+		  }
+		  pg.text(text.toString() != null ? text.toString() : "",x,y+h/2);
+		  pg.popStyle();
+	  }
+	  	  
 	public final PFont getFont() {
 		return font;
 	}
@@ -83,7 +104,14 @@ public class Text extends BaseView {
 		  text.delete(index-1,index);
 	  }
 	  
+	  public void deleteLastChar() {
+		  if(text.length() == 0) { return; }
+		  text.delete(text.length()-1,text.length());
+	  }
+	  
 	  public void append(String text) { this.text.append(text); }
+	  
+	  public void append(char ch) { this.text.append(ch); }
 	  
 	  public void insert(int index, String text) { this.text.insert(index, text); }
 	  
@@ -95,5 +123,8 @@ public class Text extends BaseView {
 		this.center = center;
 	  }
 	  
+	  public boolean isEmpty() {
+		  return text.toString().isEmpty();
+	  }
 	  
 	}
