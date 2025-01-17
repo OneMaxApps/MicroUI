@@ -1,10 +1,10 @@
 package microUI.test;
 
-import microUI.Editor;
+import microUI.EditText;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
-	Editor editor;
+	EditText editText;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.test.Main");
@@ -17,20 +17,18 @@ public class Main extends PApplet {
 	
 	@Override
 	public void setup() {
-		editor = new Editor(this);
-		
+		editText = new EditText(this,100,100,200,50);
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
-		editor.draw();
-		
+		editText.draw();
 	}
 
 	@Override
 	public void keyPressed() {
-		editor.keyPressed();
+		editText.keyPressed();
 	}
 
 }
