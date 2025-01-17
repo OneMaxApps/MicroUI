@@ -1,10 +1,10 @@
 package microUI.test;
 
-import microUI.layouts.GridLayout;
+import microUI.EditText;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
-	GridLayout grid;
+	EditText editText;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.test.Main");
@@ -12,17 +12,26 @@ public class Main extends PApplet {
 	}
 	
 	@Override
-	public void settings() { size(400,400); }
+	public void settings() { size(800,800); }
 
+	
 	@Override
 	public void setup() {
-		grid = new GridLayout(this,3);
+		editText = new EditText(this,100,350,600,100);
+		
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
-		grid.draw();
+		editText.draw();
+		
+		if(mouseButton == RIGHT) { editText.setW(mouseX); }
 	}
-	
+
+	@Override
+	public void keyPressed() {
+		editText.keyPressed();
+	}
+
 }

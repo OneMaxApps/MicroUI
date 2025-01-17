@@ -8,7 +8,7 @@ public class Rectangle extends BaseView {
     public Image image;
     private boolean basicFX;
     public Shadow shadow;
-  
+
     public Rectangle(PApplet app) {
       this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
     }
@@ -42,8 +42,15 @@ public class Rectangle extends BaseView {
         	app.rect(x,y,w,h,corners.get(0),corners.get(1),corners.get(2),corners.get(3));
         }
         
-        
       }
+    }
+    
+    public void setStyle(Rectangle otherRectangle) {
+    	fill.set(otherRectangle.fill.get());
+    	corners.set(otherRectangle.corners.get(0),otherRectangle.corners.get(1),otherRectangle.corners.get(2),otherRectangle.corners.get(3));
+    	stroke.fill.set(otherRectangle.stroke.fill.get());
+    	stroke.setWeight(otherRectangle.stroke.getWeight());
+    	shadow.fill.set(otherRectangle.shadow.fill.get());
     }
     
     public void setBasicFX(boolean basicFX) { this.basicFX = basicFX; }

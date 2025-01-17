@@ -1,0 +1,205 @@
+package microUI;
+
+import static processing.core.PApplet.dist;
+import static processing.core.PApplet.max;
+
+import microUI.layouts.Layout;
+import microUI.layouts.RowLayout;
+import microUI.utils.Event;
+import microUI.utils.Rectangle;
+import microUI.utils.Text;
+import processing.core.PApplet;
+
+public class Window extends Rectangle {
+	public Bar bar;
+	private boolean canResize,resizable;
+	private Layout layout;
+	
+	public Window(PApplet app, String title, float x, float y, float w, float h) {
+		super(app,x,y,w,h);
+		setBasicFX(false);
+		fill.set(32);
+		resizable = true;
+		bar = new Bar(app, title);
+	}
+	
+	public Window(PApplet app, String title) {
+		this(app,title,app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
+	}
+
+	@Override
+	public void draw() {
+		if(isVisible) {
+			super.draw();
+			bar.draw();
+			if(layout != null) {
+				layout.draw();
+			}
+		}
+		
+		if(resizable) {
+			if(event.pressed()) {
+			 if(dist(x+w, y+h, app.mouseX, app.mouseY) < ((w+h)/40)) {
+				canResize = true;
+			 }
+			}
+			if(!app.mousePressed) { canResize = false; }
+			
+			if(canResize) {
+				setSize(max(100,getW()+app.mouseX-app.pmouseX),max(100,getH()+app.mouseY-app.pmouseY));
+			}
+		}
+			
+	}
+	
+	public final void setLayout(Layout layout) {
+		this.layout = layout;
+		if(bar.isVisible) {
+			layout.setPosition(x, y+bar.HEIGHT);
+			layout.setSize(w, h-bar.HEIGHT);
+		} else {
+			layout.setPosition(x, y);
+			layout.setSize(w, h);
+		}
+	}
+	
+	public final void open() { isVisible = true; }
+	public final void close() { isVisible = false; }
+	public final boolean isOpen() { return isVisible; }
+	
+	public final void fullScreen() {
+		setTransforms(0,0,app.width,app.height);
+	}
+	
+	public final void smallScreen() {
+		setTransforms(app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
+	}
+	
+	public boolean isFullScreen() {
+		return (int) w == app.width && (int) h == app.height;
+	}
+	
+	public final boolean isResizable() {
+		return resizable;
+	}
+
+	public final void setResizable(boolean resizable) {
+		this.resizable = resizable;
+	}
+
+	public final class Bar {
+		public final int HEIGHT = 25;
+		public final Event event;
+		public RowLayout layout;
+		private Button buttonClose;
+		private Text title;
+		private boolean isVisible;
+		
+		public Bar(PApplet app, String title) {
+			layout = new RowLayout(app,x,y,w,HEIGHT);
+			layout.add("", .1f);
+			layout.add(this.title = new Text(app,title),.6f);
+			layout.add(buttonClose = new Button(app,"Close"),.3f);
+			this.title.setInCenter(false);
+			this.title.setTextSize(HEIGHT/2);
+			
+			buttonClose.corners.set(0);
+			
+			isVisible = true;
+			
+			event = new Event(app);
+		}
+		
+		public final void draw() {
+			if(isVisible) {
+				event.listen(layout);
+				layout.draw();
+				
+				if(app.mousePressed)
+				if(event.moved()) { setPosition(getX()+app.mouseX-app.pmouseX, getY()+app.mouseY-app.pmouseY); }
+				
+				if(event.clicked(2)) {
+					if(!isFullScreen()) {
+						fullScreen();
+					} else {
+						smallScreen();
+					}
+				}
+				
+				if(buttonClose.event.clicked()) { close(); }
+			}
+		}
+
+		public final boolean isVisible() {
+			return isVisible;
+		}
+
+		public final void setVisible(boolean isVisible) {
+			this.isVisible = isVisible;
+			if(isVisible) {
+				Window.this.layout.setPosition(x, y+bar.HEIGHT);
+				Window.this.layout.setSize(w, h-bar.HEIGHT);
+			} else {
+				Window.this.layout.setPosition(x, y);
+				Window.this.layout.setSize(w, h);
+			}
+		}
+		
+	}
+
+	@Override
+	public void setX(float x) {
+		super.setX(x);
+		if(bar != null && bar.layout != null) {
+			bar.layout.setX(x);
+		}
+		if(layout != null) {
+			layout.setX(x);
+		}
+	}
+
+	@Override
+	public void setY(float y) {
+		super.setY(y);
+		if(bar != null && bar.layout != null) {
+		bar.layout.setY(y);
+		
+		 if(layout != null) {
+			if(bar.isVisible) {
+				layout.setY(y+bar.HEIGHT);
+			} else {
+				layout.setY(y);
+			}
+		 }
+			
+		}
+		
+	}
+
+	@Override
+	public void setW(float w) {
+		super.setW(w);
+		if(bar != null && bar.layout != null) {
+		bar.layout.setW(w);
+		 if(layout != null) {
+			layout.setW(w);
+		 }
+		}
+	}
+
+	@Override
+	public void setH(float h) {
+		super.setH(h);
+		if(bar != null && bar.layout != null) {
+			 if(layout != null) {
+				if(bar.isVisible) {
+					layout.setH(h-bar.HEIGHT);
+				} else {
+					layout.setH(h);
+				}
+			 }
+		}
+	}
+	
+	
+}

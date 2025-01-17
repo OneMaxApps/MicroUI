@@ -12,7 +12,7 @@ import microUI.Slider;
 import microUI.Spinner;
 import processing.core.PApplet;
 
-public class FX {
+public final class FX {
 	public Buttons buttons;
 	public CheckBoxs checkBoxs;
 	public CircleSeekBars circleSeekBars;

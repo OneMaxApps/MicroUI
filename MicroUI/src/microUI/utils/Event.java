@@ -2,7 +2,7 @@ package microUI.utils;
 
 import processing.core.PApplet;
 
-public class Event {
+public final class Event {
 
 	  public static final int PRESSED = 1;
 	  public static final int CLICKED = 2;
@@ -11,7 +11,7 @@ public class Event {
 	  public static final int OUTSIDE = 5;
    	  
 	  private float x,y,w,h;
-	  private byte wasPressed,longPressed;
+	  private byte wasPressed,longPressed,clickCounter;
 	  private boolean moving;
 	  private PApplet app;
 
@@ -43,7 +43,7 @@ public class Event {
 		    this.y = y;
 		    this.w = w;
 		    this.h = h;
-		      
+		    
 		    if(moving && !app.mousePressed) { moving = false; }
 		    if(pressed()) {
 		    	wasPressed = 1;
@@ -55,7 +55,7 @@ public class Event {
 		    
 		    if(outside()) { wasPressed = 0; }
 		    
-		  }
+	  }
 	  
 	  public boolean inside() { return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; }
 	  public boolean outside() { return !inside(); }
@@ -72,6 +72,15 @@ public class Event {
 	    	return true;
 	    }
 	    return false;
+	  }
+	  
+	  public boolean clicked(int count) {
+		  if(clickCounter == count) {clickCounter = 0;} else {
+			 if(clicked()) { clickCounter++; } else {
+				 if(clickCounter != 0 && app.frameCount%30 == 0) { clickCounter--; }
+			 }
+		  }
+		  return clickCounter == count;
 	  }
 	  
 	  public void action() {}

@@ -7,7 +7,7 @@ import static processing.core.PConstants.SQUARE;
 import microUI.layouts.Layout;
 import processing.core.PApplet;
 
-public class Shadow {
+public final class Shadow {
 	  public Color fill;
 	  private PApplet app;
 	  private BaseForm form;

@@ -10,10 +10,8 @@ import java.util.ArrayList;
 import microUI.Button;
 import microUI.CircleSeekBar;
 import microUI.utils.BaseForm;
-import microUI.utils.Color;
 import microUI.utils.Text;
 import processing.core.PApplet;
-import processing.core.PImage;
 
 public class GridLayout extends Layout {
 	  private boolean fillTheGrid;

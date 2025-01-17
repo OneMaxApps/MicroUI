@@ -8,12 +8,14 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
-public class Text extends BaseView {
+public final class Text extends BaseView {
 	  public Color fill;
+	  public Shadow shadow;
 	  private PFont font;
 	  private StringBuilder text;
 	  private int textSize;
 	  private boolean center;
+	  
 	  
 	  public Text(PApplet app, String text, float x, float y, float w, float h) {
 	    super(app,x,y,w,h);
@@ -21,6 +23,7 @@ public class Text extends BaseView {
 	    fill = new Color(app,255);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
 	    center = true;
+	    shadow = new Shadow();
 	  }
 	  
 	  public Text(PApplet app, float x, float y, float w, float h) {
@@ -28,6 +31,7 @@ public class Text extends BaseView {
 		this.text = new StringBuilder();
 		fill = new Color(app,255);
 		textSize = (int) (h/3 > 0 ? h/3 : h/2);
+		shadow = new Shadow();
 	  }
 	  
 	  public Text(PApplet app, String text) {
@@ -35,6 +39,8 @@ public class Text extends BaseView {
 	  }
 	  
 	  public void draw() {
+		  shadow.draw();
+		  
 		  app.pushStyle();
 		  app.fill(fill.get());
 		  if(font != null) {
@@ -66,27 +72,27 @@ public class Text extends BaseView {
 		  pg.popStyle();
 	  }
 	  	  
-	public final PFont getFont() {
-		return font;
-	}
-
-	public final void loadFont(String path) {
+	  public final PFont getFont() {
+			return font;
+	  }
+	
+	  public final void loadFont(String path) {
 		font = app.loadFont(path);
-	}
+	  }
+		
+	  public final void createFont(String path, int textSize) {
+			font = app.createFont(path,textSize);
+	  }
 	
-	public final void createFont(String path, int textSize) {
-		font = app.createFont(path,textSize);
-	}
-	
-	public final void createFont(String path) {
+	  public final void createFont(String path) {
 		createFont(path,textSize);
-	}
+	  }
 	
-	public void setFont(PFont font) {
+	  public void setFont(PFont font) {
 		this.font = font;
-	}
+	  }
 	
-	public void set(String text) {
+	  public void set(String text) {
 	    clear();
 	    this.text.append(text);
 	  }
@@ -126,5 +132,67 @@ public class Text extends BaseView {
 	  public boolean isEmpty() {
 		  return text.toString().isEmpty();
 	  }
-	  
+
+	    
+	  public final class Shadow {
+		  public Color fill;
+		  private float extraSize,shiftX,shiftY;
+		  private boolean isVisible;
+		  
+		  public Shadow() {
+			  fill = new Color(app,0);
+			  extraSize = h*.025f;
+			  isVisible = false;
+		  }
+		  
+		  public final void draw() {
+			  if(isVisible) {
+				  app.pushStyle();
+				  app.fill(fill.get());
+				  if(font != null) {
+					  app.textFont(font,textSize);
+				  }
+				  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3+extraSize : 1 ) : textSize+extraSize);
+				  if(center) {
+				  app.textAlign(CENTER,CENTER);
+				  } else {
+					  app.textAlign(CORNER,CENTER);
+				  }
+				  app.text(text.toString() != null ? text.toString() : "",x+shiftX*w*.05f,y+shiftY*h*.05f,abs(w <= 0 ? 1 : w),abs(h <= 0 ? 1 : h));
+				  app.popStyle();
+			  }
+		 }
+
+		public final float getShiftX() {
+			return shiftX;
+		}
+
+		public final void setShiftX(float shiftX) {
+			if(shiftX < -1 || shiftX > 1) { return; }
+			this.shiftX = shiftX;
+		}
+
+		public final float getShiftY() {
+			return shiftY;
+		}
+
+		public final void setShiftY(float shiftY) {
+			if(shiftY < -1 || shiftY > 1) { return; }
+			this.shiftY = shiftY;
+		}
+		 
+		public final void setSize(float size) {
+			extraSize = size;
+		}
+
+		public final boolean isVisible() {
+			return isVisible;
+		}
+
+		public final void setVisible(boolean isVisible) {
+			this.isVisible = isVisible;
+		}
+		
+		
+	  } 
 	}

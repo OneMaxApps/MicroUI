@@ -2,6 +2,7 @@ package microUI;
 
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
+import static processing.core.PApplet.abs;
 
 import microUI.utils.Rectangle;
 import microUI.utils.Scrolling;
@@ -136,11 +137,11 @@ public class Slider extends Rectangle {
 	    
 	    if(isVerticalMode) {
 	      setSize(getH(),getW());
-	      button.setSize(getW(),getH()/10);
+	      button.setSize(getW(),getH()/constrain(abs(max),2,20));
 	      button.setPosition(getX(),map(value,min,max,getY()+getH()-button.getH(),getY()));
 	    } else {
 	      setSize(getH(),getW());
-	      button.setSize(getW()/10,getH());
+	      button.setSize(getW()/constrain(abs(max),2,20),getH());
 	      button.setPosition(map(value,min,max,getX(),getX()+getW()-button.getW()),getY());
 	    }
 	    
@@ -180,17 +181,17 @@ public class Slider extends Rectangle {
 	  public void showText(boolean s) { showText = s; }
 	  
 	  private float buttonsWeight() {
-	    return isVerticalMode() ? getH()/10 : getW()/10;
+	    return isVerticalMode() ? getH()/constrain(abs(max),2,20) : getW()/constrain(abs(max),2,20);
 	  }
 	  
 	  private void buttonTransformsUpdate() {
 	      if(button == null) { return; }
 	      
 	      if(isVerticalMode) {
-	        button.setSize(getW(),getH()/10);
+	        button.setSize(getW(),getH()/constrain(abs(max),2,20));
 	        button.setPosition(getX(),constrain( map(value,min,max,getY()+getH()-button.getH(),getY()) ,getY(),getY()+getH()-button.getH()));
 	      } else {
-	        button.setSize(getW()/10,getH());
+	        button.setSize(getW()/constrain(abs(max),2,20),getH());
 	        button.setPosition(constrain(map(value,min,max,getX(),getX()+getW()-button.getW()),getX(),getX()+getW()-button.getW()),getY());
 	      }
 	  }

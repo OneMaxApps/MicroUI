@@ -1,6 +1,6 @@
 package microUI.utils;
 
-public class Physics {
+public final class Physics {
 	
 	public final static boolean collision(BaseForm form, BaseForm otherForm) {
 		

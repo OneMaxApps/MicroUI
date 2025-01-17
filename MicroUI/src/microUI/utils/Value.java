@@ -2,7 +2,7 @@ package microUI.utils;
 
 import static processing.core.PApplet.constrain;
 
-public class Value {
+public final class Value {
 private float min,max,value;;
 
 public Value(float min, float max, float value) {

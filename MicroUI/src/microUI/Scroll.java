@@ -1,5 +1,6 @@
 package microUI;
 
+import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
@@ -181,7 +182,7 @@ public class Scroll extends Rectangle {
 	  }
 	  
 	  private float buttonsWeight() {
-	    return isVerticalMode() ? getH()/10 : getW()/10;
+	    return isVerticalMode() ? getH()/constrain(abs(max),2,20) : getW()/constrain(abs(max),2,20);
 	  }
 	  
 	  private void buttonsTransformsUpdate() {
