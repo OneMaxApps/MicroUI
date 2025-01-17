@@ -29,7 +29,7 @@ public final class EditText extends BaseForm {
 		cursor = new Cursor();
 		select = new Select();
 		event = new Event(app);
-		hint = "Enter text:";
+		hint = "";
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public final class EditText extends BaseForm {
 		this.focused = focused;
 	}
 
-	private final void deleteSelectedText() {
+	public final void deleteSelectedText() {
 		text.sb.delete(select.getFirstChar(),select.getLastChar());
 		if(text.sb.toString().isEmpty()) {
 			cursor.setOnStart();
@@ -83,7 +83,7 @@ public final class EditText extends BaseForm {
 		select.setEmpty();
 	}
 	
-	private final void checkPressedBackspace() {
+	public final void checkPressedBackspace() {
 		if(app.key == java.awt.event.KeyEvent.VK_BACK_SPACE) {
 			if(!text.sb.toString().isEmpty()) {
 				if(!cursor.isOnStart()) {
@@ -94,14 +94,14 @@ public final class EditText extends BaseForm {
 		}	
 	}
 	
-	private final void checkPressedCTRLC() {
+	public final void checkPressedCTRLC() {
 		if(app.key == 0x03) {
 			select.setBuffer(text.getSubText(select.getFirstChar(), select.getLastChar()));
 			select.isEmpty();
 		}
 	}
 	
-	private final void checkPressedCTRLV() {
+	public final void checkPressedCTRLV() {
 		if(app.key == 0x16) {
 			if(select.getBuffer() == null) { return; }
 			for(int i = 0; i <select.getBuffer().length(); i++) {
@@ -115,7 +115,7 @@ public final class EditText extends BaseForm {
 		
 	}
 	
-	private final void checkPressedCTRLX() {
+	public final void checkPressedCTRLX() {
 		if(app.key == 0x18) {
 			select.setBuffer(text.getSubText(select.getFirstChar(), select.getLastChar()));
 			text.sb.delete(select.getFirstChar(), min(text.sb.length(),select.getLastChar()));
@@ -124,7 +124,7 @@ public final class EditText extends BaseForm {
 		}
 	}
 	
-	private final void checkPressedCTRLA() {
+	public final void checkPressedCTRLA() {
 		if(app.key == 0x01) {
 			select.setFull();
 		}
@@ -193,7 +193,7 @@ public final class EditText extends BaseForm {
 		
 		public Text() {
 			super();
-			sb = new StringBuilder("Hello");
+			sb = new StringBuilder();
 			fill = new Color(app,0);
 			size = targetSize = h/2;
 		}
@@ -209,10 +209,20 @@ public final class EditText extends BaseForm {
 			app.popStyle();
 			
 			adaptiveSize();
+			
+		}
+		
+		private final float getHintWidth() {
+			float width;
+			app.pushStyle();
+			app.textSize(size);
+			width = app.textWidth(hint);
+			app.popStyle();
+			return width;
 		}
 		
 		public final void adaptiveSize() {
-			if(getWidth() > w) {
+			if(getWidth() > w || getHintWidth() > w) {
 				size--;
 			} else {
 			if(size < targetSize) {
