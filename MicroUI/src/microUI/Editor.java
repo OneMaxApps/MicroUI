@@ -15,7 +15,7 @@ public final class Editor extends Rectangle {
 	public Editor(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
 		linesList = new ArrayList<EditText>();
-		linesCount = 10;
+		linesCount = 12;
 		buffer = "";
 		setBasicFX(false);
 		fill.set(255);
