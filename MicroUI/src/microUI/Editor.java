@@ -50,6 +50,10 @@ public final class Editor extends Rectangle {
 				if(app.key == PASTE) {
 					
 				}
+				
+				if(app.key == CUT) {
+					
+				}
 			} else {
 				line.select.setBuffer(buffer);
 			}
