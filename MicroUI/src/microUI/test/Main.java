@@ -17,13 +17,21 @@ public class Main extends PApplet {
 	
 	@Override
 	public void setup() {
-		editText = new EditText(this,100,100,200,50);
+		editText = new EditText(this);
+		editText.setHint("Enter any word");
+		/*
+		editText.fill.set(0);
+		editText.text.fill.set(0,255,0);
+		editText.cursor.fill.set(0,255,0,128);
+		editText.select.fill.set(255,255,0,128);
+		*/
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
 		editText.draw();
+		if(mouseButton == RIGHT) { editText.setW(mouseX); }
 	}
 
 	@Override

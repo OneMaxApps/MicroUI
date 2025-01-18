@@ -1,19 +1,22 @@
 package microUI;
 
+import static processing.core.PApplet.constrain;
+import static processing.core.PApplet.map;
+import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
-import static processing.core.PApplet.map;
-import static processing.core.PApplet.constrain;
-import static processing.core.PApplet.min;
-import static processing.core.PApplet.max;
 
 import microUI.utils.BaseForm;
 import microUI.utils.Color;
 import microUI.utils.Event;
 import processing.core.PApplet;
+import processing.core.PFont;
+import processing.core.PGraphics;
 
 public final class EditText extends BaseForm {
+	public PFont font;
 	public Color fill;
 	public Text text;
 	public Cursor cursor;
@@ -30,6 +33,11 @@ public final class EditText extends BaseForm {
 		select = new Select();
 		event = new Event(app);
 		hint = "";
+		font = app.createFont("Consolas",h);
+	}
+	
+	public EditText(PApplet app) {
+		this(app,app.width*.1f,app.height*.45f,app.width*.8f,app.height*.1f);
 	}
 
 	@Override
@@ -50,6 +58,22 @@ public final class EditText extends BaseForm {
 		
 		if(event.pressed()) {
 			cursor.setMousePosition();
+			
+			if(app.mouseX > x+w*.9f) {
+				if(cursor.get() < text.sb.length()) {
+					if(app.frameCount%10  == 0) {
+						text.shift += text.getCharWidth();
+					}
+				}
+			}
+			
+			if(app.mouseX < x+w*.1f) {
+				if(cursor.get() > 0) {
+					if(app.frameCount%10 == 0) {
+					text.shift -= text.getCharWidth();
+					}
+				}
+			}
 		}
 	}
 	
@@ -63,6 +87,14 @@ public final class EditText extends BaseForm {
 		return this;
 	}
 	
+	public final PFont getFont() {
+		return font;
+	}
+
+	public final void setFont(PFont font) {
+		this.font = font;
+	}
+
 	public final boolean isFocused() {
 		return focused;
 	}
@@ -89,9 +121,12 @@ public final class EditText extends BaseForm {
 				if(!cursor.isOnStart()) {
 					text.sb.delete(cursor.get()-1,cursor.get());
 					cursor.left();
+					if(cursor.cursorX <= x+text.getCharWidth()) {
+						text.shift -= text.getCharWidth();
+					}
 				}
 			}
-		}	
+		}
 	}
 	
 	public final void checkPressedCTRLC() {
@@ -105,10 +140,12 @@ public final class EditText extends BaseForm {
 		if(app.key == 0x16) {
 			if(select.getBuffer() == null) { return; }
 			for(int i = 0; i <select.getBuffer().length(); i++) {
-				if(!text.isFull()) {
 					text.sb.insert(min(cursor.get(),text.sb.length()),select.getBuffer().charAt(i));
 					cursor.right();
-				}
+					// THINK ABOUT IT...
+					if(cursor.isOnEnd() && text.getWidth() > w) {
+						text.shift += text.getCharWidth();
+					}
 			}
 			select.setEmpty();
 		}
@@ -134,19 +171,12 @@ public final class EditText extends BaseForm {
 		boolean correctSymbol = Character.isLetter(app.key) || Character.isDigit(app.key) || Character.isWhitespace(app.key);
 		
 		if(focused) {
-			
 			cursor.timerReset();
-			
 			checkPressedCTRLV();
-			
 			checkPressedCTRLA();
-			
 			if(select.isSelected()) {
-				
 				checkPressedCTRLX();
-				
 				checkPressedCTRLC();
-				
 				if(correctSymbol || app.key == java.awt.event.KeyEvent.VK_BACK_SPACE) {
 					deleteSelectedText();
 				}
@@ -157,15 +187,23 @@ public final class EditText extends BaseForm {
 			switch(app.keyCode) {
 			case LEFT :
 				cursor.left();
+				if(cursor.cursorX <= x+text.getCharWidth()) {
+					text.shift -= text.getCharWidth();
+				}
+				
 				break;
 			case RIGHT:
 				cursor.right();
+				if(cursor.cursorX >= x+w-text.getCharWidth()) {
+					text.shift += text.getCharWidth();
+				}
 				break;
 			}
-			
-			if(!text.isFull()) {
 				if(correctSymbol) {
-					text.adaptiveSize();
+					
+					if(text.getWidth() > w-text.getCharWidth()) {
+						text.shift += text.getCharWidth();
+					}
 					
 					if(cursor.isOnEnd()) {
 						text.sb.append(app.key);
@@ -175,62 +213,82 @@ public final class EditText extends BaseForm {
 							text.sb.append(app.key);
 							cursor.right();
 						} else {
-							text.sb.insert(cursor.get(),app.key);
+							text.sb.insert(min(text.sb.length(),cursor.get()), app.key);
 							cursor.right();
 						}
-					}
+					  }
 				}
-			}
 			
 			
 		}
 	}
 
+	
+	@Override
+	public void setW(float w) {
+		super.setW(w);
+		if(text == null) { return; }
+		if(text == null || text.pg == null) { return; }
+		text.pg = app.createGraphics((int) w, (int) h);
+		if(select == null || select.pg == null) { return; }
+		select.pg = app.createGraphics((int) w, (int) h);
+		
+	}
+
+	@Override
+	public void setH(float h) {
+		super.setH(h);
+		if(text == null || text.pg == null) { return; }
+		text.pg = app.createGraphics((int) w, (int) h);
+		if(select == null || select.pg == null) { return; }
+		select.pg = app.createGraphics((int) w, (int) h);
+		
+	}
+
 	public final class Text {
+		
 		public StringBuilder sb;
 		public Color fill;
-		private float size,targetSize;
+		private float size,targetSize,shift;
+		private PGraphics pg;
 		
 		public Text() {
 			super();
 			sb = new StringBuilder();
 			fill = new Color(app,0);
 			size = targetSize = h/2;
+			pg = app.createGraphics((int) w, (int) h);
 		}
 		
 		public void draw() {
 			size = constrain(size,1,targetSize);
 			
-			app.pushStyle();
-			app.fill(fill.get());
-			app.textSize(size);
-			app.textAlign(LEFT,CENTER);
-			app.text(sb.toString().isEmpty() ? hint : sb.toString(), x,y+h/2);
-			app.popStyle();
+			pg.beginDraw();
+			pg.clear();
+			pg.pushStyle();
+			pg.fill(fill.get());
+			pg.textSize(size);
+			pg.textAlign(LEFT,CENTER);
+			pg.textFont(font,size);
+			pg.text(sb.toString().isEmpty() ? hint : sb.toString(), -shift,h/2);
+			pg.popStyle();
+			pg.endDraw();
 			
-			adaptiveSize();
+			if(sb.toString().isEmpty() || cursor.isOnStart()) {
+				shift = 0;
+			}
 			
+			app.image(pg,x,y,w,h);
 		}
-		
-		private final float getHintWidth() {
-			float width;
-			app.pushStyle();
-			app.textSize(size);
-			width = app.textWidth(hint);
-			app.popStyle();
+
+		public final float getCharWidth() {
+			pg.beginDraw();
+			pg.textFont(font,size);
+			float width = pg.textWidth(' ');
+			pg.endDraw();
 			return width;
 		}
 		
-		public final void adaptiveSize() {
-			if(getWidth() > w || getHintWidth() > w) {
-				size--;
-			} else {
-			if(size < targetSize) {
-				size++;
-			}
-		  }
-		}
-
 		public final float getSize() {
 			return size;
 		}
@@ -243,10 +301,13 @@ public final class EditText extends BaseForm {
 		public final float getSubTextWidth(int index) {
 			index = constrain(index,0,sb.length());
 			float width;
-			app.pushStyle();
-			app.textSize(size);
-			width = app.textWidth(sb.toString().substring(0,index));
-			app.popStyle();
+			pg.beginDraw();
+			pg.pushStyle();
+			pg.textSize(size);
+			pg.textFont(font,size);
+			width = pg.textWidth(sb.toString().substring(0,index));
+			pg.popStyle();
+			pg.endDraw();
 			return width;
 		}
 		
@@ -254,10 +315,13 @@ public final class EditText extends BaseForm {
 			indexStart = constrain(indexStart,0,sb.length());
 			indexEnd = constrain(indexEnd,0,sb.length());
 			float width;
-			app.pushStyle();
-			app.textSize(size);
-			width = app.textWidth(sb.toString().substring(indexStart,indexEnd));
-			app.popStyle();
+			pg.beginDraw();
+			pg.pushStyle();
+			pg.textSize(size);
+			pg.textFont(font,size);
+			width = pg.textWidth(sb.toString().substring(indexStart,indexEnd));
+			pg.popStyle();
+			pg.endDraw();
 			return width;
 		}
 		
@@ -272,11 +336,18 @@ public final class EditText extends BaseForm {
 		public final boolean isFull() {
 			return getSubTextWidth(sb.length()) > w*.94f;
 		}
+		
+		public final char cutLastChar() {
+			char ch = sb.charAt(sb.length()-1);
+			sb.delete(sb.length()-1,sb.length());
+			return ch;
+		}
 	}
 	
 	public final class Cursor {
 		public Color fill;
 		private int position,timer;
+		private float cursorX;
 		private final int TIMER_MAX;
 		
 		public Cursor() {
@@ -286,14 +357,19 @@ public final class EditText extends BaseForm {
 		}
 
 		public final void draw() {
+			
 			if(focused) {
+				
+				cursorX = constrain(x+text.getSubTextWidth(position)-text.shift,x,x+w);
+				
 				if(timer < TIMER_MAX/2) {
 					app.pushStyle();
 					app.stroke(fill.get());
 					app.strokeWeight((h*.02f)+1);
-					app.line(x+text.getSubTextWidth(position), y+h*.05f, x+text.getSubTextWidth(position), y+h-h*.05f);
+					app.line(cursorX, y+h*.05f, cursorX, y+h-h*.05f);
 					app.popStyle();
 				}
+				
 				
 				if(timer < TIMER_MAX) {
 					timer++;
@@ -309,7 +385,7 @@ public final class EditText extends BaseForm {
 		
 		public final void setMousePosition() {
 			if(text.sb.length() == 0) { return; }
-			position = (int) constrain(map(app.mouseX,x,x+text.getSubTextWidth(text.sb.length()),0,text.sb.length()),0,text.sb.length());
+			position = (int) constrain(map(app.mouseX+text.shift,x,x+text.getSubTextWidth(text.sb.length()),0,text.sb.length()),0,text.sb.length());
 			timerReset();
 		}
 		
@@ -344,6 +420,7 @@ public final class EditText extends BaseForm {
 	}
 
 	public final class Select {
+		private PGraphics pg;
 		private boolean selecting;
 		private int firstChar,lastChar;
 		private String buffer;
@@ -353,23 +430,32 @@ public final class EditText extends BaseForm {
 		public Select() {
 			fill = new Color(app,app.color(0,0,255,32));
 			event = new Event(app);
+			pg = app.createGraphics((int) w, (int) h);
 		}
 		
 		public final void draw() {
 			event.listen(x,y,w,h);
 			
 			if(!isEmpty()) {
-				app.pushStyle();
-				app.fill(fill.get());
+				pg.beginDraw();
+				pg.clear();
+				pg.pushStyle();
+				pg.fill(fill.get());
 				
-				if(firstChar < cursor.get()) {
-					app.rect(x+text.getSubTextWidth(firstChar),y+h*.1f,text.getSubTextWidth(min(firstChar,lastChar),max(firstChar,lastChar)),h*.8f);
-				} else {
-					app.rect(x+text.getSubTextWidth(firstChar),y+h*.1f,-text.getSubTextWidth(min(firstChar,lastChar),max(firstChar,lastChar)),h*.8f);
-				}
+				float startX = text.getSubTextWidth(firstChar)-text.shift,
+					  startY = h*.1f,
+					  width = getFirstChar() < cursor.get() ? text.getSubTextWidth(min(firstChar,lastChar),max(firstChar,lastChar)) : -text.getSubTextWidth(min(firstChar,lastChar),max(firstChar,lastChar)),
+					  height = h*.8f;
 				
-				app.popStyle();
+				pg.rect(startX,startY,width,height);
+					
+				pg.popStyle();
+				pg.endDraw();
+				
+				app.image(pg,x,y,w,h);
 			}
+			
+			
 			
 			logic();
 		}
@@ -392,10 +478,9 @@ public final class EditText extends BaseForm {
 			
 			if(event.clicked(2)) {
 				if(isFullSelected()) {
-					firstChar = (int) (lastChar = 0);
+					setEmpty();
 				} else {
-					firstChar = 0;
-					lastChar = text.sb.length();
+					setFull();
 				}
 			}
 		}
