@@ -16,6 +16,7 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 
 public final class EditText extends BaseForm {
+	public final static int DIGITS = 0, LETTERS = 1, ANY_SYMBOLS = 2;
 	public PFont font;
 	public Color fill;
 	public Text text;
@@ -24,8 +25,9 @@ public final class EditText extends BaseForm {
 	public Event event;
 	private String hint;
 	private boolean focused;
+	private int enterType = 2;
 	
-	public EditText(PApplet app, float x, float y, float w, float h) {
+		public EditText(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
 		fill = new Color(app,255);
 		text = new Text();
@@ -103,6 +105,19 @@ public final class EditText extends BaseForm {
 		this.focused = focused;
 	}
 
+	public final void setText(String text) {
+		this.text.sb.append(text);
+		cursor.setOnEnd();
+	}
+	
+	public final String getText() {
+		return text.sb.toString();
+	}
+	
+	public final void setEnterType(int type) {
+		enterType = type;
+	} 
+
 	public final void deleteSelectedText() {
 		text.sb.delete(select.getFirstChar(),select.getLastChar());
 		if(text.sb.toString().isEmpty()) {
@@ -168,7 +183,24 @@ public final class EditText extends BaseForm {
 	}
 	
 	public final void keyPressed() {
-		boolean correctSymbol = Character.isLetter(app.key) || Character.isDigit(app.key) || Character.isWhitespace(app.key);
+		boolean correctSymbol;
+		
+		switch(enterType) {
+			case DIGITS : 
+				correctSymbol = Character.isDigit(app.key);
+				break;
+				
+			case LETTERS : 
+				correctSymbol = Character.isLetter(app.key);
+				break;
+				
+			case ANY_SYMBOLS : 
+				correctSymbol = Character.isDigit(app.key) || Character.isLetter(app.key) || Character.isWhitespace(app.key);
+				break;
+				
+			default: correctSymbol = Character.isDigit(app.key) || Character.isLetter(app.key);
+			
+		}
 		
 		if(focused) {
 			cursor.timerReset();
