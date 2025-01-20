@@ -9,7 +9,7 @@ import processing.event.MouseEvent;
 
 public class Main extends PApplet {
 	ListView listview;
-	Window window;
+	Window window; 
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.test.Main");
