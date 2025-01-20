@@ -1,10 +1,15 @@
 package microUI.test;
 
-import microUI.EditText;
+import microUI.ListView;
+import microUI.Window;
+import microUI.utils.Item;
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.event.MouseEvent;
 
 public class Main extends PApplet {
-	EditText editText;
+	ListView listview;
+	Window window;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.test.Main");
@@ -17,27 +22,50 @@ public class Main extends PApplet {
 	
 	@Override
 	public void setup() {
-		editText = new EditText(this);
-		//editText.setHint("Enter any digit");
-		//editText.setEnterType(EditText.DIGITS);
+		listview = new ListView(this,100,100,600,600);
+		listview.items.add("THIS IS THE BIG TEXT",100);
+		listview.items.add("THIS IS THE BIG TEXT but a little smaller",80);
 		
-		editText.fill.set(0);
-		editText.text.fill.set(0,255,0);
-		editText.cursor.fill.set(0,255,0,128);
-		editText.select.fill.set(255,255,0,128);
+		class CustomItem extends Item {
+			
+			CustomItem(float r, float g, float b) {
+				super(listview);
+				fill.set(r,g,b);
+				setH(10);
+			}
+
+			@Override
+			public void draw(PGraphics p) {
+				super.draw(p);
+				if(event.clicked()) {
+					app.exit();
+				}
+			}
+			
+			
+		}
 		
+		for(int i = 0; i < 255; i++)
+		listview.items.add(new CustomItem(i,0,0));
+		for(int i = 0; i < 255; i++)
+			listview.items.add(new CustomItem(0,i,0));
+		for(int i = 0; i < 255; i++)
+			listview.items.add(new CustomItem(0,0,i));
+			
+		window = new Window(this,"ListView");
+		window.setForm(listview);
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
-		editText.draw();
-		if(mouseButton == RIGHT) { editText.setW(mouseX); }
+		window.draw();
+		
 	}
-
+	
 	@Override
-	public void keyPressed() {
-		editText.keyPressed();
+	public void mouseWheel(MouseEvent event) {
+		listview.mouseWheel(event);
 	}
-
+	
 }
