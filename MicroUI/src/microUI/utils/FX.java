@@ -169,11 +169,11 @@ public final class FX {
 		main.fill.setHEX(convertingColor(index,before.fill,after.fill));
 		main.stroke.fill.setHEX(convertingColor(index,before.stroke.fill,after.stroke.fill));
 		main.stroke.setWeight(convertingValue(index,before.stroke.getWeight(),buttons.after.stroke.getWeight()));		
-		main.corners.set(convertingValue(index,before.corners.get(0),after.corners.get(0)),
+		/*main.corners.set(convertingValue(index,before.corners.get(0),after.corners.get(0)),
 					 	 convertingValue(index,before.corners.get(1),after.corners.get(1)),
 						 convertingValue(index,before.corners.get(2),after.corners.get(2)),
 						 convertingValue(index,before.corners.get(3),after.corners.get(3)));
-	
+		*/
 	}
 	
 	private void convertingButton(int index, Button main, Button before, Button after) {
@@ -209,8 +209,8 @@ public final class FX {
 			after.stroke.fill.set(0,64,0);
 			after.stroke.setWeight(4);
 			
-			before.corners.set(10);
-			after.corners.set(0);
+			//before.corners.set(10);
+			//after.corners.set(0);
 			
 		}
 		
@@ -228,8 +228,8 @@ public final class FX {
 			after.stroke.fill.setHEX(app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
-			before.corners.set(10);
-			after.corners.set(100,0,100,0);
+			//before.corners.set(10);
+			//after.corners.set(100,0,100,0);
 		}
 		
 	}
@@ -246,8 +246,8 @@ public final class FX {
 			after.stroke.fill.setHEX(app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
-			before.corners.set(10);
-			after.corners.set(100,0,100,0);
+			//before.corners.set(10);
+			//after.corners.set(100,0,100,0);
 			
 			after.circle.fill.setHEX(app.color(0,164,0));
 		}
@@ -266,11 +266,11 @@ public final class FX {
 			after.button.fill.setHEX(app.color(0,164,0));
 			after.stroke.fill.setHEX(app.color(0,64,0));
 
-			before.corners.set(10);
-			after.corners.set(100,0,100,0);
-			after.button.corners.set(100,0,100,0);
-			after.buttonMinus.corners.set(100,0,100,0);
-			after.buttonPlus.corners.set(100,0,100,0);
+			//before.corners.set(10);
+			//after.corners.set(100,0,100,0);
+			//after.button.corners.set(100,0,100,0);
+			//after.buttonMinus.corners.set(100,0,100,0);
+			//after.buttonPlus.corners.set(100,0,100,0);
 		}
 		
 	}
@@ -308,8 +308,8 @@ public final class FX {
 			after.stroke.fill.setHEX(app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
-			before.corners.set(0);
-			after.corners.set(100,0,100,0);
+			//before.corners.set(0);
+			//after.corners.set(100,0,100,0);
 		}
 		
 	}

@@ -23,6 +23,7 @@ public class Window extends Rectangle {
 		fill.set(32);
 		resizable = true;
 		bar = new Bar(app, title);
+		ripples.setVisible(false);
 	}
 	
 	public Window(PApplet app, String title) {
@@ -30,13 +31,11 @@ public class Window extends Rectangle {
 	}
 
 	@Override
-	public void draw() {
-		if(isVisible) {
-			super.draw();
-			bar.draw();
-			if(layout != null) {
-				layout.draw();
-			}
+	public void update() {
+		super.update();
+		bar.draw();
+		if(layout != null) {
+			layout.draw();
 		}
 		
 		if(resizable) {
@@ -111,7 +110,7 @@ public class Window extends Rectangle {
 			this.title.setInCenter(false);
 			this.title.setTextSize(HEIGHT/2);
 			
-			buttonClose.corners.set(0);
+			//buttonClose.corners.set(0);
 			
 			isVisible = true;
 			

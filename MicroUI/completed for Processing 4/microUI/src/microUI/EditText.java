@@ -50,7 +50,7 @@ public final class EditText extends BaseForm {
 	
 
 	@Override
-	public void draw() {
+	public void update() {
 		event.listen(this);
 		if(event.clicked()) { focused = true; }
 		if(event.outside() && app.mousePressed) { focused = false; }

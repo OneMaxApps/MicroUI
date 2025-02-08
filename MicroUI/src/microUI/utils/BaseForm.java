@@ -2,14 +2,11 @@ package microUI.utils;
 
 import processing.core.PApplet;
 
-public class BaseForm {
-	protected PApplet app;
+public class BaseForm extends View {
 	protected float x,y,w,h;
-	protected  boolean isVisible;
 	
 	public BaseForm(PApplet app, float x, float y, float w, float h) {
-		super();
-		this.app = app;
+		super(app);
 		setTransforms(x,y,w,h);
 	}
 	
@@ -57,7 +54,6 @@ public class BaseForm {
 		this.h = h;
 	}
 
-	
 	public void setPosition(float x, float y) {
 		setX(x);
 		setY(y);
@@ -79,10 +75,7 @@ public class BaseForm {
 		setTransforms(baseForm.getX(),baseForm.getY(),baseForm.getW(),baseForm.getH());
 	}
 	
-	public void setVisible(boolean v) { isVisible = v; }
-	  
-	public boolean isVisible() { return isVisible; }
-	
-	public void draw() {}
-	
+	@Override
+	public void update() {}
+
 }

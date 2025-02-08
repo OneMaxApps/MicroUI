@@ -30,8 +30,8 @@ public abstract class Layout extends BaseForm {
 		background = new Background();
 	}
 
-	public void draw() {
-		if (isVisible()) {
+	@Override
+	public void update() {
 			if(background.isLoaded()) {
 					background.draw();
 			} else {
@@ -48,7 +48,6 @@ public abstract class Layout extends BaseForm {
 					shadow.draw();
 				}
 			app.popStyle();
-		}
 		
 	}
 	

@@ -32,6 +32,7 @@ public class CircleSeekBar extends Rectangle {
 		value = new Value(0,100,0);
 		this.title = new Text(app,"",x,y+h/2-h/4,w,h/2);
 		scrolling = new Scrolling(event);
+		ripples.setVisible(false);
 	}
 	
 	public CircleSeekBar(PApplet app, String text, float x, float y, float size) {
@@ -46,29 +47,31 @@ public class CircleSeekBar extends Rectangle {
 	}
 	
 	@Override
-	public void draw() {
-		if(isVisible()) {
-			app.pushStyle();
-			super.draw();
-			circle.draw();
-			if(title.isVisible()) {
-				if(event.inside() || event.moved()) {
-					app.fill(title.fill.get());
-					app.textSize(title.getTextSize());
-					app.textAlign(CENTER,CENTER);
-					app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
-				} else {
-					title.setPosition(x, y+h/2-h/4);
-					title.setSize(w, h/2);
-					title.draw();
-				}
+	public void update() {
+		app.pushStyle();
+		super.update();
+		circle.draw();
+		if(event.inside() || event.moved()) {
+			textOnDraw();
+			} else {
+			//title.setPosition(x, y+h/2-h/4);
+			//title.setSize(w, h/2);
+			//title.draw();
 			}
+		
 			
-			if(event.inside() || scrolling.isScrolling()) {
-				value.append(-scrolling.get());
-			}
-			app.popStyle();
+		if(event.inside() || scrolling.isScrolling()) {
+			value.append(-scrolling.get());
 		}
+		app.popStyle();
+	}
+	
+	private final void textOnDraw() {
+		app.fill(title.fill.get());
+		app.textSize(title.getTextSize());
+		app.textAlign(CENTER,CENTER);
+		app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
+		
 	}
 	
 	public PImage getTexture() {

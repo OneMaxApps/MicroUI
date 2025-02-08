@@ -42,9 +42,7 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  @Override
-	  public void draw() {
-	  
-		
+	  public void update() {
 		elementsDraw();
 		
 		gridDraw();
@@ -64,7 +62,7 @@ public class GridLayout extends Layout {
 	  private void gridDraw() {
 		  app.pushStyle();
 		    if(isVisible()) {
-			  super.draw();
+			  super.update();
 			  app.noFill();
 			  app.stroke(0);
 		      for(float x = getX(); x < getX()+getW(); x += getW()/getRows()) {

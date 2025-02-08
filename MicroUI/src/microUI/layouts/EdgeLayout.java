@@ -20,8 +20,9 @@ public class EdgeLayout extends Layout {
 		this(app,0,0,app.width,app.height);
 	}
 	
-	public void draw() {
-	super.draw();
+	@Override
+	public void update() {
+	super.update();
 		
 		if(form != null) {
 			updateSize(form);

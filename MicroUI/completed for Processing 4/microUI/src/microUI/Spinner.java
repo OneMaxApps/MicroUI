@@ -27,9 +27,9 @@ public class Spinner extends Button {
 		this(app,"Spinner",app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
 	}
 	
-	public void draw() {
-		if(isVisible()) {
-			super.draw();
+	@Override
+	public void update() {
+			super.update();
 			if(event.clicked()) { open = !open; }
 			
 			if(open) {
@@ -58,7 +58,6 @@ public class Spinner extends Button {
 				
 				
 			}
-		}
 	}
 	
 	public Spinner setAutoCloseable(boolean a) {

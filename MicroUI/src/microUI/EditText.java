@@ -11,6 +11,7 @@ import static processing.core.PConstants.RIGHT;
 import microUI.utils.BaseForm;
 import microUI.utils.Color;
 import microUI.utils.Event;
+import microUI.utils.Ripples;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -22,6 +23,7 @@ public final class EditText extends BaseForm {
 	public Text text;
 	public Cursor cursor;
 	public Select select;
+	public Ripples ripples;
 	public Event event;
 	private String hint;
 	private boolean focused;
@@ -29,10 +31,12 @@ public final class EditText extends BaseForm {
 	
 	public EditText(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
+		setVisible(true);
 		fill = new Color(app,255);
 		text = new Text();
 		cursor = new Cursor();
 		select = new Select();
+		ripples = new Ripples(this);
 		event = new Event(app);
 		hint = "";
 		font = app.createFont("Consolas",h);
@@ -50,9 +54,12 @@ public final class EditText extends BaseForm {
 	
 
 	@Override
-	public void draw() {
+	public void update() {
 		event.listen(this);
-		if(event.clicked()) { focused = true; }
+		if(event.clicked() && !focused) {
+			focused = true;
+			ripples.initAnim();
+		}
 		if(event.outside() && app.mousePressed) { focused = false; }
 		
 		app.fill(fill.get());
@@ -64,6 +71,7 @@ public final class EditText extends BaseForm {
 		text.draw();
 		cursor.draw();
 		select.draw();
+		ripples.draw();
 		
 		if(event.pressed()) {
 			cursor.setMousePosition();

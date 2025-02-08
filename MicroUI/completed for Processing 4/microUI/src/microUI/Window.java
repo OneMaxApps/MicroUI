@@ -30,13 +30,11 @@ public class Window extends Rectangle {
 	}
 
 	@Override
-	public void draw() {
-		if(isVisible) {
-			super.draw();
-			bar.draw();
-			if(layout != null) {
-				layout.draw();
-			}
+	public void update() {
+		super.update();
+		bar.draw();
+		if(layout != null) {
+			layout.draw();
 		}
 		
 		if(resizable) {

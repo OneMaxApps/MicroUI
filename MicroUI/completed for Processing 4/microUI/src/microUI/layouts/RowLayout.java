@@ -21,8 +21,8 @@ public class RowLayout extends Layout {
 	}
 
 	@Override
-	public void draw() {
-		super.draw();
+	public void update() {
+		super.update();
 		if(!elementList.isEmpty()) {
 			for(int i = 0; i < elementList.size(); i++) {
 				BaseForm form = elementList.get(i);

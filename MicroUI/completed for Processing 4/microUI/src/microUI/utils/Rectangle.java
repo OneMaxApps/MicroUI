@@ -3,12 +3,12 @@ package microUI.utils;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class Rectangle extends BaseView {
+public class Rectangle extends Component {
     public Corners corners;
     public Image image;
-    private boolean basicFX;
     public Shadow shadow;
-
+    private boolean basicFX;
+    
     public Rectangle(PApplet app) {
       this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
     }
@@ -23,11 +23,10 @@ public class Rectangle extends BaseView {
     }
     
     @Override
-    public void draw() {
+    public void update() {
       if(event != null) { event.listen(this); }
       if(shadow != null) { shadow.draw(); }
       
-      if(isVisible()) {
     	if(!image.isLoaded()) {
 	        stroke.get();
 	        app.fill(fill.get());
@@ -42,15 +41,14 @@ public class Rectangle extends BaseView {
         	app.rect(x,y,w,h,corners.get(0),corners.get(1),corners.get(2),corners.get(3));
         }
         
-      }
     }
     
-    public void setStyle(Rectangle otherRectangle) {
-    	fill.set(otherRectangle.fill.get());
-    	corners.set(otherRectangle.corners.get(0),otherRectangle.corners.get(1),otherRectangle.corners.get(2),otherRectangle.corners.get(3));
-    	stroke.fill.set(otherRectangle.stroke.fill.get());
-    	stroke.setWeight(otherRectangle.stroke.getWeight());
-    	shadow.fill.set(otherRectangle.shadow.fill.get());
+    public void setStyle(Rectangle rectangle) {
+    	super.setStyle(rectangle);
+    	corners = rectangle.corners;
+    	image = rectangle.image;
+    	shadow.setStyle(shadow);
+    	basicFX = rectangle.basicFX;
     }
     
     public void setBasicFX(boolean basicFX) { this.basicFX = basicFX; }

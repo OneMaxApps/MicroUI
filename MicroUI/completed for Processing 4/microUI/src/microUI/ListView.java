@@ -8,41 +8,73 @@ import java.util.Arrays;
 import java.util.List;
 
 import microUI.utils.BaseForm;
+import microUI.utils.BaseItem;
+import microUI.utils.Color;
 import microUI.utils.Event;
-import microUI.utils.Item;
+import microUI.utils.Shadow;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
 
-public final class ListView extends BaseForm {
-	public Scroll scroll;
-	public Items items;
+public class ListView extends BaseForm {
 	public Event event;
-
+	public Color fill;
+	public Items items;
+	public Scroll scroll;
+	public Shadow shadow;
+	
 	public ListView(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
-		float scrollW = constrain(w,min(w/20,20),20);
-		scroll = new Scroll(app,x+w-scrollW,y,h,scrollW);
-		scroll.setVerticalMode(true);
-		scroll.setVisible(false);
-		scroll.shadowDestroy();
 		
-		items = new Items();
+		isVisible = true;
 		
 		event = new Event(app);
 		
+		fill = new Color(app,255);
+		
+		shadow = new Shadow(app,this);
+
+		items = new Items();
+		
+		final float scrollW = constrain(w,min(w/20,20),20),
+					scrollX = x+w-scrollW;
+		
+		scroll = new Scroll(app,scrollX,y,h,scrollW) {{
+			buttonPlus.fill.set(32,128);
+			buttonPlus.text.set("-");
+			buttonPlus.text.setTextSize(100);
+			buttonMinus.fill.set(32,128);
+			buttonMinus.text.set("+");
+
+			button.fill.set(32,128);
+			fill.set(234);
+			setVerticalMode(true);
+			setVisible(false);
+			shadowDestroy();
+		}};
+		
 	}
 
+	public ListView(PApplet app) {
+		this(app,app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
+	}
 	
 	@Override
-	public void draw() {
+	public void update() {
 		event.listen(this);
+		if(event.inside()) { scroll.appendValue(scroll.scrolling.get()*items.getItemsCount()); }
+		
+		shadow.draw();
+		
+		app.pushStyle();
+		app.noStroke();
+		fill.get();
+		app.rect(x, y, w, h);
+		app.popStyle();
 		
 		items.draw();
 		scroll.draw();
-		
-		if(event.inside()) { scroll.appendValue(scroll.scrolling.get()); }
 		
 	}
 	
@@ -53,7 +85,7 @@ public final class ListView extends BaseForm {
 	public final void loadText(String path) {
 		List<String> lines = new ArrayList<String>(Arrays.asList(app.loadStrings(path)));
 		
-		items.list.clear();
+		items.itemsList.clear();
 		
 		for(String line : lines) {
 			items.add(line,h/20);
@@ -98,85 +130,109 @@ public final class ListView extends BaseForm {
 	}
 
  	public final class Items {
-		private PGraphics p;
-		private List<Item> list;
-		private float absoluteHeight;
+		private PGraphics pg;
+		private List<BaseItem> itemsList;
+		private float totalHeight;
 		
 		Items() {
-			p = app.createGraphics((int) w, (int) h);
-			list = new ArrayList<>();
+			pg = app.createGraphics((int) w, (int) h);
+			itemsList = new ArrayList<>();
 		}
 		
 		private final void draw() {
-			p.beginDraw();
-			p.background(255);
-			list.forEach(i -> {
-				if(i.getY()+i.getH() > y && i.getY()+i.getH() < y+h+i.getH()) {
-					i.draw(p);
-				}
-			});
-			p.endDraw();
 			
-			app.image(p,x,y,w,h);
+			pg.beginDraw();
+			pg.clear();
+			itemsList.forEach(i -> { if(itemInside(i)) { i.draw(pg); } });
+			pg.endDraw();
+			
+			app.image(pg,x,y,w,h);
 			
 			if(!app.mousePressed) {
-				if((int) w != p.width || (int) h != p.height) {
-					p = app.createGraphics((int) w, (int) h);
+				if((int) w != pg.width || (int) h != pg.height) {
+					pg = app.createGraphics((int) w, (int) h);
 					updateAbsoluteHeight();
 				}
 			}
 		}
 		
+		private final boolean itemInside(BaseItem item) {
+			return item.getY()+item.getH() > y && item.getY()+item.getH() < y+h+item.getH();
+		}
+		
 		public final void updateAbsoluteHeight() {
-			absoluteHeight = 0;
-			list.forEach(i -> {
-				absoluteHeight += i.getH();
+			totalHeight = 0;
+			itemsList.forEach(i -> {
+				totalHeight += i.getH();
 			});
 			
-			scroll.setVisible(true);
-			scroll.setMinMax((h-absoluteHeight),0);
-		}
-		
-		public final void clear() {
-			list.clear();
-			absoluteHeight = 0;
-		}
-		
-		public final int getItemsCount() {
-			return list.size();
-		}
-		
-		public final void add(String txt, float itemHeight) {
-			float positionInList = 0;
-			
-			for(Item i : list) {
-				positionInList += i.getH();
-			}
-			
-			list.add(new Item(ListView.this,txt,list.isEmpty() ? 0 : positionInList,itemHeight));
-			absoluteHeight += itemHeight;
-			
-			if(absoluteHeight > h) {
-			scroll.setVisible(true);
-			scroll.setMinMax((h-absoluteHeight),0);
+			if(totalHeight > h) {
+				scroll.setVisible(true);
+				scroll.setMinMax((h-totalHeight),0);
 			} else {
 				scroll.setVisible(false);
 			}
 		}
 		
-		public final void add(Item customItem) {
+		public final void setTotalHeight(float height) {
+			float currentYPosInList = 0;
+			
+			for(int j = 0; j < itemsList.size(); j++) {
+				BaseItem i = itemsList.get(j);
+				if(j != 0) { currentYPosInList += i.getH(); }
+				i.setH(height);
+				i.setY(currentYPosInList);
+				i.text.setSize(height/2);
+			}
+			
+			updateAbsoluteHeight();
+		}
+		
+		public final void clear() {
+			itemsList.clear();
+			totalHeight = 0;
+		}
+		
+		public final int getItemsCount() {
+			return itemsList.size();
+		}
+		
+		public final void add(String txt, float itemHeight) {
 			float positionInList = 0;
-			for(Item i : list) { positionInList += i.getH(); }
-			list.add(customItem);
+			
+			for(BaseItem i : itemsList) {
+				positionInList += i.getH();
+			}
+			
+			itemsList.add(new BaseItem(ListView.this,txt,itemsList.isEmpty() ? 0 : positionInList,itemHeight));
+			totalHeight += itemHeight;
+			
+			if(totalHeight > h) {
+			scroll.setVisible(true);
+			scroll.setMinMax((h-totalHeight),0);
+			scroll.setValue(0);
+			} else {
+				scroll.setVisible(false);
+			}
+		}
+		
+		public final void add(String txt) {
+			add(txt,h/10);
+		}
+		
+		public final void add(BaseItem customItem) {
+			float positionInList = 0;
+			for(BaseItem i : itemsList) { positionInList += i.getH(); }
+			itemsList.add(customItem);
 			customItem.setContext(ListView.this);
 			customItem.setY(positionInList);
 			
+			totalHeight += itemsList.get(itemsList.size()-1).getH();
 			
-			absoluteHeight += list.get(list.size()-1).getH();
-			
-			if(absoluteHeight > h) {
+			if(totalHeight > h) {
 			scroll.setVisible(true);
-			scroll.setMinMax((h-absoluteHeight),0);
+			scroll.setMinMax((h-totalHeight),0);
+			scroll.setValue(0);
 			} else {
 				scroll.setVisible(false);
 			}

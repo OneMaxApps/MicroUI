@@ -32,7 +32,7 @@ public class CheckBox extends Rectangle {
 	}
 	
 	@Override
-	public void draw() {
+	public void update() {
 		eventInside.listen(this);
 		if(eventInside.clicked()) { included = !included; }
 		
@@ -42,7 +42,7 @@ public class CheckBox extends Rectangle {
 			if(included) { fill.set(colorIncluded); } else { fill.set(colorNotIncluded); }
 		}
 		
-		super.draw();	
+		super.update();	
 		
 	}
 	

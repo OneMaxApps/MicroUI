@@ -50,10 +50,9 @@ public class Slider extends Rectangle {
 	    showText(true);
 	  }
 	  
-	  
-	  public void draw() {
-		if(isVisible()) {
-		    super.draw();
+	  @Override
+	  public void update() {
+		    super.update();
 		    level.draw();
 		    button.draw();
 		    
@@ -87,7 +86,6 @@ public class Slider extends Rectangle {
 		    } else {
 		      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
 		    }
-		}
 	  }
 	  
 	  
@@ -95,7 +93,7 @@ public class Slider extends Rectangle {
 		if(min > max) { return; }
 		if(value < min) { value = min; }
 	    this.min = min;
-	    update();
+	    updateForm();
 
 	  }
 	  public float getMin() { return min; }
@@ -103,14 +101,14 @@ public class Slider extends Rectangle {
 	  public void setMax(float max) {
 	    this.max = max;
 	    if(value > max) { value = max; }
-	    update();
+	    updateForm();
 	  }
 	  public float getMax() { return max; }
 	  
 	  public void setValue(float value) {
 	    if(value < min || value > max) { return; }
 		this.value = value;
-	    update();
+		updateForm();
 
 	  }
 	  
@@ -128,7 +126,7 @@ public class Slider extends Rectangle {
 	    if(value < min) { value = min; }
 	    if(value > max) { value = max; }
 	    
-	    update();
+	    updateForm();
 	    if(min > max) { System.out.println("min value not must be more than max value"); }
 	  }
 	  
@@ -155,13 +153,13 @@ public class Slider extends Rectangle {
 	  @Override
 	  public void setX(float x) {
 	    super.setX(x);
-	    update();
+	    updateForm();
 	  }
 	  
 	  @Override
 	  public void setY(float y) {
 	    super.setY(y);
-	    update();
+	    updateForm();
 
 	  }
 	  
@@ -209,7 +207,7 @@ public class Slider extends Rectangle {
 	    }
 	  }
 	  
-	  private void update() {
+	  private void updateForm() {
 	    setSize(getW(),getH());
 	    buttonTransformsUpdate();
 	  }

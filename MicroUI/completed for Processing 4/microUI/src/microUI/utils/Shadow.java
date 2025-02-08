@@ -7,15 +7,14 @@ import static processing.core.PConstants.SQUARE;
 import microUI.layouts.Layout;
 import processing.core.PApplet;
 
-public final class Shadow {
+public final class Shadow extends View {
 	  public Color fill;
-	  private PApplet app;
 	  private BaseForm form;
 	  private int leftSize,rightSize,upSize,downSize;
 	  private byte absoluteSize;
-	  private boolean isVisible;
 	  
 	  public Shadow(PApplet app, BaseForm form) {
+		super(app);
 	    this.form = form;
 	    this.app = app;
 	    fill = new Color(app,34);
@@ -27,8 +26,9 @@ public final class Shadow {
 	    isVisible = true;
 	  }
 	  
-	  public void draw() {
-	    if(form.isVisible() && isVisible) {
+	  @Override
+	  public void update() {
+	    if(form.isVisible()) {
 	      app.pushStyle();
 	      
 	      for(int i = 0; i < absoluteSize; i++) {
@@ -56,6 +56,15 @@ public final class Shadow {
 	    }
 	  }
 	  
+	  public void setStyle(Shadow shadow) {
+		  fill = shadow.fill;
+		  leftSize = shadow.leftSize;
+		  rightSize = shadow.rightSize;
+		  upSize = shadow.upSize;
+		  downSize = shadow.downSize;
+		  absoluteSize = shadow.absoluteSize;
+	  }
+	  
 	  public void set(float left, float up, float right, float down) {
 	    leftSize = (int) constrain(left,0,20);
 	    upSize = (int) constrain(up,0,20);
@@ -68,8 +77,5 @@ public final class Shadow {
 	  }
 	  
 	  public int[] get() { return new int[]{leftSize,upSize,rightSize,downSize}; }
-	  
-	  public void setVisible(boolean isVisible) { this.isVisible = isVisible; }
-	  public boolean isVisible() { return isVisible; }
-	  
+	   
 	}

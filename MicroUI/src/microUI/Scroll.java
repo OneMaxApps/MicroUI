@@ -10,15 +10,15 @@ import microUI.utils.Scrolling;
 import processing.core.PApplet;
 
 public class Scroll extends Rectangle {
-	  private float min,max,value;
-	  private boolean isVerticalMode;
 	  public Button button,buttonPlus,buttonMinus;
 	  public Scrolling scrolling;
+	  private float min,max,value;
+	  private boolean isVerticalMode;
 	  private float distOfMouseToButton;
 	  
 	public Scroll(PApplet app, float w, float h) {
 		this(app,0,0,w,h);
-		setMinMax(0,1);
+		setMinMax(0,100);
 		setValue(0);
 	}  
 	  
@@ -35,41 +35,39 @@ public class Scroll extends Rectangle {
 
 	public Scroll(PApplet app, float x, float y, float w, float h) {
 	    super(app,x,y,w,h);
+	    ripples.setVisible(false);
 	    
 	    fill.set(28);
 	    
-	    button = new Button(app,x,y,buttonsWeight(),h);
-	    button.shadow.setVisible(false);
-	    button.fill.set(12);
+	    button = new Button(app,x,y,buttonsWeight(),h) {{
+	    	fill.set(12);
+	    	shadow.setVisible(false);
+	    	ripples.setVisible(false);
+	    	shadowDestroy();
+	    }};
 	    
 	    scrolling = new Scrolling(event);
 	    
-	    buttonPlus = new Button(app,"+",x+w-buttonsWeight(),y,buttonsWeight(),h);
-	    buttonMinus = new Button(app,"-",x,y,buttonsWeight(),h);
+	    buttonPlus = new Button(app,"+",x+w-buttonsWeight(),y,buttonsWeight(),h) {{
+	    	shadow.setVisible(false);
+	    	ripples.setVisible(false);
+	    	shadowDestroy();
+	    }};
 	    
-	    buttonPlus.shadow.setVisible(false);
-	    buttonMinus.shadow.setVisible(false);
+	    buttonMinus = new Button(app,"-",x,y,buttonsWeight(),h){{
+	    	shadow.setVisible(false);
+	    	ripples.setVisible(false);
+	    	shadowDestroy();
+    	}};
 	    
 	    setBasicFX(false);
-	    button.setBasicFX(false);
-	    buttonPlus.setBasicFX(false);
-	    buttonMinus.setBasicFX(false);
-	    
-	    button.corners.set(0);
-	    buttonPlus.corners.set(0);
-	    buttonMinus.corners.set(0);
-	    
-	    button.shadowDestroy();
-	    buttonPlus.shadowDestroy();
-	    buttonMinus.shadowDestroy();
 	    
 	    buttonsTransformsUpdate();
 	  }
 	  
-	  
-	  public void draw() {
-		if(isVisible()) {
-		    super.draw();
+	  @Override
+	  public void update() {
+		    super.update();
 		    buttonPlus.draw(); if(buttonPlus.event.pressed()) { appendValue(1); }
 		    buttonMinus.draw(); if(buttonMinus.event.pressed()) { appendValue(-1); }
 		    button.draw();
@@ -94,7 +92,6 @@ public class Scroll extends Rectangle {
 		    } else {
 		      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
 		    }
-		}
 	  }
 	  
 	  
@@ -131,7 +128,6 @@ public class Scroll extends Rectangle {
 	  public void setMinMax(float min, float max) {
 	    setMin(min);
 	    setMax(max);
-	    if(min > max) { System.out.println("min value not must be more than max value"); }
 	  }
 	  
 	  public Scroll setVerticalMode(boolean v) {
@@ -169,13 +165,13 @@ public class Scroll extends Rectangle {
 	  @Override
 	  public void setX(float x) {
 	    super.setX(x);
-	    update();
+	    updateForm();
 	  }
 	  
 	  @Override
 	  public void setY(float y) {
 	    super.setY(y);
-	    update();
+	    updateForm();
 
 	  }
 	  
@@ -228,7 +224,7 @@ public class Scroll extends Rectangle {
 	    }
 	  }
 	  
-	  private void update() {
+	  private void updateForm() {
 	    setSize(getW(),getH());
 	    buttonsTransformsUpdate();
 	  }

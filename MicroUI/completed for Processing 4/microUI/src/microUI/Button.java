@@ -1,9 +1,10 @@
 package microUI;
 
+import static processing.core.PApplet.min;
+
 import microUI.utils.Rectangle;
 import microUI.utils.Text;
 import processing.core.PApplet;
-import static processing.core.PApplet.min;
 
 public class Button extends Rectangle {
 	  public Text text;
@@ -22,12 +23,16 @@ public class Button extends Rectangle {
 		  this(app,"BUTTON");
 	  }
 	  
-	  public void draw() {
-		if(isVisible()) {
-		    super.draw();
-		    text.setTransforms(this);
-		    text.draw();
-		}
+	  @Override
+	  public void update() {
+		 super.update();
+		 text.setTransforms(this);
+		 text.draw();
+	  }
+	  
+	  public void setStyle(Button button) {
+	    	super.setStyle(button);
+	    	text = button.text;
 	  }
 	  
 	  @Override

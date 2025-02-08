@@ -8,7 +8,7 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
-public final class Text extends BaseView {
+public final class Text extends Component {
 	  public Color fill;
 	  public Shadow shadow;
 	  private PFont font;
@@ -24,21 +24,19 @@ public final class Text extends BaseView {
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
 	    center = true;
 	    shadow = new Shadow();
+	    isVisible = true;
 	  }
 	  
 	  public Text(PApplet app, float x, float y, float w, float h) {
-		super(app,x,y,w,h);
-		this.text = new StringBuilder();
-		fill = new Color(app,255);
-		textSize = (int) (h/3 > 0 ? h/3 : h/2);
-		shadow = new Shadow();
+		this(app,"",x,y,w,h);
 	  }
 	  
 	  public Text(PApplet app, String text) {
 			this(app,text,app.width*.2f,app.height*.4f,app.width*.6f,app.height*.2f);
 	  }
 	  
-	  public void draw() {
+	  @Override
+	  public void update() {
 		  shadow.draw();
 		  
 		  app.pushStyle();

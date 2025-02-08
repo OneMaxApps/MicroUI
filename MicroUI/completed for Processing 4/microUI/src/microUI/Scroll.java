@@ -66,10 +66,9 @@ public class Scroll extends Rectangle {
 	    buttonsTransformsUpdate();
 	  }
 	  
-	  
-	  public void draw() {
-		if(isVisible()) {
-		    super.draw();
+	  @Override
+	  public void update() {
+		    super.update();
 		    buttonPlus.draw(); if(buttonPlus.event.pressed()) { appendValue(1); }
 		    buttonMinus.draw(); if(buttonMinus.event.pressed()) { appendValue(-1); }
 		    button.draw();
@@ -94,7 +93,6 @@ public class Scroll extends Rectangle {
 		    } else {
 		      if(button.event.inside()) { distOfMouseToButton = button.getX()-app.mouseX; }
 		    }
-		}
 	  }
 	  
 	  
@@ -169,13 +167,13 @@ public class Scroll extends Rectangle {
 	  @Override
 	  public void setX(float x) {
 	    super.setX(x);
-	    update();
+	    updateForm();
 	  }
 	  
 	  @Override
 	  public void setY(float y) {
 	    super.setY(y);
-	    update();
+	    updateForm();
 
 	  }
 	  
@@ -228,7 +226,7 @@ public class Scroll extends Rectangle {
 	    }
 	  }
 	  
-	  private void update() {
+	  private void updateForm() {
 	    setSize(getW(),getH());
 	    buttonsTransformsUpdate();
 	  }
