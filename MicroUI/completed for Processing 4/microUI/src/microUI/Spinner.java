@@ -2,6 +2,7 @@ package microUI;
 
 import java.util.ArrayList;
 
+import microUI.utils.Event;
 import processing.core.PApplet;
 
 public class Spinner extends Button {
@@ -9,14 +10,14 @@ public class Spinner extends Button {
 	private ArrayList<Button> itemList;
 	private int select;
 	private float listHeight;
-
+	private Event localEvent;
+	
 	public Spinner(PApplet app, String title, float x, float y, float w, float h) {
 		super(app,title,x,y,w,h);
-		corners.set(0);
 		shadowDestroy();
 		itemList = new ArrayList<Button>();
 		showSelectedItem = autoCloseable = true;
-		
+		localEvent = new Event(app);
 	}
 	
 	public Spinner(PApplet app, String title) {
@@ -29,8 +30,10 @@ public class Spinner extends Button {
 	
 	@Override
 	public void update() {
+			localEvent.listen(this);
+			
 			super.update();
-			if(event.clicked()) { open = !open; }
+			if(localEvent.clicked()) { open = !open; }
 			
 			if(open) {
 				if(!itemList.isEmpty()) {
@@ -38,7 +41,7 @@ public class Spinner extends Button {
 						Button item = itemList.get(i);
 						item.text.setTextSize(text.getTextSize());
 						item.draw();
-						if(item.event.clicked()) {
+						if(item.event.pressed()) {
 							select = i;
 							if(autoCloseable) { close(); }
 						}
@@ -97,7 +100,6 @@ public class Spinner extends Button {
 			itemList.add(new Button(app,title[i],getX(),getY()+getH()+listHeight,getW(),getH()));
 			listHeight += getH();
 			itemList.get(i).shadowDestroy();
-			itemList.get(i).corners.set(0);
 		}
 		
 		return this;
@@ -108,8 +110,6 @@ public class Spinner extends Button {
 			itemList.add(new Button(app,String.valueOf(nums[i]),getX(),getY()+getH()+listHeight,getW(),getH()));
 			listHeight += getH();
 			itemList.get(i).shadowDestroy();
-			itemList.get(i).corners.set(0);
-
 		}
 		
 		return this;

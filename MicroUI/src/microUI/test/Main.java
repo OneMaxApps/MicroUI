@@ -1,10 +1,10 @@
 package microUI.test;
 
-import microUI.Window;
+import microUI.Button;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
-	Window component;
+	Button button;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.test.Main");
@@ -16,20 +16,15 @@ public class Main extends PApplet {
 	
 	@Override
 	public void setup() {
-		component = new Window(this,"Window");
-
+		button = new Button(this);
 	}
-	
+		
 	@Override
 	public void draw() {
 		background(128);
-		component.draw();
+		println(frameRate);
+		button.draw();
 		
-		if(mouseButton == RIGHT) { component.setSize(mouseX, mouseY); }
 	}
-	
-	@Override
-	public void keyPressed() {
-		// component.keyPressed();
-	}
+
 }

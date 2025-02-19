@@ -17,6 +17,32 @@ public class Slider extends Rectangle {
 	  private float min,max,value;
 	  private boolean isVerticalMode,showText;
 	  
+	  public Slider(PApplet app,float x, float y, float w, float h) {
+		    super(app,x,y,w,h);
+
+		    setMinMax(0,100);
+		    
+		    button = new Button(app,x,y,buttonsWeight(),h) {{
+		     shadowDestroy();
+		     setBasicFX(false);
+		     ripples.setVisible(false);
+		     fill.set(32);
+		    }};
+		    
+		    level = new Rectangle(app,x,y,button.getX()-getX(),h) {{
+		     fill.set(0,128,234,234);
+		     shadowDestroy();
+		     eventDestroy();
+		     ripples.setVisible(false);
+		    }};
+		    
+		    scrolling = new Scrolling(event);
+		    
+		    showText(true);
+		    
+		    setBasicFX(false);
+	  }
+	  
 	  public Slider(PApplet app) { this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
 	  
 	  public Slider(PApplet app,float w, float h) { this(app,0,0,w,h); }
@@ -29,26 +55,7 @@ public class Slider extends Rectangle {
 		this.value = value;
 	  }
 	  
-	  public Slider(PApplet app,float x, float y, float w, float h) {
-	    super(app,x,y,w,h);
-
-	    setMinMax(0,1);
-	    
-	    button = new Button(app,x,y,buttonsWeight(),h);
-	    button.shadow.setVisible(false);
-	    button.setBasicFX(false);
-	    button.fill.set(32);
-	    setBasicFX(false);
-	    
-	    level = new Rectangle(app,x,y,button.getX()-getX(),h);
-	    level.fill.setHEX(app.color(0,128,234,234));
-	    level.shadowDestroy();
-	    level.eventDestroy();
-	    
-	    scrolling = new Scrolling(event);
-	    
-	    showText(true);
-	  }
+	  
 	  
 	  @Override
 	  public void update() {
@@ -127,7 +134,6 @@ public class Slider extends Rectangle {
 	    if(value > max) { value = max; }
 	    
 	    updateForm();
-	    if(min > max) { System.out.println("min value not must be more than max value"); }
 	  }
 	  
 	  public Slider setVerticalMode(boolean v) {

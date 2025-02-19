@@ -7,7 +7,9 @@ public class Rectangle extends Component {
     public Image image;
     public Shadow shadow;
     public Ripples ripples;
+    
     private boolean basicFX;
+    private Event localEvent;
     
     public Rectangle(PApplet app,float x, float y, float w, float h) {
         super(app,x,y,w,h);
@@ -16,6 +18,7 @@ public class Rectangle extends Component {
         setBasicFX(true);
         shadow = new Shadow(app,this);
         ripples = new Ripples(this);
+        localEvent = new Event(app);
       }
     
     
@@ -25,6 +28,7 @@ public class Rectangle extends Component {
     
     @Override
     public void update() {
+      localEvent.listen(this);
       if(event != null) { event.listen(this); }
       if(shadow != null) { shadow.draw(); }
       
@@ -42,15 +46,13 @@ public class Rectangle extends Component {
         	app.rect(x,y,w,h);
         }
         
+        if(localEvent.clicked()) { ripples.initAnim(); }
         ripples.draw();
-        if(event != null) {
-        	if(event.clicked()) { ripples.initAnim(); }
-        }
+        
     }
     
     public void setStyle(Rectangle rectangle) {
     	super.setStyle(rectangle);
-    	// corners = rectangle.corners;
     	image = rectangle.image;
     	shadow.setStyle(shadow);
     	basicFX = rectangle.basicFX;
@@ -131,7 +133,6 @@ public class Rectangle extends Component {
       
       public void setImage(PImage image) {
         this.image = image;
-        // if(corners != null) { corners.set(0); }
         setVisible(true);
       }
       

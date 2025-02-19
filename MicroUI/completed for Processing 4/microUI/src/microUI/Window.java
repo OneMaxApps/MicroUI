@@ -23,6 +23,7 @@ public class Window extends Rectangle {
 		fill.set(32);
 		resizable = true;
 		bar = new Bar(app, title);
+		ripples.setVisible(false);
 	}
 	
 	public Window(PApplet app, String title) {
@@ -109,7 +110,7 @@ public class Window extends Rectangle {
 			this.title.setInCenter(false);
 			this.title.setTextSize(HEIGHT/2);
 			
-			buttonClose.corners.set(0);
+			//buttonClose.corners.set(0);
 			
 			isVisible = true;
 			
@@ -209,8 +210,8 @@ public class Window extends Rectangle {
 	
 	public final void keyPressed() {
 		for(int i = 0; i < layout.getElements().size(); i++) {
-			if(layout.getElements().get(i) instanceof EditText) {
-				((EditText) (layout.getElements().get(i))).keyPressed();
+			if(layout.getElements().get(i) instanceof TextInput) {
+				((TextInput) (layout.getElements().get(i))).keyPressed();
 			}
 		}
 	}

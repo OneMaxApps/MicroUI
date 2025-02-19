@@ -2,7 +2,7 @@ package microUI.utils;
 
 import processing.core.PApplet;
 
-public final class Event {
+public class Event {
 
 	  public static final int PRESSED = 1;
 	  public static final int CLICKED = 2;
@@ -14,7 +14,7 @@ public final class Event {
 	  private byte wasPressed,longPressed,clickCounter;
 	  private boolean moving;
 	  private PApplet app;
-
+	  
 	  public Event(PApplet app) { this.app = app; }
 	  
 	  public void listen(BaseForm form) {
@@ -84,4 +84,5 @@ public final class Event {
 	  }
 	  
 	  public void action() {}
+	  
 	}

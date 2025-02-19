@@ -32,6 +32,7 @@ public class CircleSeekBar extends Rectangle {
 		value = new Value(0,100,0);
 		this.title = new Text(app,"",x,y+h/2-h/4,w,h/2);
 		scrolling = new Scrolling(event);
+		ripples.setVisible(false);
 	}
 	
 	public CircleSeekBar(PApplet app, String text, float x, float y, float size) {

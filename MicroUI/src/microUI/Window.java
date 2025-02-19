@@ -210,8 +210,8 @@ public class Window extends Rectangle {
 	
 	public final void keyPressed() {
 		for(int i = 0; i < layout.getElements().size(); i++) {
-			if(layout.getElements().get(i) instanceof EditText) {
-				((EditText) (layout.getElements().get(i))).keyPressed();
+			if(layout.getElements().get(i) instanceof TextInput) {
+				((TextInput) (layout.getElements().get(i))).keyPressed();
 			}
 		}
 	}

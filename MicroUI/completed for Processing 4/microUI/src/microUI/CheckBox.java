@@ -44,6 +44,7 @@ public class CheckBox extends Rectangle {
 		
 		super.update();	
 		
+		ripples.draw();
 	}
 	
 	@Override

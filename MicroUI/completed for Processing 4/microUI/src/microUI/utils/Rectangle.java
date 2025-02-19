@@ -4,33 +4,38 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 public class Rectangle extends Component {
-    public Corners corners;
     public Image image;
     public Shadow shadow;
+    public Ripples ripples;
+    
     private boolean basicFX;
+    private Event localEvent;
+    
+    public Rectangle(PApplet app,float x, float y, float w, float h) {
+        super(app,x,y,w,h);
+        image = new Image();
+        setVisible(true);
+        setBasicFX(true);
+        shadow = new Shadow(app,this);
+        ripples = new Ripples(this);
+        localEvent = new Event(app);
+      }
+    
     
     public Rectangle(PApplet app) {
       this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
     }
     
-    public Rectangle(PApplet app,float x, float y, float w, float h) {
-      super(app,x,y,w,h);
-      corners = new Corners();
-      image = new Image();
-      setVisible(true);
-      setBasicFX(true);
-      shadow = new Shadow(app,this);
-    }
-    
     @Override
     public void update() {
+      localEvent.listen(this);
       if(event != null) { event.listen(this); }
       if(shadow != null) { shadow.draw(); }
       
     	if(!image.isLoaded()) {
 	        stroke.get();
 	        app.fill(fill.get());
-	        app.rect(x,y,w,h,corners.corns[0],corners.corns[1],corners.corns[2],corners.corns[3]);
+	        app.rect(x,y,w,h);
     	} else {
     		image.draw();
     	}
@@ -38,14 +43,16 @@ public class Rectangle extends Component {
         if(basicFX && event != null && !image.isLoaded()) {
         	app.noStroke();
         	app.fill(0,event.inside() && !event.pressed() ? 34 : event.pressed() ? 128 : 0);
-        	app.rect(x,y,w,h,corners.get(0),corners.get(1),corners.get(2),corners.get(3));
+        	app.rect(x,y,w,h);
         }
+        
+        if(localEvent.clicked()) { ripples.initAnim(); }
+        ripples.draw();
         
     }
     
     public void setStyle(Rectangle rectangle) {
     	super.setStyle(rectangle);
-    	corners = rectangle.corners;
     	image = rectangle.image;
     	shadow.setStyle(shadow);
     	basicFX = rectangle.basicFX;
@@ -56,31 +63,6 @@ public class Rectangle extends Component {
     public BaseForm shadowDestroy() { shadow = null; return this; }
     
     public BaseForm eventDestroy() { event = null; return this; }
-    
-    public class Corners {
-      private float[] corns = new float[4];
-      
-      public void set(float corns) {
-        for(int i = 0; i < this.corns.length; i++) { this.corns[i] = corns; }
-        if(shadow != null) { shadow.set(corns); }
-      }
-      
-      public void set(float c, float c1, float c2, float c3) {
-        corns[0] = c;
-        corns[1] = c1;
-        corns[2] = c2;
-        corns[3] = c3;
-        
-        if(shadow != null) { shadow.set(c,c1,c2,c3); }
-      }
-      
-      public void set(int[] corns) {
-        set(corns[0],corns[1],corns[2],corns[3]);
-      }
-      
-      public float[] get() { return corns; }
-      public float get(int index) { if(index < 0 || index > 3) { throw new IndexOutOfBoundsException("index out of corners count exception"); } return corns[index]; }
-    }
     
     public class Image {
       private PImage image;
@@ -151,7 +133,6 @@ public class Rectangle extends Component {
       
       public void setImage(PImage image) {
         this.image = image;
-        if(corners != null) { corners.set(0); }
         setVisible(true);
       }
       
