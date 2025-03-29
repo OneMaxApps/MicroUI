@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import microUI.utils.BaseForm;
-import microUI.utils.BaseItem;
-import microUI.utils.Color;
-import microUI.utils.Event;
-import microUI.utils.Shadow;
+import microUI.util.BaseForm;
+import microUI.util.BaseItem;
+import microUI.util.Color;
+import microUI.util.Event;
+import microUI.util.Shadow;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
@@ -27,7 +27,7 @@ public class ListView extends BaseForm {
 	public ListView(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
 		
-		isVisible = true;
+		visible = true;
 		
 		event = new Event(app);
 		
@@ -128,13 +128,15 @@ public class ListView extends BaseForm {
 		if(scroll == null) { return; }
 		scroll.setH(h);
 	}
-
- 	public final class Items {
+	
+	public final class Items {
+ 		public Color background;
 		private PGraphics pg;
 		private List<BaseItem> itemsList;
 		private float totalHeight;
 		
 		Items() {
+			background = new Color(app,255);
 			pg = app.createGraphics((int) w, (int) h);
 			itemsList = new ArrayList<>();
 		}
@@ -142,7 +144,7 @@ public class ListView extends BaseForm {
 		private final void draw() {
 			
 			pg.beginDraw();
-			pg.clear();
+			background.use(pg);
 			itemsList.forEach(i -> { if(itemInside(i)) { i.draw(pg); } });
 			pg.endDraw();
 			
@@ -191,6 +193,14 @@ public class ListView extends BaseForm {
 		public final void clear() {
 			itemsList.clear();
 			totalHeight = 0;
+		}
+		
+		public final void setBackground(Color c) {
+			itemsList.forEach(i -> i.fill = c);
+		}
+		
+		public final void setColorText(Color c) {
+			itemsList.forEach(i -> i.text.fill = c);
 		}
 		
 		public final int getItemsCount() {

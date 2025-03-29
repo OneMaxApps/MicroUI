@@ -41,6 +41,8 @@ public class Slider extends Rectangle {
 		    showText(true);
 		    
 		    setBasicFX(false);
+		    
+		    ripples.setVisible(false);
 	  }
 	  
 	  public Slider(PApplet app) { this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }

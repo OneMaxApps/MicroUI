@@ -19,10 +19,18 @@ public class ColumnLayout extends Layout {
 	public ColumnLayout(PApplet app) {
 		this(app,0,0, app.width, app.height);
 	}
+	
+	@Override
+	public void draw() {
+		super.draw();
+		update();
+	}
 
 	@Override
 	public void update() {
-		super.update();
+		if(isVisible) {
+			super.update();
+		}
 		if(!elementList.isEmpty()) {
 			for(int i = 0; i < elementList.size(); i++) {
 				BaseForm form = elementList.get(i);

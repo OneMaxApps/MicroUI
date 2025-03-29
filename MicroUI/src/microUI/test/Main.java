@@ -1,10 +1,12 @@
 package microUI.test;
 
-import microUI.Button;
+import microUI.TextInput;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
-	Button button;
+	
+	
+	TextInput textInput;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.test.Main");
@@ -12,19 +14,28 @@ public class Main extends PApplet {
 	}
 	
 	@Override
-	public void settings() { size(800,800); }
+	public void settings() { size(640,640); }
 	
 	@Override
 	public void setup() {
-		button = new Button(this);
+		textInput = new TextInput(this,"Введите текст:");
 	}
 		
 	@Override
 	public void draw() {
 		background(128);
-		println(frameRate);
-		button.draw();
+		textInput.draw();
+		System.out.println(frameRate);
+	}
+
+	@Override
+	public void mousePressed() {
 		
 	}
 
+	@Override
+	public void keyPressed() {
+		textInput.keyPressed();
+	}
+	
 }

@@ -19,6 +19,10 @@ public class GridLayout extends Layout {
 	  private ArrayList<Integer> elementRowList,elementColumnList;
 	  private ArrayList<Float> elementDefaultWidth,elementDefaultHeight;
 	  
+	  public GridLayout(PApplet app) {
+		  this(app,1);
+	  }
+	  
 	  public GridLayout(PApplet app, int cells) {
 		  this(app,0,0,app.width,app.height,cells,cells);
 	  }
@@ -42,10 +46,16 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  @Override
+		public void draw() {
+			super.draw();
+			elementsDraw();
+	  }
+	  
+	  @Override
 	  public void update() {
-		elementsDraw();
-		
-		gridDraw();
+		  super.update();
+		  gridDraw();
+
 	  }
 	  
 	  private void elementsDraw() {
@@ -61,8 +71,6 @@ public class GridLayout extends Layout {
 	  
 	  private void gridDraw() {
 		  app.pushStyle();
-		    if(isVisible()) {
-			  super.update();
 			  app.noFill();
 			  app.stroke(0);
 		      for(float x = getX(); x < getX()+getW(); x += getW()/getRows()) {
@@ -72,7 +80,6 @@ public class GridLayout extends Layout {
 		          }
 		        }
 		      }
-		    }
 		    app.popStyle();
 	  }
 	  

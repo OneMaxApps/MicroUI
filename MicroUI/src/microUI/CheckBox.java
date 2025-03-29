@@ -2,9 +2,9 @@ package microUI;
 
 import static processing.core.PApplet.min;
 
-import microUI.utils.Color;
-import microUI.utils.Event;
-import microUI.utils.Rectangle;
+import microUI.util.Color;
+import microUI.util.Event;
+import microUI.util.Rectangle;
 import processing.core.PApplet;
 
 public class CheckBox extends Rectangle {

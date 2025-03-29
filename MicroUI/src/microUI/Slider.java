@@ -3,10 +3,12 @@ package microUI;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.max;
+
+import microUI.util.Rectangle;
+import microUI.util.Scrolling;
+
 import static processing.core.PApplet.abs;
 
-import microUI.utils.Rectangle;
-import microUI.utils.Scrolling;
 import processing.core.PApplet;
 
 public class Slider extends Rectangle {
@@ -41,6 +43,8 @@ public class Slider extends Rectangle {
 		    showText(true);
 		    
 		    setBasicFX(false);
+		    
+		    ripples.setVisible(false);
 	  }
 	  
 	  public Slider(PApplet app) { this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }

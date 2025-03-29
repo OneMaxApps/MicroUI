@@ -21,8 +21,16 @@ public class EdgeLayout extends Layout {
 	}
 	
 	@Override
+	public void draw() {
+		super.draw();
+		update();
+	}
+	
+	@Override
 	public void update() {
-	super.update();
+		if(isVisible) {
+			super.update();
+		}
 		
 		if(form != null) {
 			updateSize(form);
@@ -140,4 +148,14 @@ public class EdgeLayout extends Layout {
 	}
 	
 	public BaseForm getElement() { return form; }
+
+	@Override
+	public void setVisibleTotal(boolean v) {
+		super.setVisibleTotal(v);
+		if(form instanceof Layout) {
+			((Layout) form).setVisibleTotal(v);
+		}
+	}
+	
+	
 }

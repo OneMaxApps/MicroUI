@@ -43,6 +43,7 @@ public class BaseItem extends BaseForm {
 		
 		pg.pushStyle();
 			fill.use(pg);
+			pg.noStroke();
 			pg.rect(x,posInListWithoutViewY,w,h);
 			
 			if(focused) {

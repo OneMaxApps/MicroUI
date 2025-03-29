@@ -13,7 +13,7 @@ import processing.core.PImage;
 import processing.event.MouseEvent;
 
 public abstract class Layout extends BaseForm {
-	private boolean isElementsResizable;
+	protected boolean isElementsResizable;
 	protected ArrayList<BaseForm> elementList;
 	public Color fill;
 	public Margin margin;
@@ -24,7 +24,7 @@ public abstract class Layout extends BaseForm {
 		super(app,x, y, w, h);
 		elementList = new ArrayList<BaseForm>();
 		fill = new Color(app);
-		fill.setHEX(app.color(0, 32));
+		fill.setHEX(app.color(0,0,128,32));
 		margin = new Margin();
 		setVisible(true);
 		background = new Background();
@@ -81,6 +81,7 @@ public abstract class Layout extends BaseForm {
 	}
 	
 	public void setVisibleTotal(boolean v) {
+		
 		setVisible(v);
 		for(BaseForm form : elementList) {
 			if(form instanceof EdgeLayout) {
@@ -94,6 +95,7 @@ public abstract class Layout extends BaseForm {
 					((Layout) (form)).setVisibleTotal(v);
 				} 	
 			}
+			
 		}
 	}
 	

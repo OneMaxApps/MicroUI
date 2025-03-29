@@ -3,13 +3,13 @@ package microUI;
 import static processing.core.PApplet.dist;
 import static processing.core.PApplet.max;
 
-import microUI.layouts.GridLayout;
-import microUI.layouts.Layout;
-import microUI.layouts.RowLayout;
-import microUI.utils.BaseForm;
-import microUI.utils.Event;
-import microUI.utils.Rectangle;
-import microUI.utils.Text;
+import microUI.layout.GridLayout;
+import microUI.layout.Layout;
+import microUI.layout.RowLayout;
+import microUI.util.BaseForm;
+import microUI.util.Event;
+import microUI.util.Rectangle;
+import microUI.util.Text;
 import processing.core.PApplet;
 
 public class Window extends Rectangle {
@@ -29,22 +29,30 @@ public class Window extends Rectangle {
 	public Window(PApplet app, String title) {
 		this(app,title,app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
 	}
+	
+	public Window(PApplet app) {
+		this(app,"Window",app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
+	}
 
 	@Override
 	public void update() {
 		super.update();
 		bar.draw();
-		if(layout != null) {
-			layout.draw();
-		}
+		if(layout != null) { layout.draw(); }
 		
 		if(resizable) {
 			if(event.pressed()) {
 			 if(dist(x+w, y+h, app.mouseX, app.mouseY) < ((w+h)/40)) {
+				app.cursor(5);
 				canResize = true;
 			 }
 			}
-			if(!app.mousePressed) { canResize = false; }
+			if(!app.mousePressed) {
+				if(canResize) {
+					app.cursor(0);
+					canResize = false;
+				}
+			}
 			
 			if(canResize) {
 				setSize(max(100,getW()+app.mouseX-app.pmouseX),max(100,getH()+app.mouseY-app.pmouseY));
@@ -64,15 +72,17 @@ public class Window extends Rectangle {
 		}
 	}
 	
+	public final Layout getLayout() { return layout; }
+	
 	public final void setForm(BaseForm form) {
 		layout = new GridLayout(app,x,y+bar.HEIGHT,w,h-bar.HEIGHT,1,1);
 		((GridLayout) (layout)).setFillTheGrid(true);
 		((GridLayout) (layout)).add(form, 0, 0);
 	}
 	
-	public final void open() { isVisible = true; }
-	public final void close() { isVisible = false; }
-	public final boolean isOpen() { return isVisible; }
+	public final void open() { visible = true; }
+	public final void close() { visible = false; }
+	public final boolean isOpen() { return visible; }
 	
 	public final void fullScreen() {
 		setTransforms(0,0,app.width,app.height);
@@ -98,22 +108,20 @@ public class Window extends Rectangle {
 		public final int HEIGHT = 25;
 		public final Event event;
 		public RowLayout layout;
-		private Button buttonClose;
-		private Text title;
+		private final Button buttonClose;
+		private final Text title;
 		private boolean isVisible;
 		
 		public Bar(PApplet app, String title) {
 			layout = new RowLayout(app,x,y,w,HEIGHT);
 			layout.add("", .1f);
-			layout.add(this.title = new Text(app,title),.6f);
-			layout.add(buttonClose = new Button(app,"Close"),.3f);
+			layout.add(this.title = new Text(app,title),.8f);
+			layout.add(buttonClose = new Button(app,"Close"),.1f);
 			this.title.setInCenter(false);
 			this.title.setTextSize(HEIGHT/2);
-			
-			//buttonClose.corners.set(0);
-			
+			buttonClose.shadowDestroy();
 			isVisible = true;
-			
+			layout.setElementsResizable(false);
 			event = new Event(app);
 		}
 		
