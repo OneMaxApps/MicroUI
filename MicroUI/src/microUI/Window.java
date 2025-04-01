@@ -121,7 +121,7 @@ public class Window extends Rectangle {
 			this.title.setTextSize(HEIGHT/2);
 			buttonClose.shadowDestroy();
 			isVisible = true;
-			layout.setElementsResizable(false);
+			//layout.setElementsResizable(false);
 			event = new Event(app);
 		}
 		

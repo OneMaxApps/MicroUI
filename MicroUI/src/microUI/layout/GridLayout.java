@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import microUI.Button;
 import microUI.CircleSeekBar;
+import microUI.EditText;
 import microUI.util.BaseForm;
 import microUI.util.Text;
 import processing.core.PApplet;
@@ -262,6 +263,7 @@ public class GridLayout extends Layout {
 				      }
 				    }
 			    } else {
+			    	
 				    if(isElementsResizable()) {
 				      if(isFillTheGrid()) {
 				        baseForm.setSize(getW()/getRows(),getH()/getColumns());
@@ -269,6 +271,7 @@ public class GridLayout extends Layout {
 				    	baseForm.setSize(min(elementDefaultWidth.get(i),getW()/getRows()), min(elementDefaultHeight.get(i),getH()/getColumns()));
 				    }
 				  }
+				    
 			    }
 			
 			  }

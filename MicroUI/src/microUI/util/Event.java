@@ -13,9 +13,13 @@ public class Event {
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;
 	  private boolean moving;
+	  private static final boolean[] keys = new boolean[65536];
 	  private PApplet app;
 	  
-	  public Event(PApplet app) { this.app = app; }
+	  public Event(PApplet app) {
+		  this.app = app;
+		  
+	  }
 	  
 	  public void listen(BaseForm form) {
 		
@@ -81,6 +85,19 @@ public class Event {
 			 }
 		  }
 		  return clickCounter == count;
+	  }
+	  
+	  public static final void keyPressed(PApplet app) {
+		  keys[app.key] = true;
+		  keys[app.keyCode] = true;
+	  }
+	  
+	  public static final boolean checkKey(int ch) {
+		  return keys[ch];
+	  }
+	  
+	  public static final void keyReleased() {
+		  for(int i = 0; i < keys.length; i++) { keys[i] = false; }
 	  }
 	  
 	  public void action() {}

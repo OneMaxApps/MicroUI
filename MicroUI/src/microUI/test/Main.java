@@ -1,11 +1,13 @@
 package microUI.test;
 
 import microUI.EditText;
+import microUI.util.Event;
+
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public class Main extends PApplet {
-	
+
 	EditText editText;
 
 	public static void main(String[] args) {
@@ -18,8 +20,10 @@ public class Main extends PApplet {
 	
 	@Override
 	public void setup() {
-		editText = new EditText(this,0,0,width,height);
-		editText.loadText("C:\\Users\\002\\Desktop\\EditText.txt");
+		editText = new EditText(this);
+		//editText.items.setTextSize(12);
+		//editText.loadText("C:\\Users\\002\\Desktop\\EditText.txt");
+		
 	}
 		
 	@Override
@@ -27,20 +31,26 @@ public class Main extends PApplet {
 		background(128);
 		editText.draw();
 		
-		//System.out.println(frameRate);
+		System.out.println(frameRate);
 		if(mouseButton == RIGHT) { editText.items.setTextSize(map(mouseX,0,width,4,64)); }
-		
 	}
 
 	@Override
 	public void mousePressed() {
-		// if(mouseButton == RIGHT) { editText.items.setTextSize(mouseX); }
-		
+
 	}
 
 	@Override
 	public void keyPressed() {
+		Event.keyPressed(this);
 		editText.keyPressed();
+	}
+	
+	
+
+	@Override
+	public void keyReleased() {
+		Event.keyReleased();
 	}
 
 	@Override

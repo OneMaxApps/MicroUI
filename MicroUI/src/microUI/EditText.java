@@ -1,6 +1,8 @@
 package microUI;
 
 import static processing.core.PApplet.constrain;
+import static processing.core.PApplet.map;
+import static processing.core.PApplet.abs;
 import static processing.core.PApplet.max;
 import static processing.core.PConstants.BACKSPACE;
 import static processing.core.PConstants.CENTER;
@@ -10,6 +12,7 @@ import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 import static processing.core.PConstants.UP;
 import static processing.core.PConstants.TAB;
+import static processing.core.PConstants.CONTROL;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -24,12 +27,15 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
+// TODO Make text selecting
+// TODO Make text copy-paste system
+
 public final class EditText extends Component {
 	public final Items items;
 	public final Cursor cursor;
 	public Scroll scrollV,scrollH;
 	
-	private final float SCROLL_WEIGHT,SHIFT_0F_LEFT_SIDE;
+	private final float SCROLL_WEIGHT,SHIFT_LEFT_SIDE;
 	private boolean isFocused;
 	private PGraphics pg;
 	private PFont font;
@@ -39,10 +45,10 @@ public final class EditText extends Component {
  	public EditText(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
 		visible();
-		fill.set(234);
+		fill.set(255,255,232);
 		
 		SCROLL_WEIGHT = max(10,w*.025f);
-		SHIFT_0F_LEFT_SIDE = SCROLL_WEIGHT/2;
+		SHIFT_LEFT_SIDE = SCROLL_WEIGHT/2;
 		initScrolls();
 		items = new Items();
 		cursor = new Cursor();
@@ -67,16 +73,13 @@ public final class EditText extends Component {
 		pg.beginDraw();
 			pg.background(fill.get());
 			items.draw(pg);
-			if(isFocused) {
-				cursor.draw(pg);
-			}
+			if(isFocused) { cursor.draw(pg); }
 		pg.endDraw();
 		
 		app.image(pg, x, y, w, h);
 
 		scrollV.draw();
 		scrollH.draw();
-		
 		
 		if(!app.mousePressed) { autoCheckResize(); }
 		
@@ -127,7 +130,7 @@ public final class EditText extends Component {
 		scrollV.scrolling.setVelocity(.1f);
 		
 		scrollH = new Scroll(app);
-		scrollH.setMinMax(-SHIFT_0F_LEFT_SIDE, 100);
+		scrollH.setMinMax(-SHIFT_LEFT_SIDE, 100);
 		scrollH.shadowDestroy();
 		scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
 		scrollH.setSize(w-SCROLL_WEIGHT,SCROLL_WEIGHT);
@@ -155,12 +158,13 @@ public final class EditText extends Component {
 	public void setW(float w) {
 		super.setW(w);
 		if(scrollV != null && scrollH != null) {
+			float tempValueOfScrollH = scrollH.getValue();
 			scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
 			scrollV.setSize(SCROLL_WEIGHT,h);
 			scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
 			scrollH.setSize(w-SCROLL_WEIGHT,SCROLL_WEIGHT);
 			scrollH.setMax(items.getMaxTextWidthFromItems());
-			scrollH.setValue(scrollH.getMin());
+			scrollH.setValue(tempValueOfScrollH);
 		}
 	}
 
@@ -168,12 +172,13 @@ public final class EditText extends Component {
 	public void setH(float h) {
 		super.setH(h);
 		if(scrollV != null && scrollH != null) {
+			float tempValueOfScrollV = scrollV.getValue();
 			scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
 			scrollV.setSize(SCROLL_WEIGHT,h);
 			scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
 			scrollH.setSize(w-SCROLL_WEIGHT,SCROLL_WEIGHT);
 			scrollV.setMinMax(h-items.getTotalHeight(), 0);
-			scrollV.setValue(0);
+			scrollV.setValue(tempValueOfScrollV);
 		}
 	}
 
@@ -190,6 +195,15 @@ public final class EditText extends Component {
 		scrollH.setValue(tempValueOfScrollH);
 		
 		if(isFocused) {
+			
+			if(Event.checkKey(CONTROL)) {
+				
+				if(Event.checkKey('+')) { items.setTextSize(items.getTextSize()+1); }
+				if(Event.checkKey('-')) { items.setTextSize(items.getTextSize()-1); }
+				
+				return;
+			}
+			
 			switch(app.keyCode) {
 			
 			case UP:
@@ -209,7 +223,8 @@ public final class EditText extends Component {
 				break;
 				
 			case TAB:
-				items.list.get(cursor.getColumn()).getStringBuilder().append("  ");
+				items.list.get(cursor.getColumn()).getStringBuilder().insert(cursor.getRow(),"  ");
+				cursor.next();
 				cursor.next();
 				break;
 				
@@ -273,21 +288,6 @@ public final class EditText extends Component {
 					cursor.back();
 				break;
 			
-				
-				default:
-					if(app.key != '\n') {
-						if(Character.isDigit(app.key) || Character.isAlphabetic(app.key) || Character.isWhitespace(app.key)) {
-							if(cursor.getRow() <= items.list.get(cursor.getColumn()).sb.length()) {
-								items.list.get(cursor.getColumn()).sb.insert(cursor.getRow(),app.key);
-								cursor.next();
-							}
-							
-						}
-					}
-				break;
-			}
-			
-			switch(app.keyCode) {
 				case KeyEvent.VK_HOME : 
 					cursor.setRow(0);
 					scrollH.setValue(scrollH.getMin());
@@ -325,9 +325,26 @@ public final class EditText extends Component {
 					scrollH.setValue(scrollH.getMin());
 					cursor.setRow(0);
 					break;
+					
+				default:
+					if(app.key != '\n') {
+						if(Character.isDigit(app.key) || Character.isAlphabetic(app.key) || Character.isWhitespace(app.key) || isAllowedKey(app.key)) {
+							if(cursor.getRow() <= items.list.get(cursor.getColumn()).sb.length()) {
+								items.list.get(cursor.getColumn()).sb.insert(cursor.getRow(),app.key);
+								cursor.next();
+							}
+							
+						}
+					}
+				break;
 			}
-			
+
 		}
+	}
+	
+	private final boolean isAllowedKey(char ch) {
+		String s = "\'\"!@#$%^&*()_+|\\|/=-[]{};:/?,.<>=-";
+		return s.contains(String.valueOf(ch));
 	}
 
 	public final void loadText(String path) {
@@ -387,7 +404,6 @@ public final class EditText extends Component {
 		}
 		
 		private final void draw(PGraphics pg) {
-			
 			fill.use(pg);
 			if(font != null) { pg.textFont(font); }
 			pg.textSize(textSize);
@@ -395,20 +411,13 @@ public final class EditText extends Component {
 			
 			for(int i = list.size()-1; i >= 0; i--) {
 				Item item = list.get(i);
-				
 				if(itemInside(item)) {
 					item.draw(pg);
-					
-					if(item.isEditing()) {
-						cursor.setColumn(i);
-					}
+					if(item.isEditing()) { cursor.setColumn(i); }
 				} else {
 					item.setEditing(false);
-				}
-				
+					}
 			}
-			
-			
 		}
 		
 		private final boolean itemInside(Item item) {
@@ -423,15 +432,22 @@ public final class EditText extends Component {
 			if(textSize <= 2) { return; }
 			this.textSize = (int) textSize;
 			totalHeight = 0;
+			
 			for(int i = 0; i < list.size(); i++) {
 				Item item = list.get(i);
 				item.setShiftY(i*textSize);
 				totalHeight += textSize;
 			}
-			scrollV.setMinMax(h-totalHeight, 0);
-			scrollV.setValue(0);
-			scrollH.setMax(items.getMaxTextWidthFromItems());
-			scrollH.setValue(scrollH.getMin());
+			
+			if(getTotalHeight() > h) {
+				float tempValueOfScrollV = scrollV.getValue(),
+					  tempValueOfScrollH = scrollH.getValue();
+				
+				scrollV.setMinMax(h-totalHeight, 0);
+				scrollV.setValue(tempValueOfScrollV);
+				scrollH.setMax(items.getMaxTextWidthFromItems());
+				scrollH.setValue(tempValueOfScrollH);
+			}
 		}
 		
 		public final int getTextSize() {
@@ -445,7 +461,7 @@ public final class EditText extends Component {
 			totalHeight += textSize;
 		}
 		
-		public final void clear() {
+		private final void clear() {
 			list.clear();
 			totalHeight = 0;
 		}
@@ -538,10 +554,7 @@ public final class EditText extends Component {
 				event = new Event(app);
 				
 			}
-			
-			public Item(float shiftY) {
-				this(shiftY,"");
-			}
+
 			
 			private final void draw(PGraphics pg) {
 				event.listen(x,getY(),x+w,textSize);
@@ -688,10 +701,11 @@ public final class EditText extends Component {
 			if(duration < MAX_DURATION) { duration++; } else { duration = 0; }
 			
 			if(duration < MAX_DURATION/2) {
+				float dynamicHeight = abs(map(duration,0,MAX_DURATION,-items.getTextSize()/2,items.getTextSize()/2))/2;
 				pg.pushStyle();
 				pg.stroke(fill.get());
 				pg.strokeWeight(2);
-				pg.line(posX, posY, posX, posY+items.getTextSize());
+				pg.line(posX, posY+dynamicHeight, posX, posY+items.getTextSize()-dynamicHeight);
 				pg.popStyle();
 			}
 			
@@ -740,8 +754,8 @@ public final class EditText extends Component {
 		
 		public final void next() {
 			if(getRow() < getMaxCharsInRow()) { row++; }
-			if(posX > getW()/2) {
-				scrollH.appendValue(items.getTextSize()/2);
+			if(posX > getW()*.8f) {
+				scrollH.appendValue(items.getTextSize());
 			}
 		}
 		
