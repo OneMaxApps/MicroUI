@@ -47,8 +47,11 @@ public final class EditText extends Component {
 		visible();
 		fill.set(255,255,232);
 		
-		SCROLL_WEIGHT = max(10,w*.025f);
+		final int DEFAULT_MIN_WEIGHT_FOR_SCROLLS = 10;
+		final float MAX_WEIGHT_FOR_SCROLLS = w*.025f;
+		SCROLL_WEIGHT = max(DEFAULT_MIN_WEIGHT_FOR_SCROLLS,MAX_WEIGHT_FOR_SCROLLS);
 		SHIFT_LEFT_SIDE = SCROLL_WEIGHT/2;
+		
 		initScrolls();
 		items = new Items();
 		cursor = new Cursor();
@@ -58,41 +61,13 @@ public final class EditText extends Component {
 		initFX();
 		event = new Event(app);
 		
-		createFont("C:\\Windows\\Fonts\\consola.ttf",32);
+		loadFont("data/fonts/Consolas-48.vlw");
 	}
 
 	public EditText(PApplet app) {
 		this(app,app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
 	}
 
-	@Override
-	public void update() {
-		event.listen(this);
-		fx.init();
-		
-		pg.beginDraw();
-			pg.background(fill.get());
-			items.draw(pg);
-			if(isFocused) { cursor.draw(pg); }
-		pg.endDraw();
-		
-		app.image(pg, x, y, w, h);
-
-		scrollV.draw();
-		scrollH.draw();
-		
-		if(!app.mousePressed) { autoCheckResize(); }
-		
-		if(event.clicked()) { isFocused = true; }
-		if(app.mousePressed && event.outside()) { isFocused = false; }
-		
-		if(scrollH.getMax() == 0) {
-			scrollH.setMax(items.getMaxTextWidthFromItems());
-			scrollH.setValue(scrollH.getMin());
-		}
-		
-	}
-	
 	private final void initFX() {
 		fx.setIncludedTransforms(false);
 		
@@ -135,95 +110,127 @@ public final class EditText extends Component {
 		scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
 		scrollH.setSize(w-SCROLL_WEIGHT,SCROLL_WEIGHT);
 	}
-		
+	
 	@Override
-	public void setX(float x) {
-		super.setX(x);
+	public void update() {
+		event.listen(this);
+		fx.init();
+		
+		pg.beginDraw();
+			pg.background(fill.get());
+			items.draw(pg);
+			if(isFocused) { cursor.draw(pg); }
+		pg.endDraw();
+		
+		app.image(pg, x, y, w, h);
+
+		scrollV.draw();
+		scrollH.draw();
+		
+		if(!app.mousePressed) { autoCheckResize(); }
+		
+		if(event.clicked()) { isFocused = true; }
+		if(app.mousePressed && event.outside()) { isFocused = false; }
+		
+		if(scrollH.getMax() == 0) {
+			scrollH.setMax(items.getMaxTextWidthFromItems());
+			scrollH.setValue(scrollH.getMin());
+		}
+		
+	}
+	
+	private final void scrollsPositionUpdate() {
 		if(scrollV != null && scrollH != null) {
 			scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
 			scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
 		}
+	}
+		
+	private final void scrollsSizeUpdate() {
+		if(scrollV != null && scrollH != null) {
+			scrollV.setSize(SCROLL_WEIGHT,h);
+			scrollH.setSize(w-SCROLL_WEIGHT,SCROLL_WEIGHT);
+		}
+	}
+	
+	private final void scrollsTransformsUpdate() {
+		scrollsPositionUpdate();
+		scrollsSizeUpdate();
+	}
+
+	private final void scrollsValuesUpdate() {
+		if(scrollV != null && scrollH != null) {
+			float tempValueOfScrollH = scrollH.getValue(),
+				  tempValueOfScrollV = scrollV.getValue();
+			
+			scrollH.setMax(items.getMaxTextWidthFromItems());
+			scrollH.setValue(tempValueOfScrollH);
+			scrollV.setMinMax(h-items.getTotalHeight(), 0);
+			scrollV.setValue(tempValueOfScrollV);
+		}
+	}
+	
+	@Override
+	public void setX(float x) {
+		super.setX(x);
+		scrollsPositionUpdate();
 	}
 
 	@Override
 	public void setY(float y) {
 		super.setY(y);
-		if(scrollV != null && scrollH != null) {
-			scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
-			scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
-		}
+		scrollsPositionUpdate();
 	}
 
 	@Override
 	public void setW(float w) {
 		super.setW(w);
-		if(scrollV != null && scrollH != null) {
-			float tempValueOfScrollH = scrollH.getValue();
-			scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
-			scrollV.setSize(SCROLL_WEIGHT,h);
-			scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
-			scrollH.setSize(w-SCROLL_WEIGHT,SCROLL_WEIGHT);
-			scrollH.setMax(items.getMaxTextWidthFromItems());
-			scrollH.setValue(tempValueOfScrollH);
-		}
+		scrollsTransformsUpdate();
+		scrollsValuesUpdate();
 	}
 
 	@Override
 	public void setH(float h) {
 		super.setH(h);
-		if(scrollV != null && scrollH != null) {
-			float tempValueOfScrollV = scrollV.getValue();
-			scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
-			scrollV.setSize(SCROLL_WEIGHT,h);
-			scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
-			scrollH.setSize(w-SCROLL_WEIGHT,SCROLL_WEIGHT);
-			scrollV.setMinMax(h-items.getTotalHeight(), 0);
-			scrollV.setValue(tempValueOfScrollV);
-		}
+		scrollsTransformsUpdate();
+		scrollsValuesUpdate();
 	}
 
 	public final void mouseWheel(MouseEvent e) {
 		scrollV.scrolling.init(e,event.inside());
-		scrollV.appendValue(scrollV.scrolling.get());
+		scrollV.autoScrollAppending();
 	}
 	
 	public final void keyPressed() {
-		cursor.resetTimer();
-		
-		float tempValueOfScrollH = scrollH.getValue();
+
+		final float tempValueOfScrollH = scrollH.getValue();
 		scrollH.setMax(items.getMaxTextWidthFromItems());
 		scrollH.setValue(tempValueOfScrollH);
 		
-		if(isFocused) {
+		if(!isFocused) { return; }
 			
-			if(Event.checkKey(CONTROL)) {
-				
-				if(Event.checkKey('+')) { items.setTextSize(items.getTextSize()+1); }
-				if(Event.checkKey('-')) { items.setTextSize(items.getTextSize()-1); }
-				
-				return;
-			}
+		cursor.resetTimer();
 			
-			switch(app.keyCode) {
-			
-			case UP:
-				items.goUpToEditing();
-				break;
-			
-			case DOWN:
-				items.goDownToEditing();
-				break;
+		if(Event.checkKey(CONTROL)) {
 				
-			case LEFT:
-				cursor.back();
-				break;
+			if(Event.checkKey('+')) { items.setTextSize(items.getTextSize()+1); }
+			if(Event.checkKey('-')) { items.setTextSize(items.getTextSize()-1); }
 				
-			case RIGHT:
-				cursor.next();
-				break;
+			return;
+		}
+			
+		switch(app.keyCode) {
+			
+			case UP:    items.goUpToEditing(); 		break;
+			
+			case DOWN:  items.goDownToEditing(); 	break;
+				
+			case LEFT:  cursor.back();				break;
+				
+			case RIGHT: cursor.next();				break;
 				
 			case TAB:
-				items.list.get(cursor.getColumn()).getStringBuilder().insert(cursor.getRow(),"  ");
+				items.getCurrent().insert("  ");
 				cursor.next();
 				cursor.next();
 				break;
@@ -300,21 +307,19 @@ public final class EditText extends Component {
 					break;
 					
 				case KeyEvent.VK_PAGE_UP:
-					items.list.get(cursor.getColumn()).setEditing(false);
-					items.list.get(0).setEditing(true);
+					items.getCurrent().setEditing(false);
+					items.getFirst().setEditing(true);
 					
-					cursor.setColumn(0);
-					cursor.setRow(0);
+					cursor.goInStart();
 					scrollH.setValue(scrollH.getMin());
 					scrollV.setValue(0);
 					break;
 					
 				case KeyEvent.VK_PAGE_DOWN:
-					items.list.get(cursor.getColumn()).setEditing(false);
-					items.list.get(cursor.getColumnsCount()-1).setEditing(true);
+					items.getCurrent().setEditing(false);
+					items.getLast().setEditing(true);
 					
-					cursor.setColumn(cursor.getColumnsCount()-1);
-					cursor.setRow(cursor.getMaxCharsInRow());
+					cursor.goInEnd();
 					scrollH.setValue(scrollH.getMin());
 					scrollV.setValue(scrollV.getMin());
 					break;
@@ -323,28 +328,22 @@ public final class EditText extends Component {
 					items.insert(cursor.getTextOfRightSide());
 					
 					scrollH.setValue(scrollH.getMin());
-					cursor.setRow(0);
+					cursor.goInStart();
 					break;
 					
 				default:
-					if(app.key != '\n') {
-						if(Character.isDigit(app.key) || Character.isAlphabetic(app.key) || Character.isWhitespace(app.key) || isAllowedKey(app.key)) {
-							if(cursor.getRow() <= items.list.get(cursor.getColumn()).sb.length()) {
-								items.list.get(cursor.getColumn()).sb.insert(cursor.getRow(),app.key);
-								cursor.next();
-							}
-							
-						}
+					if(isAllowedChar(app.key)) {
+							items.getCurrent().insert(String.valueOf(app.key));
+							cursor.next();
 					}
 				break;
 			}
 
-		}
 	}
 	
-	private final boolean isAllowedKey(char ch) {
+	private final boolean isAllowedChar(char ch) {
 		String s = "\'\"!@#$%^&*()_+|\\|/=-[]{};:/?,.<>=-";
-		return s.contains(String.valueOf(ch));
+		return s.contains(String.valueOf(ch)) || Character.isDigit(ch) || Character.isAlphabetic(ch) || Character.isWhitespace(ch);
 	}
 
 	public final void loadText(String path) {
@@ -439,20 +438,12 @@ public final class EditText extends Component {
 				totalHeight += textSize;
 			}
 			
-			if(getTotalHeight() > h) {
-				float tempValueOfScrollV = scrollV.getValue(),
-					  tempValueOfScrollH = scrollH.getValue();
-				
-				scrollV.setMinMax(h-totalHeight, 0);
-				scrollV.setValue(tempValueOfScrollV);
-				scrollH.setMax(items.getMaxTextWidthFromItems());
-				scrollH.setValue(tempValueOfScrollH);
+			if(getTotalHeight() > EditText.this.getH()) {
+				scrollsValuesUpdate();
 			}
 		}
 		
-		public final int getTextSize() {
-			return textSize;
-		}
+		public final int getTextSize() { return textSize; }
 		
 		public final float getTotalHeight() { return totalHeight; }
 		
@@ -541,6 +532,17 @@ public final class EditText extends Component {
 			}
 		}
 		
+		private final Item getCurrent() {
+			return list.get(cursor.getColumn());
+		}
+		
+		private final Item getFirst() {
+			return list.get(0);
+		}
+		
+		private final Item getLast() {
+			return list.get(list.size()-1);
+		}
 		
 		private final class Item {
 			private final StringBuilder sb;
@@ -557,7 +559,7 @@ public final class EditText extends Component {
 
 			
 			private final void draw(PGraphics pg) {
-				event.listen(x,getY(),x+w,textSize);
+				event.listen(x,getY(),x+w,getH());
 				
 				if(pg != null) {
 					pg.text(sb.toString(),-scrollH.getValue(),getInsideY()+textSize/2);
@@ -574,17 +576,18 @@ public final class EditText extends Component {
 				
 				if(event.clicked()) {
 					isEditing = true;
-
+					final float LOCAL_MOUSE_X = app.mouseX-x+scrollH.getValue();
+					
 					for(int i = 0; i < sb.length(); i++) {
-						if(app.mouseX-x+scrollH.getValue() > getTextWidth(cursor.getRow())+getCharWidth(cursor.getRow())/2) {
-							cursor.setRow(cursor.getRow()+1);
+						if(LOCAL_MOUSE_X > getTextWidth(cursor.getRow())+getCharWidth(cursor.getRow())/2) {
+							cursor.justNext();
 						} else {
-							cursor.setRow(cursor.getRow()-1);
+							cursor.justBack();
 						}
 					}
 					
-					if(app.mouseX-x+scrollH.getValue() > getTextWidth(cursor.getRow())+getCharWidth(cursor.getRow())/2) {
-						cursor.setRow(cursor.getRow()+1);
+					if(LOCAL_MOUSE_X > getTextWidth(cursor.getRow())+getCharWidth(cursor.getRow())/2) {
+						cursor.justNext();
 					}
 					
 					cursor.resetTimer();
@@ -676,6 +679,9 @@ public final class EditText extends Component {
 				return sb.toString().isEmpty();
 			}
 			
+			private final void insert(String txt) {
+				sb.insert(cursor.getRow(),txt);
+			}
 		}
 	
 		
@@ -686,9 +692,8 @@ public final class EditText extends Component {
 		
 		private final int MAX_DURATION = 60;
 		private float posX,posY;
-		private int row,column;
-		private int duration;
-		
+		private int row,column,
+					duration;
 		
 		public Cursor() {
 			fill = new Color(app,0);
@@ -719,12 +724,6 @@ public final class EditText extends Component {
 			return posY;
 		}
 
-		private final int getMaxCharsInRow() {
-			if(getColumn() > items.list.size()-1) { column--; }
-			
-			return items.list.get(column).getCharsCount();
-		}
-		
 		public final int getRow() {
 			return constrain(row,0,getMaxCharsInRow());
 		}
@@ -759,12 +758,30 @@ public final class EditText extends Component {
 			}
 		}
 		
+		private final void justNext() {
+			if(getRow() < getMaxCharsInRow()) { row++; }
+		}
+		
+		private final void justBack() {
+			if(getRow() > 0) { row--; }
+		}
+
+		private final void goInStart() {
+			row = 0;
+		}
+		
+		private final void goInEnd() {
+			row = getMaxCharsInRow();
+		}
+		
 		private final void resetTimer() {
 			duration = 0;
 		}
 		
-		private final boolean isRightSideHasText() {
-			return getMaxCharsInRow()-getRow() > 0;
+		private final int getMaxCharsInRow() {
+			if(getColumn() > items.list.size()-1) { column--; }
+			
+			return items.list.get(column).getCharsCount();
 		}
 		
 		private final String getTextOfRightSide() {

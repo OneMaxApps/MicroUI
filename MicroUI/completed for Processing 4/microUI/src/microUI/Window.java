@@ -3,13 +3,13 @@ package microUI;
 import static processing.core.PApplet.dist;
 import static processing.core.PApplet.max;
 
-import microUI.layouts.GridLayout;
-import microUI.layouts.Layout;
-import microUI.layouts.RowLayout;
-import microUI.utils.BaseForm;
-import microUI.utils.Event;
-import microUI.utils.Rectangle;
-import microUI.utils.Text;
+import microUI.layout.GridLayout;
+import microUI.layout.Layout;
+import microUI.layout.RowLayout;
+import microUI.util.BaseForm;
+import microUI.util.Event;
+import microUI.util.Rectangle;
+import microUI.util.Text;
 import processing.core.PApplet;
 
 public class Window extends Rectangle {
@@ -80,9 +80,9 @@ public class Window extends Rectangle {
 		((GridLayout) (layout)).add(form, 0, 0);
 	}
 	
-	public final void open() { isVisible = true; }
-	public final void close() { isVisible = false; }
-	public final boolean isOpen() { return isVisible; }
+	public final void open() { visible = true; }
+	public final void close() { visible = false; }
+	public final boolean isOpen() { return visible; }
 	
 	public final void fullScreen() {
 		setTransforms(0,0,app.width,app.height);
@@ -121,7 +121,7 @@ public class Window extends Rectangle {
 			this.title.setTextSize(HEIGHT/2);
 			buttonClose.shadowDestroy();
 			isVisible = true;
-			layout.setElementsResizable(false);
+			//layout.setElementsResizable(false);
 			event = new Event(app);
 		}
 		

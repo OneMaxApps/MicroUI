@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import microUI.utils.BaseForm;
-import microUI.utils.BaseItem;
-import microUI.utils.Color;
-import microUI.utils.Event;
-import microUI.utils.Shadow;
+import microUI.util.BaseForm;
+import microUI.util.BaseItem;
+import microUI.util.Color;
+import microUI.util.Event;
+import microUI.util.Shadow;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
@@ -27,7 +27,7 @@ public class ListView extends BaseForm {
 	public ListView(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
 		
-		isVisible = true;
+		visible = true;
 		
 		event = new Event(app);
 		

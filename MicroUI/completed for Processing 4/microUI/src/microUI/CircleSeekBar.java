@@ -7,11 +7,11 @@ import static processing.core.PConstants.PI;
 import static processing.core.PConstants.SQUARE;
 import static processing.core.PConstants.TWO_PI;
 
-import microUI.utils.Color;
-import microUI.utils.Rectangle;
-import microUI.utils.Scrolling;
-import microUI.utils.Text;
-import microUI.utils.Value;
+import microUI.util.Color;
+import microUI.util.Rectangle;
+import microUI.util.Scrolling;
+import microUI.util.Text;
+import microUI.util.Value;
 import processing.core.PApplet;
 import processing.core.PImage;
 

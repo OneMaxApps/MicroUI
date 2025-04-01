@@ -8,11 +8,11 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 
-import microUI.utils.BaseForm;
-import microUI.utils.Clipboard;
-import microUI.utils.Color;
-import microUI.utils.Event;
-import microUI.utils.Ripples;
+import microUI.util.BaseForm;
+import microUI.util.Clipboard;
+import microUI.util.Color;
+import microUI.util.Event;
+import microUI.util.Ripples;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;

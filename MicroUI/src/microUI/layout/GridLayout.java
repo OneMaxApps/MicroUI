@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import microUI.Button;
 import microUI.CircleSeekBar;
-import microUI.EditText;
 import microUI.util.BaseForm;
 import microUI.util.Text;
 import processing.core.PApplet;

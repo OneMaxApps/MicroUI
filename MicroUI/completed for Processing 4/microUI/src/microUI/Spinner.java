@@ -2,7 +2,7 @@ package microUI;
 
 import java.util.ArrayList;
 
-import microUI.utils.Event;
+import microUI.util.Event;
 import processing.core.PApplet;
 
 public class Spinner extends Button {

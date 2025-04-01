@@ -124,6 +124,10 @@ public class Scroll extends Rectangle {
 	    }
 	  }
 	  
+	  public final void autoScrollAppending() {
+		  appendValue(scrolling.get());
+	  }
+	  
 	  public float getValue() { return value; }
 	  
 	  public void setMinMax(float min, float max) {

@@ -4,9 +4,10 @@ import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 
-import microUI.utils.Rectangle;
-import microUI.utils.Scrolling;
+import microUI.util.Rectangle;
+import microUI.util.Scrolling;
 import processing.core.PApplet;
 
 public class Scroll extends Rectangle {
@@ -123,6 +124,10 @@ public class Scroll extends Rectangle {
 	    }
 	  }
 	  
+	  public final void autoScrollAppending() {
+		  appendValue(scrolling.get());
+	  }
+	  
 	  public float getValue() { return value; }
 	  
 	  public void setMinMax(float min, float max) {
@@ -135,6 +140,7 @@ public class Scroll extends Rectangle {
 	    isVerticalMode = v;
 	    
 	    if(isVerticalMode) {
+	    	 
 	      setSize(getH(),getW());
 	      button.setSize(getW(),buttonsWeight());
 	      button.setPosition(getX(),map(value,min,max,getY()+getH()-button.getH()-buttonsWeight(),getY()+buttonsWeight()));
@@ -188,7 +194,7 @@ public class Scroll extends Rectangle {
 	  }
 	  
 	  private float buttonsWeight() {
-	    return isVerticalMode() ? getH()/constrain(abs(max(abs(min),abs(max))),2,20) : getW()/constrain(abs(max(abs(min),abs(max))),2,20);
+	    return isVerticalMode() ? min(getH()/constrain(abs(max(abs(min),abs(max))),2,20),getH()/5) : min(getW()/constrain(abs(max(abs(min),abs(max))),2,20),getW()/5);
 	  }
 	  
 	  private void buttonsTransformsUpdate() {
@@ -196,7 +202,10 @@ public class Scroll extends Rectangle {
 	      
 	      if(isVerticalMode) {
 	        button.setSize(getW(),buttonsWeight());
-	        button.setPosition(getX(),constrain( map(value,min,max,getY()+getH()-button.getH()-buttonsWeight(),getY()+buttonsWeight()) ,getY(),getY()+getH()-button.getH()));
+	        
+	        if(min != max) {
+	        	button.setPosition(getX(),constrain( map(value,min,max,getY()+getH()-button.getH()-buttonsWeight(),getY()+buttonsWeight()) ,getY(),getY()+getH()-button.getH()));
+	        }
 	        
 	        buttonPlus.setPosition(getX(),getY());
 	        buttonPlus.setSize(getW(),buttonsWeight());
@@ -205,8 +214,9 @@ public class Scroll extends Rectangle {
 	        buttonMinus.setSize(getW(),buttonsWeight());
 	      } else {
 	        button.setSize(buttonsWeight(),getH());
-	        button.setPosition(constrain( map(value,min,max,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()) ,getX(),getX()+getW()-button.getW()),getY());
-	        
+	        if(min != max) {
+	        	button.setPosition(constrain( map(value,min,max,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()),getX(),getX()+getW()-button.getW()),  getY());
+	        }
 	        buttonPlus.setPosition(getX()+getW()-buttonsWeight(),getY());
 	        buttonPlus.setSize(buttonsWeight(),getH());
 	        
@@ -217,6 +227,7 @@ public class Scroll extends Rectangle {
 	  
 	  private void updateDataOfValue() {
 	    if(button == null) { return; }
+	    if(min == max || button.getW() == 0 || button.getH() == 0) { return; }
 	    if(!isVerticalMode) {
 	      value = constrain(map(app.mouseX-button.getW()/2,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
 	    } else {
