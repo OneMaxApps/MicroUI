@@ -198,7 +198,10 @@ public class Scroll extends Rectangle {
 	      
 	      if(isVerticalMode) {
 	        button.setSize(getW(),buttonsWeight());
-	        button.setPosition(getX(),constrain( map(value,min,max,getY()+getH()-button.getH()-buttonsWeight(),getY()+buttonsWeight()) ,getY(),getY()+getH()-button.getH()));
+	        
+	        if(min != max) {
+	        	button.setPosition(getX(),constrain( map(value,min,max,getY()+getH()-button.getH()-buttonsWeight(),getY()+buttonsWeight()) ,getY(),getY()+getH()-button.getH()));
+	        }
 	        
 	        buttonPlus.setPosition(getX(),getY());
 	        buttonPlus.setSize(getW(),buttonsWeight());
@@ -207,8 +210,9 @@ public class Scroll extends Rectangle {
 	        buttonMinus.setSize(getW(),buttonsWeight());
 	      } else {
 	        button.setSize(buttonsWeight(),getH());
-	        button.setPosition(constrain( map(value,min,max,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()) ,getX(),getX()+getW()-button.getW()),getY());
-	        
+	        if(min != max) {
+	        	button.setPosition(constrain( map(value,min,max,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()),getX(),getX()+getW()-button.getW()),  getY());
+	        }
 	        buttonPlus.setPosition(getX()+getW()-buttonsWeight(),getY());
 	        buttonPlus.setSize(buttonsWeight(),getH());
 	        
@@ -219,6 +223,7 @@ public class Scroll extends Rectangle {
 	  
 	  private void updateDataOfValue() {
 	    if(button == null) { return; }
+	    if(min == max || button.getW() == 0 || button.getH() == 0) { return; }
 	    if(!isVerticalMode) {
 	      value = constrain(map(app.mouseX-button.getW()/2,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
 	    } else {

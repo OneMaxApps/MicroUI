@@ -55,7 +55,9 @@ public class Rectangle extends Component {
     public void setStyle(Rectangle rectangle) {
     	super.setStyle(rectangle);
     	image = rectangle.image;
-    	shadow.setStyle(shadow);
+    	if(shadow != null) {
+    		shadow.setStyle(shadow);
+    	}
     	basicFX = rectangle.basicFX;
     }
     

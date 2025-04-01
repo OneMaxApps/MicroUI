@@ -57,10 +57,7 @@ public class GridLayout extends Layout {
 	  public void update() {
 		  super.update();
 		  gridDraw();
-		  do {
-			  transforming.updateForce();
-			  break;
-		  } while(app.frameCount%60*60 == 0);
+		  if(app.frameCount == 1 || app.frameCount%60*60 == 0) { transforming.updateForce(); }
 	  }
 	  
 	  private void elementsDraw() {

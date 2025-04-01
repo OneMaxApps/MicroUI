@@ -39,11 +39,8 @@ public class ColumnLayout extends Layout {
 			elementList.forEach(element -> element.draw());
 		}
 		
-		do {
-			  transforming.updateForce();
-			  break;
-		  } while(app.frameCount%60*60 == 0);
-		
+		if(app.frameCount == 1 || app.frameCount%60*60 == 0) { transforming.updateForce(); }
+
 	}
 	
 	
@@ -75,7 +72,7 @@ public class ColumnLayout extends Layout {
 	}
 	
 	public void remove(int index) {
-		if(index < 0 && index > elementList.size()-1) { throw new IndexOutOfBoundsException("Index out of bounds of Column exception"); }
+		if(index < 0 || index > elementList.size()-1) { throw new IndexOutOfBoundsException("Index out of bounds of Column exception"); }
 		elementList.remove(index);
 		weightList.remove(index);
 		transforming.updateForce();

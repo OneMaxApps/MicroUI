@@ -119,7 +119,17 @@ public final class Text extends Component {
 	  
 	  public void insert(int index, String text) { this.text.insert(index, text); }
 	  
-	  public void setTextSize(float textSize) { if(textSize >= 1) { this.textSize = (int) textSize; } }
+	  public void setTextSize(float textSize) {
+		  if(textSize < 1) { return; }
+		  app.textSize(textSize);
+		  float textHeight = app.textAscent()+app.textDescent();
+		  if(textHeight > getH()) { return; }
+		  if(textSize >= 1) { this.textSize = (int) textSize; }
+	  }
+	  
+	  public final float getTextHeight() {
+		  return app.textAscent()+app.textDescent(); 
+	  }
 	  
 	  public int getTextSize() { return textSize; }
 	

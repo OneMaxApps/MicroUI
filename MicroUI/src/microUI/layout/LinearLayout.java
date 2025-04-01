@@ -32,7 +32,7 @@ public class LinearLayout extends Layout {
 	}
 	
 	public final void setMode(int mode) {
-		if(mode < 0 || mode > 1) { throw new IndexOutOfBoundsException("out of types exception"); }
+		if(mode !=  MODE_ROW && mode != MODE_COLUMN) { throw new IndexOutOfBoundsException("out of types exception"); }
 		this.mode = mode;
 		transforming.updateForce();
 	}
@@ -74,10 +74,8 @@ public class LinearLayout extends Layout {
 			elementList.forEach(element -> element.draw());
 		};
 		
-		do {
-			  transforming.updateForce();
-			  break;
-		  } while(app.frameCount%60*60 == 0);
+		if(app.frameCount == 1 || app.frameCount%60*60 == 0) { transforming.updateForce(); }
+
 	}
 	
 	public LinearLayout add(BaseForm form, float weight) {
@@ -106,7 +104,7 @@ public class LinearLayout extends Layout {
 	}
 	
 	public void remove(int index) {
-		if(index < 0 && index > elementList.size()-1) { throw new IndexOutOfBoundsException(); }
+		if(index < 0 || index > elementList.size()-1) { throw new IndexOutOfBoundsException(); }
 		elementList.remove(index);
 		weightList.remove(index);
 		transforming.updateForce();

@@ -39,10 +39,7 @@ public class RowLayout extends Layout {
 			elementList.forEach(element -> element.draw());
 		};
 		
-		do {
-			transforming.updateForce();
-			break;
-		} while(app.frameCount%60*60 == 0);
+		if(app.frameCount == 1 || app.frameCount%60*60 == 0) { transforming.updateForce(); }
 	}
 	
 	public RowLayout add(BaseForm form, float weight) {
@@ -71,7 +68,7 @@ public class RowLayout extends Layout {
 	}
 	
 	public void remove(int index) {
-		if(index < 0 && index > elementList.size()-1) { throw new IndexOutOfBoundsException("Index out of bounds of Row exception"); }
+		if(index < 0 || index > elementList.size()-1) { throw new IndexOutOfBoundsException(); }
 		elementList.remove(index);
 		weightList.remove(index);
 		transforming.updateForce();
