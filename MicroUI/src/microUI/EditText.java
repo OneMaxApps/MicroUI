@@ -996,8 +996,8 @@ public final class EditText extends Component {
 				}
 				
 			}
-			
-			return sb.toString();
+			 
+			return sb.toString(); 
 		}
 		
 	}
