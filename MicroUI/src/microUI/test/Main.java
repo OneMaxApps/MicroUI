@@ -21,7 +21,8 @@ public class Main extends PApplet {
 	@Override
 	public void setup() {
 		editText = new EditText(this);
-		editText.items.setTextSize(12);
+		editText.items.setTextSize(14);
+		editText.createFont("C:\\Windows\\Fonts\\consola.ttf",32);
 		editText.loadText("C:\\Users\\002\\Desktop\\EditText.txt");
 		
 	}
@@ -43,7 +44,13 @@ public class Main extends PApplet {
 	@Override
 	public void keyPressed() {
 		Event.keyPressed(this);
+		if(Event.checkKey('q')) {
+			System.out.println(editText.selection.getText());
+			exit();
+		}
+		
 		editText.keyPressed();
+		
 	}
 	
 	

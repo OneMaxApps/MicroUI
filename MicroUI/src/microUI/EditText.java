@@ -3,6 +3,7 @@ package microUI;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.abs;
+import static processing.core.PApplet.min;
 import static processing.core.PApplet.max;
 import static processing.core.PConstants.BACKSPACE;
 import static processing.core.PConstants.CENTER;
@@ -14,7 +15,12 @@ import static processing.core.PConstants.UP;
 import static processing.core.PConstants.TAB;
 import static processing.core.PConstants.CONTROL;
 
-import java.awt.event.KeyEvent;
+import static java.awt.event.KeyEvent.VK_HOME;
+import static java.awt.event.KeyEvent.VK_END;
+import static java.awt.event.KeyEvent.VK_PAGE_UP;
+import static java.awt.event.KeyEvent.VK_PAGE_DOWN;
+import static java.awt.event.KeyEvent.VK_ENTER;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +33,15 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-// TODO Make text selecting
-// TODO Make text copy-paste system
+// TODO Make text-copy	  		(CTRL+C)
+// TODO Make text-pasting 		(CTRL+V)
+// TODO Make text-cutting 		(CTRL+X)
+// TODO Make all text selecting (CTRL+A)
 
 public final class EditText extends Component {
 	public final Items items;
 	public final Cursor cursor;
+	public final Selection selection;
 	public Scroll scrollV,scrollH;
 	
 	private final float SCROLL_WEIGHT,SHIFT_LEFT_SIDE;
@@ -55,13 +64,13 @@ public final class EditText extends Component {
 		initScrolls();
 		items = new Items();
 		cursor = new Cursor();
+		selection = new Selection();
 		
 		pg = app.createGraphics((int) w, (int) h);
 		fx = new FX(app);
 		initFX();
 		event = new Event(app);
 		
-		loadFont("data/fonts/Consolas-48.vlw");
 	}
 
 	public EditText(PApplet app) {
@@ -120,6 +129,7 @@ public final class EditText extends Component {
 			pg.background(fill.get());
 			items.draw(pg);
 			if(isFocused) { cursor.draw(pg); }
+			selection.draw();
 		pg.endDraw();
 		
 		app.image(pg, x, y, w, h);
@@ -202,143 +212,139 @@ public final class EditText extends Component {
 	}
 	
 	public final void keyPressed() {
-
-		final float tempValueOfScrollH = scrollH.getValue();
-		scrollH.setMax(items.getMaxTextWidthFromItems());
-		scrollH.setValue(tempValueOfScrollH);
+		scrollsValuesUpdate();
 		
 		if(!isFocused) { return; }
 			
 		cursor.resetTimer();
-			
+		
 		if(Event.checkKey(CONTROL)) {
-				
 			if(Event.checkKey('+')) { items.setTextSize(items.getTextSize()+1); }
 			if(Event.checkKey('-')) { items.setTextSize(items.getTextSize()-1); }
-				
 			return;
 		}
 			
 		switch(app.keyCode) {
-			
 			case UP:    items.goUpToEditing(); 		break;
-			
-			case DOWN:  items.goDownToEditing(); 	break;
-				
-			case LEFT:  cursor.back();				break;
-				
+			case DOWN:  items.goDownToEditing(); 	break;	
+			case LEFT:  cursor.back();				break;	
 			case RIGHT: cursor.next();				break;
-				
-			case TAB:
-				items.getCurrent().insert("  ");
-				cursor.next();
-				cursor.next();
+			case TAB:   keyTab();					break;
+			case BACKSPACE:	 keyBackspace(); 		break;
+			case VK_HOME : keyHome();				break;	
+			case VK_END: keyEnd();					break;	
+			case VK_PAGE_UP: keyPageUp(); 			break;	
+			case VK_PAGE_DOWN: keyPageDown(); 		break;
+			case VK_ENTER: keyEnter();				break;
+			default:
+				if(isAllowedChar(app.key)) {
+					items.getCurrent().insert(String.valueOf(app.key));
+					cursor.next();
+				}
 				break;
-				
-			case BACKSPACE:	
-					if(!items.list.get(cursor.getColumn()).isEmpty() && cursor.getColumn() > 0 && cursor.getRow() == 0) {
-						String textFromRightSideToCursor = cursor.getTextOfRightSide();
-						
-						items.goUpToEditing();
-						cursor.setRow(items.list.get(cursor.getColumn()-1).getCharsCount());
-						items.list.get(cursor.getColumn()-1).getStringBuilder().append(textFromRightSideToCursor);
-						
-						
-						if(cursor.getColumn() < items.list.size()-1) {
-								items.list.remove(cursor.getColumn());
-							
-							for(int i = cursor.getColumn(); i < items.list.size(); i++) {
-								items.list.get(i).formUp();
-							}
-							items.totalHeight -= items.getTextSize();
-							
-							if(items.getTotalHeight() > h) {
-								float tempValueOfScrollV = scrollV.getValue();
-								scrollV.setMinMax(h-items.totalHeight, 0);
-								scrollV.setValue(constrain(tempValueOfScrollV+items.getTextSize(),scrollV.getMin(),scrollV.getMax()));
-							}
-						}
-						
-						
-						return;
-					}
-				
-					if(items.list.get(cursor.getColumn()).isEmpty() || cursor.getRow() == 0) {
-						
-						if(cursor.getColumn() > 0) {
-							items.goUpToEditing();
-							if(!items.list.get(cursor.getColumn()-1).isEmpty()) {
-								cursor.setRow(items.list.get(cursor.getColumn()-1).getCharsCount());
-							}
-							if(cursor.getColumn() < items.list.size()-1) {
-								items.list.remove(cursor.getColumn());
-							
-							for(int i = cursor.getColumn(); i < items.list.size(); i++) {
-								items.list.get(i).formUp();
-							}
-							items.totalHeight -= items.getTextSize();
-							
-							if(items.getTotalHeight() > h) {
-								float tempValueOfScrollV = scrollV.getValue();
-								scrollV.setMinMax(h-items.totalHeight, 0);
-								scrollV.setValue(constrain(tempValueOfScrollV+items.getTextSize(),scrollV.getMin(),scrollV.getMax()));
-								}
-							}
-						}
-						
-						return;
-					}
-					
-					
-					
-					items.list.get(cursor.getColumn()).deleteChar();
-					cursor.back();
-				break;
-			
-				case KeyEvent.VK_HOME : 
-					cursor.setRow(0);
-					scrollH.setValue(scrollH.getMin());
-					break;
-					
-				case KeyEvent.VK_END:
-					cursor.setRow(cursor.getMaxCharsInRow());
-					scrollH.setValue(scrollH.getMax()/4);
-					
-					break;
-					
-				case KeyEvent.VK_PAGE_UP:
-					items.getCurrent().setEditing(false);
-					items.getFirst().setEditing(true);
-					
-					cursor.goInStart();
-					scrollH.setValue(scrollH.getMin());
-					scrollV.setValue(0);
-					break;
-					
-				case KeyEvent.VK_PAGE_DOWN:
-					items.getCurrent().setEditing(false);
-					items.getLast().setEditing(true);
-					
-					cursor.goInEnd();
-					scrollH.setValue(scrollH.getMin());
-					scrollV.setValue(scrollV.getMin());
-					break;
-					
-				case KeyEvent.VK_ENTER:
-					items.insert(cursor.getTextOfRightSide());
-					
-					scrollH.setValue(scrollH.getMin());
-					cursor.goInStart();
-					break;
-					
-				default:
-					if(isAllowedChar(app.key)) {
-							items.getCurrent().insert(String.valueOf(app.key));
-							cursor.next();
-					}
-				break;
-			}
+		}
 
+	}
+	
+	private final void keyEnter() {
+		items.insert(cursor.getTextOfRightSide());
+		
+		scrollH.setValue(scrollH.getMin());
+		cursor.goInStart();
+	}
+	
+	private final void keyPageUp() {
+		items.getCurrent().setEditing(false);
+		items.getFirst().setEditing(true);
+		
+		cursor.goInStart();
+		scrollH.setValue(scrollH.getMin());
+		scrollV.setValue(0);
+	}
+	
+	private final void keyPageDown() {
+		items.getCurrent().setEditing(false);
+		items.getLast().setEditing(true);
+		
+		cursor.goInEnd();
+		scrollH.setValue(scrollH.getMin());
+		scrollV.setValue(scrollV.getMin());
+	}
+	
+	private final void keyHome() {
+		cursor.setRow(0);
+		scrollH.setValue(scrollH.getMin());
+	}
+	
+	private final void keyEnd() {
+		cursor.setRow(cursor.getMaxCharsInRow());
+		scrollH.setValue(scrollH.getMax()/4);
+	}
+	
+	private final void keyTab() {
+		items.getCurrent().insert("  ");
+		cursor.next();
+		cursor.next();
+	}
+	
+	private final void keyBackspace() {
+		if(!items.list.get(cursor.getColumn()).isEmpty() && cursor.getColumn() > 0 && cursor.getRow() == 0) {
+			String textFromRightSideToCursor = cursor.getTextOfRightSide();
+			
+			items.goUpToEditing();
+			cursor.setRow(items.list.get(cursor.getColumn()-1).getCharsCount());
+			items.list.get(cursor.getColumn()-1).getStringBuilder().append(textFromRightSideToCursor);
+			
+			
+			if(cursor.getColumn() < items.list.size()-1) {
+					items.list.remove(cursor.getColumn());
+				
+				for(int i = cursor.getColumn(); i < items.list.size(); i++) {
+					items.list.get(i).formUp();
+				}
+				items.totalHeight -= items.getTextSize();
+				
+				if(items.getTotalHeight() > h) {
+					float tempValueOfScrollV = scrollV.getValue();
+					scrollV.setMinMax(h-items.totalHeight, 0);
+					scrollV.setValue(constrain(tempValueOfScrollV+items.getTextSize(),scrollV.getMin(),scrollV.getMax()));
+				}
+			}
+			
+			
+			return;
+		}
+	
+		if(items.list.get(cursor.getColumn()).isEmpty() || cursor.getRow() == 0) {
+			
+			if(cursor.getColumn() > 0) {
+				items.goUpToEditing();
+				if(!items.list.get(cursor.getColumn()-1).isEmpty()) {
+					cursor.setRow(items.list.get(cursor.getColumn()-1).getCharsCount());
+				}
+				if(cursor.getColumn() < items.list.size()-1) {
+					items.list.remove(cursor.getColumn());
+				
+				for(int i = cursor.getColumn(); i < items.list.size(); i++) {
+					items.list.get(i).formUp();
+				}
+				items.totalHeight -= items.getTextSize();
+				
+				if(items.getTotalHeight() > h) {
+					float tempValueOfScrollV = scrollV.getValue();
+					scrollV.setMinMax(h-items.totalHeight, 0);
+					scrollV.setValue(constrain(tempValueOfScrollV+items.getTextSize(),scrollV.getMin(),scrollV.getMax()));
+					}
+				}
+			}
+			
+			return;
+		}
+		
+		
+		
+		items.list.get(cursor.getColumn()).deleteChar();
+		cursor.back();
 	}
 	
 	private final boolean isAllowedChar(char ch) {
@@ -536,6 +542,10 @@ public final class EditText extends Component {
 			return list.get(cursor.getColumn());
 		}
 		
+		private final Item get(int index) {
+			 return list.get(index);
+		}
+		
 		private final Item getFirst() {
 			return list.get(0);
 		}
@@ -548,7 +558,8 @@ public final class EditText extends Component {
 			private final StringBuilder sb;
 			private final Event event;
 			private float shiftY,textWidth;
-			private boolean isEditing;
+			private boolean isEditing, isFullSelected,isPartSelected;
+			private int firstSelectedRow,lastSelectedRow;
 			
 			public Item(float shiftY, String text) {
 				sb = new StringBuilder(text);
@@ -572,9 +583,22 @@ public final class EditText extends Component {
 						pg.popStyle();
 					}
 					
+					if(isFullSelected) {
+						pg.pushStyle();
+						pg.fill(0,0,255,64);
+						pg.rect(-scrollH.getValue(),getInsideY(),getTextWidth(),textSize);
+						pg.popStyle();
+					}
+					
+					if(isPartSelected) {
+						pg.pushStyle();
+						pg.fill(0,0,255,64);
+						pg.rect(-scrollH.getValue()+getTextWidth(min(firstSelectedRow,lastSelectedRow)),getInsideY(),getTextWidth(firstSelectedRow,lastSelectedRow),textSize);
+						pg.popStyle();
+					}
 				}
 				
-				if(event.clicked()) {
+				if(event.pressed()) {
 					isEditing = true;
 					final float LOCAL_MOUSE_X = app.mouseX-x+scrollH.getValue();
 					
@@ -596,6 +620,55 @@ public final class EditText extends Component {
 				if(app.mousePressed && event.outside()) {
 					isEditing = false;
 				}
+			}
+			
+			private final void setFullSelect(boolean isFullSelected) {
+				this.isFullSelected = isFullSelected;
+				
+				if(isFullSelected) {
+					firstSelectedRow = 0;
+					lastSelectedRow = sb.length();
+				}
+				
+				isPartSelected = false;
+			}
+			
+			private final void unselect() {
+				isFullSelected = isPartSelected = false;
+				firstSelectedRow = lastSelectedRow = 0;
+			}
+			
+			private final void setPartSelected(int firstRow, int lastRow) {
+				isPartSelected = true;
+				isFullSelected = false;
+				firstSelectedRow = firstRow;
+				lastSelectedRow = lastRow;
+			}
+			
+			private final void setRightSideSelected() {
+				isPartSelected = true;
+				isFullSelected = false;
+				lastSelectedRow = sb.length();
+			}
+			
+			private final void setRightSideSelected(int index) {
+				isPartSelected = true;
+				isFullSelected = false;
+				firstSelectedRow = index;
+				lastSelectedRow = sb.length();
+				
+			}
+			
+			
+			private final void setLeftSideSelected(int endRow) {
+				isPartSelected = true;
+				isFullSelected = false;
+				firstSelectedRow = 0;
+				this.lastSelectedRow = endRow;
+			}
+			
+			private final String getSelectedText() {
+				return sb.toString().substring(firstSelectedRow,lastSelectedRow);
 			}
 			
 			private final String getText() {
@@ -647,11 +720,16 @@ public final class EditText extends Component {
 			}
 			
 			private final float getTextWidth(int indexEnd) {
+				return getTextWidth(0,indexEnd);
+			}
+			
+			private final float getTextWidth(int indexStart, int indexEnd) {
 				float width = 0;
 				
-				if(indexEnd > sb.length()) { return width; }
+				if(indexStart < 0 || indexStart > sb.length()) { return width; }
+				if(indexEnd < 0 || indexEnd > sb.length()) { return width; }
 				
-				width = pg.textWidth(sb.toString().substring(0,indexEnd));
+				width = pg.textWidth(sb.toString().substring(min(indexStart,indexEnd),max(indexStart,indexEnd)));
 				
 				return width;
 			}
@@ -791,4 +869,136 @@ public final class EditText extends Component {
 		}
 	}
 		
+	public final class Selection {
+		private int startColumn,endColumn,startRow,endRow;
+		private final Event eventIn;
+		private boolean isSelecting,selectingWasStoped;
+		
+		public Selection() {
+			eventIn = new Event(app);
+			startColumn = endColumn = startRow = endRow = -1;
+		}
+		private final void draw() {
+			eventIn.listen(EditText.this);
+			
+			if(event.pressed()) {
+				
+				if(selectingWasStoped) {
+					unselected();
+					startColumn = endColumn = startRow = endRow = -1;
+					selectingWasStoped = false;
+				}
+				
+				if(startColumn == -1) { startColumn = cursor.getColumn(); }
+				endColumn = cursor.getColumn();
+				if(startRow == -1) {
+					startRow = cursor.getRow();
+				}
+				endRow = cursor.getRow();
+				
+				if(cursor.getPosY() < getH()*.2f) {
+					scrollV.appendValue(items.getTextSize()/4);
+				}
+				
+				if(cursor.getPosY() > getH()*.8f) {
+					scrollV.appendValue(-items.getTextSize()/4);
+				}
+				
+				if(cursor.getPosX() < getW()*.2f) {
+					scrollH.appendValue(-items.getTextSize()/4);
+				}
+				
+				if(cursor.getPosX() > getW()*.8f) {
+					scrollH.appendValue(items.getTextSize()/4);
+				}
+				
+			} else {
+				if(!selectingWasStoped) {
+					selectingWasStoped = true;
+				}
+			}
+			
+			isSelecting = (startRow != endRow) || (startColumn != endColumn);
+			
+			if(isSelecting) {
+				
+				for(int i = 0; i < items.getItemsCount(); i++) {
+					
+					if(i == startColumn) {
+						if(isMultiLinesSelected()) {
+							if(isDown()) {
+								items.get(startColumn).setRightSideSelected();
+							}
+							
+							if(isUp()) {
+								items.get(endColumn).setRightSideSelected(endRow);
+							}
+							
+						} else {
+							items.get(i).setPartSelected(startRow, endRow);
+						}
+					}
+					
+					if(i == endColumn && isMultiLinesSelected()) {
+						if(isDown()) {
+							items.get(i).setLeftSideSelected(endRow);
+						}
+						if(isUp()) {
+							items.get(startColumn).setLeftSideSelected(startRow);
+						}
+					}
+					
+					if(i > min(startColumn,endColumn) && i < max(startColumn,endColumn)) {
+						items.get(i).setFullSelect(true);
+					} else {
+						if(i < min(startColumn,endColumn) || i > max(startColumn,endColumn)) {
+							items.get(i).setFullSelect(false);
+						}
+					}
+					
+				}
+			
+			}
+		
+			
+			if(eventIn.clicked(2)) {
+				startColumn = endColumn = startRow = endRow = -1;
+				isSelecting = false;
+				unselected();
+			}
+		}
+		
+		private final void unselected() {
+			for(int i = 0; i < items.getItemsCount(); i++) {
+				items.get(i).unselect();
+			}
+		}
+		
+		private final boolean isMultiLinesSelected() {
+			return startColumn != endColumn;
+		}
+		
+		private final boolean isUp() {
+			return endColumn < startColumn;
+		}
+		
+		private final boolean isDown() {
+			return endColumn > startColumn;
+		}
+		
+		public final String getText() {
+			StringBuilder sb = new StringBuilder();
+			
+			for(Items.Item item : items.list) {
+				
+				if(!item.getSelectedText().equals("")) {
+					sb.append(item.getSelectedText()+'\n');
+				}
+				
+			}
+			
+			return sb.toString();
+		}
+		
+	}
 }
