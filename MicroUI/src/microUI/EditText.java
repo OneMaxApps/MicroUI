@@ -33,10 +33,10 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-// TODO Make text-copy	  		(CTRL+C)
-// TODO Make text-pasting 		(CTRL+V)
-// TODO Make text-cutting 		(CTRL+X)
-// TODO Make all text selecting (CTRL+A)
+// TODO Make text-copy	  		 (CTRL+C)
+// TODO Make text-pasting 		 (CTRL+V)
+// TODO Make text-cutting 		 (CTRL+X)
+// TODO Make all text selecting  (CTRL+A)
 
 public final class EditText extends Component {
 	public final Items items;
