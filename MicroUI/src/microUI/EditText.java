@@ -990,7 +990,7 @@ public final class EditText extends Component {
 			StringBuilder sb = new StringBuilder();
 			
 			for(Items.Item item : items.list) {
-				
+				 
 				if(!item.getSelectedText().equals("")) {
 					sb.append(item.getSelectedText()+'\n');
 				}
