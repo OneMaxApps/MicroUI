@@ -38,7 +38,7 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-// TODO Optimize code
+// TODO Fix bug with pasting text
 
 public final class EditText extends Component {
 	public final Items items;
@@ -111,7 +111,7 @@ public final class EditText extends Component {
 		scrollV.setVerticalMode(true);
 		scrollV.shadowDestroy();
 		scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
-		scrollV.setSize(SCROLL_WEIGHT,h);
+		scrollV.setSize(SCROLL_WEIGHT,h-SCROLL_WEIGHT);
 		scrollV.setValue(scrollV.getMax());
 		scrollV.scrolling.setVelocity(.1f);
 		
@@ -119,11 +119,12 @@ public final class EditText extends Component {
 		scrollH.setMinMax(-SHIFT_LEFT_SIDE, 100);
 		scrollH.shadowDestroy();
 		scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
-		scrollH.setSize(w-SCROLL_WEIGHT,SCROLL_WEIGHT);
+		scrollH.setSize(w,SCROLL_WEIGHT);
 	}
 	
 	@Override
 	public void update() {
+		// debug();
 		event.listen(this);
 		fx.init();
 		
@@ -151,37 +152,14 @@ public final class EditText extends Component {
 		
 	}
 	
-	private final void scrollsPositionUpdate() {
-		if(scrollV != null && scrollH != null) {
-			scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
-			scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
-		}
-	}
-		
-	private final void scrollsSizeUpdate() {
-		if(scrollV != null && scrollH != null) {
-			scrollV.setSize(SCROLL_WEIGHT,h);
-			scrollH.setSize(w-SCROLL_WEIGHT,SCROLL_WEIGHT);
-		}
-	}
-	
-	private final void scrollsTransformsUpdate() {
-		scrollsPositionUpdate();
-		scrollsSizeUpdate();
-	}
-
-	private final void scrollsValuesUpdate() {
-		if(scrollV != null && scrollH != null) {
-			float tempValueOfScrollH = scrollH.getValue(),
-				  tempValueOfScrollV = scrollV.getValue();
-			
-			scrollH.setMax(items.getMaxTextWidthFromItems());
-			scrollH.setValue(tempValueOfScrollH);
-			if(items.getTotalHeight() > EditText.this.getH()) {
-				scrollV.setMinMax(h-items.getTotalHeight(), 0);
-				scrollV.setValue(tempValueOfScrollV);
-			}
-		}
+	private final void debug() {
+		System.out.println("\nfps:"+ (int) app.frameRate+"\nselected items:"+selection.getSelectedLines()+"\ntotal height:"+items.getTotalHeight()+"\nitems count:"+items.getItemsCount());
+		System.out.println("\nis Selecting:"+selection.isSelecting()+
+							"\nis FullTextSelected:"+selection.isSelectedAllText()+
+							"\nfirst Column:"+selection.getFirstColumn()+
+							"\nlast Column:"+selection.getLastColumn()+
+							"\nfirst row:"+selection.getFirstRow()+
+							"\nlast row:"+selection.getLastRow());
 	}
 	
 	@Override
@@ -266,28 +244,105 @@ public final class EditText extends Component {
 
 	}
 	
+	public final boolean isFocused() { return isFocused; }
+	
+	public final void setFocused(boolean isFocused) { this.isFocused = isFocused; }
+
+	private final void removeItem(final int index) {
+		if(!items.get(index).isEmpty()) { return; }
+		items.list.remove(index);
+		items.get(index-1).setEditing(true);
+		for(int i = index; i < items.getItemsCount(); i++) {
+			items.get(i).formUp();
+		}
+		items.appendTotalHeight(-items.getTextSize());
+	}
+
+	private final void scrollsPositionUpdate() {
+		if(scrollV != null && scrollH != null) {
+			scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
+			scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
+		}
+	}
+		
+	private final void scrollsSizeUpdate() {
+		if(scrollV != null && scrollH != null) {
+			scrollV.setSize(SCROLL_WEIGHT,h-SCROLL_WEIGHT);
+			scrollH.setSize(w,SCROLL_WEIGHT);
+		}
+	}
+	
+	private final void scrollsTransformsUpdate() {
+		scrollsPositionUpdate();
+		scrollsSizeUpdate();
+	}
+
+	private final void scrollsValuesUpdate() {
+		if(scrollV != null && scrollH != null) {
+			float tempValueOfScrollH = scrollH.getValue(),
+				  tempValueOfScrollV = scrollV.getValue();
+			if(!items.list.isEmpty()) {
+				scrollH.setMax(items.getCurrent().getTextWidth());
+				scrollH.setValue(tempValueOfScrollH);
+			}
+			if(items.getTotalHeight() > EditText.this.getH()) {
+				scrollV.setMinMax(h-items.getTotalHeight(), 0);
+				scrollV.setValue(tempValueOfScrollV);
+			} else {
+				scrollV.setMinMax(-items.getTotalHeight()-items.getTextSize(), 0);
+				scrollV.setValue(scrollV.getMax());
+			}
+		}
+	}
+
 	private final void CTRLV() {
-		if(Clipboard.get().contains(String.valueOf('\n'))) {
-			String[] lines = Clipboard.get().split(String.valueOf('\n'));
-			for(int i = 0; i < lines.length; i++) {
-				if(i == 0) {
-					items.getCurrent().insert(lines[i]);
+		if(isInClipboardSeveralLines()) {
+			insertLines(Clipboard.getAsArray());
+		} else {
+			insertLine(Clipboard.get());
+		}
+	}
+	
+	private final boolean isInClipboardSeveralLines() {
+		return Clipboard.get().contains(String.valueOf('\n'));
+	}
+	
+	private final void insertLine(String line) {
+		items.getCurrent().insert(line);
+		for(int i = 0; i < line.length(); i++) { cursor.next(); }
+	}
+	
+	private final void insertLines(String[] lines) {
+		for(int i = 0; i < lines.length; i++) {
+			if(i == 0) {
+				items.getCurrent().insert(lines[i]);
+			} else {
+				if(items.get(i).isEmpty()) {
+					items.get(i).insert(lines[i]);
 				} else {
 					items.insert(lines[i]);
 				}
 				
+				
+				
+				cursor.goInEnd();
+				if(cursor.getPosY() > EditText.this.getH()*.9f) {
+					scrollV.appendValue(-items.getTextSize());
+				}
 			}
-		} else {
-			items.getCurrent().insert(Clipboard.get());
-			for(int i = 0; i < Clipboard.get().length(); i++) { cursor.next(); }
 		}
 	}
 	
 	private final void CTRLX() {
 		Clipboard.set(selection.getText());
+		
 		items.deleteAllSelectedText();
+		
+		deleteItemsFromSelectedArea();
+		
 		selection.unselect();
 		selection.setSelecting(false);
+		
 	}
 	
 	private final void keyEnter() {
@@ -311,6 +366,9 @@ public final class EditText extends Component {
 		items.getLast().setEditing(true);
 		
 		cursor.goInEnd();
+		
+		scrollsValuesUpdate();
+		
 		scrollH.setValue(scrollH.getMin());
 		scrollV.setValue(scrollV.getMin());
 	}
@@ -322,7 +380,7 @@ public final class EditText extends Component {
 	
 	private final void keyEnd() {
 		cursor.setRow(cursor.getMaxCharsInRow());
-		scrollH.setValue(scrollH.getMax()/4);
+		scrollH.setValue(scrollH.getMax()*.9f);
 	}
 	
 	private final void keyTab() {
@@ -336,12 +394,17 @@ public final class EditText extends Component {
 		if(selection.isSelectedAllText()) {
 			items.deleteAllText();
 			selection.unselect();
-			selection.setSelectedAllText(false);
+			items.clear();
+			items.add("");
+			cursor.setColumn(0);
+			cursor.setRow(0);
 			return;
 		}
 		
 		if(selection.isSelecting()) {
 			items.deleteAllSelectedText();
+			deleteItemsFromSelectedArea();
+			
 			selection.unselect();
 			return;
 		}
@@ -362,11 +425,7 @@ public final class EditText extends Component {
 				}
 				items.totalHeight -= items.getTextSize();
 				
-				if(items.getTotalHeight() > h) {
-					float tempValueOfScrollV = scrollV.getValue();
-					scrollV.setMinMax(h-items.totalHeight, 0);
-					scrollV.setValue(constrain(tempValueOfScrollV+items.getTextSize(),scrollV.getMin(),scrollV.getMax()));
-				}
+				scrollsValuesUpdate();
 			}
 			
 			
@@ -408,6 +467,12 @@ public final class EditText extends Component {
 	private final boolean isAllowedChar(char ch) {
 		String s = "\'\"!@#$%^&*()_+|\\|/=-[]{};:/?,.<>=-";
 		return s.contains(String.valueOf(ch)) || Character.isDigit(ch) || Character.isAlphabetic(ch) || Character.isWhitespace(ch);
+	}
+
+	private final void deleteItemsFromSelectedArea() {
+		for(int i = selection.getLastColumn(); i > selection.getFirstColumn(); i--) {
+			removeItem(i);
+		}
 	}
 
 	public final void loadText(String path) {
@@ -515,15 +580,17 @@ public final class EditText extends Component {
 				totalHeight += textSize;
 			}
 			
-			if(getTotalHeight() > EditText.this.getH()) {
-				scrollsValuesUpdate();
-			}
+			scrollsValuesUpdate();
 		}
 		
 		public final int getTextSize() { return textSize; }
 		
 		public final float getTotalHeight() { return totalHeight; }
 		
+		private final void appendTotalHeight(int value) {
+			totalHeight += value;
+		}
+
 		public final void add(String text) {
 			list.add(new Item(list.size()*textSize,text));
 			totalHeight += textSize;
@@ -532,6 +599,7 @@ public final class EditText extends Component {
 		private final void clear() {
 			list.clear();
 			totalHeight = 0;
+			scrollsValuesUpdate();
 		}
 		
 		private final float getMaxTextWidthFromItems() {
@@ -585,7 +653,6 @@ public final class EditText extends Component {
 				if(list.get(i).isEditing()) { id = i; }
 			}
 			
-			
 			list.add(id+1, new Item(list.get(id).getShiftY(),partOfText));
 			
 			
@@ -614,7 +681,7 @@ public final class EditText extends Component {
 		}
 		
 		private final Item get(int index) {
-			 return list.get(index);
+			 return list.get(constrain(index,0,list.size()));
 		}
 		
 		private final Item getFirst() {
@@ -842,7 +909,11 @@ public final class EditText extends Component {
 			}
 			
 			private final void insert(String txt) {
-				sb.insert(cursor.getRow(),txt);
+				if(isEmpty()) {
+					sb.append(txt);
+				} else {
+					sb.insert(cursor.getRow(),txt);
+				}
 			}
 		}
 	
@@ -966,9 +1037,7 @@ public final class EditText extends Component {
 		private final void draw() {
 			eventIn.listen(EditText.this);
 			
-			// System.out.println(isSelecting);
-			
-			if(event.pressed() && !scrollV.button.event.moved() && !scrollH.button.event.moved()) {
+			if(isAllowedStateToStartSelecting()) {
 				
 				if(selectingWasStoped) {
 					unselect();
@@ -977,9 +1046,7 @@ public final class EditText extends Component {
 				
 				if(startColumn == -1) { startColumn = cursor.getColumn(); }
 				endColumn = cursor.getColumn();
-				if(startRow == -1) {
-					startRow = cursor.getRow();
-				}
+				if(startRow == -1) { startRow = cursor.getRow(); }
 				endRow = cursor.getRow();
 				
 				if(items.getTotalHeight() > EditText.this.getH()) {
@@ -1056,6 +1123,14 @@ public final class EditText extends Component {
 			}
 		}
 		
+		private final boolean isAllowedStateToStartSelecting() {
+			return event.pressed() &&
+				   !scrollV.button.event.moved() &&
+				   !scrollH.button.event.moved() &&
+				   !scrollV.event.inside() &&
+				   !scrollH.event.inside();
+		}
+		
 		private final boolean isSelecting() { return isSelecting; }
 		
 		private final void unselect() {
@@ -1068,10 +1143,32 @@ public final class EditText extends Component {
 			setSelectedAllText(false);
 		}
 		
-		
-		
 		private final boolean isSelectedAllText() {
 			return isSelectedAllText;
+		}
+		
+		private final int getFirstColumn() {
+			return min(startColumn,endColumn);
+		}
+		
+		private final int getLastColumn() {
+			return max(startColumn,endColumn);
+		}
+		
+		private final int getFirstRow() {
+			return min(startRow,endRow);
+		}
+		
+		private final int getLastRow() {
+			return max(startRow,endRow);
+		}
+
+		private final int getRealFirstColumn() {
+			return startColumn;
+		}
+		
+		private final int getRealLastColumn() {
+			return endColumn;
 		}
 
 		private final void setSelectedAllText(boolean isSelectedAllText) {

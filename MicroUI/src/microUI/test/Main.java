@@ -21,9 +21,8 @@ public class Main extends PApplet {
 	@Override
 	public void setup() {
 		editText = new EditText(this);
-		// editText.items.setTextSize(32);
-		//editText.createFont("C:\\Windows\\Fonts\\consola.ttf",32);
-		//editText.loadText("C:\\Users\\002\\Desktop\\EditText.txt");
+		editText.items.setTextSize(12);
+		editText.loadText("C:\\Users\\002\\Desktop\\EditText.txt");
 		
 	}
 		
@@ -32,7 +31,6 @@ public class Main extends PApplet {
 		background(128);
 		editText.draw();
 		
-		// System.out.println(editText.scrollV.getValue());
 		if(mouseButton == RIGHT) { editText.setPosition(mouseX,mouseY); }
 	}
 

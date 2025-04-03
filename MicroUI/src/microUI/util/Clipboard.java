@@ -38,6 +38,10 @@ public final class Clipboard {
 
 	}
 	
+	public static final String[] getAsArray() {
+		return get().split(String.valueOf('\n'));
+	}
+	
 	public static final void usingLocalBuffer() {
 		usingLocalBuffer = true;
 	}
