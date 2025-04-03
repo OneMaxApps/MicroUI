@@ -270,7 +270,12 @@ public final class EditText extends Component {
 		if(Clipboard.get().contains(String.valueOf('\n'))) {
 			String[] lines = Clipboard.get().split(String.valueOf('\n'));
 			for(int i = 0; i < lines.length; i++) {
-				items.insert(lines[i]);
+				if(i == 0) {
+					items.getCurrent().insert(lines[i]);
+				} else {
+					items.insert(lines[i]);
+				}
+				
 			}
 		} else {
 			items.getCurrent().insert(Clipboard.get());
@@ -1060,6 +1065,7 @@ public final class EditText extends Component {
 			}
 			isSelecting = false;
 			selectingWasStoped = true;
+			setSelectedAllText(false);
 		}
 		
 		
