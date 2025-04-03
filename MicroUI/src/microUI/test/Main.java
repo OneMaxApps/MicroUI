@@ -22,8 +22,8 @@ public class Main extends PApplet {
 	public void setup() {
 		editText = new EditText(this);
 		// editText.items.setTextSize(32);
-		editText.createFont("C:\\Windows\\Fonts\\consola.ttf",32);
-		editText.loadText("C:\\Users\\002\\Desktop\\EditText.txt");
+		//editText.createFont("C:\\Windows\\Fonts\\consola.ttf",32);
+		//editText.loadText("C:\\Users\\002\\Desktop\\EditText.txt");
 		
 	}
 		

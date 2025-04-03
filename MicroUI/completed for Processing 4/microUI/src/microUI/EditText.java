@@ -3,6 +3,7 @@ package microUI;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.abs;
+import static processing.core.PApplet.min;
 import static processing.core.PApplet.max;
 import static processing.core.PConstants.BACKSPACE;
 import static processing.core.PConstants.CENTER;
@@ -14,10 +15,20 @@ import static processing.core.PConstants.UP;
 import static processing.core.PConstants.TAB;
 import static processing.core.PConstants.CONTROL;
 
-import java.awt.event.KeyEvent;
+import static java.awt.event.KeyEvent.VK_HOME;
+import static java.awt.event.KeyEvent.VK_END;
+import static java.awt.event.KeyEvent.VK_PAGE_UP;
+import static java.awt.event.KeyEvent.VK_PAGE_DOWN;
+import static java.awt.event.KeyEvent.VK_ENTER;
+import static java.awt.event.KeyEvent.VK_A;
+import static java.awt.event.KeyEvent.VK_C;
+import static java.awt.event.KeyEvent.VK_V;
+import static java.awt.event.KeyEvent.VK_X;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import microUI.util.Clipboard;
 import microUI.util.Color;
 import microUI.util.Component;
 import microUI.util.Event;
@@ -27,12 +38,12 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-// TODO Make text selecting
-// TODO Make text copy-paste system
+// TODO Optimize code
 
 public final class EditText extends Component {
 	public final Items items;
 	public final Cursor cursor;
+	public final Selection selection;
 	public Scroll scrollV,scrollH;
 	
 	private final float SCROLL_WEIGHT,SHIFT_LEFT_SIDE;
@@ -55,13 +66,13 @@ public final class EditText extends Component {
 		initScrolls();
 		items = new Items();
 		cursor = new Cursor();
+		selection = new Selection();
 		
 		pg = app.createGraphics((int) w, (int) h);
 		fx = new FX(app);
 		initFX();
 		event = new Event(app);
 		
-		loadFont("data/fonts/Consolas-48.vlw");
 	}
 
 	public EditText(PApplet app) {
@@ -120,6 +131,7 @@ public final class EditText extends Component {
 			pg.background(fill.get());
 			items.draw(pg);
 			if(isFocused) { cursor.draw(pg); }
+			selection.draw();
 		pg.endDraw();
 		
 		app.image(pg, x, y, w, h);
@@ -165,8 +177,10 @@ public final class EditText extends Component {
 			
 			scrollH.setMax(items.getMaxTextWidthFromItems());
 			scrollH.setValue(tempValueOfScrollH);
-			scrollV.setMinMax(h-items.getTotalHeight(), 0);
-			scrollV.setValue(tempValueOfScrollV);
+			if(items.getTotalHeight() > EditText.this.getH()) {
+				scrollV.setMinMax(h-items.getTotalHeight(), 0);
+				scrollV.setValue(tempValueOfScrollV);
+			}
 		}
 	}
 	
@@ -197,148 +211,198 @@ public final class EditText extends Component {
 	}
 
 	public final void mouseWheel(MouseEvent e) {
-		scrollV.scrolling.init(e,event.inside());
-		scrollV.autoScrollAppending();
+		if(isFocused) {
+			scrollV.scrolling.init(e,event.inside());
+			scrollV.autoScrollAppending();
+		}
 	}
 	
 	public final void keyPressed() {
-
-		final float tempValueOfScrollH = scrollH.getValue();
-		scrollH.setMax(items.getMaxTextWidthFromItems());
-		scrollH.setValue(tempValueOfScrollH);
+		scrollsValuesUpdate();
 		
 		if(!isFocused) { return; }
 			
 		cursor.resetTimer();
-			
+		
 		if(Event.checkKey(CONTROL)) {
-				
 			if(Event.checkKey('+')) { items.setTextSize(items.getTextSize()+1); }
 			if(Event.checkKey('-')) { items.setTextSize(items.getTextSize()-1); }
+			if(Event.checkKey(VK_C)) { Clipboard.set(selection.getText()); }
+			if(Event.checkKey(VK_V)) { CTRLV(); }
+			if(Event.checkKey(VK_X)) { CTRLX(); }
+			if(Event.checkKey(VK_A)) {
+				items.selectAllText();
 				
+				selection.setSelectedAllText(true);
+				
+			}
 			return;
 		}
 			
 		switch(app.keyCode) {
-			
 			case UP:    items.goUpToEditing(); 		break;
-			
-			case DOWN:  items.goDownToEditing(); 	break;
-				
-			case LEFT:  cursor.back();				break;
-				
+			case DOWN:  items.goDownToEditing(); 	break;	
+			case LEFT:  cursor.back();				break;	
 			case RIGHT: cursor.next();				break;
+			case TAB:   keyTab();					break;
+			case BACKSPACE:	 keyBackspace(); 		break;
+			case VK_HOME : keyHome();				break;	
+			case VK_END: keyEnd();					break;	
+			case VK_PAGE_UP: keyPageUp(); 			break;	
+			case VK_PAGE_DOWN: keyPageDown(); 		break;
+			case VK_ENTER: keyEnter();				break;
+			default:
 				
-			case TAB:
-				items.getCurrent().insert("  ");
-				cursor.next();
-				cursor.next();
-				break;
+				items.deleteAllSelectedText();
+				selection.unselect();
+				selection.setSelecting(false);
 				
-			case BACKSPACE:	
-					if(!items.list.get(cursor.getColumn()).isEmpty() && cursor.getColumn() > 0 && cursor.getRow() == 0) {
-						String textFromRightSideToCursor = cursor.getTextOfRightSide();
-						
-						items.goUpToEditing();
-						cursor.setRow(items.list.get(cursor.getColumn()-1).getCharsCount());
-						items.list.get(cursor.getColumn()-1).getStringBuilder().append(textFromRightSideToCursor);
-						
-						
-						if(cursor.getColumn() < items.list.size()-1) {
-								items.list.remove(cursor.getColumn());
-							
-							for(int i = cursor.getColumn(); i < items.list.size(); i++) {
-								items.list.get(i).formUp();
-							}
-							items.totalHeight -= items.getTextSize();
-							
-							if(items.getTotalHeight() > h) {
-								float tempValueOfScrollV = scrollV.getValue();
-								scrollV.setMinMax(h-items.totalHeight, 0);
-								scrollV.setValue(constrain(tempValueOfScrollV+items.getTextSize(),scrollV.getMin(),scrollV.getMax()));
-							}
-						}
-						
-						
-						return;
-					}
-				
-					if(items.list.get(cursor.getColumn()).isEmpty() || cursor.getRow() == 0) {
-						
-						if(cursor.getColumn() > 0) {
-							items.goUpToEditing();
-							if(!items.list.get(cursor.getColumn()-1).isEmpty()) {
-								cursor.setRow(items.list.get(cursor.getColumn()-1).getCharsCount());
-							}
-							if(cursor.getColumn() < items.list.size()-1) {
-								items.list.remove(cursor.getColumn());
-							
-							for(int i = cursor.getColumn(); i < items.list.size(); i++) {
-								items.list.get(i).formUp();
-							}
-							items.totalHeight -= items.getTextSize();
-							
-							if(items.getTotalHeight() > h) {
-								float tempValueOfScrollV = scrollV.getValue();
-								scrollV.setMinMax(h-items.totalHeight, 0);
-								scrollV.setValue(constrain(tempValueOfScrollV+items.getTextSize(),scrollV.getMin(),scrollV.getMax()));
-								}
-							}
-						}
-						
-						return;
-					}
-					
-					
-					
-					items.list.get(cursor.getColumn()).deleteChar();
-					cursor.back();
+				if(isAllowedChar(app.key)) {
+					items.getCurrent().insert(String.valueOf(app.key));
+					cursor.next();
+				}
 				break;
-			
-				case KeyEvent.VK_HOME : 
-					cursor.setRow(0);
-					scrollH.setValue(scrollH.getMin());
-					break;
-					
-				case KeyEvent.VK_END:
-					cursor.setRow(cursor.getMaxCharsInRow());
-					scrollH.setValue(scrollH.getMax()/4);
-					
-					break;
-					
-				case KeyEvent.VK_PAGE_UP:
-					items.getCurrent().setEditing(false);
-					items.getFirst().setEditing(true);
-					
-					cursor.goInStart();
-					scrollH.setValue(scrollH.getMin());
-					scrollV.setValue(0);
-					break;
-					
-				case KeyEvent.VK_PAGE_DOWN:
-					items.getCurrent().setEditing(false);
-					items.getLast().setEditing(true);
-					
-					cursor.goInEnd();
-					scrollH.setValue(scrollH.getMin());
-					scrollV.setValue(scrollV.getMin());
-					break;
-					
-				case KeyEvent.VK_ENTER:
-					items.insert(cursor.getTextOfRightSide());
-					
-					scrollH.setValue(scrollH.getMin());
-					cursor.goInStart();
-					break;
-					
-				default:
-					if(isAllowedChar(app.key)) {
-							items.getCurrent().insert(String.valueOf(app.key));
-							cursor.next();
-					}
-				break;
-			}
+		}
 
+	}
+	
+	private final void CTRLV() {
+		if(Clipboard.get().contains(String.valueOf('\n'))) {
+			String[] lines = Clipboard.get().split(String.valueOf('\n'));
+			for(int i = 0; i < lines.length; i++) {
+				if(i == 0) {
+					items.getCurrent().insert(lines[i]);
+				} else {
+					items.insert(lines[i]);
+				}
+				
+			}
+		} else {
+			items.getCurrent().insert(Clipboard.get());
+			for(int i = 0; i < Clipboard.get().length(); i++) { cursor.next(); }
+		}
+	}
+	
+	private final void CTRLX() {
+		Clipboard.set(selection.getText());
+		items.deleteAllSelectedText();
+		selection.unselect();
+		selection.setSelecting(false);
+	}
+	
+	private final void keyEnter() {
+		items.insert(cursor.getTextOfRightSide());
+		
+		scrollH.setValue(scrollH.getMin());
+		cursor.goInStart();
+	}
+	
+	private final void keyPageUp() {
+		items.getCurrent().setEditing(false);
+		items.getFirst().setEditing(true);
+		
+		cursor.goInStart();
+		scrollH.setValue(scrollH.getMin());
+		scrollV.setValue(0);
+	}
+	
+	private final void keyPageDown() {
+		items.getCurrent().setEditing(false);
+		items.getLast().setEditing(true);
+		
+		cursor.goInEnd();
+		scrollH.setValue(scrollH.getMin());
+		scrollV.setValue(scrollV.getMin());
+	}
+	
+	private final void keyHome() {
+		cursor.setRow(0);
+		scrollH.setValue(scrollH.getMin());
+	}
+	
+	private final void keyEnd() {
+		cursor.setRow(cursor.getMaxCharsInRow());
+		scrollH.setValue(scrollH.getMax()/4);
+	}
+	
+	private final void keyTab() {
+		items.getCurrent().insert("  ");
+		cursor.next();
+		cursor.next();
+	}
+	
+	private final void keyBackspace() {
+		
+		if(selection.isSelectedAllText()) {
+			items.deleteAllText();
+			selection.unselect();
+			selection.setSelectedAllText(false);
+			return;
+		}
+		
+		if(selection.isSelecting()) {
+			items.deleteAllSelectedText();
+			selection.unselect();
+			return;
+		}
+		
+		if(!items.list.get(cursor.getColumn()).isEmpty() && cursor.getColumn() > 0 && cursor.getRow() == 0) {
+			String textFromRightSideToCursor = cursor.getTextOfRightSide();
+			
+			items.goUpToEditing();
+			cursor.setRow(items.list.get(cursor.getColumn()-1).getCharsCount());
+			items.list.get(cursor.getColumn()-1).getStringBuilder().append(textFromRightSideToCursor);
+			
+			
+			if(cursor.getColumn() < items.list.size()-1) {
+					items.list.remove(cursor.getColumn());
+				
+				for(int i = cursor.getColumn(); i < items.list.size(); i++) {
+					items.list.get(i).formUp();
+				}
+				items.totalHeight -= items.getTextSize();
+				
+				if(items.getTotalHeight() > h) {
+					float tempValueOfScrollV = scrollV.getValue();
+					scrollV.setMinMax(h-items.totalHeight, 0);
+					scrollV.setValue(constrain(tempValueOfScrollV+items.getTextSize(),scrollV.getMin(),scrollV.getMax()));
+				}
+			}
+			
+			
+			return;
+		}
+	
+		if(items.list.get(cursor.getColumn()).isEmpty() || cursor.getRow() == 0) {
+			
+			if(cursor.getColumn() > 0) {
+				items.goUpToEditing();
+				if(!items.list.get(cursor.getColumn()-1).isEmpty()) {
+					cursor.setRow(items.list.get(cursor.getColumn()-1).getCharsCount());
+				}
+				if(cursor.getColumn() < items.list.size()-1) {
+					items.list.remove(cursor.getColumn());
+				
+				for(int i = cursor.getColumn(); i < items.list.size(); i++) {
+					items.list.get(i).formUp();
+				}
+				items.totalHeight -= items.getTextSize();
+				
+				if(items.getTotalHeight() > h) {
+					float tempValueOfScrollV = scrollV.getValue();
+					scrollV.setMinMax(h-items.totalHeight, 0);
+					scrollV.setValue(constrain(tempValueOfScrollV+items.getTextSize(),scrollV.getMin(),scrollV.getMax()));
+					}
+				}
+			}
+			
+			return;
+		}
+		
+		
+		
+		items.list.get(cursor.getColumn()).deleteChar();
+		cursor.back();
 	}
 	
 	private final boolean isAllowedChar(char ch) {
@@ -421,6 +485,19 @@ public final class EditText extends Component {
 		
 		private final boolean itemInside(Item item) {
 			return item.getY() > getY()-item.getH() && item.getY() < getY()+getH();
+		}
+		
+		private final void deleteAllSelectedText() {
+			for(Item item : list) { item.removeSelectedText(); }
+		}
+		
+		private final void deleteAllText() {
+			for(Item item : list) { item.removeAllText(); }
+		}
+
+		
+		private final void selectAllText() {
+			for(Item item : list) { item.setFullSelect(true); }
 		}
 		
 		public final int getItemsCount() {
@@ -536,6 +613,10 @@ public final class EditText extends Component {
 			return list.get(cursor.getColumn());
 		}
 		
+		private final Item get(int index) {
+			 return list.get(index);
+		}
+		
 		private final Item getFirst() {
 			return list.get(0);
 		}
@@ -548,7 +629,8 @@ public final class EditText extends Component {
 			private final StringBuilder sb;
 			private final Event event;
 			private float shiftY,textWidth;
-			private boolean isEditing;
+			private boolean isEditing, isFullSelected,isPartSelected;
+			private int firstSelectedRow,lastSelectedRow;
 			
 			public Item(float shiftY, String text) {
 				sb = new StringBuilder(text);
@@ -561,8 +643,13 @@ public final class EditText extends Component {
 			private final void draw(PGraphics pg) {
 				event.listen(x,getY(),x+w,getH());
 				
+				if(!isFullSelected && !isPartSelected) {
+					firstSelectedRow = lastSelectedRow = 0;
+				}
+				
 				if(pg != null) {
 					pg.text(sb.toString(),-scrollH.getValue(),getInsideY()+textSize/2);
+
 					textWidth = pg.textWidth(sb.toString());
 					
 					if(isFocused && isEditing) {
@@ -572,9 +659,18 @@ public final class EditText extends Component {
 						pg.popStyle();
 					}
 					
-				}
+						pg.pushStyle();
+						pg.fill(0,0,255,64);
+						if(isFullSelected) {
+							pg.rect(-scrollH.getValue(),getInsideY(),getTextWidth(),textSize);
+						}
+						if(isPartSelected) {
+							pg.rect(-scrollH.getValue()+getTextWidth(min(firstSelectedRow,lastSelectedRow)),getInsideY(),getTextWidth(firstSelectedRow,lastSelectedRow),textSize);
+						}
+						pg.popStyle();
+					}
 				
-				if(event.clicked()) {
+				if(event.pressed()) {
 					isEditing = true;
 					final float LOCAL_MOUSE_X = app.mouseX-x+scrollH.getValue();
 					
@@ -596,6 +692,67 @@ public final class EditText extends Component {
 				if(app.mousePressed && event.outside()) {
 					isEditing = false;
 				}
+			}
+			
+			private final void setFullSelect(boolean isFullSelected) {
+				this.isFullSelected = isFullSelected;
+				
+				if(isFullSelected) {
+					firstSelectedRow = 0;
+					lastSelectedRow = sb.length();
+				}
+				
+				isPartSelected = false;
+			}
+			
+			private final void unselect() {
+				isFullSelected = isPartSelected = false;
+				firstSelectedRow = lastSelectedRow = 0;
+			}
+			
+			private final void setPartSelected(int firstRow, int lastRow) {
+				isPartSelected = true;
+				isFullSelected = false;
+				firstSelectedRow = firstRow;
+				lastSelectedRow = lastRow;
+			}
+			
+			private final void setRightSideSelected() {
+				isPartSelected = true;
+				isFullSelected = false;
+				lastSelectedRow = sb.length();
+			}
+			
+			private final void setRightSideSelected(int index) {
+				isPartSelected = true;
+				isFullSelected = false;
+				firstSelectedRow = index;
+				lastSelectedRow = sb.length();
+				
+			}
+			
+			
+			private final void setLeftSideSelected(int endRow) {
+				isPartSelected = true;
+				isFullSelected = false;
+				firstSelectedRow = 0;
+				this.lastSelectedRow = endRow;
+			}
+			
+			private final String getSelectedText() {
+				return sb.toString().substring(min(firstSelectedRow,lastSelectedRow),max(firstSelectedRow,lastSelectedRow));
+			}
+			
+			private final void removeSelectedText() {
+				if(sb.length() > 0) {
+					sb.delete(min(firstSelectedRow,lastSelectedRow), max(firstSelectedRow,lastSelectedRow));
+				}
+				unselect();
+			}
+			
+			private final void removeAllText() {
+				sb.delete(0, sb.length());
+				unselect();
 			}
 			
 			private final String getText() {
@@ -647,11 +804,16 @@ public final class EditText extends Component {
 			}
 			
 			private final float getTextWidth(int indexEnd) {
+				return getTextWidth(0,indexEnd);
+			}
+			
+			private final float getTextWidth(int indexStart, int indexEnd) {
 				float width = 0;
 				
-				if(indexEnd > sb.length()) { return width; }
+				if(indexStart < 0 || indexStart > sb.length()) { return width; }
+				if(indexEnd < 0 || indexEnd > sb.length()) { return width; }
 				
-				width = pg.textWidth(sb.toString().substring(0,indexEnd));
+				width = pg.textWidth(sb.toString().substring(min(indexStart,indexEnd),max(indexStart,indexEnd)));
 				
 				return width;
 			}
@@ -791,4 +953,187 @@ public final class EditText extends Component {
 		}
 	}
 		
+	public final class Selection {
+		private int startColumn,endColumn,startRow,endRow;
+		private final Event eventIn;
+		private boolean isSelecting,selectingWasStoped,isSelectedAllText;
+		
+		public Selection() {
+			eventIn = new Event(app);
+			startColumn = endColumn = startRow = endRow = -1;
+		}
+		
+		private final void draw() {
+			eventIn.listen(EditText.this);
+			
+			// System.out.println(isSelecting);
+			
+			if(event.pressed() && !scrollV.button.event.moved() && !scrollH.button.event.moved()) {
+				
+				if(selectingWasStoped) {
+					unselect();
+					selectingWasStoped = false;
+				}
+				
+				if(startColumn == -1) { startColumn = cursor.getColumn(); }
+				endColumn = cursor.getColumn();
+				if(startRow == -1) {
+					startRow = cursor.getRow();
+				}
+				endRow = cursor.getRow();
+				
+				if(items.getTotalHeight() > EditText.this.getH()) {
+				
+					if(cursor.getPosY() < getH()*.2f) {
+						scrollV.appendValue(getH()*.01f);
+					}
+					
+					if(cursor.getPosY() > getH()*.8f) {
+						scrollV.appendValue(-getH()*.01f);
+					}
+					
+					if(cursor.getPosX() < getW()*.2f) {
+						scrollH.appendValue(-getW()*.01f);
+					}
+					
+					if(cursor.getPosX() > getW()*.8f) {
+						scrollH.appendValue(getW()*.01f);
+					}
+				
+				}
+				
+				
+			} else {
+				if(!selectingWasStoped) {
+					selectingWasStoped = true;
+				}
+			}
+			
+			isSelecting = (startRow != endRow) || (startColumn != endColumn);
+			
+			if(isSelecting && !scrollV.button.event.moved() && !scrollH.button.event.moved()) {
+				
+				for(int i = 0; i < items.getItemsCount(); i++) {
+					
+					if(i == startColumn) {
+						if(isMultiLinesSelected()) {
+							if(isDown()) {
+								items.get(startColumn).setRightSideSelected();
+							}
+							
+							if(isUp()) {
+								items.get(endColumn).setRightSideSelected(endRow);
+							}
+							
+						} else {
+							items.get(i).setPartSelected(startRow, endRow);
+						}
+					}
+					
+					if(i == endColumn && isMultiLinesSelected()) {
+						if(isDown()) {
+							items.get(i).setLeftSideSelected(endRow);
+						}
+						if(isUp()) {
+							items.get(startColumn).setLeftSideSelected(startRow);
+						}
+					}
+					
+					if(i > min(startColumn,endColumn) && i < max(startColumn,endColumn)) {
+						items.get(i).setFullSelect(true);
+					} else {
+						if(i < min(startColumn,endColumn) || i > max(startColumn,endColumn)) {
+							items.get(i).setFullSelect(false);
+						}
+					}
+					
+				}
+			
+			}
+		
+			if(eventIn.clicked(2)) {
+				unselect();
+			}
+		}
+		
+		private final boolean isSelecting() { return isSelecting; }
+		
+		private final void unselect() {
+			startColumn = endColumn = startRow = endRow = -1;
+			for(int i = 0; i < items.getItemsCount(); i++) {
+				items.get(i).unselect();
+			}
+			isSelecting = false;
+			selectingWasStoped = true;
+			setSelectedAllText(false);
+		}
+		
+		
+		
+		private final boolean isSelectedAllText() {
+			return isSelectedAllText;
+		}
+
+		private final void setSelectedAllText(boolean isSelectedAllText) {
+			this.isSelectedAllText = isSelectedAllText;
+			if(isSelectedAllText) { isSelecting = true; }
+		}
+
+		private final boolean isMultiLinesSelected() {
+			return startColumn != endColumn;
+		}
+		
+		private final boolean isUp() {
+			return endColumn < startColumn;
+		}
+		
+		private final boolean isDown() {
+			return endColumn > startColumn;
+		}
+		
+		private final void setSelecting(boolean isSelecting) {
+			this.isSelecting = isSelecting;
+		}
+		
+		public final String getText() {
+			StringBuilder sb = new StringBuilder();
+			int countOfLines = getSelectedLines();
+			
+			
+			
+			if(countOfLines > 1) {
+				for(Items.Item item : items.list) { 
+					if(!item.getSelectedText().equals("")) {
+						sb.append(item.getSelectedText()+'\n');
+					}
+				}
+			} else {
+				for(Items.Item item : items.list) { 
+					if(!item.getSelectedText().equals("")) {
+						sb.append(item.getSelectedText());
+					}
+				}
+			}
+			 
+			
+			
+			return sb.toString(); 
+		}
+		
+		private final int getSelectedLines() {
+			int countOfLines = 0;
+			
+			for(Items.Item item : items.list) {
+				 
+				if(!item.getSelectedText().equals("")) {
+					countOfLines++;
+				}
+				
+			}
+			
+			return countOfLines;
+		}
+		
+	}
+	
 }
