@@ -1,6 +1,7 @@
 package microUI;
 
 import static processing.core.PApplet.dist;
+import static processing.core.PApplet.min;
 import static processing.core.PApplet.max;
 
 import microUI.layout.GridLayout;
@@ -11,6 +12,9 @@ import microUI.util.Event;
 import microUI.util.Rectangle;
 import microUI.util.Text;
 import processing.core.PApplet;
+
+// TODO Add mouseWheel(MouseEvent e) method
+// TODO Make button "close" can't resize
 
 public class Window extends Rectangle {
 	public Bar bar;
@@ -78,6 +82,7 @@ public class Window extends Rectangle {
 		layout = new GridLayout(app,x,y+bar.HEIGHT,w,h-bar.HEIGHT,1,1);
 		((GridLayout) (layout)).setFillTheGrid(true);
 		((GridLayout) (layout)).add(form, 0, 0);
+		((GridLayout) (layout)).margin.set(min(h,w)*.01f);
 	}
 	
 	public final void open() { visible = true; }

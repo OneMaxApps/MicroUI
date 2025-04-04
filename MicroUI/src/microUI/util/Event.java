@@ -97,7 +97,10 @@ public class Event {
 	  }
 	  
 	  public static final void keyReleased() {
-		  for(int i = 0; i < keys.length; i++) { keys[i] = false; }
+		  for(int i = 0; i < keys.length; i++) {
+				  keys[i] = false;
+		  }
+		  
 	  }
 	  
 	  public void action() {}

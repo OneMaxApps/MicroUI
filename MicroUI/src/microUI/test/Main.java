@@ -1,14 +1,14 @@
 package microUI.test;
 
 import microUI.EditText;
+import microUI.layout.GridLayout;
 import microUI.util.Event;
-
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public class Main extends PApplet {
-
-	EditText editText;
+	GridLayout gridLayout;
+	EditText[] editText;
 
 	public static void main(String[] args) {
 		PApplet.main("microUI.test.Main");
@@ -20,20 +20,25 @@ public class Main extends PApplet {
 	
 	@Override
 	public void setup() {
-		editText = new EditText(this);
-		//editText.items.setTextSize(12);
-		//editText.loadText("C:\\Users\\002\\Desktop\\EditText.txt");
+		editText = new EditText[2];
 		
+		editText[0] = new EditText(this);
+		editText[1] = new EditText(this);
+		
+		editText[0].createFont("C:\\Windows\\Fonts\\consola.ttf");
+		editText[1].createFont("C:\\Windows\\Fonts\\consola.ttf");
+		
+		gridLayout = new GridLayout(this,2);
+		gridLayout.add(editText[0], 0, 0);
+		gridLayout.add(editText[1], 1, 1);
 	}
 		
 	@Override
 	public void draw() {
 		background(128);
-		editText.draw();
-		
-		// if(mouseButton == RIGHT) { frameRate((int) map(mouseX,0,width,1,60)); }
-		
-		
+		gridLayout.draw();
+		// if(mousePressed) { editText.setSize(mouseX,mouseY); }
+		System.out.println("fps:"+(int) frameRate);
 	}
 
 	@Override
@@ -45,7 +50,8 @@ public class Main extends PApplet {
 	public void keyPressed() {
 		Event.keyPressed(this);
 		
-		editText.keyPressed();
+		editText[0].keyPressed();
+		editText[1].keyPressed();
 		
 	}
 	
@@ -58,7 +64,8 @@ public class Main extends PApplet {
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		editText.mouseWheel(event);
+		editText[0].mouseWheel(event);
+		editText[1].mouseWheel(event);
 	}
 	
 	
