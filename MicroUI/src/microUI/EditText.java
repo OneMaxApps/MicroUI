@@ -38,8 +38,6 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-// TODO Fix bug with pasting text
-
 public final class EditText extends Component {
 	public final Items items;
 	public final Cursor cursor;
@@ -124,7 +122,6 @@ public final class EditText extends Component {
 	
 	@Override
 	public void update() {
-		// debug();
 		event.listen(this);
 		fx.init();
 		
@@ -301,6 +298,8 @@ public final class EditText extends Component {
 		} else {
 			insertLine(Clipboard.get());
 		}
+		
+		scrollsValuesUpdate();
 	}
 	
 	private final boolean isInClipboardSeveralLines() {
@@ -317,8 +316,9 @@ public final class EditText extends Component {
 			if(i == 0) {
 				items.getCurrent().insert(lines[i]);
 			} else {
-				if(items.get(i).isEmpty()) {
-					items.get(i).insert(lines[i]);
+				
+				if(items.getCurrent().isEmpty()) {
+					items.getCurrent().insert(lines[i]);
 				} else {
 					items.insert(lines[i]);
 				}
@@ -395,7 +395,9 @@ public final class EditText extends Component {
 			items.deleteAllText();
 			selection.unselect();
 			items.clear();
-			items.add("");
+			while(items.getTotalHeight() < EditText.this.getH()) {
+				items.add("");
+			}
 			cursor.setColumn(0);
 			cursor.setRow(0);
 			return;
@@ -716,7 +718,7 @@ public final class EditText extends Component {
 				
 				if(pg != null) {
 					pg.text(sb.toString(),-scrollH.getValue(),getInsideY()+textSize/2);
-
+					
 					textWidth = pg.textWidth(sb.toString());
 					
 					if(isFocused && isEditing) {
@@ -1161,14 +1163,6 @@ public final class EditText extends Component {
 		
 		private final int getLastRow() {
 			return max(startRow,endRow);
-		}
-
-		private final int getRealFirstColumn() {
-			return startColumn;
-		}
-		
-		private final int getRealLastColumn() {
-			return endColumn;
 		}
 
 		private final void setSelectedAllText(boolean isSelectedAllText) {
