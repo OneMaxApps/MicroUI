@@ -1,6 +1,8 @@
 package microUI.util;
 
 import static processing.core.PApplet.constrain;
+import static processing.core.PApplet.min;
+import static processing.core.PApplet.max;
 
 public final class Value {
 private float min,max,value;;
@@ -34,10 +36,7 @@ public float getValue() {
 }
 
 public void setValue(float value) {
-	if(value < min || value > max) {
-		System.out.println("The value must be between the minimum and maximum");
-		return;
-	}
+	if(value < min(min,max) || value > max(min,max)) { return; }
 	this.value = value;
 }
 

@@ -124,7 +124,7 @@ public class Window extends Rectangle {
 			layout.add(buttonClose = new Button(app,"Close"),.1f);
 			this.title.setInCenter(false);
 			this.title.setTextSize(HEIGHT/2);
-			buttonClose.shadowDestroy();
+			buttonClose.shadow.invisible();
 			isVisible = true;
 			//layout.setElementsResizable(false);
 			event = new Event(app);

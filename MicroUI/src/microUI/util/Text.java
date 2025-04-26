@@ -9,12 +9,12 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 
 public final class Text extends Component {
-	  public Color fill;
-	  public Shadow shadow;
+	  public final Color fill;
+	  public final Shadow shadow;
 	  private PFont font;
-	  private StringBuilder text;
+	  private final StringBuilder text;
 	  private int textSize;
-	  private boolean center;
+	  private boolean center,upperCaseStyle;
 	  
 	  
 	  public Text(PApplet app, String text, float x, float y, float w, float h) {
@@ -92,7 +92,8 @@ public final class Text extends Component {
 	
 	  public void set(String text) {
 	    clear();
-	    this.text.append(text);
+	    append(text); 
+	    
 	  }
 	  
 	  public void set(int digits) { set(String.valueOf(digits)); }
@@ -113,11 +114,23 @@ public final class Text extends Component {
 		  text.delete(text.length()-1,text.length());
 	  }
 	  
-	  public void append(String text) { this.text.append(text); }
+	  public void append(String text) {
+		  if(upperCaseStyle) {
+			  this.text.append(text.toUpperCase());
+		  } else {
+			  this.text.append(text);
+		  }  
+	  }
 	  
 	  public void append(char ch) { this.text.append(ch); }
 	  
-	  public void insert(int index, String text) { this.text.insert(index, text); }
+	  public void insert(int index, String text) {
+		  if(upperCaseStyle) {
+			  this.text.insert(index, text.toUpperCase());
+		  } else {
+			  this.text.insert(index, text);
+		  }
+	  }
 	  
 	  public void setTextSize(float textSize) {
 		  if(textSize < 1) { return; }
@@ -140,9 +153,19 @@ public final class Text extends Component {
 	  public boolean isEmpty() {
 		  return text.toString().isEmpty();
 	  }
+	  
+	  public final boolean isUpperCaseStyle() {
+		return upperCaseStyle;
+	  }
 
-	    
-	  public final class Shadow {
+	  public final void setUpperCaseStyle(boolean upperCaseStyle) {
+		this.upperCaseStyle = upperCaseStyle;
+	  }
+
+
+
+
+	public final class Shadow {
 		  public Color fill;
 		  private float extraSize,shiftX,shiftY;
 		  private boolean isVisible;

@@ -29,6 +29,8 @@ public class CheckBox extends Rectangle {
 		colorIncluded.set(0,128,0);
 		colorNotIncluded.set(0,34,34);
 		eventInside = new Event(app);
+		ripples.setVisible(false);
+		shadow.setVisible(false);
 	}
 	
 	@Override

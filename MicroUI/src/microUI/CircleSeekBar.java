@@ -2,6 +2,7 @@ package microUI;
 
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.min;
+import static processing.core.PApplet.max;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.SQUARE;
@@ -10,7 +11,6 @@ import static processing.core.PConstants.TWO_PI;
 import microUI.util.Color;
 import microUI.util.Rectangle;
 import microUI.util.Scrolling;
-import microUI.util.Text;
 import microUI.util.Value;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -18,27 +18,25 @@ import processing.core.PImage;
 public class CircleSeekBar extends Rectangle {
 	public Circle circle;
 	public Value value;
-	public Text title;
 	public Scrolling scrolling;
+	public Info info;
 	private PImage texture;
-	
+
 	public CircleSeekBar(PApplet app, float x, float y, float size) {
 		super(app,x,y,size,size);
 		fill.set(255,0);
 		stroke.fill.set(255,0);
-		shadowDestroy();
+		shadow.invisible();
 		setBasicFX(false);
 		circle = new Circle();
 		value = new Value(0,100,0);
-		this.title = new Text(app,"",x,y+h/2-h/4,w,h/2);
 		scrolling = new Scrolling(event);
 		ripples.setVisible(false);
+		info = new Info();
 	}
 	
 	public CircleSeekBar(PApplet app, String text, float x, float y, float size) {
 		this(app,x,y,size);
-		this.title.setVisible(true);
-		this.title.set(text);
 	}
 	
 	public CircleSeekBar(PApplet app) {
@@ -52,12 +50,8 @@ public class CircleSeekBar extends Rectangle {
 		super.update();
 		circle.draw();
 		if(event.inside() || event.moved()) {
-			textOnDraw();
-			} else {
-			//title.setPosition(x, y+h/2-h/4);
-			//title.setSize(w, h/2);
-			//title.draw();
-			}
+			info.draw();
+		}
 		
 			
 		if(event.inside() || scrolling.isScrolling()) {
@@ -65,14 +59,7 @@ public class CircleSeekBar extends Rectangle {
 		}
 		app.popStyle();
 	}
-	
-	private final void textOnDraw() {
-		app.fill(title.fill.get());
-		app.textSize(title.getTextSize());
-		app.textAlign(CENTER,CENTER);
-		app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
-		
-	}
+
 	
 	public PImage getTexture() {
 		return texture;
@@ -85,16 +72,14 @@ public class CircleSeekBar extends Rectangle {
 	@Override
 	public void setPosition(float x, float y) {
 		super.setPosition(x,y);
-		if(title != null) { title.setPosition(x, y+h/2-h/4); }
 	}
 	
 	@Override
 	public void setSize(float w, float h) {
 		float size = min(w,h);
 		super.setSize(size,size);
-		if(title != null) {
-			title.setPosition(x, y+size/2-size/4);
-			title.setSize(size,size/2);
+		if(info != null) {
+			info.setSize((int) max(w,h)/3);
 		}
 	}
 	
@@ -180,5 +165,28 @@ public class CircleSeekBar extends Rectangle {
 				this.isVisible = isVisible;
 			}
 		}
+	}
+
+	public final class Info {
+		private int size;
+		public final Color fill;
+		
+		public Info() {
+			super();
+			fill = new Color(app,255);
+			setSize((int) max(w,h)/3);
+		}
+		
+		private final void draw() {
+			app.pushStyle();
+			app.fill(fill.get());
+			app.textSize(size <= 0 ? 1 : size);
+			app.textAlign(CENTER,CENTER);
+			app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
+			app.popStyle();
+		}
+		
+		public final void setSize(int size) { this.size = size; }
+		public final int getSize() { return size; }
 	}
 }

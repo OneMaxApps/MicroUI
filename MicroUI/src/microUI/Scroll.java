@@ -44,7 +44,7 @@ public class Scroll extends Rectangle {
 	    	fill.set(12);
 	    	shadow.setVisible(false);
 	    	ripples.setVisible(false);
-	    	shadowDestroy();
+	    	shadow.invisible();
 	    }};
 	    
 	    scrolling = new Scrolling(event);
@@ -52,13 +52,13 @@ public class Scroll extends Rectangle {
 	    buttonPlus = new Button(app,"+",x+w-buttonsWeight(),y,buttonsWeight(),h) {{
 	    	shadow.setVisible(false);
 	    	ripples.setVisible(false);
-	    	shadowDestroy();
+	    	shadow.invisible();
 	    }};
 	    
 	    buttonMinus = new Button(app,"-",x,y,buttonsWeight(),h){{
 	    	shadow.setVisible(false);
 	    	ripples.setVisible(false);
-	    	shadowDestroy();
+	    	shadow.invisible();
     	}};
 	    
 	    setBasicFX(false);

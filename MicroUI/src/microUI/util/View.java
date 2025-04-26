@@ -3,7 +3,7 @@ package microUI.util;
 import processing.core.PApplet;
 
 public abstract class View implements Visible {
-	protected PApplet app;
+	protected final PApplet app;
 	protected boolean visible;
 	
 	public View(PApplet app) {
@@ -28,7 +28,7 @@ public abstract class View implements Visible {
 	
 	
 	public void draw() {
-		if(visible) {
+		if(isVisible()) {
 			app.pushStyle();
 			update();
 			app.popStyle();

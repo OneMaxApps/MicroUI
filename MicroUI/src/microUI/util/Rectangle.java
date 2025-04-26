@@ -4,12 +4,13 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 public class Rectangle extends Component {
-    public Image image;
-    public Shadow shadow;
-    public Ripples ripples;
+    public final Image image;
+    public final Ripples ripples;
+    public final Shadow shadow;
     
     private boolean basicFX;
-    private Event localEvent;
+    private final Event eventForRipples;
+    
     
     public Rectangle(PApplet app,float x, float y, float w, float h) {
         super(app,x,y,w,h);
@@ -18,7 +19,7 @@ public class Rectangle extends Component {
         setBasicFX(true);
         shadow = new Shadow(app,this);
         ripples = new Ripples(this);
-        localEvent = new Event(app);
+        eventForRipples = new Event(app);
       }
     
     
@@ -28,7 +29,7 @@ public class Rectangle extends Component {
     
     @Override
     public void update() {
-      localEvent.listen(this);
+      eventForRipples.listen(this);
       if(event != null) { event.listen(this); }
       
       if(shadow != null) { shadow.draw(); }
@@ -47,34 +48,30 @@ public class Rectangle extends Component {
         	app.rect(x,y,w,h);
         }
         
-        if(localEvent.clicked()) { ripples.initAnim(); }
+        if(eventForRipples.clicked()) { ripples.initAnim(); }
         ripples.draw();
         
     }
     
-    public void setStyle(Rectangle rectangle) {
+    public void setStyle(final Rectangle rectangle) {
     	super.setStyle(rectangle);
-    	image = rectangle.image;
-    	if(shadow != null) {
-    		shadow.setStyle(shadow);
-    	}
-    	basicFX = rectangle.basicFX;
+    	image.set(rectangle.image.get());
+    	if(shadow != null) { shadow.setStyle(shadow); }
+    	basicFX = rectangle.getBasicFX();
     }
     
-    public void setBasicFX(boolean basicFX) { this.basicFX = basicFX; }
+    public final void setBasicFX(final boolean basicFX) { this.basicFX = basicFX; }
+    public final boolean getBasicFX() { return basicFX; }
     
-    public BaseForm shadowDestroy() { shadow = null; return this; }
+    public final BaseForm eventDestroy() { event = null; return this; }
     
-    public BaseForm eventDestroy() { event = null; return this; }
-    
-    public class Image {
+    public final class Image extends View {
       private PImage image;
-      private boolean isVisible;
-      public Color tint;
+      public final Color tint;
       private boolean tintUsed;
       
       public Image() {
-    	  
+    	  super(Rectangle.this.app);
     	  tint = new Color(app) {
     		@Override
     		public void set(Color c) {
@@ -112,37 +109,30 @@ public class Rectangle extends Component {
     			tintUsed = true;
     		}
     	  };
-    	  
+    	  invisible();
       }
       
-      public void draw() {
-    	app.pushStyle();
-        if(image != null && isVisible()) {
-        	if(tintUsed) {
-        		app.tint(tint.get());
-        	} else {
-	        	if(basicFX && event != null) {
-	        		app.tint(event.inside() && !event.pressed() ? 94 : event.pressed() ? 0 : 128);
-	        	}
-        	}
-        	app.image(image,x,y,w,h);
-        }
-       app.popStyle();
+      @Override
+      public final void update() {
+    	  app.pushStyle();
+          if(image != null) {
+          	if(tintUsed) {
+          		app.tint(tint.get());
+          	} else {
+  	        	if(basicFX && event != null) {
+  	        		app.tint(event.inside() && !event.pressed() ? 94 : event.pressed() ? 0 : 128);
+  	        	}
+          	}
+          	app.image(image,x,y,w,h);
+          }
+         app.popStyle();
       }
       
-      public void setVisible(boolean isVisible) { this.isVisible = isVisible; }
-      
-      public boolean isVisible() { return isVisible; }
-      
-      public void setImage(PImage image) {
+      public final void set(final PImage image) {
         this.image = image;
-        setVisible(true);
+        visible();
       }
-      
-      public PImage getImage() { return image; }
-      
-      public boolean isLoaded() {
-    	  return image != null;
-      }
+      public final PImage get() { return image; }
+      public final boolean isLoaded() { return image != null; }
     }
 }

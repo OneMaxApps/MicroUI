@@ -107,7 +107,7 @@ public class EditText extends Component {
 		scrollV = new Scroll(app);
 		scrollV.setMinMax(-1,0);
 		scrollV.setVerticalMode(true);
-		scrollV.shadowDestroy();
+		scrollV.shadow.invisible();
 		scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
 		scrollV.setSize(SCROLL_WEIGHT,h-SCROLL_WEIGHT);
 		scrollV.setValue(scrollV.getMax());
@@ -115,7 +115,7 @@ public class EditText extends Component {
 		
 		scrollH = new Scroll(app);
 		scrollH.setMinMax(-SHIFT_LEFT_SIDE, 100);
-		scrollH.shadowDestroy();
+		scrollH.shadow.invisible();
 		scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
 		scrollH.setSize(w,SCROLL_WEIGHT);
 	}
@@ -149,7 +149,8 @@ public class EditText extends Component {
 		}
 		
 	}
-	
+
+	/*
 	private final void debug() {
 		System.out.println("\nfps:"+ (int) app.frameRate+"\nselected items:"+selection.getSelectedLines()+"\ntotal height:"+items.getTotalHeight()+"\nitems count:"+items.size());
 		System.out.println("\nis Selecting:"+selection.isSelecting()+
@@ -158,7 +159,7 @@ public class EditText extends Component {
 							"\nlast Column:"+selection.getLastColumn()+
 							"\nfirst row:"+selection.getFirstRow()+
 							"\nlast row:"+selection.getLastRow());
-	}
+	}*/
 	
 	@Override
 	public void setX(float x) {
@@ -169,13 +170,13 @@ public class EditText extends Component {
 	@Override
 	public void setY(float y) {
 		super.setY(y);
-		//scrollsPositionUpdate();
+		scrollsPositionUpdate();
 	}
 
 	@Override
 	public void setW(float w) {
 		super.setW(w);
-		//scrollsTransformsUpdate();
+		scrollsTransformsUpdate();
 		scrollsValuesUpdate();
 	}
 
@@ -263,8 +264,7 @@ public class EditText extends Component {
 			scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
 			scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
 		}
-	}
-		
+	}	
 	private final void scrollsSizeUpdate() {
 		if(scrollV != null && scrollH != null) {
 			scrollV.setSize(SCROLL_WEIGHT,h-SCROLL_WEIGHT);
@@ -1126,14 +1126,7 @@ public class EditText extends Component {
 		private final int getLastColumn() {
 			return max(startColumn,endColumn);
 		}
-		
-		private final int getFirstRow() {
-			return min(startRow,endRow);
-		}
-		
-		private final int getLastRow() {
-			return max(startRow,endRow);
-		}
+
 
 		private final void setSelectedAllText(boolean isSelectedAllText) {
 			this.isSelectedAllText = isSelectedAllText;

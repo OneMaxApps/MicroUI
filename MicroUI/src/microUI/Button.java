@@ -14,6 +14,7 @@ public class Button extends Rectangle {
 	    
 	    this.text = new Text(app,text.toUpperCase(),x,y,w,h);
 	    this.text.setTextSize(h/2);
+	    this.text.setUpperCaseStyle(true);
 	    
 	    shadow.setVisible(false);
 	  }

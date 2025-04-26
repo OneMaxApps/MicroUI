@@ -4,9 +4,9 @@ import static processing.core.PConstants.SQUARE;
 
 import processing.core.PApplet;
 
-public class Component extends BaseForm {
-    public Color fill;
-    public Stroke stroke;
+public abstract class Component extends BaseForm {
+    public final Color fill;
+    public final Stroke stroke;
     public Event event;
     
     public Component(PApplet app) {
@@ -22,14 +22,12 @@ public class Component extends BaseForm {
     }
     
     public void setStyle(Component component) {
-		fill = component.fill;
-		stroke = component.stroke;
+    	fill.set(component.fill);
+    	stroke.set(component.stroke);
 	}
     
-    
-    
-  public class Stroke {
-    public Color fill;
+    public class Stroke {
+    public final Color fill;
     private int weight;
     
     public Stroke() {
@@ -43,9 +41,13 @@ public class Component extends BaseForm {
       app.strokeWeight(weight);
     }
     
-    public void setWeight(int size) { this.weight = size; }
-    public int getWeight() { return weight; }
+    public final void setWeight(int size) { this.weight = size; }
+    public final int getWeight() { return weight; }
     
+    public final void set(Stroke stroke) {
+    	fill.set(stroke.fill);
+    	weight = stroke.getWeight();
+    }
   }
 
 }

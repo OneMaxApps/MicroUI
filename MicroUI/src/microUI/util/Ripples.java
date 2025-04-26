@@ -38,7 +38,6 @@ public final class Ripples extends View {
 		
 		if(currentWidth != (int) form.w || currentHeight != (int) form.h) {
 			pg = app.createGraphics(currentWidth = (int) form.getW(),currentHeight = (int) form.getH());
-			// System.out.println(this+" was resized");
 		}
 	}
 	

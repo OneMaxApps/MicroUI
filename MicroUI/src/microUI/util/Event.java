@@ -4,11 +4,7 @@ import processing.core.PApplet;
 
 public class Event {
 
-	  public static final int PRESSED = 1;
-	  public static final int CLICKED = 2;
-	  public static final int MOVED = 3;
-	  public static final int INSIDE = 4;
-	  public static final int OUTSIDE = 5;
+	  public static final int PRESSED = 1, CLICKED = 2, MOVED = 3, INSIDE = 4, OUTSIDE = 5;
    	  
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;

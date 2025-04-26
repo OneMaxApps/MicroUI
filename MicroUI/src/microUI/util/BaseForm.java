@@ -2,7 +2,7 @@ package microUI.util;
 
 import processing.core.PApplet;
 
-public class BaseForm extends View {
+public abstract class BaseForm extends View {
 	protected float x,y,w,h;
 	
 	public BaseForm(PApplet app, float x, float y, float w, float h) {
@@ -16,6 +16,10 @@ public class BaseForm extends View {
 	
 	public BaseForm(PApplet app, float w, float h) {
 		this(app,0,0,w,h);
+	}
+	
+	public BaseForm(PApplet app, BaseForm baseForm) {
+		this(app,baseForm.getX(),baseForm.getY(),baseForm.getW(),baseForm.getH());
 	}
 	
 	public BaseForm(PApplet app) {
@@ -59,9 +63,19 @@ public class BaseForm extends View {
 		setY(y);
 	}
 	
+	public void setPosition(BaseForm baseForm) {
+		setX(baseForm.getX());
+		setY(baseForm.getY());
+	}
+	
 	public void setSize(float w, float h) {
 		setW(w);
 		setH(h);
+	}
+	
+	public void setSize(BaseForm baseForm) {
+		setW(baseForm.getW());
+		setH(baseForm.getH());
 	}
 	
 	public void setTransforms(float x, float y, float w, float h) {
@@ -75,7 +89,4 @@ public class BaseForm extends View {
 		setTransforms(baseForm.getX(),baseForm.getY(),baseForm.getW(),baseForm.getH());
 	}
 	
-	@Override
-	public void update() {}
-
 }

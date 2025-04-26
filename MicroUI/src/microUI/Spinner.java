@@ -14,7 +14,7 @@ public class Spinner extends Button {
 	
 	public Spinner(PApplet app, String title, float x, float y, float w, float h) {
 		super(app,title,x,y,w,h);
-		shadowDestroy();
+		shadow.invisible();
 		itemList = new ArrayList<Button>();
 		showSelectedItem = autoCloseable = true;
 		localEvent = new Event(app);
@@ -99,7 +99,7 @@ public class Spinner extends Button {
 		for(int i = 0; i < title.length; i++) {
 			itemList.add(new Button(app,title[i],getX(),getY()+getH()+listHeight,getW(),getH()));
 			listHeight += getH();
-			itemList.get(i).shadowDestroy();
+			itemList.get(i).shadow.invisible();
 		}
 		
 		return this;
@@ -109,7 +109,7 @@ public class Spinner extends Button {
 		for(int i = 0; i < nums.length; i++) {
 			itemList.add(new Button(app,String.valueOf(nums[i]),getX(),getY()+getH()+listHeight,getW(),getH()));
 			listHeight += getH();
-			itemList.get(i).shadowDestroy();
+			itemList.get(i).shadow.invisible();
 		}
 		
 		return this;

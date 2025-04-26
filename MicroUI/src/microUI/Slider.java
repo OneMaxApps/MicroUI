@@ -25,7 +25,7 @@ public class Slider extends Rectangle {
 		    setMinMax(0,100);
 		    
 		    button = new Button(app,x,y,buttonsWeight(),h) {{
-		     shadowDestroy();
+		     shadow.invisible();
 		     setBasicFX(false);
 		     ripples.setVisible(false);
 		     fill.set(32);
@@ -33,7 +33,7 @@ public class Slider extends Rectangle {
 		    
 		    level = new Rectangle(app,x,y,button.getX()-getX(),h) {{
 		     fill.set(0,128,234,234);
-		     shadowDestroy();
+		     shadow.invisible();
 		     eventDestroy();
 		     ripples.setVisible(false);
 		    }};
