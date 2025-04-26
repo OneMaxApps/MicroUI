@@ -17,6 +17,7 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
+// TODO Add correct checking input text like in EditText
 public final class TextInput extends BaseForm {
 	public final static int DIGITS = 0, LETTERS = 1, ANY_SYMBOLS = 2;
 	public PFont font;
