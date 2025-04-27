@@ -16,7 +16,29 @@ public class RowLayout extends Layout {
 	public RowLayout(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
 		weightList = new ArrayList<Float>();
-		transforming = new Transforming();
+		
+		transforming = new Transforming() {
+			@Override
+			public void updateForce() {
+			  	for(int i = 0; i < elementList.size(); i++) {
+			  		BaseForm form = elementList.get(i);
+			  		if(isElementsResizable()) {
+						if(i == 0) {
+						form.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
+						} else {
+							form.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
+						}
+			  		} else {
+			  			if(i == 0) {
+							form.setPosition(getX(),getY());
+						} else {
+							form.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
+						}
+			  		}
+			  	}
+		 }
+		};
+		
 		isElementsResizable = true;
 	}
 	
@@ -73,54 +95,6 @@ public class RowLayout extends Layout {
 		weightList.remove(index);
 		transforming.updateForce();
 		
-	}
-	
-	
-	public final class Transforming {
-		  private float layX,layY,layW,layH;
-		  
-		  public final void autoUpdate() {
-			  if(layX != x) {
-				  layX = x;
-				  updateForce();
-			  }
-			  
-			  if(layY != y) {
-				  layY = y;
-				  updateForce();
-			  }
-			  
-			  if(layW != w) {
-				  layW = w;
-				  updateForce();
-			  }
-			  
-			  if(layH != h) {
-				  layH = h;
-				  updateForce();
-			  }
-		  }
-		  
-		  
-		  public final void updateForce() {
-			  	for(int i = 0; i < elementList.size(); i++) {
-			  		BaseForm form = elementList.get(i);
-			  		if(isElementsResizable()) {
-						if(i == 0) {
-						form.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
-						} else {
-							form.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
-						}
-			  		} else {
-			  			if(i == 0) {
-							form.setPosition(getX(),getY());
-						} else {
-							form.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
-						}
-			  		}
-			  	}
-		 }
-		  
 	}
 	
 	@Override

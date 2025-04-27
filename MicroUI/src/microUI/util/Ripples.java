@@ -53,7 +53,7 @@ public final class Ripples extends View {
 		private boolean start;
 		
 		public Circle() {
-			fill = new Color(app,0);
+			fill = new Color(0);
 		}
 
 		private final void draw(PGraphics pg) {

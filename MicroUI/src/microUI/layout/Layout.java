@@ -2,32 +2,33 @@ package microUI.layout;
 
 import java.util.ArrayList;
 
-import microUI.CircleSeekBar;
-import microUI.Scroll;
-import microUI.Slider;
 import microUI.util.BaseForm;
 import microUI.util.Color;
+import microUI.util.Scrollable;
 import microUI.util.Shadow;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.event.MouseEvent;
 
-public abstract class Layout extends BaseForm {
-	protected boolean isElementsResizable;
-	protected final ArrayList<BaseForm> elementList;
+public abstract class Layout extends BaseForm implements Scrollable {
 	public final Color fill;
 	public final Margin margin;
 	public final Background background;
-	public Shadow shadow;
+	public final Shadow shadow;
+	protected boolean isElementsResizable;
+	protected final ArrayList<BaseForm> elementList;
+	
 	
 	public Layout(PApplet app, float x, float y, float w, float h) {
 		super(app,x, y, w, h);
 		elementList = new ArrayList<BaseForm>();
-		fill = new Color(app);
+		fill = new Color();
 		fill.set(0,0,128,32);
 		margin = new Margin();
 		setVisible(true);
 		background = new Background();
+		shadow = new Shadow(app,this);
+		shadow.invisible();
 	}
 
 	@Override
@@ -83,7 +84,6 @@ public abstract class Layout extends BaseForm {
 		setVisible(v);
 		for(BaseForm form : elementList) {
 			if(form instanceof EdgeLayout) {
-				form.setVisible(v);
 				EdgeLayout e = (EdgeLayout) form;
 				if(e.getElement() instanceof Layout) {
 					((Layout) (e.getElement())).setVisibleTotal(v);
@@ -95,36 +95,20 @@ public abstract class Layout extends BaseForm {
 			}
 			
 		}
+		
 	}
 	
 	public ArrayList<BaseForm> getElements() {
 		return elementList;
 	}
 	
-	public void mouseWheelInit(MouseEvent e) {
-		  for(int i = 0; i < elementList.size(); i++) {
-			  if(elementList.get(i) instanceof Slider) {
-				  ((Slider) elementList.get(i)).scrolling.init(e);
-			  }
-			  
-			  if(elementList.get(i) instanceof Scroll) {
-				  ((Scroll) elementList.get(i)).scrolling.init(e);
-			  }
-
-			  if(elementList.get(i) instanceof CircleSeekBar) {
-				  ((CircleSeekBar) elementList.get(i)).scrolling.init(e);
-			  }
-			  
-			  if(elementList.get(i) instanceof Layout) {
-				  ((Layout) elementList.get(i)).mouseWheelInit(e);
-			  }
-		  }
-	  }
-	
-	public void initShadow() {
-		if(shadow == null) {
-			shadow = new Shadow(app,this);
-		}
+	@Override
+	public void mouseWheel(MouseEvent e) {
+		elementList.forEach(element -> {
+			if(element instanceof Scrollable) {
+				((Scrollable) element).mouseWheel(e);
+			}
+		});
 	}
 	
 	public class Background {
@@ -132,7 +116,7 @@ public abstract class Layout extends BaseForm {
 		  private PImage background;
 		  
 		  public Background() {
-			  tint = new Color(app,app.color(255));
+			  tint = new Color(255);
 		  }
 		  
 		  private void draw() {
@@ -216,5 +200,35 @@ public abstract class Layout extends BaseForm {
 		public float getDown() {
 			return down;
 		}
+	}
+
+	protected abstract class Transforming {
+		private float layX,layY,layW,layH;
+		  
+		  protected final void autoUpdate() {
+			  if(layX != x) {
+				  layX = x;
+				  updateForce();
+			  }
+			  
+			  if(layY != y) {
+				  layY = y;
+				  updateForce();
+			  }
+			  
+			  if(layW != w) {
+				  layW = w;
+				  updateForce();
+			  }
+			  
+			  if(layH != h) {
+				  layH = h;
+				  updateForce();
+			  }
+		  }
+		  
+		  
+		  protected abstract void updateForce();
+
 	}
 }

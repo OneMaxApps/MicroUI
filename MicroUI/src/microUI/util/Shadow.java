@@ -17,7 +17,7 @@ public final class Shadow extends View {
 	  public Shadow(PApplet app, BaseForm form) {
 		super(app);
 	    this.form = form;
-	    fill = new Color(app,34);
+	    fill = new Color(34);
 	    leftSize = 10;
 	    upSize = 10;
 	    rightSize = 10;

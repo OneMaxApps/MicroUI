@@ -47,6 +47,7 @@ public abstract class BaseForm extends View {
 	}
 
 	public void setW(float w) {
+		if(w <= 0) { this.w = 0; return; }
 		this.w = w;
 	}
 
@@ -55,6 +56,7 @@ public abstract class BaseForm extends View {
 	}
 
 	public void setH(float h) {
+		if(h <= 0) { this.h = 0; return; }
 		this.h = h;
 	}
 

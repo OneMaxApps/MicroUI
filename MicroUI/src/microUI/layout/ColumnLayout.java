@@ -15,7 +15,27 @@ public class ColumnLayout extends Layout {
 	public ColumnLayout(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
 		weightList = new ArrayList<Float>();
-		transforming = new Transforming();
+		transforming = new Transforming() {
+			@Override
+			public final void updateForce() {
+			  	for(int i = 0; i < elementList.size(); i++) {
+			  		BaseForm baseForm = elementList.get(i);
+			  		if(isElementsResizable()) {
+						if(i == 0) {
+						baseForm.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
+						} else {
+						baseForm.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
+						}
+			  		} else {
+			  			if(i == 0) {
+							baseForm.setPosition(getX(), getY());
+							} else {
+							baseForm.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getH());
+							}
+			  		}
+			  	}
+		 }
+		};
 		isElementsResizable = true;
 	}
 	
@@ -78,54 +98,6 @@ public class ColumnLayout extends Layout {
 		transforming.updateForce();
 	}
 
-	
-	public final class Transforming {
-		  private float layX,layY,layW,layH;
-		  
-		  public final void autoUpdate() {
-			  if(layX != x) {
-				  layX = x;
-				  updateForce();
-			  }
-			  
-			  if(layY != y) {
-				  layY = y;
-				  updateForce();
-			  }
-			  
-			  if(layW != w) {
-				  layW = w;
-				  updateForce();
-			  }
-			  
-			  if(layH != h) {
-				  layH = h;
-				  updateForce();
-			  }
-		  }
-		  
-		  
-		  public final void updateForce() {
-			  	for(int i = 0; i < elementList.size(); i++) {
-			  		BaseForm baseForm = elementList.get(i);
-			  		if(isElementsResizable()) {
-						if(i == 0) {
-						baseForm.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
-						} else {
-						baseForm.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
-						}
-			  		} else {
-			  			if(i == 0) {
-							baseForm.setPosition(getX(), getY());
-							} else {
-							baseForm.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getH());
-							}
-			  		}
-			  	}
-		 }
-		  
-	}
-	
 	@Override
 	public void setX(float x) {
 		super.setX(x);

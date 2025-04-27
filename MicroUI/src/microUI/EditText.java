@@ -487,7 +487,7 @@ public class EditText extends Component {
 		private float totalHeight;
 		
 		public Items() {
-			fill = new Color(app,0);
+			fill = new Color(0);
 			textSize = 32;
 			list = new ArrayList<Item>();
 			for(int i = 0; i < getH()/textSize; i++) {
@@ -901,7 +901,7 @@ public class EditText extends Component {
 					duration;
 		
 		public Cursor() {
-			fill = new Color(app,0);
+			fill = new Color(0);
 		}
 		
 		private final void draw(PGraphics pg) {

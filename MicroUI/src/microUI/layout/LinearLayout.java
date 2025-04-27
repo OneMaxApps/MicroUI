@@ -17,7 +17,53 @@ public class LinearLayout extends Layout {
 	public LinearLayout(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
 		weightList = new ArrayList<Float>();
-		transforming = new Transforming();
+		transforming = new Transforming() {
+		@Override
+			public final void updateForce() {
+		  	for(int i = 0; i < elementList.size(); i++) {
+		  		BaseForm form = elementList.get(i);
+
+		  		switch(mode) {
+		  		
+			  		case MODE_ROW :
+				  		if(isElementsResizable()) {
+							if(i == 0) {
+							form.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
+							} else {
+								form.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
+							}
+				  		} else {
+				  			if(i == 0) {
+								form.setPosition(getX(),getY());
+							} else {
+								form.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
+							}
+				  		}
+			  		break;
+			  		
+			  		
+			  		case MODE_COLUMN:
+				  		if(isElementsResizable()) {
+							if(i == 0) {
+								form.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
+							} else {
+								form.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
+							}
+				  		} else {
+				  			if(i == 0) {
+				  				form.setPosition(getX(), getY());
+								} else {
+									form.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getH());
+								}
+				  		}
+			  		break;
+			  		
+		  		}
+		  		
+		  	 }
+			}
+		};
+		
 		isElementsResizable = true;
 	}
 	
@@ -111,80 +157,6 @@ public class LinearLayout extends Layout {
 		
 	}
 
-	public final class Transforming {
-		  private float layX,layY,layW,layH;
-		  
-		  public final void autoUpdate() {
-			  if(layX != x) {
-				  layX = x;
-				  updateForce();
-			  }
-			  
-			  if(layY != y) {
-				  layY = y;
-				  updateForce();
-			  }
-			  
-			  if(layW != w) {
-				  layW = w;
-				  updateForce();
-			  }
-			  
-			  if(layH != h) {
-				  layH = h;
-				  updateForce();
-			  }
-		  }
-		  
-		  
-		  public final void updateForce() {
-			  	for(int i = 0; i < elementList.size(); i++) {
-			  		BaseForm form = elementList.get(i);
-
-			  		switch(mode) {
-			  		
-				  		case MODE_ROW :
-					  		if(isElementsResizable()) {
-								if(i == 0) {
-								form.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
-								} else {
-									form.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
-								}
-					  		} else {
-					  			if(i == 0) {
-									form.setPosition(getX(),getY());
-								} else {
-									form.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
-								}
-					  		}
-				  		break;
-				  		
-				  		
-				  		case MODE_COLUMN:
-					  		if(isElementsResizable()) {
-								if(i == 0) {
-									form.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
-								} else {
-									form.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
-								}
-					  		} else {
-					  			if(i == 0) {
-					  				form.setPosition(getX(), getY());
-									} else {
-										form.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getH());
-									}
-					  		}
-				  		break;
-				  		
-			  		}
-			  		
-			  	}
-		 }
-		  
-		  
-		  
-	}
-	
 	@Override
 	public void setX(float x) {
 		super.setX(x);

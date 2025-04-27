@@ -34,7 +34,7 @@ public final class TextInput extends BaseForm {
 	public TextInput(PApplet app, float x, float y, float w, float h) {
 		super(app, x, y, w, h);
 		setVisible(true);
-		fill = new Color(app,255);
+		fill = new Color(255);
 		text = new Text();
 		cursor = new Cursor();
 		select = new Select();
@@ -293,7 +293,7 @@ public final class TextInput extends BaseForm {
 		public Text() {
 			super();
 			sb = new StringBuilder();
-			fill = new Color(app,0);
+			fill = new Color(0);
 			size = targetSize = h/2;
 			pg = app.createGraphics((int) w, (int) h);
 		}
@@ -392,7 +392,7 @@ public final class TextInput extends BaseForm {
 		
 		public Cursor() {
 			super();
-			fill = new Color(app,0);
+			fill = new Color(0);
 			TIMER_MAX = 60;
 		}
 
@@ -467,7 +467,7 @@ public final class TextInput extends BaseForm {
 		public Color fill;
 		
 		public Select() {
-			fill = new Color(app,app.color(0,0,255,32));
+			fill = new Color(0,0,255,32);
 			event = new Event(app);
 			pg = app.createGraphics((int) w, (int) h);
 		}

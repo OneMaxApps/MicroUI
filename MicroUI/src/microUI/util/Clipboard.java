@@ -16,12 +16,20 @@ public final class Clipboard {
 		clip = Toolkit.getDefaultToolkit().getSystemClipboard();
 	}
 	
-	public static final void set(String txt) {
+	public static final void set(final String txt) {
 		if(usingLocalBuffer) {
 			Clipboard.localBuffer = txt;
 		} else {
 			clip.setContents(new StringSelection(txt),null);
 		}
+	}
+	
+	public static final void set(final String[] LINES) {
+		final StringBuilder sb = new StringBuilder();
+		
+		for(int i = 0; i < LINES.length; i++) { sb.append(LINES[i]+'\n'); }
+		
+		set(sb.toString()); 
 	}
 	
 	public static final String get() {
@@ -39,7 +47,7 @@ public final class Clipboard {
 	}
 	
 	public static final String[] getAsArray() {
-		return get().split(String.valueOf('\n'));
+		return get().split("\n");
 	}
 	
 	public static final void usingLocalBuffer() {

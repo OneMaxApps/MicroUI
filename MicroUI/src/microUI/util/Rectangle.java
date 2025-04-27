@@ -7,6 +7,7 @@ public class Rectangle extends Component {
     public final Image image;
     public final Ripples ripples;
     public final Shadow shadow;
+    public final Stroke stroke;
     
     private boolean basicFX;
     private final Event eventForRipples;
@@ -18,6 +19,7 @@ public class Rectangle extends Component {
         setVisible(true);
         setBasicFX(true);
         shadow = new Shadow(app,this);
+        stroke = new Stroke(app);
         ripples = new Ripples(this);
         eventForRipples = new Event(app);
       }
@@ -58,12 +60,13 @@ public class Rectangle extends Component {
     	image.set(rectangle.image.get());
     	if(shadow != null) { shadow.setStyle(shadow); }
     	basicFX = rectangle.getBasicFX();
+    	stroke.set(rectangle.stroke);
     }
     
     public final void setBasicFX(final boolean basicFX) { this.basicFX = basicFX; }
     public final boolean getBasicFX() { return basicFX; }
     
-    public final BaseForm eventDestroy() { event = null; return this; }
+    // public final BaseForm eventDestroy() { event = null; return this; }
     
     public final class Image extends View {
       private PImage image;
@@ -72,18 +75,18 @@ public class Rectangle extends Component {
       
       public Image() {
     	  super(Rectangle.this.app);
-    	  tint = new Color(app) {
+    	  tint = new Color() {
     		@Override
     		public void set(Color c) {
     			super.set(c);
     			tintUsed = true;
     		}
-    		
+    		/*
     		@Override
     		public void setHEX(int hex) {
     			super.setHEX(hex);
     			tintUsed = true;
-    		}
+    		}*/
     		
     		@Override
     		public void set(float gray) {

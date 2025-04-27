@@ -31,11 +31,11 @@ public void setMax(float max) {
 	this.max = max;
 }
 
-public float getValue() {
+public float get() {
 	return value;
 }
 
-public void setValue(float value) {
+public void set(float value) {
 	if(value < min(min,max) || value > max(min,max)) { return; }
 	this.value = value;
 }
@@ -43,7 +43,7 @@ public void setValue(float value) {
 public void set(float min, float max, float value) {
 	setMin(min);
 	setMax(max);
-	setValue(value);
+	set(value);
 }
 
 public void setMinMax(float min, float max) {
@@ -51,6 +51,6 @@ public void setMinMax(float min, float max) {
 	setMax(max);
 }
 
-public void append(float append) { value = constrain(value+append,min,max); }
+public void append(float append) { value = constrain(value+append,min(min,max),max(min,max)); }
 
 }

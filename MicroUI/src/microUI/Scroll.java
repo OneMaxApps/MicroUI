@@ -7,10 +7,12 @@ import static processing.core.PApplet.max;
 import static processing.core.PApplet.min;
 
 import microUI.util.Rectangle;
+import microUI.util.Scrollable;
 import microUI.util.Scrolling;
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 
-public class Scroll extends Rectangle {
+public class Scroll extends Rectangle implements Scrollable {
 	  public Button button,buttonPlus,buttonMinus;
 	  public Scrolling scrolling;
 	  private float min,max,value;
@@ -238,6 +240,11 @@ public class Scroll extends Rectangle {
 	  private void updateForm() {
 	    setSize(getW(),getH());
 	    buttonsTransformsUpdate();
+	  }
+	  
+	  @Override
+	  public final void mouseWheel(MouseEvent e) {
+		  scrolling.init(e);
 	  }
 	  
 	}

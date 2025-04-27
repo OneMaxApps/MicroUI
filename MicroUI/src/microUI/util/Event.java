@@ -8,16 +8,17 @@ public class Event {
    	  
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;
-	  private boolean moving;
+	  private boolean moving,enable;
 	  private static final boolean[] keys = new boolean[65536];
 	  private PApplet app;
 	  
 	  public Event(PApplet app) {
 		  this.app = app;
-		  
+		  enable = true;
 	  }
 	  
 	  public void listen(BaseForm form) {
+		if(!enable) { return; }
 		
 	    x = form.getX();
 	    y = form.getY();
@@ -38,6 +39,7 @@ public class Event {
 	  }
 	  
 	  public void listen(float x, float y, float w, float h) {
+		  	if(!enable) { return; }
 			
 		    this.x = x;
 		    this.y = y;
@@ -56,6 +58,9 @@ public class Event {
 		    if(outside()) { wasPressed = 0; }
 		    
 	  }
+	  
+	  public final void setEnable(boolean enable) { this.enable = enable; }
+	  public final boolean isEnable() { return enable; }
 	  
 	  public boolean inside() { return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; }
 	  public boolean outside() { return !inside(); }

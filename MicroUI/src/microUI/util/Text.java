@@ -20,7 +20,7 @@ public final class Text extends Component {
 	  public Text(PApplet app, String text, float x, float y, float w, float h) {
 	    super(app,x,y,w,h);
 	    this.text = new StringBuilder(text);
-	    fill = new Color(app,255);
+	    fill = new Color(255);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
 	    center = true;
 	    shadow = new Shadow();
@@ -171,7 +171,7 @@ public final class Text extends Component {
 		  private boolean isVisible;
 		  
 		  public Shadow() {
-			  fill = new Color(app,0);
+			  fill = new Color(0);
 			  extraSize = h*.025f;
 			  isVisible = false;
 		  }

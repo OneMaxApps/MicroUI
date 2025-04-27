@@ -4,74 +4,116 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 
 public class Color {
-	private PApplet app;
-	private int hex;
-
-	public Color(PApplet app) {
-		this.app = app;
-		app.color(128);
-	}
-
-	public Color(PApplet app, int hex) {
-		this.app = app;
-		this.hex = hex;
-	}
-
-	public Color(PApplet app, Color c) {
-		this.app = app;
-		set(c);
-	}
-
-	public int get() {
-		return hex;
+	public static final int MIN_VALUE = 0, MAX_VALUE = 255;
+	private float red,green,blue,alpha;
+	
+	public Color(float red, float green, float blue, float alpha) {
+		super();
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
+		this.alpha = alpha;
 	}
 	
-	public void use() {
-		app.fill(hex);
+	public Color(float red, float green, float blue) {
+		this(red,green,blue,MAX_VALUE);
 	}
 	
-	public void use(PGraphics pg) {
-		pg.fill(hex);
+	public Color(float gray, float alpha) {
+		this(gray,gray,gray,alpha);
 	}
 	
-	public void set(Color c) {
-		this.hex = c.get();
+	public Color(float gray) {
+		this(gray,gray,gray,MAX_VALUE);
 	}
 	
-	public void setHEX(int hex) {
-		this.hex = hex;
-	}
-	
-	public void set(float gray) {
-		hex = app.color(gray);
-	}
-	
-	public void set(float gray, float alpha) {
-		hex = app.color(gray, alpha);
-	}
-	
-	public void set(float red, float green, float blue) {
-		hex = app.color(red,green,blue);
+	public Color() {
+		set(128,MAX_VALUE);
 	}
 	
 	public void set(float red, float green, float blue, float alpha) {
-		hex = app.color(red,green,blue,alpha);
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
+		this.alpha = alpha;
+	}
+	
+	public void set(float red, float green, float blue) {
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
+	}
+	
+	public void set(float gray, float alpha) {
+		set(gray,gray,gray,alpha);
+	}
+	
+	public void set(float gray) {
+		red = green = blue = gray;
+	}
+	
+	public void set(Color otherColor) {
+		setHEX(otherColor.get());
+	}
+	
+	public void setHEX(int hex) {
+		setAlpha(hex >> 24 & 0xFF);
+		setRed(hex >> 16 & 0xFF);
+		setGreen(hex >> 8 & 0xFF);
+		setBlue(hex & 0xFF);	
+	}
+	
+	public int get() {
+		return hexFromRGBA(red,green,blue,alpha);
+	}
+	
+	public static int hexFromRGBA(float red, float green, float blue, float alpha) {
+		return (int) alpha << 24 | (int) red << 16 | (int) green << 8 | (int) blue;
 	}
 
-	public int getRed() {
-		return (int) app.red(hex);
+	public final float getRed() {
+		return red;
 	}
 
-	public int getGreen() {
-		return (int) app.green(hex);
+	public final void setRed(float red) {
+		if(red < MIN_VALUE || red > MAX_VALUE) { return; }
+		this.red = red;
 	}
 
-	public int getBlue() {
-		return (int) app.blue(hex);
+	public final float getGreen() {
+		return green;
 	}
 
-	public int getAlpha() {
-		return (int) app.alpha(hex);
+	public final void setGreen(float green) {
+		if(green < MIN_VALUE || blue > MAX_VALUE) { return; }
+		this.green = green;
 	}
 
+	public final float getBlue() {
+		return blue;
+	}
+
+	public final void setBlue(float blue) {
+		if(blue < MIN_VALUE || blue > MAX_VALUE) { return; }
+		this.blue = blue;
+	}
+
+	public final float getAlpha() {
+		return alpha;
+	}
+
+	public final void setAlpha(float alpha) {
+		if(alpha < MIN_VALUE || alpha > MAX_VALUE) { return; }
+		this.alpha = alpha;
+	}
+	
+	public void use(PApplet app) {
+		app.fill(get());
+	}
+	
+	public void use(PGraphics pg) {
+		pg.fill(get());
+	}
+
+	public boolean isTransparent() { return (int) alpha == 0; }
 }

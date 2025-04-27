@@ -24,8 +24,8 @@ public class CheckBox extends Rectangle {
 	
 	public CheckBox(PApplet app) {
 		super(app,app.width*.4f,app.height*.4f,app.width*.2f,app.height*.2f);
-		colorIncluded = new Color(app);
-		colorNotIncluded = new Color(app);
+		colorIncluded = new Color();
+		colorNotIncluded = new Color();
 		colorIncluded.set(0,128,0);
 		colorNotIncluded.set(0,34,34);
 		eventInside = new Event(app);

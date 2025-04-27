@@ -44,8 +44,51 @@ public class GridLayout extends Layout {
 	    elementColumnList = new ArrayList<Integer>();
 	    elementDefaultWidth = new ArrayList<Float>();
 	    elementDefaultHeight = new ArrayList<Float>();
-	    transforming = new Transforming();
-	  }
+	    transforming = new Transforming() {
+	    	@Override
+	    	public void updateForce() {
+				  
+				  for(int i = 0; i < elementList.size(); i++) {
+				  BaseForm baseForm = elementList.get(i);
+				  
+				  if(elementRowList.get(i) < 0 || elementRowList.get(i) > getRows()-1 || elementColumnList.get(i) < 0 || elementColumnList.get(i) > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
+				    
+				  if(baseForm instanceof Layout) {
+				    	Layout l = ((Layout) baseForm);
+					  	l.setPosition(
+					    		map(elementRowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-l.getW()/2-l.margin.getLeft(),
+					    		map(elementColumnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-l.getH()/2-l.margin.getUp()
+					    );
+				    } else {
+				    	baseForm.setPosition(
+					    		map(elementRowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,
+					    		map(elementColumnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseForm.getH()/2
+					    );
+				    }
+				    if(baseForm instanceof CircleSeekBar) {
+					    if(isElementsResizable()) {
+					      if(isFillTheGrid()) {
+					    	baseForm.setSize(getW()/getRows(),getH()/getColumns());
+					      } else {
+					    	  baseForm.setSize(min(getW()/getRows(),elementDefaultWidth.get(i)),min(getH()/getColumns(),elementDefaultHeight.get(i)));
+					      }
+					    }
+				    } else {
+				    	
+					    if(isElementsResizable()) {
+					      if(isFillTheGrid()) {
+					        baseForm.setSize(getW()/getRows(),getH()/getColumns());
+					      } else {
+					    	baseForm.setSize(min(elementDefaultWidth.get(i),getW()/getRows()), min(elementDefaultHeight.get(i),getH()/getColumns()));
+					    }
+					  }
+					    
+				    }
+				
+				  }
+			  }
+	    };
+	  	}
 	  
 	  @Override
 		public void draw() {
@@ -207,78 +250,6 @@ public class GridLayout extends Layout {
 			fillTheGrid = f;
 	  }
 
-
-	  public final class Transforming {
-		  private float layX,layY,layW,layH;
-		  
-		  public final void autoUpdate() {
-			  if(layX != x) {
-				  layX = x;
-				  updateForce();
-			  }
-			  
-			  if(layY != y) {
-				  layY = y;
-				  updateForce();
-			  }
-			  
-			  if(layW != w) {
-				  layW = w;
-				  updateForce();
-			  }
-			  
-			  if(layH != h) {
-				  layH = h;
-				  updateForce();
-			  }
-		  }
-		  
-		  
-		  public void updateForce() {
-			  
-			  for(int i = 0; i < elementList.size(); i++) {
-			  BaseForm baseForm = elementList.get(i);
-			  
-			  if(elementRowList.get(i) < 0 || elementRowList.get(i) > getRows()-1 || elementColumnList.get(i) < 0 || elementColumnList.get(i) > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
-			    
-			  if(baseForm instanceof Layout) {
-			    	Layout l = ((Layout) baseForm);
-				  	l.setPosition(
-				    		map(elementRowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-l.getW()/2-l.margin.getLeft(),
-				    		map(elementColumnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-l.getH()/2-l.margin.getUp()
-				    );
-			    } else {
-			    	baseForm.setPosition(
-				    		map(elementRowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,
-				    		map(elementColumnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseForm.getH()/2
-				    );
-			    }
-			    if(baseForm instanceof CircleSeekBar) {
-				    if(isElementsResizable()) {
-				      if(isFillTheGrid()) {
-				    	baseForm.setSize(getW()/getRows(),getH()/getColumns());
-				      } else {
-				    	  baseForm.setSize(min(getW()/getRows(),elementDefaultWidth.get(i)),min(getH()/getColumns(),elementDefaultHeight.get(i)));
-				      }
-				    }
-			    } else {
-			    	
-				    if(isElementsResizable()) {
-				      if(isFillTheGrid()) {
-				        baseForm.setSize(getW()/getRows(),getH()/getColumns());
-				      } else {
-				    	baseForm.setSize(min(elementDefaultWidth.get(i),getW()/getRows()), min(elementDefaultHeight.get(i),getH()/getColumns()));
-				    }
-				  }
-				    
-			    }
-			
-			  }
-		  }
-	  }
-
-
-		
 	  	@Override
 		public void setX(float x) {
 			super.setX(x);

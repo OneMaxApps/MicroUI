@@ -236,7 +236,7 @@ public final class FX {
 			after.stroke.fill.setHEX(app.color(0,64,0));
 			after.stroke.setWeight(4);
 			
-			after.circle.fill.setHEX(app.color(0,164,0));
+			//circle.fill.setHEX(app.color(0,164,0));
 		}
 		
 	}

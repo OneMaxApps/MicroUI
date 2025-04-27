@@ -1,0 +1,25 @@
+package microUI.test.util;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
+import microUI.util.BaseForm;
+import processing.core.PApplet;
+
+class BaseFormTest {
+	
+	@Test
+	void setW() {
+		BaseForm baseForm = new BaseForm(new PApplet()) { public void update() {} };
+		baseForm.setW(-100);
+		assertEquals(0,baseForm.getW());
+	}
+	
+	@Test
+	void setH() {
+		BaseForm baseForm = new BaseForm(new PApplet()) { public void update() {} };
+		baseForm.setH(-100);
+		assertEquals(0,baseForm.getH());
+	}
+}

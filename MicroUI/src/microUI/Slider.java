@@ -1,17 +1,17 @@
 package microUI;
 
+import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.max;
 
 import microUI.util.Rectangle;
+import microUI.util.Scrollable;
 import microUI.util.Scrolling;
-
-import static processing.core.PApplet.abs;
-
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 
-public class Slider extends Rectangle {
+public class Slider extends Rectangle implements Scrollable {
 	  public Button button;
 	  public Rectangle level;
 	  public Scrolling scrolling;
@@ -34,7 +34,7 @@ public class Slider extends Rectangle {
 		    level = new Rectangle(app,x,y,button.getX()-getX(),h) {{
 		     fill.set(0,128,234,234);
 		     shadow.invisible();
-		     eventDestroy();
+		     event.setEnable(false);
 		     ripples.setVisible(false);
 		    }};
 		    
@@ -222,4 +222,9 @@ public class Slider extends Rectangle {
 	    buttonTransformsUpdate();
 	  }
 	  
+	  
+	  @Override
+	  public final void mouseWheel(MouseEvent e) {
+		  scrolling.init(e);
+	  }
 	}

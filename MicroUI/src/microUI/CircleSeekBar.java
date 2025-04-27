@@ -1,8 +1,8 @@
 package microUI;
 
 import static processing.core.PApplet.map;
-import static processing.core.PApplet.min;
 import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.SQUARE;
@@ -10,12 +10,14 @@ import static processing.core.PConstants.TWO_PI;
 
 import microUI.util.Color;
 import microUI.util.Rectangle;
+import microUI.util.Scrollable;
 import microUI.util.Scrolling;
 import microUI.util.Value;
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.event.MouseEvent;
 
-public class CircleSeekBar extends Rectangle {
+public class CircleSeekBar extends Rectangle implements Scrollable {
 	public Circle circle;
 	public Value value;
 	public Scrolling scrolling;
@@ -96,7 +98,7 @@ public class CircleSeekBar extends Rectangle {
 		public Arrow arrow;
 		
 		public Circle() {
-			this.fill = new Color(app,app.color(34));
+			this.fill = new Color(34);
 			arrow = new Arrow();
 		}
 
@@ -104,7 +106,7 @@ public class CircleSeekBar extends Rectangle {
 			if(texture != null) {
 				app.push();
 				app.translate(x+w/2,y+h/2);
-				app.rotate(map(value.getValue(), value.getMin(), value.getMax(), 0, TWO_PI-PI/4));
+				app.rotate(map(value.get(), value.getMin(), value.getMax(), 0, TWO_PI-PI/4));
 				app.image(texture, -w/2,-h/2,w,h);
 				app.pop();
 			}
@@ -131,7 +133,7 @@ public class CircleSeekBar extends Rectangle {
 			
 			public Arrow() {
 				setWeight(8);
-				fill = new Color(app,app.color(234));
+				fill = new Color(234);
 				setVisible(true);
 			}
 			
@@ -142,7 +144,7 @@ public class CircleSeekBar extends Rectangle {
 					app.stroke(fill.get());
 					app.strokeWeight(weight);
 					app.translate(getX()+getW()/2,getY()+getH()/2);
-					app.rotate(map(value.getValue(), value.getMin(), value.getMax(), PI/4, TWO_PI-PI/4));
+					app.rotate(map(value.get(), value.getMin(), value.getMax(), PI/4, TWO_PI-PI/4));
 					app.line(0,getH()/3,0,getH()/2);
 					app.pop();
 				}
@@ -173,7 +175,7 @@ public class CircleSeekBar extends Rectangle {
 		
 		public Info() {
 			super();
-			fill = new Color(app,255);
+			fill = new Color(255);
 			setSize((int) max(w,h)/3);
 		}
 		
@@ -182,11 +184,16 @@ public class CircleSeekBar extends Rectangle {
 			app.fill(fill.get());
 			app.textSize(size <= 0 ? 1 : size);
 			app.textAlign(CENTER,CENTER);
-			app.text(String.valueOf((int) value.getValue()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
+			app.text(String.valueOf((int) value.get()), getX(),getY()+getH()/2-getH()/4,getW(),getH()/2);
 			app.popStyle();
 		}
 		
 		public final void setSize(int size) { this.size = size; }
 		public final int getSize() { return size; }
+	}
+	
+	@Override
+	public final void mouseWheel(MouseEvent e) {
+	  scrolling.init(e);
 	}
 }
