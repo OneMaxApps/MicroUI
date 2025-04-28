@@ -1,29 +1,28 @@
 package microUI;
 
+import static java.awt.event.KeyEvent.VK_A;
+import static java.awt.event.KeyEvent.VK_C;
+import static java.awt.event.KeyEvent.VK_END;
+import static java.awt.event.KeyEvent.VK_ENTER;
+import static java.awt.event.KeyEvent.VK_HOME;
+import static java.awt.event.KeyEvent.VK_PAGE_DOWN;
+import static java.awt.event.KeyEvent.VK_PAGE_UP;
+import static java.awt.event.KeyEvent.VK_V;
+import static java.awt.event.KeyEvent.VK_X;
+import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
-import static processing.core.PApplet.abs;
-import static processing.core.PApplet.min;
 import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 import static processing.core.PConstants.BACKSPACE;
 import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.CONTROL;
 import static processing.core.PConstants.CORNER;
 import static processing.core.PConstants.DOWN;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
-import static processing.core.PConstants.UP;
 import static processing.core.PConstants.TAB;
-import static processing.core.PConstants.CONTROL;
-
-import static java.awt.event.KeyEvent.VK_HOME;
-import static java.awt.event.KeyEvent.VK_END;
-import static java.awt.event.KeyEvent.VK_PAGE_UP;
-import static java.awt.event.KeyEvent.VK_PAGE_DOWN;
-import static java.awt.event.KeyEvent.VK_ENTER;
-import static java.awt.event.KeyEvent.VK_A;
-import static java.awt.event.KeyEvent.VK_C;
-import static java.awt.event.KeyEvent.VK_V;
-import static java.awt.event.KeyEvent.VK_X;
+import static processing.core.PConstants.UP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +32,13 @@ import microUI.util.Color;
 import microUI.util.Component;
 import microUI.util.Event;
 import microUI.util.FX;
+import microUI.util.Scrollable;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-public class EditText extends Component {
+public class EditText extends Component implements Scrollable {
 	public Scroll scrollV,scrollH;
 	public final Items items;
 	public final Cursor cursor;
@@ -187,6 +187,7 @@ public class EditText extends Component {
 		scrollsValuesUpdate();
 	}
 
+	@Override
 	public final void mouseWheel(MouseEvent e) {
 		if(isFocused) {
 			scrollV.scrolling.init(e,event.inside());

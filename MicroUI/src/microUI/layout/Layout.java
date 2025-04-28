@@ -3,17 +3,17 @@ package microUI.layout;
 import java.util.ArrayList;
 
 import microUI.util.BaseForm;
+import microUI.util.BaseImage;
 import microUI.util.Color;
 import microUI.util.Scrollable;
 import microUI.util.Shadow;
 import processing.core.PApplet;
-import processing.core.PImage;
 import processing.event.MouseEvent;
 
 public abstract class Layout extends BaseForm implements Scrollable {
 	public final Color fill;
 	public final Margin margin;
-	public final Background background;
+	public final BaseImage image;
 	public final Shadow shadow;
 	protected boolean isElementsResizable;
 	protected final ArrayList<BaseForm> elementList;
@@ -26,15 +26,27 @@ public abstract class Layout extends BaseForm implements Scrollable {
 		fill.set(0,0,128,32);
 		margin = new Margin();
 		setVisible(true);
-		background = new Background();
+		image = new BaseImage(app) {
+			@Override
+			public void update() {
+				if(isLoaded()) {
+					  app.pushStyle();
+					  app.tint(tint.get());
+					  app.image(image,x,y,w,h);
+					  app.popStyle();
+				  }
+			}
+		};
+		image.setTransforms(this);
+		
 		shadow = new Shadow(app,this);
 		shadow.invisible();
 	}
 
 	@Override
 	public void update() {
-			if(background.isLoaded()) {
-					background.draw();
+			if(image.isLoaded()) {
+					image.draw();
 			} else {
 				app.pushStyle();
 					app.stroke(0);
@@ -69,6 +81,31 @@ public abstract class Layout extends BaseForm implements Scrollable {
 	@Override
 	public float getH() {
 		return super.getH()-margin.getDown();
+	}
+	
+	
+	@Override
+	public void setX(float x) {
+		if(image != null) { image.setX(x); }
+		super.setX(x);
+	}
+
+	@Override
+	public void setY(float y) {
+		if(image != null) { image.setY(y); }
+		super.setY(y);
+	}
+
+	@Override
+	public void setW(float w) {
+		if(image != null) { image.setW(w); }
+		super.setW(w);
+	}
+
+	@Override
+	public void setH(float h) {
+		if(image != null) { image.setH(h); }
+		super.setH(h);
 	}
 
 	public boolean isElementsResizable() {
@@ -110,36 +147,6 @@ public abstract class Layout extends BaseForm implements Scrollable {
 			}
 		});
 	}
-	
-	public class Background {
-		  public Color tint;
-		  private PImage background;
-		  
-		  public Background() {
-			  tint = new Color(255);
-		  }
-		  
-		  private void draw() {
-			  if(background != null) {
-				  app.pushStyle();
-				  app.tint(tint.get());
-				  app.image(background,x,y,w,h);
-				  app.popStyle();
-			  }
-		  }
-		  
-		  public void set(PImage background) {
-			  this.background = background;
-		  }
-		  
-		  public void load(String path) {
-			  background = app.loadImage(path);
-		  }
-		  
-		  public PImage get() { return background; }
-		  
-		  public boolean isLoaded() { return background != null; }
-	  }
 
 	public class Margin {
 		private float left, up, right, down;

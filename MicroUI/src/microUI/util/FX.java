@@ -71,13 +71,13 @@ public final class FX {
 				convertingRectangle(i, elementList.get(i), checkBoxs.before, checkBoxs.after);
 			}
 			app.popStyle();
-			
+			/*
 			app.pushStyle();
 			if(elementList.get(i) instanceof CircleSeekBar) {
 				convertingRectangle(i, elementList.get(i), circleSeekBars.before, circleSeekBars.after);
 				((CircleSeekBar) (elementList.get(i))).circle.fill.setHEX(convertingColor(i,circleSeekBars.before.circle.fill,circleSeekBars.after.circle.fill));
 			}
-			app.popStyle();
+			app.popStyle();*/
 			
 			app.pushStyle();
 			if(elementList.get(i) instanceof Scroll) {

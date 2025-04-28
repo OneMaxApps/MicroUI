@@ -9,32 +9,34 @@ import static processing.core.PConstants.SQUARE;
 import static processing.core.PConstants.TWO_PI;
 
 import microUI.util.Color;
-import microUI.util.Rectangle;
+import microUI.util.Component;
 import microUI.util.Scrollable;
 import microUI.util.Scrolling;
+import microUI.util.Stroke;
 import microUI.util.Value;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.event.MouseEvent;
 
-public class CircleSeekBar extends Rectangle implements Scrollable {
-	public Circle circle;
-	public Value value;
-	public Scrolling scrolling;
-	public Info info;
-	private PImage texture;
+public final class CircleSeekBar extends Component implements Scrollable {
+	public final Circle circle;
+	public final Value value;
+	public final Scrolling scrolling;
+	public final Info info;
+	public final Stroke stroke;
+	private  PImage texture;
 
 	public CircleSeekBar(PApplet app, float x, float y, float size) {
 		super(app,x,y,size,size);
 		fill.set(255,0);
+		stroke = new Stroke(app);
 		stroke.fill.set(255,0);
-		shadow.invisible();
-		setBasicFX(false);
 		circle = new Circle();
 		value = new Value(0,100,0);
 		scrolling = new Scrolling(event);
-		ripples.setVisible(false);
 		info = new Info();
+		scrolling.setReverse(true);
+		visible();
 	}
 	
 	public CircleSeekBar(PApplet app, String text, float x, float y, float size) {
@@ -48,8 +50,8 @@ public class CircleSeekBar extends Rectangle implements Scrollable {
 	
 	@Override
 	public void update() {
+		event.listen(this);
 		app.pushStyle();
-		super.update();
 		circle.draw();
 		if(event.inside() || event.moved()) {
 			info.draw();

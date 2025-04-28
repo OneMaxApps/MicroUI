@@ -5,7 +5,7 @@ import processing.event.MouseEvent;
 public final class Scrolling {
 	private Event event;
     private float speed,velocity;
-    private boolean isScrolling;
+    private boolean isScrolling,reverse;
     
     public Scrolling(Event event) {
     	this.event = event;
@@ -14,14 +14,23 @@ public final class Scrolling {
     
     public void init(MouseEvent e, boolean action) {
       if(!action) { return; }
-      
-        if(e.getCount() > 0) {
-          if(speed > 0) { speed = 0; }
-            speed -= e.getCount()*velocity*10;
-        } else {
-          if(speed < 0) { speed = 0; }
-            speed -= e.getCount()*velocity*10;
-        }
+      	if(reverse) {
+	        if(e.getCount() < 0) {
+	          if(speed > 0) { speed = 0; }
+	            speed += e.getCount()*velocity*10;
+	        } else {
+	          if(speed < 0) { speed = 0; }
+	            speed += e.getCount()*velocity*10;
+	        }
+      	} else {
+      		if(e.getCount() > 0) {
+  	          if(speed > 0) { speed = 0; }
+  	            speed -= e.getCount()*velocity*10;
+  	        } else {
+  	          if(speed < 0) { speed = 0; }
+  	            speed -= e.getCount()*velocity*10;
+  	        }
+      	}
     }
     
     public void init(MouseEvent e) {
@@ -48,6 +57,14 @@ public final class Scrolling {
 
 	public final void setVelocity(float velocity) {
 		this.velocity = velocity;
+	}
+
+	public final boolean isReverse() {
+		return reverse;
+	}
+
+	public final void setReverse(boolean reverse) {
+		this.reverse = reverse;
 	}
     
     

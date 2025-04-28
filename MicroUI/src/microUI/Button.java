@@ -27,7 +27,6 @@ public class Button extends Rectangle {
 	  @Override
 	  public void update() {
 		 super.update();
-		 text.setTransforms(this);
 		 text.draw();
 		 
 	  }
@@ -37,18 +36,34 @@ public class Button extends Rectangle {
 	    	text = button.text;
 	  }
 	  
-	  @Override
+	  
+	@Override
+	public void setX(float x) {
+		super.setX(x);
+		if(text == null) { return; }
+		text.setX(x);
+	}
+	@Override
+	public void setY(float y) {
+		super.setY(y);
+		if(text == null) { return; }
+		text.setY(y);
+	}
+	
+	@Override
 	  public void setW(float w) {
 	    super.setW(w);
 	    if(text == null) { return; }
-	    text.setTextSize(min(w,h)/2);
+	    text.setTextSize(min(w,h)/4);
+	    text.setW(w);
 	  }
 	  
 	  @Override
 	  public void setH(float h) {
 		super.setH(h);
 		if(text == null) { return; }
-		text.setTextSize(min(w,h)/2);
+		text.setTextSize(min(w,h)/4);
+		text.setH(h);
 	  }
 	  
 	  

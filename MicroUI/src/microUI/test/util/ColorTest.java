@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import microUI.util.Color;
-import processing.core.PApplet;
 
 class ColorTest {
 	
