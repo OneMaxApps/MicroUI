@@ -4,12 +4,12 @@ import static processing.core.PApplet.map;
 
 import java.util.ArrayList;
 
-import microUI.Button;
-import microUI.CheckBox;
-import microUI.CircleSeekBar;
-import microUI.Scroll;
-import microUI.Slider;
-import microUI.Spinner;
+import microUI.component.Button;
+import microUI.component.CheckBox;
+import microUI.component.CircleSeekBar;
+import microUI.component.Scroll;
+import microUI.component.Slider;
+import microUI.component.Spinner;
 import processing.core.PApplet;
 
 public final class FX {

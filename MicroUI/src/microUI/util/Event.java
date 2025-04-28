@@ -69,7 +69,13 @@ public class Event {
 		  if(pressed() && longPressed >= seconds) { return true; }
 		  return false;
 	  }
-	  public boolean moved() { if(pressed()) { return moving = true; } else { return moving; } }
+	  public boolean moved() {
+		  if(pressed()) {
+			  return moving = true;
+		  } else {
+			  return moving;
+			  }
+	  }
 	  public boolean clicked() {
 	    if(inside() && !pressed() && wasPressed == 1) {
 	    	wasPressed = 0;
@@ -79,6 +85,7 @@ public class Event {
 	    return false;
 	  }
 	  
+	  // TODO Continue from here to do JUnit tests
 	  public boolean clicked(int count) {
 		  if(clickCounter == count) {clickCounter = 0;} else {
 			 if(clicked()) { clickCounter++; } else {
@@ -106,4 +113,11 @@ public class Event {
 	  
 	  public void action() {}
 	  
+	  void log() {
+		  System.out.println(x+" "+y+" "+w+" "+h);
+		  System.out.println("mousePressed: "+app.mousePressed);
+		  System.out.println("mouseX: "+app.mouseX);
+		  System.out.println("mouseY: "+app.mouseY);
+		  
+	  }
 	}

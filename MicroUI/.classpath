@@ -7,8 +7,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="lib" path="src/core.jar"/>
-	<classpathentry kind="lib" path="src/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="src/jogl-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

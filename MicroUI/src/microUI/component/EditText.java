@@ -1,4 +1,4 @@
-package microUI;
+package microUI.component;
 
 import static java.awt.event.KeyEvent.VK_A;
 import static java.awt.event.KeyEvent.VK_C;

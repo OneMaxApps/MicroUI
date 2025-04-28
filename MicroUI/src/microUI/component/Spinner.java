@@ -1,4 +1,4 @@
-package microUI;
+package microUI.component;
 
 import java.util.ArrayList;
 

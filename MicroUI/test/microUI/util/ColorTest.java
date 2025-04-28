@@ -1,4 +1,4 @@
-package microUI.test.util;
+package microUI.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

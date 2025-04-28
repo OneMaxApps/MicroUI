@@ -7,8 +7,8 @@ import static processing.core.PApplet.min;
 
 import java.util.ArrayList;
 
-import microUI.Button;
-import microUI.CircleSeekBar;
+import microUI.component.Button;
+import microUI.component.CircleSeekBar;
 import microUI.util.BaseForm;
 import microUI.util.Text;
 import processing.core.PApplet;

@@ -1,4 +1,4 @@
-package microUI;
+package microUI.component;
 
 import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;

@@ -1,4 +1,4 @@
-package microUI;
+package microUI.component;
 
 import static processing.core.PApplet.dist;
 import static processing.core.PApplet.min;
