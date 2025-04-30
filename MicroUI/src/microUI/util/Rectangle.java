@@ -1,5 +1,10 @@
 package microUI.util;
 
+import microUI.core.BaseImage;
+import microUI.core.Component;
+import microUI.effect.Ripples;
+import microUI.effect.Shadow;
+import microUI.event.Event;
 import processing.core.PApplet;
 
 public class Rectangle extends Component {

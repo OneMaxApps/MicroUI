@@ -1,5 +1,7 @@
-package microUI.util;
+package microUI.core;
 
+import microUI.event.Event;
+import microUI.util.Color;
 import processing.core.PApplet;
 
 public abstract class Component extends BaseForm {

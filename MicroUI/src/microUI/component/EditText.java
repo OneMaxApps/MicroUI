@@ -27,18 +27,19 @@ import static processing.core.PConstants.UP;
 import java.util.ArrayList;
 import java.util.List;
 
+import microUI.core.Component;
+import microUI.effect.FX;
+import microUI.event.Event;
+import microUI.event.KeyPressable;
+import microUI.event.Scrollable;
 import microUI.util.Clipboard;
 import microUI.util.Color;
-import microUI.util.Component;
-import microUI.util.Event;
-import microUI.util.FX;
-import microUI.util.Scrollable;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-public class EditText extends Component implements Scrollable {
+public class EditText extends Component implements Scrollable, KeyPressable {
 	public Scroll scrollV,scrollH;
 	public final Items items;
 	public final Cursor cursor;
@@ -195,6 +196,7 @@ public class EditText extends Component implements Scrollable {
 		}
 	}
 	
+	@Override
 	public final void keyPressed() {
 		scrollsValuesUpdate();
 		

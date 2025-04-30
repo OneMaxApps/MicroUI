@@ -1,8 +1,8 @@
-package microUI.layout;
+package microUI.container.layout;
 
 import static processing.core.PApplet.min;
 
-import microUI.util.BaseForm;
+import microUI.core.BaseForm;
 import processing.core.PApplet;
 
 public class EdgeLayout extends Layout {

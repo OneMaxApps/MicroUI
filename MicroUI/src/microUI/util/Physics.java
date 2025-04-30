@@ -1,5 +1,7 @@
 package microUI.util;
 
+import microUI.core.BaseForm;
+
 public final class Physics {
 	
 	public final static boolean collision(final BaseForm form, final  BaseForm otherForm) {
@@ -20,7 +22,12 @@ public final class Physics {
 		
 		if(collision(form,otherForm)) {
 			form.setPosition(px,py);
+			if(collision(form,otherForm)) {
+				if(form.getX()+form.getW()/2 < otherForm.getX()+otherForm.getW()/2) { form.setX(otherForm.getX()-form.getW()); } else { form.setX(otherForm.getX()+otherForm.getW()); }
+				if(form.getY()+form.getH()/2 < otherForm.getY()+otherForm.getH()/2) { form.setY(otherForm.getY()-form.getH()); } else { form.setY(otherForm.getY()+otherForm.getH()); }
+			}
 		}
+		
 	}
 	
 }

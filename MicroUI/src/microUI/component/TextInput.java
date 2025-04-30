@@ -8,17 +8,18 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 
-import microUI.util.BaseForm;
+import microUI.core.BaseForm;
+import microUI.effect.Ripples;
+import microUI.event.Event;
+import microUI.event.KeyPressable;
 import microUI.util.Clipboard;
 import microUI.util.Color;
-import microUI.util.Event;
-import microUI.util.Ripples;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
 // TODO Add correct checking input text like in EditText
-public final class TextInput extends BaseForm {
+public final class TextInput extends BaseForm implements KeyPressable {
 	public final static int DIGITS = 0, LETTERS = 1, ANY_SYMBOLS = 2;
 	public PFont font;
 	public Color fill;
@@ -209,6 +210,7 @@ public final class TextInput extends BaseForm {
 		}
 	}
 	
+	@Override
 	public final void keyPressed() {
 		boolean correctSymbol;
 		

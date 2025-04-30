@@ -8,10 +8,10 @@ import static processing.core.PConstants.PI;
 import static processing.core.PConstants.SQUARE;
 import static processing.core.PConstants.TWO_PI;
 
+import microUI.core.Component;
+import microUI.event.Scrollable;
+import microUI.event.Scrolling;
 import microUI.util.Color;
-import microUI.util.Component;
-import microUI.util.Scrollable;
-import microUI.util.Scrolling;
 import microUI.util.Stroke;
 import microUI.util.Value;
 import processing.core.PApplet;

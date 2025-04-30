@@ -1,4 +1,4 @@
-package microUI.util;
+package microUI.core;
 
 import processing.core.PApplet;
 
@@ -36,4 +36,8 @@ public abstract class View implements Visible {
 	}
 	
 	public abstract void update();
+	
+	public final PApplet getContext() {
+		return app;
+	}
 }

@@ -1,4 +1,4 @@
-package microUI.util;
+package microUI.effect;
 
 import static processing.core.PApplet.map;
 
@@ -10,6 +10,9 @@ import microUI.component.CircleSeekBar;
 import microUI.component.Scroll;
 import microUI.component.Slider;
 import microUI.component.Spinner;
+import microUI.event.Event;
+import microUI.util.Color;
+import microUI.util.Rectangle;
 import processing.core.PApplet;
 
 public final class FX {

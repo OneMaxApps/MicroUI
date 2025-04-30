@@ -1,4 +1,4 @@
-package microUI.layout;
+package microUI.container.layout;
 
 import static processing.core.PApplet.ceil;
 import static processing.core.PApplet.constrain;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import microUI.component.Button;
 import microUI.component.CircleSeekBar;
-import microUI.util.BaseForm;
+import microUI.core.BaseForm;
 import microUI.util.Text;
 import processing.core.PApplet;
 

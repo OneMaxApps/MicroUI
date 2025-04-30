@@ -6,9 +6,9 @@ import static processing.core.PApplet.map;
 import static processing.core.PApplet.max;
 import static processing.core.PApplet.min;
 
+import microUI.event.Scrollable;
+import microUI.event.Scrolling;
 import microUI.util.Rectangle;
-import microUI.util.Scrollable;
-import microUI.util.Scrolling;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 

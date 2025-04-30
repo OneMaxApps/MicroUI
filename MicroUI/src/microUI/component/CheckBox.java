@@ -2,8 +2,8 @@ package microUI.component;
 
 import static processing.core.PApplet.min;
 
+import microUI.event.Event;
 import microUI.util.Color;
-import microUI.util.Event;
 import microUI.util.Rectangle;
 import processing.core.PApplet;
 

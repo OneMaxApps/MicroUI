@@ -1,14 +1,16 @@
-package microUI.component;
+package microUI.container.window;
 
 import static processing.core.PApplet.dist;
-import static processing.core.PApplet.min;
 import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 
-import microUI.layout.GridLayout;
-import microUI.layout.Layout;
-import microUI.layout.RowLayout;
-import microUI.util.BaseForm;
-import microUI.util.Event;
+import microUI.component.Button;
+import microUI.component.TextInput;
+import microUI.container.layout.GridLayout;
+import microUI.container.layout.Layout;
+import microUI.container.layout.RowLayout;
+import microUI.core.BaseForm;
+import microUI.event.Event;
 import microUI.util.Rectangle;
 import microUI.util.Text;
 import processing.core.PApplet;

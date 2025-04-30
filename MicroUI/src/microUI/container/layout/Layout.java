@@ -1,16 +1,17 @@
-package microUI.layout;
+package microUI.container.layout;
 
 import java.util.ArrayList;
 
-import microUI.util.BaseForm;
-import microUI.util.BaseImage;
+import microUI.core.BaseForm;
+import microUI.core.BaseImage;
+import microUI.effect.Shadow;
+import microUI.event.KeyPressable;
+import microUI.event.Scrollable;
 import microUI.util.Color;
-import microUI.util.Scrollable;
-import microUI.util.Shadow;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
-public abstract class Layout extends BaseForm implements Scrollable {
+public abstract class Layout extends BaseForm implements Scrollable, KeyPressable {
 	public final Color fill;
 	public final Margin margin;
 	public final BaseImage image;
@@ -144,6 +145,15 @@ public abstract class Layout extends BaseForm implements Scrollable {
 		elementList.forEach(element -> {
 			if(element instanceof Scrollable) {
 				((Scrollable) element).mouseWheel(e);
+			}
+		});
+	}
+
+	@Override
+	public void keyPressed() {
+		elementList.forEach(element -> {
+			if(element instanceof KeyPressable) {
+				((KeyPressable) element).keyPressed();
 			}
 		});
 	}

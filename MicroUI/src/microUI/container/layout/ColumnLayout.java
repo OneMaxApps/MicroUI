@@ -1,10 +1,10 @@
-package microUI.layout;
+package microUI.container.layout;
 
 import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 
-import microUI.util.BaseForm;
+import microUI.core.BaseForm;
 import microUI.util.Text;
 import processing.core.PApplet;
 

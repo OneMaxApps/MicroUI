@@ -1,8 +1,12 @@
-package microUI.util;
+package microUI.effect;
 
-import static processing.core.PApplet.min;
-import static processing.core.PApplet.max;
 import static processing.core.PApplet.constrain;
+import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
+
+import microUI.core.BaseForm;
+import microUI.core.View;
+import microUI.util.Color;
 import processing.core.PGraphics;
 
 public final class Ripples extends View {
@@ -12,7 +16,7 @@ public final class Ripples extends View {
 	private int currentWidth,currentHeight;
 	
 	public Ripples(BaseForm form) {
-		super(form.app);
+		super(form.getContext());
 		circle = new Circle();
 		visible = true;
 		this.form = form;
@@ -28,7 +32,7 @@ public final class Ripples extends View {
 		pg.clear();
 		circle.draw(pg);
 		pg.endDraw();
-		app.image(pg, form.x,form.y,form.w,form.h);
+		app.image(pg, form.getX(),form.getY(),form.getW(),form.getH());
 		}
 		
 	}
@@ -36,7 +40,7 @@ public final class Ripples extends View {
 	public final void checkResizing() {
 		if(!visible || app.mousePressed) { return; }
 		
-		if(currentWidth != (int) form.w || currentHeight != (int) form.h) {
+		if(currentWidth != (int) form.getW() || currentHeight != (int) form.getH()) {
 			pg = app.createGraphics(currentWidth = (int) form.getW(),currentHeight = (int) form.getH());
 		}
 	}
@@ -67,12 +71,12 @@ public final class Ripples extends View {
 		}
 		
 		private final void incSize() {
-			radius += constrain(min(form.w*.2f,form.h*.2f),1,20);
+			radius += constrain(min(form.getW()*.2f,form.getH()*.2f),1,20);
 		}
 		
 		private final void playAnim() {
 			incSize();
-			if(radius > max(form.w*2,form.h*2)) {
+			if(radius > max(form.getW()*2,form.getH()*2)) {
 				radius = 0;
 				start = false;
 			}
@@ -83,8 +87,8 @@ public final class Ripples extends View {
 		}
 		
 		private final void resetPosition() {
-			x = app.mouseX-form.x;
-			y = app.mouseY-form.y;
+			x = app.mouseX-form.getX();
+			y = app.mouseY-form.getY();
 		}
 	}
 }

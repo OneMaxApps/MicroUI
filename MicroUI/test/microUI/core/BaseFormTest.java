@@ -1,10 +1,10 @@
-package microUI.util;
+package microUI.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import microUI.util.BaseForm;
+import microUI.core.BaseForm;
 import processing.core.PApplet;
 
 class BaseFormTest {

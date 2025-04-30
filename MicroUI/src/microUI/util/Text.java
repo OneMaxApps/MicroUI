@@ -4,6 +4,7 @@ import static processing.core.PApplet.abs;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
+import microUI.core.Component;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;

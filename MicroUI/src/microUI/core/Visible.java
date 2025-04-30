@@ -1,4 +1,4 @@
-package microUI.util;
+package microUI.core;
 
 public interface Visible {
 	

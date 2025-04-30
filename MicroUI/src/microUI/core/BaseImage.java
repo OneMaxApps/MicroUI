@@ -1,5 +1,6 @@
-package microUI.util;
+package microUI.core;
 
+import microUI.util.Color;
 import processing.core.PApplet;
 import processing.core.PImage;
 

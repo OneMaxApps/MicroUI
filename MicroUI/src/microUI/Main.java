@@ -8,9 +8,9 @@ import microUI.component.Scroll;
 import microUI.component.Slider;
 import microUI.component.Spinner;
 import microUI.component.TextInput;
-import microUI.component.Window;
-import microUI.layout.GridLayout;
-import microUI.util.Event;
+import microUI.container.layout.GridLayout;
+import microUI.container.window.Window;
+import microUI.util.Physics;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -25,7 +25,6 @@ public final class Main extends PApplet {
 	private Spinner spinner;
 	private TextInput textInput;
 	private Window window;
-	private Event event;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.Main");
@@ -55,15 +54,18 @@ public final class Main extends PApplet {
 				  .add(scroll, 1,1).add(slider, 2,1).add(spinner, 0,2).add(textInput, 1, 2)
 				  .add(window, 2, 2);
 		
-		event = new Event(this);
+		
+		
+		//Physics.constrain(width/2, height/2, button, checkBox);
+		
+		// System.out.println(Physics.collision(checkBox, button));
 	}
 		
 	@Override
 	public void draw() {
 		background(128);
-		//gridLayout.draw();
-		event.listen(0,0,height,width);
-		if(event.clicked(2)) { exit(); }
+		gridLayout.draw();
+
 	}
 
 	@Override
@@ -71,4 +73,8 @@ public final class Main extends PApplet {
 		gridLayout.mouseWheel(event);
 	}
 	
+	@Override
+	public void keyPressed() {
+		gridLayout.keyPressed();
+	}
 }

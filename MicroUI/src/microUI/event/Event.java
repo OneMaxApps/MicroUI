@@ -1,5 +1,6 @@
-package microUI.util;
+package microUI.event;
 
+import microUI.core.BaseForm;
 import processing.core.PApplet;
 
 public class Event {
@@ -8,8 +9,8 @@ public class Event {
    	  
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;
-	  private boolean moving,enable;
-	  private static final boolean[] keys = new boolean[65536];
+	  private boolean moving,dragging,enable;
+	  private static final boolean[] keys = new boolean[Character.MAX_VALUE];
 	  private PApplet app;
 	  
 	  public Event(PApplet app) {
@@ -25,7 +26,11 @@ public class Event {
 	    w = form.getW();
 	    h = form.getH();
 	      
-	    if(moving && !app.mousePressed) { moving = false; }
+	    if(!app.mousePressed) {
+	    	moving = false;
+	    	dragging = false;
+	    }
+	    
 	    if(pressed()) {
 	    	wasPressed = 1;
 	    	if(app.frameCount%60 == 0) { longPressed++; }
@@ -46,7 +51,11 @@ public class Event {
 		    this.w = w;
 		    this.h = h;
 		    
-		    if(moving && !app.mousePressed) { moving = false; }
+		    if(!app.mousePressed) {
+		    	moving = false;
+		    	dragging = false;
+		    }
+		    
 		    if(pressed()) {
 		    	wasPressed = 1;
 		    	if(app.frameCount%60 == 0) { longPressed++; }
@@ -69,13 +78,21 @@ public class Event {
 		  if(pressed() && longPressed >= seconds) { return true; }
 		  return false;
 	  }
+
 	  public boolean moved() {
-		  if(pressed()) {
-			  return moving = true;
+		  if(pressed()) { return moving = true;
 		  } else {
-			  return moving;
-			  }
+			  	return moving;
+			}
 	  }
+	  
+	  public boolean dragged() {
+		  if(pressed() && (app.mouseX != app.pmouseX || app.mouseY != app.pmouseY)) { return dragging = true;
+		  } else {
+			  	return dragging;
+			}
+	  }
+	  
 	  public boolean clicked() {
 	    if(inside() && !pressed() && wasPressed == 1) {
 	    	wasPressed = 0;
@@ -85,7 +102,6 @@ public class Event {
 	    return false;
 	  }
 	  
-	  // TODO Continue from here to do JUnit tests
 	  public boolean clicked(int count) {
 		  if(clickCounter == count) {clickCounter = 0;} else {
 			 if(clicked()) { clickCounter++; } else {
@@ -113,11 +129,9 @@ public class Event {
 	  
 	  public void action() {}
 	  
-	  void log() {
-		  System.out.println(x+" "+y+" "+w+" "+h);
-		  System.out.println("mousePressed: "+app.mousePressed);
-		  System.out.println("mouseX: "+app.mouseX);
-		  System.out.println("mouseY: "+app.mouseY);
-		  
+	  public final void resetState() {
+		  keyReleased();
+		  longPressed = wasPressed = clickCounter = 0;
+		  moving = dragging = false;
 	  }
 	}
