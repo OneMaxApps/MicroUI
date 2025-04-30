@@ -6,18 +6,21 @@ import static processing.core.PApplet.min;
 
 import microUI.core.BaseForm;
 import microUI.core.View;
+import microUI.event.Event;
 import microUI.util.Color;
 import processing.core.PGraphics;
 
 public final class Ripples extends View {
-	public Circle circle;
-	private BaseForm form;
+	public final Circle circle;
+	private Event event;
+	private final BaseForm form;
 	private PGraphics pg;
 	private int currentWidth,currentHeight;
 	
 	public Ripples(BaseForm form) {
 		super(form.getContext());
 		circle = new Circle();
+		event = new Event(app);
 		visible = true;
 		this.form = form;
 		pg = app.createGraphics(currentWidth = (int) form.getW(),currentHeight = (int) form.getH(),app.sketchRenderer());
@@ -25,6 +28,8 @@ public final class Ripples extends View {
 
 	@Override
 	public void update() {
+		event.listen(form);
+		
 		checkResizing();
 		
 		if(pg.width != 0 && pg.height != 0) {
@@ -35,6 +40,7 @@ public final class Ripples extends View {
 		app.image(pg, form.getX(),form.getY(),form.getW(),form.getH());
 		}
 		
+		if(event.clicked()) { initAnim(); }
 	}
 
 	public final void checkResizing() {

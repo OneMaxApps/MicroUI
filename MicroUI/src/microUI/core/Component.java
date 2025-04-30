@@ -21,5 +21,5 @@ public abstract class Component extends BaseForm {
     public void setStyle(Component otherComponent) {
     	fill.set(otherComponent.fill);
 	}
-    
+     
 }

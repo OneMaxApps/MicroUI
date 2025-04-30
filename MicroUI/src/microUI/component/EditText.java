@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import microUI.core.Component;
-import microUI.effect.FX;
+//import microUI.effect.Animation;
 import microUI.event.Event;
 import microUI.event.KeyPressable;
 import microUI.event.Scrollable;
@@ -49,7 +49,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	protected boolean isFocused;
 	protected PGraphics pg;
 	protected PFont font;
-	protected final FX fx;
+	//protected final Animation fx;
 	protected final Event event;
 
  	public EditText(PApplet app, float x, float y, float w, float h) {
@@ -68,7 +68,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		selection = new Selection();
 		
 		pg = app.createGraphics((int) w, (int) h, app.sketchRenderer());
-		fx = new FX(app);
+		//fx = new Animation(app);
 		initFX();
 		event = new Event(app);
 		
@@ -79,6 +79,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 
 	private final void initFX() {
+		/*
 		fx.setIncludedTransforms(false);
 		
 		fx.scrolls.before.fill.set(1,0);
@@ -101,14 +102,13 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		
 		fx.add(scrollV,scrollH);
 		fx.setBasicFX(false);
-		fx.setEventType(Event.INSIDE);
+		fx.setEventType(Event.INSIDE);*/
 	}
 	
 	private final void initScrolls() {
 		scrollV = new Scroll(app);
 		scrollV.setMinMax(-1,0);
 		scrollV.setVerticalMode(true);
-		scrollV.shadow.invisible();
 		scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
 		scrollV.setSize(SCROLL_WEIGHT,h-SCROLL_WEIGHT);
 		scrollV.setValue(scrollV.getMax());
@@ -116,7 +116,6 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		
 		scrollH = new Scroll(app);
 		scrollH.setMinMax(-SHIFT_LEFT_SIDE, 100);
-		scrollH.shadow.invisible();
 		scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
 		scrollH.setSize(w,SCROLL_WEIGHT);
 	}
@@ -125,7 +124,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	public void update() {
 		// debug();
 		event.listen(this);
-		fx.init();
+		//fx.init();
 	
 		pg.beginDraw();
 			pg.background(fill.get());

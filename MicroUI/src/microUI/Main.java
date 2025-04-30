@@ -10,7 +10,6 @@ import microUI.component.Spinner;
 import microUI.component.TextInput;
 import microUI.container.layout.GridLayout;
 import microUI.container.window.Window;
-import microUI.util.Physics;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -49,23 +48,23 @@ public final class Main extends PApplet {
 		
 		window           = new Window(this);
 		
-		
+		/*
 		gridLayout.add(button, 0,0).add(checkBox, 1,0).add(circleSeekBar, 2,0).add(editText, 0,1)
 				  .add(scroll, 1,1).add(slider, 2,1).add(spinner, 0,2).add(textInput, 1, 2)
 				  .add(window, 2, 2);
-		
+		*/
 		
 		
 		//Physics.constrain(width/2, height/2, button, checkBox);
 		
-		// System.out.println(Physics.collision(checkBox, button));
 	}
 		
 	@Override
 	public void draw() {
 		background(128);
-		gridLayout.draw();
-
+		button.draw();
+		
+		if(mouseButton == RIGHT) { button.setPosition(mouseX,mouseY); }
 	}
 
 	@Override

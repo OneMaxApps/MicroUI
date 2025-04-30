@@ -38,32 +38,23 @@ public class Scroll extends Rectangle implements Scrollable {
 
 	public Scroll(PApplet app, float x, float y, float w, float h) {
 	    super(app,x,y,w,h);
-	    ripples.setVisible(false);
 	    
 	    fill.set(28);
 	    
 	    button = new Button(app,x,y,buttonsWeight(),h) {{
 	    	fill.set(12);
-	    	shadow.setVisible(false);
 	    	ripples.setVisible(false);
-	    	shadow.invisible();
 	    }};
 	    
 	    scrolling = new Scrolling(event);
 	    
 	    buttonPlus = new Button(app,"+",x+w-buttonsWeight(),y,buttonsWeight(),h) {{
-	    	shadow.setVisible(false);
 	    	ripples.setVisible(false);
-	    	shadow.invisible();
 	    }};
 	    
 	    buttonMinus = new Button(app,"-",x,y,buttonsWeight(),h){{
-	    	shadow.setVisible(false);
 	    	ripples.setVisible(false);
-	    	shadow.invisible();
     	}};
-	    
-	    setBasicFX(false);
 	    
 	    buttonsTransformsUpdate();
 	  }

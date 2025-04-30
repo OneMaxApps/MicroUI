@@ -25,26 +25,19 @@ public class Slider extends Rectangle implements Scrollable {
 		    setMinMax(0,100);
 		    
 		    button = new Button(app,x,y,buttonsWeight(),h) {{
-		     shadow.invisible();
-		     setBasicFX(false);
 		     ripples.setVisible(false);
 		     fill.set(32);
 		    }};
 		    
 		    level = new Rectangle(app,x,y,button.getX()-getX(),h) {{
 		     fill.set(0,128,234,234);
-		     shadow.invisible();
 		     event.setEnable(false);
-		     ripples.setVisible(false);
 		    }};
 		    
 		    scrolling = new Scrolling(event);
 		    
 		    showText(true);
 		    
-		    setBasicFX(false);
-		    
-		    ripples.setVisible(false);
 	  }
 	  
 	  public Slider(PApplet app) { this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
@@ -81,10 +74,9 @@ public class Slider extends Rectangle implements Scrollable {
 		      }
 		    }
 		    
-		    if(event != null) {
-			    if(event.inside() || scrolling.isScrolling()) {
-			      appendValue(scrolling.get());
-			    }
+			if(event.inside() || scrolling.isScrolling()) {
+			  appendValue(scrolling.get());
+			
 		    
 		    if(showText) {
 		      if(event.inside() || scrolling.isScrolling() || button.event.moved()) { button.text.set((int) value); } else { button.text.clear(); }

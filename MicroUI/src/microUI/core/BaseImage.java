@@ -11,7 +11,6 @@ public abstract class BaseImage extends BaseForm {
 	public BaseImage(PApplet app) {
 		super(app);
 		tint = new Color(255);
-		
 	}
 	
 	public final boolean isLoaded() {
@@ -24,6 +23,7 @@ public abstract class BaseImage extends BaseForm {
 	}
 	
 	public final void set(final String path) {
+		if(path == null) { return; }
 		image = app.loadImage(path);
 	}
 	

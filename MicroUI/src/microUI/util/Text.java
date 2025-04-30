@@ -4,28 +4,28 @@ import static processing.core.PApplet.abs;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
+import microUI.core.BaseForm;
 import microUI.core.Component;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
 public final class Text extends Component {
-	  public final Color fill;
 	  public final Shadow shadow;
-	  private PFont font;
 	  private final StringBuilder text;
+	  private PFont font;
 	  private int textSize;
 	  private boolean center,upperCaseStyle;
 	  
-	  
+	   
 	  public Text(PApplet app, String text, float x, float y, float w, float h) {
 	    super(app,x,y,w,h);
 	    this.text = new StringBuilder(text);
-	    fill = new Color(255);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
 	    center = true;
 	    shadow = new Shadow();
 	    visible = true;
+	    fill.set(255);
 	  }
 	  
 	  public Text(PApplet app, float x, float y, float w, float h) {
@@ -41,18 +41,14 @@ public final class Text extends Component {
 		  shadow.draw();
 		  
 		  app.pushStyle();
-		  app.fill(fill.get());
-		  if(font != null) {
-			  app.textFont(font,textSize);
-		  }
+		  fill.use(app);
+		  if(font != null) { app.textFont(font,textSize); }
 		  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
-		  if(center) {
-		  app.textAlign(CENTER,CENTER);
-		  } else {
-			  app.textAlign(CORNER,CENTER);
-		  }
+		  app.textAlign(center ? CENTER : CORNER,CENTER);
 		  app.text(text.toString() != null ? text.toString() : "",x,y,abs(w <= 0 ? 1 : w),abs(h <= 0 ? 1 : h));
 		  app.popStyle();
+		  
+		  
 	  }
 	  
 	  public void draw(PGraphics pg) {
@@ -163,10 +159,7 @@ public final class Text extends Component {
 		this.upperCaseStyle = upperCaseStyle;
 	  }
 
-
-
-
-	public final class Shadow {
+	  public final class Shadow {
 		  public Color fill;
 		  private float extraSize,shiftX,shiftY;
 		  private boolean isVisible;

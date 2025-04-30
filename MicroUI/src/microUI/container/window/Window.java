@@ -25,11 +25,9 @@ public class Window extends Rectangle {
 	
 	public Window(PApplet app, String title, float x, float y, float w, float h) {
 		super(app,x,y,w,h);
-		setBasicFX(false);
 		fill.set(32);
 		resizable = true;
 		bar = new Bar(app, title);
-		ripples.setVisible(false);
 	}
 	
 	public Window(PApplet app, String title) {
@@ -126,7 +124,7 @@ public class Window extends Rectangle {
 			layout.add(buttonClose = new Button(app,"Close"),.1f);
 			this.title.setInCenter(false);
 			this.title.setTextSize(HEIGHT/2);
-			buttonClose.shadow.invisible();
+			//buttonClose.shadow.invisible();
 			isVisible = true;
 			//layout.setElementsResizable(false);
 			event = new Event(app);

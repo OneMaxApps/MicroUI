@@ -24,7 +24,7 @@ public final class CircleSeekBar extends Component implements Scrollable {
 	public final Scrolling scrolling;
 	public final Info info;
 	public final Stroke stroke;
-	private  PImage texture;
+	private PImage texture;
 
 	public CircleSeekBar(PApplet app, float x, float y, float size) {
 		super(app,x,y,size,size);
@@ -96,8 +96,8 @@ public final class CircleSeekBar extends Component implements Scrollable {
 	}
 
 	public class Circle {
-		public Color fill;
-		public Arrow arrow;
+		public final Color fill;
+		public final Arrow arrow;
 		
 		public Circle() {
 			this.fill = new Color(34);
