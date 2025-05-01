@@ -1,12 +1,13 @@
 package microUI.util;
 
 import static processing.core.PApplet.abs;
+import static processing.core.PApplet.min;
+import static processing.core.PApplet.max;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
-import microUI.core.BaseForm;
 import microUI.core.Component;
-import processing.core.PApplet;
+import microUI.core.View;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
@@ -15,11 +16,11 @@ public final class Text extends Component {
 	  private final StringBuilder text;
 	  private PFont font;
 	  private int textSize;
-	  private boolean center,upperCaseStyle;
+	  private boolean center,upperCaseStyle,lowerCaseStyle,autoResize;
 	  
 	   
-	  public Text(PApplet app, String text, float x, float y, float w, float h) {
-	    super(app,x,y,w,h);
+	  public Text(String text, float x, float y, float w, float h) {
+	    super(x,y,w,h);
 	    this.text = new StringBuilder(text);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
 	    center = true;
@@ -28,12 +29,12 @@ public final class Text extends Component {
 	    fill.set(255);
 	  }
 	  
-	  public Text(PApplet app, float x, float y, float w, float h) {
-		this(app,"",x,y,w,h);
+	  public Text(float x, float y, float w, float h) {
+		this("",x,y,w,h);
 	  }
 	  
-	  public Text(PApplet app, String text) {
-			this(app,text,app.width*.2f,app.height*.4f,app.width*.6f,app.height*.2f);
+	  public Text(String text) {
+			this(text,app.width*.2f,app.height*.4f,app.width*.6f,app.height*.2f);
 	  }
 	  
 	  @Override
@@ -43,9 +44,17 @@ public final class Text extends Component {
 		  app.pushStyle();
 		  fill.use(app);
 		  if(font != null) { app.textFont(font,textSize); }
-		  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
+		  
+		  if(isAutoResize()) {
+			  
+			  app.textSize(max(min(w,h)/2,1));
+			  
+		  } else {
+			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
+		  }
+		  
 		  app.textAlign(center ? CENTER : CORNER,CENTER);
-		  app.text(text.toString() != null ? text.toString() : "",x,y,abs(w <= 0 ? 1 : w),abs(h <= 0 ? 1 : h));
+		  app.text(text.toString(),x,y,w,h);
 		  app.popStyle();
 		  
 		  
@@ -76,7 +85,7 @@ public final class Text extends Component {
 	  }
 		
 	  public final void createFont(String path, int textSize) {
-			font = app.createFont(path,textSize);
+		font = app.createFont(path,textSize);
 	  }
 	
 	  public final void createFont(String path) {
@@ -112,11 +121,7 @@ public final class Text extends Component {
 	  }
 	  
 	  public void append(String text) {
-		  if(upperCaseStyle) {
-			  this.text.append(text.toUpperCase());
-		  } else {
-			  this.text.append(text);
-		  }  
+		  this.text.append(upperCaseStyle ? text.toUpperCase() : lowerCaseStyle ? text.toLowerCase() : text);
 	  }
 	  
 	  public void append(char ch) { this.text.append(ch); }
@@ -156,37 +161,64 @@ public final class Text extends Component {
 	  }
 
 	  public final void setUpperCaseStyle(boolean upperCaseStyle) {
+		if(this.upperCaseStyle) { return; }
+		
 		this.upperCaseStyle = upperCaseStyle;
+		lowerCaseStyle = false;
+		
+		set(text.toString().toUpperCase());
+		
+	  }
+	  
+	  public final boolean isLowerCaseStyle() {
+		return lowerCaseStyle;
 	  }
 
-	  public final class Shadow {
+	  public final void setLowerCaseStyle(boolean lowerCaseStyle) {
+		if(this.lowerCaseStyle) { return; }
+		
+		this.lowerCaseStyle = lowerCaseStyle;
+		upperCaseStyle = false;
+		set(text.toString().toLowerCase());
+		
+      }
+
+	  public final boolean isAutoResize() {
+		return autoResize;
+	  }
+
+	  public final void setAutoResize(boolean autoResize) {
+		this.autoResize = autoResize;
+	  }
+
+
+
+	public final class Shadow extends View {
 		  public Color fill;
 		  private float extraSize,shiftX,shiftY;
-		  private boolean isVisible;
 		  
 		  public Shadow() {
 			  fill = new Color(0);
 			  extraSize = h*.025f;
-			  isVisible = false;
+			  invisible();
 		  }
 		  
-		  public final void draw() {
-			  if(isVisible) {
-				  app.pushStyle();
-				  app.fill(fill.get());
-				  if(font != null) {
-					  app.textFont(font,textSize);
-				  }
-				  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3+extraSize : 1 ) : textSize+extraSize);
-				  if(center) {
-				  app.textAlign(CENTER,CENTER);
-				  } else {
-					  app.textAlign(CORNER,CENTER);
-				  }
-				  app.text(text.toString() != null ? text.toString() : "",x+shiftX*w*.05f,y+shiftY*h*.05f,abs(w <= 0 ? 1 : w),abs(h <= 0 ? 1 : h));
-				  app.popStyle();
+		  @Override
+		  public final void update() {
+			  app.pushStyle();
+			  app.fill(fill.get());
+			  if(font != null) {
+				  app.textFont(font,textSize);
 			  }
-		 }
+			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3+extraSize : 1 ) : textSize+extraSize);
+			  if(center) {
+			  app.textAlign(CENTER,CENTER);
+			  } else {
+				  app.textAlign(CORNER,CENTER);
+			  }
+			  app.text(text.toString() != null ? text.toString() : "",x+shiftX*w*.05f,y+shiftY*h*.05f,abs(w <= 0 ? 1 : w),abs(h <= 0 ? 1 : h));
+			  app.popStyle();
+		}
 
 		public final float getShiftX() {
 			return shiftX;
@@ -210,14 +242,5 @@ public final class Text extends Component {
 			extraSize = size;
 		}
 
-		public final boolean isVisible() {
-			return isVisible;
-		}
-
-		public final void setVisible(boolean isVisible) {
-			this.isVisible = isVisible;
-		}
-		
-		
 	  } 
 	}

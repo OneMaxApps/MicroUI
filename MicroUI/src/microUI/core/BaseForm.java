@@ -1,29 +1,26 @@
 package microUI.core;
 
-import processing.core.PApplet;
-
 public abstract class BaseForm extends View {
 	protected float x,y,w,h;
 	
-	public BaseForm(PApplet app, float x, float y, float w, float h) {
-		super(app);
+	public BaseForm(float x, float y, float w, float h) {
 		setTransforms(x,y,w,h);
 	}
 	
-	public BaseForm(PApplet app, float x, float y, float size) {
-		this(app,x,y,size,size);
+	public BaseForm(float x, float y, float size) {
+		this(x,y,size,size);
 	}
 	
-	public BaseForm(PApplet app, float w, float h) {
-		this(app,0,0,w,h);
+	public BaseForm(float w, float h) {
+		this(0,0,w,h);
 	}
 	
-	public BaseForm(PApplet app, BaseForm baseForm) {
-		this(app,baseForm.getX(),baseForm.getY(),baseForm.getW(),baseForm.getH());
+	public BaseForm(BaseForm baseForm) {
+		this(baseForm.getX(),baseForm.getY(),baseForm.getW(),baseForm.getH());
 	}
 	
-	public BaseForm(PApplet app) {
-		this(app,0,0,0,0);
+	public BaseForm() {
+		this(0,0,0,0);
 	}
 	
 	public float getX() {
@@ -32,6 +29,7 @@ public abstract class BaseForm extends View {
 
 	public void setX(float x) {
 		this.x = x;
+		inTransforms();
 	}
 
 	public float getY() {
@@ -40,23 +38,27 @@ public abstract class BaseForm extends View {
 
 	public void setY(float y) {
 		this.y = y;
+		inTransforms();
 	}
 
 	public float getW() {
 		return w;
 	}
-
+	
 	public void setW(float w) {
 		if(w <= 0) { this.w = 0; return; }
+		inTransforms();
 		this.w = w;
 	}
-
+	
 	public float getH() {
+		
 		return h;
 	}
-
+	
 	public void setH(float h) {
 		if(h <= 0) { this.h = 0; return; }
+		inTransforms();
 		this.h = h;
 	}
 
@@ -89,6 +91,10 @@ public abstract class BaseForm extends View {
 	
 	public void setTransforms(BaseForm baseForm) {
 		setTransforms(baseForm.getX(),baseForm.getY(),baseForm.getW(),baseForm.getH());
+	}
+	
+	public void inTransforms() {
+		
 	}
 	
 }

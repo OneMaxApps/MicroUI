@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import microUI.util.Clipboard;
-
 class ClipboardTest {
 	private final String TEST_WORD = "TEST";
 	private final String[] LINES = {"One","Two","Three"};

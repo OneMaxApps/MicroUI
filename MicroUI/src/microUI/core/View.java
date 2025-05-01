@@ -1,15 +1,9 @@
 package microUI.core;
 
-import processing.core.PApplet;
+import microUI.MicroUI;
 
-public abstract class View implements Visible {
-	protected final PApplet app;
+public abstract class View extends MicroUI implements Visible {
 	protected boolean visible;
-	
-	public View(PApplet app) {
-		super();
-		this.app = app;
-	}
 
 	@Override
 	public final boolean isVisible() { return visible; }
@@ -37,7 +31,4 @@ public abstract class View implements Visible {
 	
 	public abstract void update();
 	
-	public final PApplet getContext() {
-		return app;
-	}
 }

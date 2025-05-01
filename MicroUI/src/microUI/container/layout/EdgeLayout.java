@@ -3,7 +3,6 @@ package microUI.container.layout;
 import static processing.core.PApplet.min;
 
 import microUI.core.BaseForm;
-import processing.core.PApplet;
 
 public class EdgeLayout extends Layout {
 	private BaseForm form;
@@ -11,14 +10,14 @@ public class EdgeLayout extends Layout {
 	private float defaultWidthOfElement,defaultHeightOfElement;
 	
 
-	public EdgeLayout(PApplet app, float x, float y, float w, float h) {
-		super(app, x, y, w, h);
+	public EdgeLayout(float x, float y, float w, float h) {
+		super(x, y, w, h);
 		setCenter(true);
 		setElementsResizable(true);
 	}
 	
-	public EdgeLayout(PApplet app) {
-		this(app,0,0,app.width,app.height);
+	public EdgeLayout() {
+		this(0,0,app.width,app.height);
 	}
 	
 	@Override

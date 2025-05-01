@@ -34,7 +34,6 @@ import microUI.event.KeyPressable;
 import microUI.event.Scrollable;
 import microUI.util.Clipboard;
 import microUI.util.Color;
-import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
@@ -52,8 +51,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	//protected final Animation fx;
 	protected final Event event;
 
- 	public EditText(PApplet app, float x, float y, float w, float h) {
-		super(app, x, y, w, h);
+ 	public EditText(float x, float y, float w, float h) {
+		super(x, y, w, h);
 		visible();
 		fill.set(255,255,232);
 		
@@ -70,12 +69,12 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		pg = app.createGraphics((int) w, (int) h, app.sketchRenderer());
 		//fx = new Animation(app);
 		initFX();
-		event = new Event(app);
+		event = new Event();
 		
 	}
 
-	public EditText(PApplet app) {
-		this(app,app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
+	public EditText() {
+		this(app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
 	}
 
 	private final void initFX() {
@@ -106,7 +105,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 	
 	private final void initScrolls() {
-		scrollV = new Scroll(app);
+		scrollV = new Scroll();
 		scrollV.setMinMax(-1,0);
 		scrollV.setVerticalMode(true);
 		scrollV.setPosition(x+w-SCROLL_WEIGHT, y);
@@ -114,7 +113,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		scrollV.setValue(scrollV.getMax());
 		scrollV.scrolling.setVelocity(.1f);
 		
-		scrollH = new Scroll(app);
+		scrollH = new Scroll();
 		scrollH.setMinMax(-SHIFT_LEFT_SIDE, 100);
 		scrollH.setPosition(x,y+h-SCROLL_WEIGHT);
 		scrollH.setSize(w,SCROLL_WEIGHT);
@@ -671,7 +670,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			public Item(float shiftY, String text) {
 				sb = new StringBuilder(text);
 				this.shiftY = shiftY;
-				event = new Event(app);
+				event = new Event();
 				
 			}
 
@@ -1004,7 +1003,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		private boolean isSelecting,selectingWasStoped,isSelectedAllText;
 		
 		public Selection() {
-			eventIn = new Event(app);
+			eventIn = new Event();
 			startColumn = endColumn = startRow = endRow = -1;
 		}
 		

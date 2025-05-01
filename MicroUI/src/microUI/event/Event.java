@@ -1,9 +1,10 @@
 package microUI.event;
 
+import microUI.MicroUI;
 import microUI.core.BaseForm;
 import processing.core.PApplet;
 
-public class Event {
+public class Event extends MicroUI {
 
 	  public static final int PRESSED = 1, CLICKED = 2, MOVED = 3, INSIDE = 4, OUTSIDE = 5;
    	  
@@ -11,10 +12,8 @@ public class Event {
 	  private byte wasPressed,longPressed,clickCounter;
 	  private boolean moving,dragging,enable;
 	  private static final boolean[] keys = new boolean[Character.MAX_VALUE];
-	  private PApplet app;
-	  
-	  public Event(PApplet app) {
-		  this.app = app;
+
+	  public Event() {
 		  enable = true;
 	  }
 	  

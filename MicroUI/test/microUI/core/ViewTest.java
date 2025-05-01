@@ -4,14 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import microUI.core.View;
+import microUI.MicroUI;
 import processing.core.PApplet;
 
 class ViewTest {
 
 	@Test
 	void visible() {
-		View view = new View(new PApplet()) { public void update() {} };
+		MicroUI.setContext(new PApplet());
+		View view = new View() { public void update() {} };
 		
 		view.setVisible(true);
 		assertEquals(true,view.isVisible());

@@ -1,9 +1,8 @@
 package microUI.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
 
-import microUI.util.Value;
+import org.junit.jupiter.api.Test;
 
 class ValueTest {
 	

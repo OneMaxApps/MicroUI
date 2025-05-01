@@ -7,7 +7,6 @@ import static processing.core.PApplet.min;
 
 import java.util.ArrayList;
 
-import microUI.component.Button;
 import microUI.component.CircleSeekBar;
 import microUI.core.BaseForm;
 import microUI.util.Text;
@@ -21,22 +20,22 @@ public class GridLayout extends Layout {
 	  private ArrayList<Float> elementDefaultWidth,elementDefaultHeight;
 	  
 	  
-	  public GridLayout(PApplet app) {
-		  this(app,1);
+	  public GridLayout() {
+		  this(1);
 	  }
 	  
-	  public GridLayout(PApplet app, int cells) {
+	  public GridLayout(int cells) {
 		  this(app,0,0,app.width,app.height,cells,cells);
 	  }
 	  
-	  public GridLayout(PApplet app, int rows, int columns) {
+	  public GridLayout(int rows, int columns) {
 		  this(app,0,0,app.width,app.height,rows,columns);
 	  }
 	  
 	  public GridLayout(PApplet app, float x, float y, float w, float h) { this(app,x,y,w,h,3,3); }
 	  
 	  public GridLayout(PApplet app, float x, float y, float w, float h, int rows, int columns) {
-	    super(app,x,y,w,h);
+	    super(x,y,w,h);
 	    setGrid(rows,columns);
 	    setElementsResizable(true);
 	    
@@ -167,10 +166,10 @@ public class GridLayout extends Layout {
 			    }
 		    }
 		    
-	    
+	    /*
 		if(baseForm instanceof Button) {
 			((Button) baseForm).text.setTextSize(baseForm.getH()/3);
-		}
+		}*/
 	    
 		checkObject(baseForm,row,column);
 		
@@ -181,7 +180,7 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  public GridLayout add(String txt, int row, int column) {
-		  Text baseForm = new Text(app,txt,0,0,0,0);
+		  Text baseForm = new Text(txt,0,0,0,0);
 		  if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
 		    baseForm.setPosition(
 		    		map(row,0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,
@@ -250,37 +249,11 @@ public class GridLayout extends Layout {
 			fillTheGrid = f;
 	  }
 
-	  	@Override
-		public void setX(float x) {
-			super.setX(x);
-			if(transforming != null) {
-				transforming.autoUpdate();
-			}
-		}
-	
-		@Override
-		public void setY(float y) {
-			super.setY(y);
-			if(transforming != null) {
-				transforming.autoUpdate();
-			}
-		}
-	
-		@Override
-		public void setW(float w) {
-			super.setW(w);
-			if(transforming != null) {
-				transforming.autoUpdate();
-			}
-		}
-	
-		@Override
-		public void setH(float h) {
-			super.setH(h);
-			if(transforming != null) {
-				transforming.autoUpdate();
-			}
-		}
+	  @Override
+	  public void inTransforms() {
+			super.inTransforms();
+			if(transforming != null) { transforming.autoUpdate(); }	
+	  }
 
 	  
 } 

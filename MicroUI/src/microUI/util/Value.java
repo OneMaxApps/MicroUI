@@ -1,8 +1,8 @@
 package microUI.util;
 
 import static processing.core.PApplet.constrain;
-import static processing.core.PApplet.min;
 import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 
 public final class Value {
 private float min,max,value;;

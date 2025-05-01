@@ -8,7 +8,6 @@ import static processing.core.PApplet.max;
 import microUI.event.Scrollable;
 import microUI.event.Scrolling;
 import microUI.util.Rectangle;
-import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public class Slider extends Rectangle implements Scrollable {
@@ -19,17 +18,17 @@ public class Slider extends Rectangle implements Scrollable {
 	  private float min,max,value;
 	  private boolean isVerticalMode,showText;
 	  
-	  public Slider(PApplet app,float x, float y, float w, float h) {
-		    super(app,x,y,w,h);
+	  public Slider(float x, float y, float w, float h) {
+		    super(x,y,w,h);
 
 		    setMinMax(0,100);
 		    
-		    button = new Button(app,x,y,buttonsWeight(),h) {{
+		    button = new Button(x,y,buttonsWeight(),h) {{
 		     ripples.setVisible(false);
 		     fill.set(32);
 		    }};
 		    
-		    level = new Rectangle(app,x,y,button.getX()-getX(),h) {{
+		    level = new Rectangle(x,y,button.getX()-getX(),h) {{
 		     fill.set(0,128,234,234);
 		     event.setEnable(false);
 		    }};
@@ -40,13 +39,13 @@ public class Slider extends Rectangle implements Scrollable {
 		    
 	  }
 	  
-	  public Slider(PApplet app) { this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
+	  public Slider() { this(app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); }
 	  
-	  public Slider(PApplet app,float w, float h) { this(app,0,0,w,h); }
+	  public Slider(float w, float h) { this(0,0,w,h); }
 
 	  
-	  public Slider(PApplet app, float min, float max, float value) {
-		this(app, app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
+	  public Slider(float min, float max, float value) {
+		this(app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
 		this.min = min;
 		this.max = max;
 		this.value = value;

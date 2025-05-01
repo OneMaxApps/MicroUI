@@ -2,17 +2,13 @@ package microUI.util;
 
 import microUI.core.BaseImage;
 import microUI.core.Component;
-import microUI.effect.Ripples;
-import microUI.effect.Shadow;
-import microUI.event.Event;
-import processing.core.PApplet;
 
 public abstract class Rectangle extends Component {
     public final BaseImage image;
     public final Stroke stroke;
     
-    public Rectangle(PApplet app,float x, float y, float w, float h) {
-        super(app,x,y,w,h);
+    public Rectangle(float x, float y, float w, float h) {
+        super(x,y,w,h);
         visible();
         
         image = new BaseImage(app) {
@@ -31,8 +27,8 @@ public abstract class Rectangle extends Component {
       }
     
     
-    public Rectangle(PApplet app) {
-      this(app,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
+    public Rectangle() {
+      this(app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
     }
     
     @Override
@@ -54,30 +50,9 @@ public abstract class Rectangle extends Component {
     }
 
 	@Override
-	public void setX(float x) {
-		if(image != null) { image.setX(x); }
-		super.setX(x);
-	}
-
-
-	@Override
-	public void setY(float y) {
-		if(image != null) { image.setY(y); }
-		super.setY(y);
-	}
-
-
-	@Override
-	public void setW(float w) {
-		if(image != null) { image.setW(w); }
-		super.setW(w);
-	}
-
-
-	@Override
-	public void setH(float h) {
-		if(image != null) { image.setH(h); }
-		super.setH(h);
+	public void inTransforms() {
+		if(image != null) { image.setTransforms(this); }
 	}
     
+	
 }

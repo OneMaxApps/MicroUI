@@ -9,7 +9,6 @@ import microUI.container.layout.Layout;
 import microUI.core.BaseForm;
 import microUI.core.View;
 import microUI.util.Color;
-import processing.core.PApplet;
 
 public final class Shadow extends View {
 	  public final Color fill;
@@ -17,8 +16,8 @@ public final class Shadow extends View {
 	  private int leftSize,rightSize,upSize,downSize;
 	  private byte absoluteSize;
 	  
-	  public Shadow(PApplet app, BaseForm form) {
-		super(app);
+	  public Shadow(BaseForm form) {
+		super();
 	    this.form = form;
 	    fill = new Color(34);
 	    leftSize = 10;

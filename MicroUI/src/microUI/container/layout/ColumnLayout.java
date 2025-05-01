@@ -6,14 +6,13 @@ import java.util.ArrayList;
 
 import microUI.core.BaseForm;
 import microUI.util.Text;
-import processing.core.PApplet;
 
 public class ColumnLayout extends Layout {
 	private final ArrayList<Float> weightList;
 	private final Transforming transforming;
 	
-	public ColumnLayout(PApplet app, float x, float y, float w, float h) {
-		super(app, x, y, w, h);
+	public ColumnLayout(float x, float y, float w, float h) {
+		super(x, y, w, h);
 		weightList = new ArrayList<Float>();
 		transforming = new Transforming() {
 			@Override
@@ -39,8 +38,8 @@ public class ColumnLayout extends Layout {
 		isElementsResizable = true;
 	}
 	
-	public ColumnLayout(PApplet app) {
-		this(app,0,0, app.width, app.height);
+	public ColumnLayout() {
+		this(0,0, app.width, app.height);
 	}
 	
 	@Override
@@ -86,7 +85,7 @@ public class ColumnLayout extends Layout {
 	}
 	
 	public ColumnLayout add(String text, float weight) {
-		add(new Text(app,text,x,y,w,weight),weight);
+		add(new Text(text,x,y,w,weight),weight);
 		
 		return this;
 	}

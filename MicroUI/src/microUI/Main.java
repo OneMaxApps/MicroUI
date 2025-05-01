@@ -34,37 +34,36 @@ public final class Main extends PApplet {
 	
 	@Override
 	public void setup() {
-		gridLayout		 = new GridLayout(this,3);
+		MicroUI.setContext(this);
 		
-		button 	   		 = new Button(this);
-		checkBox   		 = new CheckBox(this);
-		circleSeekBar    = new CircleSeekBar(this);
-		editText         = new EditText(this);
+		gridLayout		 = new GridLayout(3);
 		
-		scroll           = new Scroll(this);
-		slider           = new Slider(this);
-		spinner          = new Spinner(this);
-		textInput        = new TextInput(this);
+		button 	   		 = new Button();
+		checkBox   		 = new CheckBox();
+		circleSeekBar    = new CircleSeekBar();
+		editText         = new EditText();
 		
-		window           = new Window(this);
+		scroll           = new Scroll();
+		slider           = new Slider();
+		spinner          = new Spinner();
+		textInput        = new TextInput();
 		
-		/*
+		window           = new Window();
+		
+		gridLayout.setFillTheGrid(false);
 		gridLayout.add(button, 0,0).add(checkBox, 1,0).add(circleSeekBar, 2,0).add(editText, 0,1)
 				  .add(scroll, 1,1).add(slider, 2,1).add(spinner, 0,2).add(textInput, 1, 2)
 				  .add(window, 2, 2);
-		*/
-		
-		
-		//Physics.constrain(width/2, height/2, button, checkBox);
 		
 	}
 		
 	@Override
 	public void draw() {
 		background(128);
-		button.draw();
+		gridLayout.draw();
 		
-		if(mouseButton == RIGHT) { button.setPosition(mouseX,mouseY); }
+		// if(mouseButton == RIGHT) { button.setPosition(mouseX,mouseY); }
+		if(mouseButton == RIGHT) { button.setSize(mouseX,mouseY); }
 	}
 
 	@Override

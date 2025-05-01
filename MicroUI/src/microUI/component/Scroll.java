@@ -9,7 +9,6 @@ import static processing.core.PApplet.min;
 import microUI.event.Scrollable;
 import microUI.event.Scrolling;
 import microUI.util.Rectangle;
-import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public class Scroll extends Rectangle implements Scrollable {
@@ -19,40 +18,40 @@ public class Scroll extends Rectangle implements Scrollable {
 	  private boolean isVerticalMode;
 	  private float distOfMouseToButton;
 	  
-	public Scroll(PApplet app, float w, float h) {
-		this(app,0,0,w,h);
+	public Scroll(float w, float h) {
+		this(0,0,w,h);
 		setMinMax(0,100);
 		setValue(0);
 	}  
 	  
-	public Scroll(PApplet app) {
-		this(app,0,100,0);
+	public Scroll() {
+		this(0,100,0);
 		setTransforms(app.width*.2f,app.height*.45f,app.width*.6f,app.height*.1f);
 	}
 
-	public Scroll(PApplet app, int min, int max, int value) {
-		this(app, 0,0,0,0);
+	public Scroll(int min, int max, int value) {
+		this(0,0,0,0);
 		setMinMax(min,max);
 		setValue(value);
 	}
 
-	public Scroll(PApplet app, float x, float y, float w, float h) {
-	    super(app,x,y,w,h);
+	public Scroll(float x, float y, float w, float h) {
+	    super(x,y,w,h);
 	    
 	    fill.set(28);
 	    
-	    button = new Button(app,x,y,buttonsWeight(),h) {{
+	    button = new Button(x,y,buttonsWeight(),h) {{
 	    	fill.set(12);
 	    	ripples.setVisible(false);
 	    }};
 	    
 	    scrolling = new Scrolling(event);
 	    
-	    buttonPlus = new Button(app,"+",x+w-buttonsWeight(),y,buttonsWeight(),h) {{
+	    buttonPlus = new Button("+",x+w-buttonsWeight(),y,buttonsWeight(),h) {{
 	    	ripples.setVisible(false);
 	    }};
 	    
-	    buttonMinus = new Button(app,"-",x,y,buttonsWeight(),h){{
+	    buttonMinus = new Button("-",x,y,buttonsWeight(),h){{
 	    	ripples.setVisible(false);
     	}};
 	    

@@ -13,7 +13,6 @@ import microUI.core.BaseForm;
 import microUI.event.Event;
 import microUI.util.Rectangle;
 import microUI.util.Text;
-import processing.core.PApplet;
 
 // TODO Add mouseWheel(MouseEvent e) method
 // TODO Make button "close" can't resize
@@ -23,19 +22,19 @@ public class Window extends Rectangle {
 	private boolean canResize,resizable;
 	private Layout layout;
 	
-	public Window(PApplet app, String title, float x, float y, float w, float h) {
-		super(app,x,y,w,h);
+	public Window(String title, float x, float y, float w, float h) {
+		super(x,y,w,h);
 		fill.set(32);
 		resizable = true;
-		bar = new Bar(app, title);
+		bar = new Bar(title);
 	}
 	
-	public Window(PApplet app, String title) {
-		this(app,title,app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
+	public Window(String title) {
+		this(title,app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
 	}
 	
-	public Window(PApplet app) {
-		this(app,"Window",app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
+	public Window() {
+		this("Window",app.width*.1f,app.height*.1f,app.width*.8f,app.height*.8f);
 	}
 
 	@Override
@@ -117,17 +116,17 @@ public class Window extends Rectangle {
 		private final Text title;
 		private boolean isVisible;
 		
-		public Bar(PApplet app, String title) {
-			layout = new RowLayout(app,x,y,w,HEIGHT);
+		public Bar(String title) {
+			layout = new RowLayout(x,y,w,HEIGHT);
 			layout.add("", .1f);
-			layout.add(this.title = new Text(app,title),.8f);
-			layout.add(buttonClose = new Button(app,"Close"),.1f);
+			layout.add(this.title = new Text(title),.8f);
+			layout.add(buttonClose = new Button("Close"),.1f);
 			this.title.setInCenter(false);
 			this.title.setTextSize(HEIGHT/2);
 			//buttonClose.shadow.invisible();
 			isVisible = true;
 			//layout.setElementsResizable(false);
-			event = new Event(app);
+			event = new Event();
 		}
 		
 		public final void draw() {

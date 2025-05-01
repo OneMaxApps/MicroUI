@@ -9,7 +9,6 @@ public abstract class BaseImage extends BaseForm {
 	protected PImage image;
 	
 	public BaseImage(PApplet app) {
-		super(app);
 		tint = new Color(255);
 	}
 	

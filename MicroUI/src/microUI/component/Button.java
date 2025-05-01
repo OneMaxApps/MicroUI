@@ -2,22 +2,21 @@ package microUI.component;
 
 import microUI.core.AbstractButton;
 import microUI.util.Text;
-import processing.core.PApplet;
 
 public class Button extends AbstractButton {
 	  public Text text;
 	  
-	  public Button(PApplet app, String text, float x, float y, float w, float h) {
-	    super(app,x,y,w,h);
+	  public Button(String text, float x, float y, float w, float h) {
+	    super(x,y,w,h);
 	    
-	    this.text = new Text(app,text.toUpperCase(),x,y,w,h);
+	    this.text = new Text(text.toUpperCase(),x,y,w,h);
 	    this.text.setUpperCaseStyle(true);
-	    
+	    this.text.setAutoResize(true);
 	  }
-	  public Button(PApplet app, float x, float y, float w, float h) { this(app,"",x,y,w,h); }
-	  public Button(PApplet app, String titie) { this(app,titie,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); } 
-	  public Button(PApplet app) {
-		  this(app,"Button");
+	  public Button(float x, float y, float w, float h) { this("",x,y,w,h); }
+	  public Button(String titie) { this(titie,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f); } 
+	  public Button() {
+		  this("BUTTON");
 	  }
 	  
 	  @Override
@@ -32,31 +31,10 @@ public class Button extends AbstractButton {
 	    	text = button.text;
 	  }
 	  
-	  
 	  @Override
-	  public void setX(float x) {
-		super.setX(x);
-		transforming();
+	  public void inTransforms() {
+		    super.inTransforms();
+			if(text != null) { text.setTransforms(this); }
 	  }
-	  @Override
-	  public void setY(float y) {
-		super.setY(y);
-		transforming();
-	  }
-	  @Override
-      public void setW(float w) {
-        super.setW(w);
-        transforming();
-      }
-      @Override
-      public void setH(float h) {
-	    super.setH(h);
-	    transforming();
-	  }
-		  
-      public final void transforming() {
-	  if(text == null) { return; }
-	  text.setTransforms(this);
-      }
-		
+      
 	}

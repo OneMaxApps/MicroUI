@@ -14,7 +14,6 @@ import microUI.event.Scrolling;
 import microUI.util.Color;
 import microUI.util.Stroke;
 import microUI.util.Value;
-import processing.core.PApplet;
 import processing.core.PImage;
 import processing.event.MouseEvent;
 
@@ -26,8 +25,8 @@ public final class CircleSeekBar extends Component implements Scrollable {
 	public final Stroke stroke;
 	private PImage texture;
 
-	public CircleSeekBar(PApplet app, float x, float y, float size) {
-		super(app,x,y,size,size);
+	public CircleSeekBar(float x, float y, float size) {
+		super(x,y,size,size);
 		fill.set(255,0);
 		stroke = new Stroke(app);
 		stroke.fill.set(255,0);
@@ -39,12 +38,12 @@ public final class CircleSeekBar extends Component implements Scrollable {
 		visible();
 	}
 	
-	public CircleSeekBar(PApplet app, String text, float x, float y, float size) {
-		this(app,x,y,size);
+	public CircleSeekBar(String text, float x, float y, float size) {
+		this(x,y,size);
 	}
 	
-	public CircleSeekBar(PApplet app) {
-		this(app,0,0,app.width*.1f+app.height*.1f);
+	public CircleSeekBar() {
+		this(0,0,app.width*.1f+app.height*.1f);
 		setPosition(app.width/2-getW()/2,app.height/2-getH()/2);
 	}
 	

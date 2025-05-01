@@ -8,7 +8,6 @@ import microUI.effect.Shadow;
 import microUI.event.KeyPressable;
 import microUI.event.Scrollable;
 import microUI.util.Color;
-import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public abstract class Layout extends BaseForm implements Scrollable, KeyPressable {
@@ -20,8 +19,8 @@ public abstract class Layout extends BaseForm implements Scrollable, KeyPressabl
 	protected final ArrayList<BaseForm> elementList;
 	
 	
-	public Layout(PApplet app, float x, float y, float w, float h) {
-		super(app,x, y, w, h);
+	public Layout(float x, float y, float w, float h) {
+		super(x, y, w, h);
 		elementList = new ArrayList<BaseForm>();
 		fill = new Color();
 		fill.set(0,0,128,32);
@@ -40,7 +39,7 @@ public abstract class Layout extends BaseForm implements Scrollable, KeyPressabl
 		};
 		image.setTransforms(this);
 		
-		shadow = new Shadow(app,this);
+		shadow = new Shadow(this);
 		shadow.invisible();
 	}
 
@@ -58,7 +57,7 @@ public abstract class Layout extends BaseForm implements Scrollable, KeyPressabl
 			}
 			
 			app.pushStyle();
-				if(shadow != null) { shadow.draw(); }
+			shadow.draw();
 			app.popStyle();
 		
 	}
@@ -84,29 +83,9 @@ public abstract class Layout extends BaseForm implements Scrollable, KeyPressabl
 		return super.getH()-margin.getDown();
 	}
 	
-	
 	@Override
-	public void setX(float x) {
-		if(image != null) { image.setX(x); }
-		super.setX(x);
-	}
-
-	@Override
-	public void setY(float y) {
-		if(image != null) { image.setY(y); }
-		super.setY(y);
-	}
-
-	@Override
-	public void setW(float w) {
-		if(image != null) { image.setW(w); }
-		super.setW(w);
-	}
-
-	@Override
-	public void setH(float h) {
-		if(image != null) { image.setH(h); }
-		super.setH(h);
+	public void inTransforms() {
+		if(image != null) { image.setTransforms(this); }
 	}
 
 	public boolean isElementsResizable() {

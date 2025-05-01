@@ -5,15 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import microUI.event.Event;
+import microUI.MicroUI;
 import processing.core.PApplet;
 
 class EventTest {
 	
 	@Test
 	void pressedTest() {
-		PApplet app = new PApplet();
-		Event event = new Event(app);
+		MicroUI.setContext(new PApplet());
+		PApplet app = MicroUI.getContext();
+		Event event = new Event();
 		
 		event.listen(0,0,100,100);
 		
@@ -28,8 +29,9 @@ class EventTest {
 	
 	@Test
 	void insideTest() {
-		PApplet app = new PApplet();
-		Event event = new Event(app);
+		MicroUI.setContext(new PApplet());
+		PApplet app = MicroUI.getContext();
+		Event event = new Event();
 		
 		event.listen(0,0,100,100);
 		
@@ -44,8 +46,9 @@ class EventTest {
 	
 	@Test
 	void ousideTest() {
-		PApplet app = new PApplet();
-		Event event = new Event(app);
+		MicroUI.setContext(new PApplet());
+		PApplet app = MicroUI.getContext();
+		Event event = new Event();
 		
 		event.listen(0,0,100,100);
 		
@@ -60,8 +63,9 @@ class EventTest {
 	
 	@Test
 	void longPressedTest() {
-		PApplet app = new PApplet();
-		Event event = new Event(app);
+		MicroUI.setContext(new PApplet());
+		PApplet app = MicroUI.getContext();
+		Event event = new Event();
 		
 		event.listen(0,0,100,100);
 		
@@ -80,8 +84,9 @@ class EventTest {
 	
 	@Test
 	void enableTest() {
-		PApplet app = new PApplet();
-		Event event = new Event(app);
+		MicroUI.setContext(new PApplet());
+		PApplet app = MicroUI.getContext();
+		Event event = new Event();
 		
 		event.setEnable(true);
 		assertTrue(event.isEnable());
@@ -89,8 +94,9 @@ class EventTest {
 	
 	@Test
 	void movedTest() {
-		PApplet app = new PApplet();
-		Event event = new Event(app);
+		MicroUI.setContext(new PApplet());
+		PApplet app = MicroUI.getContext();
+		Event event = new Event();
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
@@ -112,8 +118,9 @@ class EventTest {
 	
 	@Test
 	void clickedTest() {
-		PApplet app = new PApplet();
-		Event event = new Event(app);
+		MicroUI.setContext(new PApplet());
+		PApplet app = MicroUI.getContext();
+		Event event = new Event();
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
@@ -127,9 +134,9 @@ class EventTest {
 	
 	@Test
 	void multiClickedTest() {
-		
-		PApplet app = new PApplet();
-		Event event = new Event(app);
+		MicroUI.setContext(new PApplet());
+		PApplet app = MicroUI.getContext();
+		Event event = new Event();
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
@@ -189,6 +196,7 @@ class EventTest {
 	
 	@Test
 	void keyPressedTest() {
+		MicroUI.setContext(new PApplet());
 		PApplet app = new PApplet();
 		final char symbolA = 'A',symbolB = 'B';
 		app.key = symbolA;

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import microUI.core.BaseForm;
 import microUI.util.Text;
-import processing.core.PApplet;
 
 public class LinearLayout extends Layout {
 	public final static int MODE_ROW = 0,MODE_COLUMN = 1;
@@ -14,8 +13,8 @@ public class LinearLayout extends Layout {
 	private ArrayList<Float> weightList;
 	public final Transforming transforming;
 	
-	public LinearLayout(PApplet app, float x, float y, float w, float h) {
-		super(app, x, y, w, h);
+	public LinearLayout(float x, float y, float w, float h) {
+		super(x, y, w, h);
 		weightList = new ArrayList<Float>();
 		transforming = new Transforming() {
 		@Override
@@ -67,8 +66,8 @@ public class LinearLayout extends Layout {
 		isElementsResizable = true;
 	}
 	
-	public LinearLayout(PApplet app) {
-		this(app,0,0,app.width,app.height);
+	public LinearLayout() {
+		this(0,0,app.width,app.height);
 	}
 
 	@Override
@@ -145,7 +144,7 @@ public class LinearLayout extends Layout {
 	}
 	
 	public LinearLayout add(String text, float weight) {
-		add(new Text(app,text,x,y,w,weight),weight);
+		add(new Text(text,x,y,w,weight),weight);
 		return this;
 	}
 	

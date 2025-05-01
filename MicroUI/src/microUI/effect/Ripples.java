@@ -18,9 +18,9 @@ public final class Ripples extends View {
 	private int currentWidth,currentHeight;
 	
 	public Ripples(BaseForm form) {
-		super(form.getContext());
+		super();
 		circle = new Circle();
-		event = new Event(app);
+		event = new Event();
 		visible = true;
 		this.form = form;
 		pg = app.createGraphics(currentWidth = (int) form.getW(),currentHeight = (int) form.getH(),app.sketchRenderer());

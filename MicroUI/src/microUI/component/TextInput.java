@@ -14,7 +14,6 @@ import microUI.event.Event;
 import microUI.event.KeyPressable;
 import microUI.util.Clipboard;
 import microUI.util.Color;
-import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
@@ -32,26 +31,26 @@ public final class TextInput extends BaseForm implements KeyPressable {
 	private boolean focused;
 	private int enterType = 2;
 	
-	public TextInput(PApplet app, float x, float y, float w, float h) {
-		super(app, x, y, w, h);
+	public TextInput(float x, float y, float w, float h) {
+		super(x, y, w, h);
 		setVisible(true);
 		fill = new Color(255);
 		text = new Text();
 		cursor = new Cursor();
 		select = new Select();
 		ripples = new Ripples(this);
-		event = new Event(app);
+		event = new Event();
 		hint = "";
 		font = app.createFont("Consolas",h);
 	}
 	
-	public TextInput(PApplet app, String hint) {
-		this(app,app.width*.1f,app.height*.45f,app.width*.8f,app.height*.1f);
+	public TextInput(String hint) {
+		this(app.width*.1f,app.height*.45f,app.width*.8f,app.height*.1f);
 		this.hint = hint;
 	}
 	
-	public TextInput(PApplet app) {
-		this(app,app.width*.1f,app.height*.45f,app.width*.8f,app.height*.1f);
+	public TextInput() {
+		this(app.width*.1f,app.height*.45f,app.width*.8f,app.height*.1f);
 	}
 	
 	
@@ -287,17 +286,21 @@ public final class TextInput extends BaseForm implements KeyPressable {
 
 	public final class Text {
 		
-		public StringBuilder sb;
-		public Color fill;
+		public final StringBuilder sb;
+		public final Color fill;
 		private float size,targetSize,shift;
 		private PGraphics pg;
 		
-		public Text() {
+		public Text(final String txt) {
 			super();
-			sb = new StringBuilder();
+			sb = new StringBuilder(txt);
 			fill = new Color(0);
 			size = targetSize = h/2;
 			pg = app.createGraphics((int) w, (int) h);
+		}
+		
+		public Text() {
+			this("");
 		}
 		
 		public void draw() {
@@ -470,7 +473,7 @@ public final class TextInput extends BaseForm implements KeyPressable {
 		
 		public Select() {
 			fill = new Color(0,0,255,32);
-			event = new Event(app);
+			event = new Event();
 			pg = app.createGraphics((int) w, (int) h);
 		}
 		
