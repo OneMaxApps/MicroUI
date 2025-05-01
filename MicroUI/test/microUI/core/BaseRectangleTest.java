@@ -7,20 +7,20 @@ import org.junit.jupiter.api.Test;
 import microUI.MicroUI;
 import processing.core.PApplet;
 
-class BaseFormTest {
+class BaseRectangleTest {
 	
 	@Test
 	void setW() {
 		MicroUI.setContext(new PApplet());
-		BaseForm baseForm = new BaseForm() { public void update() {} };
-		baseForm.setW(-100);
-		assertEquals(0,baseForm.getW());
+		AbstractRectangle baseRectangle = new AbstractRectangle() { public void update() {} };
+		baseRectangle.setW(-100);
+		assertEquals(0,baseRectangle.getW());
 	}
 	
 	@Test
 	void setH() {
 		MicroUI.setContext(new PApplet());
-		BaseForm baseForm = new BaseForm() { public void update() {} };
+		AbstractRectangle baseForm = new AbstractRectangle() { public void update() {} };
 		baseForm.setH(-100);
 		assertEquals(0,baseForm.getH());
 	}

@@ -1,7 +1,7 @@
 package microUI.event;
 
 import microUI.MicroUI;
-import microUI.core.BaseForm;
+import microUI.core.AbstractRectangle;
 import processing.core.PApplet;
 
 public class Event extends MicroUI {
@@ -17,7 +17,7 @@ public class Event extends MicroUI {
 		  enable = true;
 	  }
 	  
-	  public void listen(BaseForm form) {
+	  public void listen(AbstractRectangle form) {
 		if(!enable) { return; }
 		
 	    x = form.getX();

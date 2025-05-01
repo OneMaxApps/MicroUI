@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import microUI.MicroUI;
-import microUI.core.BaseForm;
+import microUI.core.AbstractRectangle;
 import processing.core.PApplet;
 
 class PhysicsTest {
@@ -16,7 +16,7 @@ class PhysicsTest {
 		MicroUI.setContext(new PApplet());
 		PApplet app = MicroUI.getContext();
 		
-		BaseForm b,b1;
+		AbstractRectangle b,b1;
 		b = new ComponentTest(app,0,0,100,100);
 		b1 = new ComponentTest(app,50,50,100,100);
 		
@@ -28,7 +28,7 @@ class PhysicsTest {
 		MicroUI.setContext(new PApplet());
 		PApplet app = MicroUI.getContext();
 		
-		BaseForm b,b1;
+		AbstractRectangle b,b1;
 		b = new ComponentTest(app,0,0,100,100);
 		b1 = new ComponentTest(app,50,50,100,100);
 		
@@ -37,7 +37,7 @@ class PhysicsTest {
 		assertFalse(Physics.collision(b, b1));
 	}
 	
-	private final class ComponentTest extends BaseForm {
+	private final class ComponentTest extends AbstractRectangle {
 
 		public ComponentTest(PApplet app, float x, float y, float w, float h) {
 			super(x, y, w, h);

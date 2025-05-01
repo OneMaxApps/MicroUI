@@ -6,12 +6,12 @@ import static processing.core.PApplet.map;
 import static processing.core.PApplet.max;
 import static processing.core.PApplet.min;
 
+import microUI.core.Component;
 import microUI.event.Scrollable;
 import microUI.event.Scrolling;
-import microUI.util.Rectangle;
 import processing.event.MouseEvent;
 
-public class Scroll extends Rectangle implements Scrollable {
+public class Scroll extends Component implements Scrollable {
 	  public Button button,buttonPlus,buttonMinus;
 	  public Scrolling scrolling;
 	  private float min,max,value;
@@ -60,7 +60,7 @@ public class Scroll extends Rectangle implements Scrollable {
 	  
 	  @Override
 	  public void update() {
-		    super.update();
+		    // super.update();
 		    buttonPlus.draw(); if(buttonPlus.event.pressed()) { appendValue(1); }
 		    buttonMinus.draw(); if(buttonMinus.event.pressed()) { appendValue(-1); }
 		    button.draw();

@@ -5,12 +5,13 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.max;
 
+import microUI.core.Component;
 import microUI.event.Scrollable;
 import microUI.event.Scrolling;
-import microUI.util.Rectangle;
 import processing.event.MouseEvent;
 
-public class Slider extends Rectangle implements Scrollable {
+/*
+public class Slider extends Component implements Scrollable {
 	  public Button button;
 	  public Rectangle level;
 	  public Scrolling scrolling;
@@ -27,6 +28,7 @@ public class Slider extends Rectangle implements Scrollable {
 		     ripples.setVisible(false);
 		     fill.set(32);
 		    }};
+		    
 		    
 		    level = new Rectangle(x,y,button.getX()-getX(),h) {{
 		     fill.set(0,128,234,234);
@@ -55,8 +57,8 @@ public class Slider extends Rectangle implements Scrollable {
 	  
 	  @Override
 	  public void update() {
-		    super.update();
-		    level.draw();
+		    // super.update();
+		    // level.draw();
 		    button.draw();
 		    
 		    if(button.event.moved()) {
@@ -218,4 +220,4 @@ public class Slider extends Rectangle implements Scrollable {
 	  public final void mouseWheel(MouseEvent e) {
 		  scrolling.init(e);
 	  }
-	}
+	}*/

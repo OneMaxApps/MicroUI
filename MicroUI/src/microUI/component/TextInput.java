@@ -8,7 +8,7 @@ import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 
-import microUI.core.BaseForm;
+import microUI.core.Component;
 import microUI.effect.Ripples;
 import microUI.event.Event;
 import microUI.event.KeyPressable;
@@ -18,15 +18,13 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 
 // TODO Add correct checking input text like in EditText
-public final class TextInput extends BaseForm implements KeyPressable {
+public final class TextInput extends Component implements KeyPressable {
 	public final static int DIGITS = 0, LETTERS = 1, ANY_SYMBOLS = 2;
 	public PFont font;
-	public Color fill;
 	public Text text;
 	public Cursor cursor;
 	public Select select;
 	public Ripples ripples;
-	public Event event;
 	private String hint;
 	private boolean focused;
 	private int enterType = 2;
@@ -34,12 +32,11 @@ public final class TextInput extends BaseForm implements KeyPressable {
 	public TextInput(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setVisible(true);
-		fill = new Color(255);
+		fill.set(255);
 		text = new Text();
 		cursor = new Cursor();
 		select = new Select();
 		ripples = new Ripples(this);
-		event = new Event();
 		hint = "";
 		font = app.createFont("Consolas",h);
 	}

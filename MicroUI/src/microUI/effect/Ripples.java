@@ -4,7 +4,7 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.max;
 import static processing.core.PApplet.min;
 
-import microUI.core.BaseForm;
+import microUI.core.AbstractRectangle;
 import microUI.core.View;
 import microUI.event.Event;
 import microUI.util.Color;
@@ -12,12 +12,12 @@ import processing.core.PGraphics;
 
 public final class Ripples extends View {
 	public final Circle circle;
-	private Event event;
-	private final BaseForm form;
+	private final Event event;
+	private final AbstractRectangle form;
 	private PGraphics pg;
 	private int currentWidth,currentHeight;
 	
-	public Ripples(BaseForm form) {
+	public Ripples(AbstractRectangle form) {
 		super();
 		circle = new Circle();
 		event = new Event();

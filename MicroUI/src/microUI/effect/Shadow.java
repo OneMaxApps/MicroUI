@@ -6,17 +6,17 @@ import static processing.core.PConstants.CORNERS;
 import static processing.core.PConstants.SQUARE;
 
 import microUI.container.layout.Layout;
-import microUI.core.BaseForm;
+import microUI.core.AbstractRectangle;
 import microUI.core.View;
 import microUI.util.Color;
 
 public final class Shadow extends View {
 	  public final Color fill;
-	  private final BaseForm form;
+	  private final AbstractRectangle form;
 	  private int leftSize,rightSize,upSize,downSize;
 	  private byte absoluteSize;
 	  
-	  public Shadow(BaseForm form) {
+	  public Shadow(AbstractRectangle form) {
 		super();
 	    this.form = form;
 	    fill = new Color(34);
@@ -45,7 +45,7 @@ public final class Shadow extends View {
 	    		  form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),
 	    		  form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize));
     		  } else {
-		    	  if(form instanceof BaseForm) {
+		    	  if(form instanceof AbstractRectangle) {
 		    		 app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
 		             form.getY()-map(i,0f,absoluteSize,0f,upSize),
 		             form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),

@@ -8,7 +8,7 @@ import microUI.core.View;
 
 public final class ContainerManager extends View {
 	private final List<Focusable> containerList;
-	private View container;
+	private Focusable container;
 	
 	public ContainerManager() {
 		containerList = new ArrayList<Focusable>();
@@ -19,29 +19,35 @@ public final class ContainerManager extends View {
 	@Override
 	public void update() {
 		if(container == null) { return; }
+		if(containerList.isEmpty()) { return; }
 		
-		for(Focusable element : containerList) {
-			if(container == element) {
-				((View) element).draw();
+		containerList.forEach(container -> {
+			if(this.container == container) {
+				((View) container).draw();
 			}
+		});
+		
+	}
+	
+	public final void add(final Focusable... containers) {
+		for(Focusable container : containers) {
+			add(container);
 		}
 	}
 	
-	public final void add(View... baseForm) {
-		for(int i = 0; i < baseForm.length; i++) {
-			add(baseForm[i]);
-		}
+	public final void add(final Focusable container) {
+		containerList.add((Focusable) container);
 	}
 	
-	public final void add(View container) {
-		if(container instanceof Focusable) {
-			containerList.add((Focusable) container);
-		}
+	public final void remove(final Focusable container) {
+		if(containerList == null) { return; }
+		containerList.remove(container);
+		if(this.container == container) { this.container = null; }
 	}
 	
-	public final void remove(View container) {
-		if(container instanceof Focusable) {
-			containerList.remove((Focusable) container);
+	public final void remove(final Focusable... containers) {
+		for(Focusable container : containers) {
+			remove(container);
 		}
 	}
 	
@@ -50,7 +56,7 @@ public final class ContainerManager extends View {
 	}
 	
 	public final void setFocusOn(Focusable focusable) {
-		container = (View) focusable;
+		container = focusable;
 	}
 	
 }

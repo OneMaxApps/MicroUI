@@ -7,8 +7,7 @@ import static processing.core.PApplet.min;
 
 import java.util.ArrayList;
 
-import microUI.component.CircleSeekBar;
-import microUI.core.BaseForm;
+import microUI.core.AbstractRectangle;
 import microUI.util.Text;
 import processing.core.PApplet;
 
@@ -48,41 +47,42 @@ public class GridLayout extends Layout {
 	    	public void updateForce() {
 				  
 				  for(int i = 0; i < elementList.size(); i++) {
-				  BaseForm baseForm = elementList.get(i);
+				  AbstractRectangle baseRectangle = elementList.get(i);
 				  
 				  if(elementRowList.get(i) < 0 || elementRowList.get(i) > getRows()-1 || elementColumnList.get(i) < 0 || elementColumnList.get(i) > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
 				    
-				  if(baseForm instanceof Layout) {
-				    	Layout l = ((Layout) baseForm);
+				  if(baseRectangle instanceof Layout) {
+				    	Layout l = ((Layout) baseRectangle);
 					  	l.setPosition(
 					    		map(elementRowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-l.getW()/2-l.margin.getLeft(),
 					    		map(elementColumnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-l.getH()/2-l.margin.getUp()
 					    );
 				    } else {
-				    	baseForm.setPosition(
-					    		map(elementRowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,
-					    		map(elementColumnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseForm.getH()/2
+				    	baseRectangle.setPosition(
+					    		map(elementRowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseRectangle.getW()/2,
+					    		map(elementColumnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseRectangle.getH()/2
 					    );
 				    }
-				    if(baseForm instanceof CircleSeekBar) {
+				    /*
+				    if(baseRectangle instanceof CircleSeekBar) {
 					    if(isElementsResizable()) {
 					      if(isFillTheGrid()) {
-					    	baseForm.setSize(getW()/getRows(),getH()/getColumns());
+					    	baseRectangle.setSize(getW()/getRows(),getH()/getColumns());
 					      } else {
-					    	  baseForm.setSize(min(getW()/getRows(),elementDefaultWidth.get(i)),min(getH()/getColumns(),elementDefaultHeight.get(i)));
+					    	  baseRectangle.setSize(min(getW()/getRows(),elementDefaultWidth.get(i)),min(getH()/getColumns(),elementDefaultHeight.get(i)));
 					      }
 					    }
 				    } else {
-				    	
+				    	*/
 					    if(isElementsResizable()) {
 					      if(isFillTheGrid()) {
-					        baseForm.setSize(getW()/getRows(),getH()/getColumns());
+					        baseRectangle.setSize(getW()/getRows(),getH()/getColumns());
 					      } else {
-					    	baseForm.setSize(min(elementDefaultWidth.get(i),getW()/getRows()), min(elementDefaultHeight.get(i),getH()/getColumns()));
+					    	baseRectangle.setSize(min(elementDefaultWidth.get(i),getW()/getRows()), min(elementDefaultHeight.get(i),getH()/getColumns()));
 					    }
 					  }
 					    
-				    }
+				   // }
 				
 				  }
 			  }
@@ -139,39 +139,39 @@ public class GridLayout extends Layout {
 	    setColumns(constrain(columns,1,columns));
 	  }
 	  
-	  public GridLayout add(BaseForm baseForm, int row, int column) {
+	  public GridLayout add(AbstractRectangle baseRectangle, int row, int column) {
 		  if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
 		    
-		  baseForm.setPosition(
-		    		map(row,0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,
-		    		map(column,0,this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseForm.getH()/2
+		  baseRectangle.setPosition(
+		    		map(row,0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseRectangle.getW()/2,
+		    		map(column,0,this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseRectangle.getH()/2
 		  );
 		    
-		    
-		  if(baseForm instanceof CircleSeekBar) {
+		  /*
+		  if(baseRectangle instanceof CircleSeekBar) {
 			    if(isElementsResizable()) {
 			      if(isFillTheGrid()) {
-			    	baseForm.setSize(getW()/getRows(),getH()/getColumns());
+			    	baseRectangle.setSize(getW()/getRows(),getH()/getColumns());
 			      }
 			    }
 		    } else {
-		 
+		 */
 			    if(isElementsResizable()) {
 			      if(isFillTheGrid()) {
-			        baseForm.setSize(getW()/getRows(),getH()/getColumns());
+			        baseRectangle.setSize(getW()/getRows(),getH()/getColumns());
 			      } else {
-			        if(baseForm.getW() > getW()/getRows() || baseForm.getW() < getW()/getRows()/2) { baseForm.setW(getW()/getRows()); }
-			        if(baseForm.getH() > getH()/getColumns() || baseForm.getH() < getH()/getColumns()/2) { baseForm.setH(getH()/getColumns()); }
+			        if(baseRectangle.getW() > getW()/getRows() || baseRectangle.getW() < getW()/getRows()/2) { baseRectangle.setW(getW()/getRows()); }
+			        if(baseRectangle.getH() > getH()/getColumns() || baseRectangle.getH() < getH()/getColumns()/2) { baseRectangle.setH(getH()/getColumns()); }
 			      }
 			    }
-		    }
+		    //}
 		    
 	    /*
 		if(baseForm instanceof Button) {
 			((Button) baseForm).text.setTextSize(baseForm.getH()/3);
 		}*/
 	    
-		checkObject(baseForm,row,column);
+		checkObject(baseRectangle,row,column);
 		
 		transforming.updateForce();
 		
@@ -203,21 +203,21 @@ public class GridLayout extends Layout {
 		return this; 
 	  }
 	  
-	  private void checkObject(BaseForm baseForm, int row, int column) {
+	  private void checkObject(AbstractRectangle baseRectangle, int row, int column) {
 		    for(int i = 0; i < elementList.size(); i++) {
-		    	if(elementList.get(i) == baseForm) {
+		    	if(elementList.get(i) == baseRectangle) {
 		    		return;
 		    	}
 		    }
-		    	elementList.add(baseForm);
+		    	elementList.add(baseRectangle);
 		    	elementRowList.add(row);
 				elementColumnList.add(column);
-				elementDefaultWidth.add(baseForm.getW());
-				elementDefaultHeight.add(baseForm.getH());
+				elementDefaultWidth.add(baseRectangle.getW());
+				elementDefaultHeight.add(baseRectangle.getH());
 	  }
 
 	  
-	  public void remove(BaseForm baseForm) {
+	  public void remove(AbstractRectangle baseForm) {
 		  if(elementList.isEmpty()) { return; }
 		  for(int i = 0; i < elementList.size(); i++) {
 		    	if(elementList.get(i) == baseForm) {
@@ -239,7 +239,7 @@ public class GridLayout extends Layout {
 		  elementDefaultHeight.remove(index);
 	  }
 	  
-	  public ArrayList<BaseForm> getElementList() { return elementList; }
+	  public ArrayList<AbstractRectangle> getElementList() { return elementList; }
 	  
 	  public boolean isFillTheGrid() {
 			return fillTheGrid;

@@ -4,7 +4,7 @@ import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 
-import microUI.core.BaseForm;
+import microUI.core.AbstractRectangle;
 import microUI.util.Text;
 
 
@@ -20,18 +20,18 @@ public class RowLayout extends Layout {
 			@Override
 			public void updateForce() {
 			  	for(int i = 0; i < elementList.size(); i++) {
-			  		BaseForm form = elementList.get(i);
+			  		AbstractRectangle baseRectangle = elementList.get(i);
 			  		if(isElementsResizable()) {
 						if(i == 0) {
-						form.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
+						baseRectangle.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
 						} else {
-							form.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
+							baseRectangle.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
 						}
 			  		} else {
 			  			if(i == 0) {
-							form.setPosition(getX(),getY());
+							baseRectangle.setPosition(getX(),getY());
 						} else {
-							form.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
+							baseRectangle.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
 						}
 			  		}
 			  	}
@@ -63,8 +63,8 @@ public class RowLayout extends Layout {
 		if(app.frameCount == 1 || app.frameCount%60*60 == 0) { transforming.updateForce(); }
 	}
 	
-	public RowLayout add(BaseForm form, float weight) {
-		elementList.add(form);
+	public RowLayout add(AbstractRectangle baseRectanle, float weight) {
+		elementList.add(baseRectanle);
 		
 		if(weightList.isEmpty()) {
 			weightList.add(constrain(weight,0,1f));

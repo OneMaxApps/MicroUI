@@ -2,21 +2,17 @@ package microUI.component;
 
 import microUI.core.AbstractButton;
 import microUI.event.Event;
-import microUI.util.Color;
 
 public class CheckBox extends AbstractButton {
-	public final Color colorIncluded,colorNotIncluded;
 	private final Event eventInside;
 	private boolean included;
 	
 	
 	public CheckBox(float x, float y, float w, float h) {
 		super(x,y,w,h);
-		colorIncluded = new Color();
-		colorNotIncluded = new Color();
-		colorIncluded.set(0,128,0);
-		colorNotIncluded.set(0,34,34);
+		fill.set(0,200,0);
 		eventInside = new Event();
+		
 	}
 	
 	public CheckBox(boolean include) {
@@ -30,10 +26,16 @@ public class CheckBox extends AbstractButton {
 	
 	@Override
 	public void update() {
-		super.update();	
+		super.update();
 		eventInside.listen(this);
 		if(eventInside.clicked()) { included = !included; }
-		if(included) { fill.set(colorIncluded); } else { fill.set(colorNotIncluded); }
+		
+		if(!included) {
+			app.pushStyle();
+			app.fill(0,100);
+			app.rect(x, y, w, h);
+			app.popStyle();
+		}
 	}
 	
 	public boolean isIncluded() {

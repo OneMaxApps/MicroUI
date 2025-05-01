@@ -4,7 +4,7 @@ import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 
-import microUI.core.BaseForm;
+import microUI.core.AbstractRectangle;
 import microUI.util.Text;
 
 public class LinearLayout extends Layout {
@@ -20,22 +20,22 @@ public class LinearLayout extends Layout {
 		@Override
 			public final void updateForce() {
 		  	for(int i = 0; i < elementList.size(); i++) {
-		  		BaseForm form = elementList.get(i);
+		  		AbstractRectangle baseRectangle = elementList.get(i);
 
 		  		switch(mode) {
 		  		
 			  		case MODE_ROW :
 				  		if(isElementsResizable()) {
 							if(i == 0) {
-							form.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
+							baseRectangle.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
 							} else {
-								form.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
+								baseRectangle.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
 							}
 				  		} else {
 				  			if(i == 0) {
-								form.setPosition(getX(),getY());
+								baseRectangle.setPosition(getX(),getY());
 							} else {
-								form.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
+								baseRectangle.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
 							}
 				  		}
 			  		break;
@@ -44,15 +44,15 @@ public class LinearLayout extends Layout {
 			  		case MODE_COLUMN:
 				  		if(isElementsResizable()) {
 							if(i == 0) {
-								form.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
+								baseRectangle.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
 							} else {
-								form.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
+								baseRectangle.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
 							}
 				  		} else {
 				  			if(i == 0) {
-				  				form.setPosition(getX(), getY());
+				  				baseRectangle.setPosition(getX(), getY());
 								} else {
-									form.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getH());
+									baseRectangle.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getH());
 								}
 				  		}
 			  		break;
@@ -123,8 +123,8 @@ public class LinearLayout extends Layout {
 
 	}
 	
-	public LinearLayout add(BaseForm form, float weight) {
-		elementList.add(form);
+	public LinearLayout add(AbstractRectangle baseRectangle, float weight) {
+		elementList.add(baseRectangle);
 		
 		if(weightList.isEmpty()) {
 			weightList.add(constrain(weight,0,1f));

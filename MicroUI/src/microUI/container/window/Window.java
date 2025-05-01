@@ -9,16 +9,15 @@ import microUI.component.TextInput;
 import microUI.container.layout.GridLayout;
 import microUI.container.layout.Layout;
 import microUI.container.layout.RowLayout;
-import microUI.core.BaseForm;
+import microUI.core.AbstractRectangle;
 import microUI.core.Focusable;
 import microUI.event.Event;
-import microUI.util.Rectangle;
 import microUI.util.Text;
 
 // TODO Add mouseWheel(MouseEvent e) method
 // TODO Make button "close" can't resize
-
-public class Window extends Rectangle implements Focusable{
+/*
+public class Window extends AbstractRectangle implements Focusable{
 	public Bar bar;
 	private boolean canResize,resizable;
 	private Layout layout;
@@ -78,10 +77,10 @@ public class Window extends Rectangle implements Focusable{
 	
 	public final Layout getLayout() { return layout; }
 	
-	public final void setForm(BaseForm form) {
+	public final void setForm(BaseRectangle baseRectangle) {
 		layout = new GridLayout(app,x,y+bar.HEIGHT,w,h-bar.HEIGHT,1,1);
 		((GridLayout) (layout)).setFillTheGrid(true);
-		((GridLayout) (layout)).add(form, 0, 0);
+		((GridLayout) (layout)).add(baseRectangle, 0, 0);
 		((GridLayout) (layout)).margin.set(min(h,w)*.01f);
 	}
 	
@@ -229,3 +228,4 @@ public class Window extends Rectangle implements Focusable{
 		}
 	}
 }
+*/
