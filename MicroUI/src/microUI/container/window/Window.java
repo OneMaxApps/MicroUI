@@ -10,6 +10,7 @@ import microUI.container.layout.GridLayout;
 import microUI.container.layout.Layout;
 import microUI.container.layout.RowLayout;
 import microUI.core.BaseForm;
+import microUI.core.Focusable;
 import microUI.event.Event;
 import microUI.util.Rectangle;
 import microUI.util.Text;
@@ -17,7 +18,7 @@ import microUI.util.Text;
 // TODO Add mouseWheel(MouseEvent e) method
 // TODO Make button "close" can't resize
 
-public class Window extends Rectangle {
+public class Window extends Rectangle implements Focusable{
 	public Bar bar;
 	private boolean canResize,resizable;
 	private Layout layout;

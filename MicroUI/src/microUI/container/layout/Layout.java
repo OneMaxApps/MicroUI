@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 import microUI.core.BaseForm;
 import microUI.core.BaseImage;
+import microUI.core.Focusable;
 import microUI.effect.Shadow;
 import microUI.event.KeyPressable;
 import microUI.event.Scrollable;
 import microUI.util.Color;
 import processing.event.MouseEvent;
 
-public abstract class Layout extends BaseForm implements Scrollable, KeyPressable {
+public abstract class Layout extends BaseForm implements Scrollable, KeyPressable, Focusable  {
 	public final Color fill;
 	public final Margin margin;
 	public final BaseImage image;
