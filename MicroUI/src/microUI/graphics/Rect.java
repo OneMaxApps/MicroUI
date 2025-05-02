@@ -8,7 +8,6 @@ import microUI.util.Stroke;
 public class Rect extends Bounds {
     public final Stroke stroke;
     public final Color fill;
-    public final Event event;
     
     public Rect(float x, float y, float w, float h) {
         super(x,y,w,h);
@@ -16,7 +15,6 @@ public class Rect extends Bounds {
   
         stroke = new Stroke();
         fill = new Color(44);
-        event = new Event();
       }
     
     
@@ -26,8 +24,6 @@ public class Rect extends Bounds {
     
     @Override
     public void update() {
-      event.listen(this);
-      
       app.pushStyle();
       stroke.get();
 	  fill.use();

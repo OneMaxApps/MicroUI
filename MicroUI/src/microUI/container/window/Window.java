@@ -1,19 +1,5 @@
 package microUI.container.window;
 
-import static processing.core.PApplet.dist;
-import static processing.core.PApplet.max;
-import static processing.core.PApplet.min;
-
-import microUI.component.Button;
-import microUI.component.TextInput;
-import microUI.container.layout.GridLayout;
-import microUI.container.layout.Layout;
-import microUI.container.layout.RowLayout;
-import microUI.core.Bounds;
-import microUI.core.Focusable;
-import microUI.event.Event;
-import microUI.util.Text;
-
 // TODO Add mouseWheel(MouseEvent e) method
 // TODO Make button "close" can't resize
 /*

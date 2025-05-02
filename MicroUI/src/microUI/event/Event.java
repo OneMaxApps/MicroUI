@@ -11,7 +11,7 @@ public class Event extends MicroUI {
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;
 	  private boolean holding,dragging,enable;
-	  private static final boolean[] keys = new boolean[Character.MAX_VALUE];
+	  private static final boolean[] keys = new boolean[Character.MAX_VALUE+1];
 
 	  public Event() {
 		  enable = true;

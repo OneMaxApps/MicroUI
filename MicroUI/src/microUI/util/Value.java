@@ -66,6 +66,10 @@ public void append(float append) {
 	action();
 }
 
+public void setWithoutActions(final float value) {
+	this.value = value;
+}
+
 public void action() {}
 
 }

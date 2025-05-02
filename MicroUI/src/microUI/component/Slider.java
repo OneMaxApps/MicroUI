@@ -13,7 +13,6 @@ public final class Slider extends RangeControl {
 	public Slider(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		level = new Rect(x,y,w,h);
-		level.event.setEnable(false);
 		level.fill.set(234);
 		level.allowNegativeDimensions(true);
 		
@@ -35,12 +34,12 @@ public final class Slider extends RangeControl {
 		if(event.holding()) {
 			switch(orientation) {
 			case Constants.HORIZONTAL: value.set(map(app.mouseX,getX(),getX()+getW(),value.getMin(),value.getMax())); break;
-			case Constants.VERTICAL: value.set(map(app.mouseY,getY()+getH(),getY(),value.getMin(),value.getMax())); break;
+			case Constants.VERTICAL: value.set(map(app.mouseY,getY(),getY()+getH(),value.getMin(),value.getMax())); break;
 			}
 			inTransforms();
 		}
 		
-		if(scrolling.isScrolling()) { value.append(scrolling.get()); }
+		
 		
 	}
 

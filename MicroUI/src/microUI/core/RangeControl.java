@@ -37,6 +37,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		app.rect(x, y, w, h);
 		app.popStyle();
 		
+		if(scrolling.isScrolling()) { value.append(scrolling.get()); }
 	}
 	
 	@Override
@@ -55,6 +56,10 @@ public abstract class RangeControl extends Component implements Scrollable {
 		setW(h);
 		setH(w);
 		inTransforms();
+	}
+	
+	public final void autoScroll() {
+		value.append(scrolling.get());
 	}
 	
 }
