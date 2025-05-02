@@ -3,7 +3,7 @@ package microUI.event;
 import processing.event.MouseEvent;
  
 public final class Scrolling {
-	private Event event;
+	private final Event event;
     private float speed,velocity;
     private boolean isScrolling,reverse;
     
@@ -12,7 +12,7 @@ public final class Scrolling {
     	velocity = .01f;
     }
     
-    public void init(MouseEvent e, boolean action) {
+    public final void init(final MouseEvent e, final boolean action) {
       if(!action) { return; }
       	if(reverse) {
 	        if(e.getCount() < 0) {
@@ -43,7 +43,7 @@ public final class Scrolling {
       
       isScrolling = (speed < -.01f || speed > .01f);
       
-      if(event.moved()) { speed = 0; }
+      if(event.holding()) { speed = 0; }
       
       if(isScrolling) { return speed; }
       return 0f;

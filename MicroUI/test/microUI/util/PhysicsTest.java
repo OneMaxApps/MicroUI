@@ -5,18 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import init.TestInit;
 import microUI.MicroUI;
-import microUI.core.AbstractRectangle;
+import microUI.core.Bounds;
 import processing.core.PApplet;
 
-class PhysicsTest {
+class PhysicsTest extends TestInit {
+	private PApplet app = MicroUI.getContext();
+	
 	
 	@Test
 	void collisionTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = MicroUI.getContext();
-		
-		AbstractRectangle b,b1;
+		Bounds b,b1;
 		b = new ComponentTest(app,0,0,100,100);
 		b1 = new ComponentTest(app,50,50,100,100);
 		
@@ -25,10 +25,7 @@ class PhysicsTest {
 	
 	@Test
 	void constrainTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = MicroUI.getContext();
-		
-		AbstractRectangle b,b1;
+		Bounds b,b1;
 		b = new ComponentTest(app,0,0,100,100);
 		b1 = new ComponentTest(app,50,50,100,100);
 		
@@ -37,7 +34,7 @@ class PhysicsTest {
 		assertFalse(Physics.collision(b, b1));
 	}
 	
-	private final class ComponentTest extends AbstractRectangle {
+	private final class ComponentTest extends Bounds {
 
 		public ComponentTest(PApplet app, float x, float y, float w, float h) {
 			super(x, y, w, h);

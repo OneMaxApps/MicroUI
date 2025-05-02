@@ -1,7 +1,7 @@
 package microUI.event;
 
 import microUI.MicroUI;
-import microUI.core.AbstractRectangle;
+import microUI.core.Bounds;
 import processing.core.PApplet;
 
 public class Event extends MicroUI {
@@ -10,14 +10,14 @@ public class Event extends MicroUI {
    	  
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;
-	  private boolean moving,dragging,enable;
+	  private boolean holding,dragging,enable;
 	  private static final boolean[] keys = new boolean[Character.MAX_VALUE];
 
 	  public Event() {
 		  enable = true;
 	  }
 	  
-	  public void listen(AbstractRectangle form) {
+	  public void listen(Bounds form) {
 		if(!enable) { return; }
 		
 	    x = form.getX();
@@ -26,7 +26,7 @@ public class Event extends MicroUI {
 	    h = form.getH();
 	      
 	    if(!app.mousePressed) {
-	    	moving = false;
+	    	holding = false;
 	    	dragging = false;
 	    }
 	    
@@ -51,7 +51,7 @@ public class Event extends MicroUI {
 		    this.h = h;
 		    
 		    if(!app.mousePressed) {
-		    	moving = false;
+		    	holding = false;
 		    	dragging = false;
 		    }
 		    
@@ -78,11 +78,13 @@ public class Event extends MicroUI {
 		  return false;
 	  }
 
-	  public boolean moved() {
-		  if(pressed()) { return moving = true;
+	  public boolean holding() {
+		  action();
+		  if(pressed()) { return holding = true;
 		  } else {
-			  	return moving;
+			  	return holding;
 			}
+		  
 	  }
 	  
 	  public boolean dragged() {
@@ -131,6 +133,6 @@ public class Event extends MicroUI {
 	  public final void resetState() {
 		  keyReleased();
 		  longPressed = wasPressed = clickCounter = 0;
-		  moving = dragging = false;
+		  holding = dragging = false;
 	  }
 	}

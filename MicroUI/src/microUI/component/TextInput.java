@@ -502,7 +502,7 @@ public final class TextInput extends Component implements KeyPressable {
 		}
 		
 		private final void logic() {
-			if(event.pressed() && !event.moved()) { setEmpty(); }
+			if(event.pressed() && !event.holding()) { setEmpty(); }
 			
 			if(event.pressed()) {
 				if(!selecting) {
@@ -513,7 +513,7 @@ public final class TextInput extends Component implements KeyPressable {
 				selecting = false;
 			}
 			
-			if(event.moved()) {
+			if(event.holding()) {
 				lastChar = cursor.get();
 			}
 			

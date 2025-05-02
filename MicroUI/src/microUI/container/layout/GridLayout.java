@@ -7,7 +7,7 @@ import static processing.core.PApplet.min;
 
 import java.util.ArrayList;
 
-import microUI.core.AbstractRectangle;
+import microUI.core.Bounds;
 import microUI.util.Text;
 import processing.core.PApplet;
 
@@ -47,7 +47,7 @@ public class GridLayout extends Layout {
 	    	public void updateForce() {
 				  
 				  for(int i = 0; i < elementList.size(); i++) {
-				  AbstractRectangle baseRectangle = elementList.get(i);
+				  Bounds baseRectangle = elementList.get(i);
 				  
 				  if(elementRowList.get(i) < 0 || elementRowList.get(i) > getRows()-1 || elementColumnList.get(i) < 0 || elementColumnList.get(i) > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
 				    
@@ -139,7 +139,7 @@ public class GridLayout extends Layout {
 	    setColumns(constrain(columns,1,columns));
 	  }
 	  
-	  public GridLayout add(AbstractRectangle baseRectangle, int row, int column) {
+	  public GridLayout add(Bounds baseRectangle, int row, int column) {
 		  if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
 		    
 		  baseRectangle.setPosition(
@@ -203,7 +203,7 @@ public class GridLayout extends Layout {
 		return this; 
 	  }
 	  
-	  private void checkObject(AbstractRectangle baseRectangle, int row, int column) {
+	  private void checkObject(Bounds baseRectangle, int row, int column) {
 		    for(int i = 0; i < elementList.size(); i++) {
 		    	if(elementList.get(i) == baseRectangle) {
 		    		return;
@@ -217,7 +217,7 @@ public class GridLayout extends Layout {
 	  }
 
 	  
-	  public void remove(AbstractRectangle baseForm) {
+	  public void remove(Bounds baseForm) {
 		  if(elementList.isEmpty()) { return; }
 		  for(int i = 0; i < elementList.size(); i++) {
 		    	if(elementList.get(i) == baseForm) {
@@ -239,7 +239,7 @@ public class GridLayout extends Layout {
 		  elementDefaultHeight.remove(index);
 	  }
 	  
-	  public ArrayList<AbstractRectangle> getElementList() { return elementList; }
+	  public ArrayList<Bounds> getElementList() { return elementList; }
 	  
 	  public boolean isFillTheGrid() {
 			return fillTheGrid;

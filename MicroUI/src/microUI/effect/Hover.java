@@ -20,7 +20,7 @@ public final class Hover extends View {
 	public void update() {
 		if(component.event.inside()) {
 			app.pushStyle();
-			fill.use(app);
+			fill.use();
 			app.rect(component.getX(),component.getY(),component.getW(),component.getH());
 			app.popStyle();
 		

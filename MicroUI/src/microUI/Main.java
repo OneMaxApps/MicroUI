@@ -1,12 +1,14 @@
 package microUI;
 
-import microUI.component.EditText;
+import microUI.component.Slider;
+import microUI.container.layout.GridLayout;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public final class Main extends PApplet {
 	
-	private EditText component;
+	private Slider component;
+	private GridLayout gridLayout;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.Main");
@@ -19,23 +21,28 @@ public final class Main extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new EditText();
+		gridLayout = new GridLayout(3,9).add(new Slider(), 1, 5);
+		component = new Slider();
 	}
 		
 	@Override
 	public void draw() {
 		background(128);
-		component.draw();
+		gridLayout.draw();
+		if(mouseButton == RIGHT) {
+			gridLayout.setSize(mouseX,mouseY);
+		}
+		
 	}
 
 	@Override
 	public void keyPressed() {
-		component.keyPressed();
+		//component.keyPressed();
 	}
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		component.mouseWheel(event);
+		gridLayout.mouseWheel(event);
 	}
 
 	

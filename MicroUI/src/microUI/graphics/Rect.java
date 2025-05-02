@@ -1,15 +1,16 @@
-package microUI.core;
+package microUI.graphics;
 
+import microUI.core.Bounds;
 import microUI.event.Event;
 import microUI.util.Color;
 import microUI.util.Stroke;
 
-public abstract class Rectangle extends AbstractRectangle {
+public class Rect extends Bounds {
     public final Stroke stroke;
     public final Color fill;
     public final Event event;
     
-    public Rectangle(float x, float y, float w, float h) {
+    public Rect(float x, float y, float w, float h) {
         super(x,y,w,h);
         visible();
   
@@ -19,7 +20,7 @@ public abstract class Rectangle extends AbstractRectangle {
       }
     
     
-    public Rectangle() {
+    public Rect() {
       this(app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
     }
     
@@ -27,16 +28,17 @@ public abstract class Rectangle extends AbstractRectangle {
     public void update() {
       event.listen(this);
       
+      app.pushStyle();
       stroke.get();
-	  fill.use(app);
+	  fill.use();
 	  app.rect(x,y,w,h);
-
+	  app.popStyle();
  
     }
     
-    public void setStyle(final Rectangle rectangle) {
-    	stroke.set(rectangle.stroke);
-    	fill.setHEX(rectangle.fill.get());
+    public void setStyle(final Rect otherRectangle) {
+    	stroke.set(otherRectangle.stroke);
+    	fill.setHEX(otherRectangle.fill.get());
     }
 	
 }

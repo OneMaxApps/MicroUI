@@ -18,7 +18,7 @@ public abstract class AbstractButton extends Component {
 	public void update() {
 		event.listen(this);
 		app.pushStyle();
-		fill.use(app);
+		fill.use();
 		app.rect(x, y, w, h);
 		hover.draw();
 		ripples.draw();

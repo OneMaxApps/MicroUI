@@ -3,7 +3,7 @@ package microUI.core;
 import microUI.event.Event;
 import microUI.util.Color;
 
-public abstract class Component extends AbstractRectangle {
+public abstract class Component extends Bounds {
     public final Color fill;
     public final Event event;
     

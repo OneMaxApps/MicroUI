@@ -1,10 +1,10 @@
 package microUI.util;
 
-import microUI.core.AbstractRectangle;
+import microUI.core.Bounds;
 
 public final class Physics {
 	
-	public final static boolean collision(final AbstractRectangle form, final  AbstractRectangle otherForm) {
+	public final static boolean collision(final Bounds form, final  Bounds otherForm) {
 		
 		if(form.getX() > otherForm.getX()-form.getW() 		&&
 		   form.getX() < otherForm.getX()+otherForm.getW()	&&
@@ -16,7 +16,7 @@ public final class Physics {
 		return false;
 	}
 	
-	public final static void constrain(final float x, final float y, final  AbstractRectangle form, final  AbstractRectangle otherForm) {
+	public final static void constrain(final float x, final float y, final  Bounds form, final  Bounds otherForm) {
 		final float px = form.getX(), py = form.getY();
 		form.setPosition(x,y);
 		

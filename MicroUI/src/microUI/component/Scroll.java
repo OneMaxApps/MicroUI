@@ -11,6 +11,8 @@ import microUI.event.Scrollable;
 import microUI.event.Scrolling;
 import processing.event.MouseEvent;
 
+// TODO recreate that class
+
 public class Scroll extends Component implements Scrollable {
 	  public Button button,buttonPlus,buttonMinus;
 	  public Scrolling scrolling;
@@ -56,6 +58,8 @@ public class Scroll extends Component implements Scrollable {
     	}};
 	    
 	    buttonsTransformsUpdate();
+	    
+	    visible();
 	  }
 	  
 	  @Override
@@ -65,7 +69,7 @@ public class Scroll extends Component implements Scrollable {
 		    buttonMinus.draw(); if(buttonMinus.event.pressed()) { appendValue(-1); }
 		    button.draw();
 		    
-		    if(button.event.moved()) {
+		    if(button.event.holding()) {
 		      if(!isVerticalMode) {
 		        button.setX(constrain(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight()));
 		        value = constrain(map(app.mouseX+distOfMouseToButton,getX()+buttonsWeight(),getX()+getW()-button.getW()-buttonsWeight(),min,max),min,max);
@@ -75,11 +79,10 @@ public class Scroll extends Component implements Scrollable {
 		      }
 		    }
 		    
-		    if(event != null) {
-		    	if(event.inside() || scrolling.isScrolling()) {
-		    		appendValue(scrolling.get());
-		    	}
-		    }
+	    	if(event.inside() || scrolling.isScrolling()) {
+	    		appendValue(scrolling.get());
+	    	}
+		    
 		    if(isVerticalMode) {
 		      if(button.event.inside()) { distOfMouseToButton = button.getY()-app.mouseY; }
 		    } else {

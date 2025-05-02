@@ -1,8 +1,8 @@
 package microUI.util;
 
 import static processing.core.PApplet.abs;
-import static processing.core.PApplet.min;
 import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
@@ -42,7 +42,7 @@ public final class Text extends Component {
 		  shadow.draw();
 		  
 		  app.pushStyle();
-		  fill.use(app);
+		  fill.use();
 		  if(font != null) { app.textFont(font,textSize); }
 		  
 		  if(isAutoResize()) {
@@ -100,6 +100,10 @@ public final class Text extends Component {
 	    clear();
 	    append(text); 
 	    
+	  }
+	  
+	  public final void set(final Text otherText) {
+		  set(otherText.get());
 	  }
 	  
 	  public void set(int digits) { set(String.valueOf(digits)); }

@@ -2,10 +2,10 @@ package microUI.container.layout;
 
 import static processing.core.PApplet.min;
 
-import microUI.core.AbstractRectangle;
+import microUI.core.Bounds;
 
 public class EdgeLayout extends Layout {
-	private AbstractRectangle form;
+	private Bounds form;
 	private boolean left,up,right,down,center,centerHorizontal,centerVertical;
 	private float defaultWidthOfElement,defaultHeightOfElement;
 	
@@ -39,7 +39,7 @@ public class EdgeLayout extends Layout {
 		}
 	}
 	
-	public void updatePosition(AbstractRectangle form) {
+	public void updatePosition(Bounds form) {
 		
 		if(left) { form.setX(getX()); }
 		if(up) { form.setY(getY()); }
@@ -60,13 +60,13 @@ public class EdgeLayout extends Layout {
 		
 	}
 	
-	public void updateSize(AbstractRectangle f) {
+	public void updateSize(Bounds f) {
 		if(isElementsResizable()) {
 			f.setSize(min(getW(),defaultWidthOfElement), min(getH(),defaultHeightOfElement));
 		}
 	}
 	
-	public EdgeLayout set(AbstractRectangle form) {
+	public EdgeLayout set(Bounds form) {
 		this.form = form;
 		defaultWidthOfElement = form.getW();
 		defaultHeightOfElement = form.getH();
@@ -147,7 +147,7 @@ public class EdgeLayout extends Layout {
 		return this;
 	}
 	
-	public AbstractRectangle getElement() { return form; }
+	public Bounds getElement() { return form; }
 
 	@Override
 	public void setVisibleTotal(boolean v) {

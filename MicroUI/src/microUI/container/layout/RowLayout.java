@@ -4,7 +4,7 @@ import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 
-import microUI.core.AbstractRectangle;
+import microUI.core.Bounds;
 import microUI.util.Text;
 
 
@@ -20,7 +20,7 @@ public class RowLayout extends Layout {
 			@Override
 			public void updateForce() {
 			  	for(int i = 0; i < elementList.size(); i++) {
-			  		AbstractRectangle baseRectangle = elementList.get(i);
+			  		Bounds baseRectangle = elementList.get(i);
 			  		if(isElementsResizable()) {
 						if(i == 0) {
 						baseRectangle.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
@@ -63,7 +63,7 @@ public class RowLayout extends Layout {
 		if(app.frameCount == 1 || app.frameCount%60*60 == 0) { transforming.updateForce(); }
 	}
 	
-	public RowLayout add(AbstractRectangle baseRectanle, float weight) {
+	public RowLayout add(Bounds baseRectanle, float weight) {
 		elementList.add(baseRectanle);
 		
 		if(weightList.isEmpty()) {

@@ -9,7 +9,7 @@ import microUI.component.TextInput;
 import microUI.container.layout.GridLayout;
 import microUI.container.layout.Layout;
 import microUI.container.layout.RowLayout;
-import microUI.core.AbstractRectangle;
+import microUI.core.Bounds;
 import microUI.core.Focusable;
 import microUI.event.Event;
 import microUI.util.Text;

@@ -1,5 +1,6 @@
 package microUI.util;
 
+import microUI.MicroUI;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -107,8 +108,9 @@ public class Color {
 		this.alpha = alpha;
 	}
 	
-	public void use(PApplet app) {
-		app.fill(get());
+	// TODO remove that argument and use static variable from class MicroUI for getting context PApplet
+	public void use() {
+		MicroUI.getContext().fill(get());
 	}
 	
 	public void use(PGraphics pg) {

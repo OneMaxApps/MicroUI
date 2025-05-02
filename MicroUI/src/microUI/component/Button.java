@@ -4,7 +4,7 @@ import microUI.core.AbstractButton;
 import microUI.util.Text;
 
 public class Button extends AbstractButton {
-	  public Text text;
+	  public final Text text;
 	  
 	  public Button(String text, float x, float y, float w, float h) {
 	    super(x,y,w,h);
@@ -26,9 +26,9 @@ public class Button extends AbstractButton {
 		 
 	  }
 	  
-	  public void setStyle(Button button) {
-	    	super.setStyle(button);
-	    	text = button.text;
+	  public void setStyle(Button otherButton) {
+	    	super.setStyle(otherButton);
+	    	text.set(otherButton.text);
 	  }
 	  
 	  @Override

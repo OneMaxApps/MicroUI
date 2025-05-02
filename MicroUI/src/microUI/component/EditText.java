@@ -1051,7 +1051,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			
 			isSelecting = (startRow != endRow) || (startColumn != endColumn);
 			
-			if(isSelecting && !scrollV.button.event.moved() && !scrollH.button.event.moved()) {
+			if(isSelecting && !scrollV.button.event.holding() && !scrollH.button.event.holding()) {
 				
 				for(int i = 0; i < items.size(); i++) {
 					
@@ -1098,8 +1098,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		
 		private final boolean isAllowedStateToStartSelecting() {
 			return event.pressed() &&
-				   !scrollV.button.event.moved() &&
-				   !scrollH.button.event.moved() &&
+				   !scrollV.button.event.holding() &&
+				   !scrollH.button.event.holding() &&
 				   !scrollV.event.inside() &&
 				   !scrollH.event.inside();
 		}

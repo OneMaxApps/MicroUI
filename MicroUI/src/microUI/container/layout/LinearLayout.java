@@ -4,7 +4,7 @@ import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 
-import microUI.core.AbstractRectangle;
+import microUI.core.Bounds;
 import microUI.util.Text;
 
 public class LinearLayout extends Layout {
@@ -20,7 +20,7 @@ public class LinearLayout extends Layout {
 		@Override
 			public final void updateForce() {
 		  	for(int i = 0; i < elementList.size(); i++) {
-		  		AbstractRectangle baseRectangle = elementList.get(i);
+		  		Bounds baseRectangle = elementList.get(i);
 
 		  		switch(mode) {
 		  		
@@ -123,7 +123,7 @@ public class LinearLayout extends Layout {
 
 	}
 	
-	public LinearLayout add(AbstractRectangle baseRectangle, float weight) {
+	public LinearLayout add(Bounds baseRectangle, float weight) {
 		elementList.add(baseRectangle);
 		
 		if(weightList.isEmpty()) {

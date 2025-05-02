@@ -3,37 +3,36 @@ package microUI.event;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import init.TestInit;
 import microUI.MicroUI;
 import processing.core.PApplet;
 
-class EventTest {
+class EventTest extends TestInit {
+	private PApplet app = MicroUI.getContext();
+	private static Event event;
+	
+	@BeforeAll
+	static void initEvent() {
+		event = new Event();
+		event.listen(0,0,100,100);
+		
+	}
 	
 	@Test
 	void pressedTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = MicroUI.getContext();
-		Event event = new Event();
-		
-		event.listen(0,0,100,100);
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
 		app.mousePressed = true;
-		
-		
 		
 		assertTrue(event.pressed());
 	}
 	
 	@Test
 	void insideTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = MicroUI.getContext();
-		Event event = new Event();
-		
-		event.listen(0,0,100,100);
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
@@ -46,11 +45,6 @@ class EventTest {
 	
 	@Test
 	void ousideTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = MicroUI.getContext();
-		Event event = new Event();
-		
-		event.listen(0,0,100,100);
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
@@ -63,11 +57,6 @@ class EventTest {
 	
 	@Test
 	void longPressedTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = MicroUI.getContext();
-		Event event = new Event();
-		
-		event.listen(0,0,100,100);
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
@@ -84,9 +73,6 @@ class EventTest {
 	
 	@Test
 	void enableTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = MicroUI.getContext();
-		Event event = new Event();
 		
 		event.setEnable(true);
 		assertTrue(event.isEnable());
@@ -94,9 +80,6 @@ class EventTest {
 	
 	@Test
 	void movedTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = MicroUI.getContext();
-		Event event = new Event();
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
@@ -104,7 +87,7 @@ class EventTest {
 		
 		event.listen(0,0,100,100);
 		
-		assertTrue(event.moved());
+		assertTrue(event.holding());
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
@@ -112,15 +95,12 @@ class EventTest {
 		
 		event.listen(0,0,100,100);
 		
-		assertFalse(event.moved());
+		assertFalse(event.holding());
 		
 	}
 	
 	@Test
 	void clickedTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = MicroUI.getContext();
-		Event event = new Event();
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
@@ -134,9 +114,6 @@ class EventTest {
 	
 	@Test
 	void multiClickedTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = MicroUI.getContext();
-		Event event = new Event();
 		
 		app.mouseX = 50;
 		app.mouseY = 50;
@@ -196,8 +173,6 @@ class EventTest {
 	
 	@Test
 	void keyPressedTest() {
-		MicroUI.setContext(new PApplet());
-		PApplet app = new PApplet();
 		final char symbolA = 'A',symbolB = 'B';
 		app.key = symbolA;
 		Event.keyPressed(app);

@@ -3,7 +3,7 @@ package microUI.container.layout;
 import java.util.ArrayList;
 
 import microUI.core.BaseImage;
-import microUI.core.AbstractRectangle;
+import microUI.core.Bounds;
 import microUI.core.Focusable;
 import microUI.effect.Shadow;
 import microUI.event.KeyPressable;
@@ -11,17 +11,17 @@ import microUI.event.Scrollable;
 import microUI.util.Color;
 import processing.event.MouseEvent;
 
-public abstract class Layout extends AbstractRectangle implements Scrollable, KeyPressable, Focusable  {
+public abstract class Layout extends Bounds implements Scrollable, KeyPressable, Focusable  {
 	public final Color fill;
 	public final Margin margin;
 	public final BaseImage image;
 	public final Shadow shadow;
 	protected boolean isElementsResizable;
-	protected final ArrayList<AbstractRectangle> elementList;
+	protected final ArrayList<Bounds> elementList;
 	
 	public Layout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		elementList = new ArrayList<AbstractRectangle>();
+		elementList = new ArrayList<Bounds>();
 		fill = new Color();
 		fill.set(0,0,128,32);
 		margin = new Margin();
@@ -99,7 +99,7 @@ public abstract class Layout extends AbstractRectangle implements Scrollable, Ke
 	public void setVisibleTotal(boolean v) {
 		
 		setVisible(v);
-		for(AbstractRectangle form : elementList) {
+		for(Bounds form : elementList) {
 			if(form instanceof EdgeLayout) {
 				EdgeLayout e = (EdgeLayout) form;
 				if(e.getElement() instanceof Layout) {
@@ -115,7 +115,7 @@ public abstract class Layout extends AbstractRectangle implements Scrollable, Ke
 		
 	}
 	
-	public ArrayList<AbstractRectangle> getElements() {
+	public ArrayList<Bounds> getElements() {
 		return elementList;
 	}
 	

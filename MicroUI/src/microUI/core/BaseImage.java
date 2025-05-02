@@ -4,7 +4,7 @@ import microUI.util.Color;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public abstract class BaseImage extends AbstractRectangle {
+public abstract class BaseImage extends Bounds {
 	public final Color tint;
 	protected PImage image;
 	
