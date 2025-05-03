@@ -1,7 +1,6 @@
 package microUI.util;
 
 import microUI.MicroUI;
-import processing.core.PApplet;
 import processing.core.PGraphics;
 
 public class Color {

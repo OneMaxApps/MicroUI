@@ -1,4 +1,4 @@
-package microUI.util;
+package microUI.component;
 
 import static processing.core.PApplet.abs;
 import static processing.core.PApplet.max;
@@ -8,10 +8,11 @@ import static processing.core.PConstants.CORNER;
 
 import microUI.core.Component;
 import microUI.core.View;
+import microUI.util.Color;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
-public final class Text extends Component {
+public final class TextView extends Component {
 	  public final Shadow shadow;
 	  private final StringBuilder text;
 	  private PFont font;
@@ -19,7 +20,7 @@ public final class Text extends Component {
 	  private boolean center,upperCaseStyle,lowerCaseStyle,autoResize;
 	  
 	   
-	  public Text(String text, float x, float y, float w, float h) {
+	  public TextView(String text, float x, float y, float w, float h) {
 	    super(x,y,w,h);
 	    this.text = new StringBuilder(text);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
@@ -29,12 +30,16 @@ public final class Text extends Component {
 	    fill.set(255);
 	  }
 	  
-	  public Text(float x, float y, float w, float h) {
+	  public TextView(float x, float y, float w, float h) {
 		this("",x,y,w,h);
 	  }
 	  
-	  public Text(String text) {
+	  public TextView(String text) {
 			this(text,app.width*.2f,app.height*.4f,app.width*.6f,app.height*.2f);
+	  }
+	  
+	  public TextView() {
+			this("",app.width*.2f,app.height*.4f,app.width*.6f,app.height*.2f);
 	  }
 	  
 	  @Override
@@ -102,7 +107,7 @@ public final class Text extends Component {
 	    
 	  }
 	  
-	  public final void set(final Text otherText) {
+	  public final void set(TextView otherText) {
 		  set(otherText.get());
 	  }
 	  

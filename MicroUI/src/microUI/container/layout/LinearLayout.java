@@ -4,8 +4,8 @@ import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 
+import microUI.component.TextView;
 import microUI.core.Bounds;
-import microUI.util.Text;
 
 public class LinearLayout extends Layout {
 	public final static int MODE_ROW = 0,MODE_COLUMN = 1;
@@ -144,7 +144,7 @@ public class LinearLayout extends Layout {
 	}
 	
 	public LinearLayout add(String text, float weight) {
-		add(new Text(text,x,y,w,weight),weight);
+		add(new TextView(text,x,y,w,weight),weight);
 		return this;
 	}
 	

@@ -4,8 +4,8 @@ import static processing.core.PApplet.constrain;
 
 import java.util.ArrayList;
 
+import microUI.component.TextView;
 import microUI.core.Bounds;
-import microUI.util.Text;
 
 
 public class RowLayout extends Layout {
@@ -84,7 +84,7 @@ public class RowLayout extends Layout {
 	}
 	
 	public RowLayout add(String text, float weight) {
-		add(new Text(text,x,y,w,weight),weight);
+		add(new TextView(text,x,y,w,weight),weight);
 		return this;
 	}
 	

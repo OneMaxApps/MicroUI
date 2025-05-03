@@ -1,11 +1,10 @@
 package microUI.graphics;
 
 import microUI.core.Bounds;
-import microUI.event.Event;
 import microUI.util.Color;
 import microUI.util.Stroke;
 
-public class Rect extends Bounds {
+public final class Rect extends Bounds {
     public final Stroke stroke;
     public final Color fill;
     
@@ -32,9 +31,9 @@ public class Rect extends Bounds {
  
     }
     
-    public void setStyle(final Rect otherRectangle) {
-    	stroke.set(otherRectangle.stroke);
-    	fill.setHEX(otherRectangle.fill.get());
+    public void setStyle(final Rect otherRect) {
+    	stroke.set(otherRect.stroke);
+    	fill.setHEX(otherRect.fill.get());
     }
 	
 }

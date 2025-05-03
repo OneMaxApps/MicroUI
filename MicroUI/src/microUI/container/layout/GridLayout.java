@@ -7,8 +7,8 @@ import static processing.core.PApplet.min;
 
 import java.util.ArrayList;
 
+import microUI.component.TextView;
 import microUI.core.Bounds;
-import microUI.util.Text;
 import processing.core.PApplet;
 
 public class GridLayout extends Layout {
@@ -180,7 +180,7 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  public GridLayout add(String txt, int row, int column) {
-		  Text baseForm = new Text(txt,0,0,0,0);
+		  TextView baseForm = new TextView(txt,0,0,0,0);
 		  if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
 		    baseForm.setPosition(
 		    		map(row,0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,

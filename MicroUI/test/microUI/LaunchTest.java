@@ -1,18 +1,16 @@
 package microUI;
 
-import microUI.component.TextInput;
-import microUI.container.layout.GridLayout;
+import microUI.component.TextField;
 import microUI.event.Event;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
-public final class Main extends PApplet {
+public final class LaunchTest extends PApplet {
 	
-	private GridLayout gridLayout;
-	
+	private TextField textField;
 	
 	public static void main(String[] args) {
-		PApplet.main("microUI.Main");
+		PApplet.main("microUI.LaunchTest");
 	}
 	
 	@Override
@@ -23,35 +21,27 @@ public final class Main extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		
-		gridLayout = new GridLayout(8);
-		
-		for(int r = 0; r < gridLayout.getRows(); r++) {
-			for(int c = 0; c < gridLayout.getColumns(); c++) {
-				gridLayout.add(new TextInput(), r, c);
-			}
-		}
-		
-		gridLayout.setFillTheGrid(true);
+		textField = new TextField();
+		// textField.text.font.set(createFont("C:\\Windows\\Fonts\\BRUSHSCI.TTF",32));
+		textField.text.set("Smartphone");
+		// textField.text.size.set(80);
 	}
 		
 	@Override
 	public void draw() {
 		background(128);
-		gridLayout.draw();
+		textField.draw();
 		if(mouseButton == RIGHT) {
-			gridLayout.setSize(mouseX,mouseY);
+			textField.setPosition(mouseX,mouseY);
 		}
-		System.out.println((int) frameRate);
-		// if(frameCount > 100) { exit(); }
 	}
 
 	@Override
 	public void keyPressed() {
 		Event.keyPressed(this);
+		textField.keyPressed();
 	}
 	
-	
-
 	@Override
 	public void keyReleased() {
 		Event.keyReleased();
