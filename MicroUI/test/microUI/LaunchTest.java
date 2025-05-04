@@ -3,7 +3,6 @@ package microUI;
 import microUI.component.TextField;
 import microUI.event.Event;
 import processing.core.PApplet;
-import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 
@@ -20,8 +19,8 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		textField = new TextField();
-		textField.text.set("Hello World");
+		textField = new TextField(0,0,400,100);
+		textField.text.set("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 		
 	}
 		
@@ -30,9 +29,6 @@ public final class LaunchTest extends PApplet {
 		background(128);
 		textField.draw();
 		
-		/*if(mousePressed) {
-			textField.setSize(mouseX,mouseY);
-		}*/
 	}
 
 	@Override

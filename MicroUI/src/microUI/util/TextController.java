@@ -1,5 +1,9 @@
 package microUI.util;
 
+import static processing.core.PApplet.constrain;
+
+import microUI.component.TextField.Cursor;
+
 public class TextController {
 	private final StringBuilder sb;
 	private boolean validation;
@@ -20,6 +24,7 @@ public class TextController {
 			clear();
 			insert(0,text);
 		}
+		
 	}
 	
 	public final void set(final TextController text) {
@@ -36,6 +41,7 @@ public class TextController {
 		if(pos < 0 || pos > length()) { return; }
 		if(validation) {
 		  if(isValidChar(ch)) { sb.insert(pos,ch); }
+		  inInserting();
 		} else {
 		  sb.insert(pos,ch);
 		}
@@ -64,9 +70,7 @@ public class TextController {
 	
 	public final void removeCharAt(final int pos) {
 		if(isEmpty()) { return; }
-		if(pos < 0 || pos > length()) { return; }
-		
-		sb.deleteCharAt(pos);
+		sb.deleteCharAt(constrain(pos,0,length()-1));
 	}
 	
 	public final void removeFirstChar() {
@@ -92,4 +96,6 @@ public class TextController {
 	public final boolean isValidChar(final char ch) {
 		return " .,;:[]{}<>/|\\\"'?+-*=&!@#$%^`~_".contains(String.valueOf(ch)) || Character.isLetterOrDigit(ch);
 	}
+	
+	protected void inInserting() {}
 }

@@ -60,10 +60,7 @@ public final class Ripples extends View {
 	}
 	
 	private final void createGraphics() {
-		if(form.getW() < 0 || form.getH() < 0) {
-			throw new IllegalArgumentException("Ripples can't have negative dimensions");
-		}
-		pg = app.createGraphics((int) form.getW(),(int) form.getH());
+		pg = app.createGraphics((int) max(1,form.getW()),(int) max(1,form.getH()));
 	}
 
 	public final class Circle {

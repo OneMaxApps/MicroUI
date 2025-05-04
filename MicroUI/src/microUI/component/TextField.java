@@ -1,23 +1,32 @@
 package microUI.component;
 
+import static java.awt.event.KeyEvent.VK_END;
+import static java.awt.event.KeyEvent.VK_HOME;
+import static processing.core.PApplet.map;
+import static processing.core.PApplet.min;
+import static processing.core.PApplet.max;
+import static processing.core.PConstants.BACKSPACE;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
-import static processing.core.PApplet.max;
 
 import microUI.core.Component;
 import microUI.event.KeyPressable;
 import microUI.util.Color;
 import microUI.util.TextController;
+import microUI.util.Value;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
+// TODO Scroll need to be easy for using
 public final class TextField extends Component implements KeyPressable {
 	public final Text text;
 	public final Cursor cursor;
 	private PGraphics pg;
+	private final Value scroll;
 	private final int LEFT_OFFSET = 10;
+	private boolean focused;
 	
 	public TextField(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -28,6 +37,7 @@ public final class TextField extends Component implements KeyPressable {
 		cursor = new Cursor();
 		
 		pg = app.createGraphics((int) w, (int) h, app.sketchRenderer());
+		scroll = new Value(0,0,0);
 		
 	}
 	
@@ -51,44 +61,101 @@ public final class TextField extends Component implements KeyPressable {
 			pg.beginDraw();
 				pg.clear();
 				text.draw(pg);
-				cursor.draw(pg);
+				if(focused) { cursor.draw(pg); }
 			pg.endDraw();
 			
 			app.image(pg, x, y, w, h);
 		app.popStyle();
 		
 		
+		if(event.clicked()) { focused = true; }
+		if(app.mousePressed && event.outside()) { focused = false; }
+		
+		if(event.pressed()) {
+			updateScrollMin();
+			cursor.row.set((int) map(app.mouseX-getX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
+			if(app.mouseX-getX() < getW()*.1f) { scroll.append(cursor.row.getCurrentCharWidth()); }
+			if(app.mouseX-getX() > getW()*.8f) { scroll.append(-cursor.row.getCurrentCharWidth()); }
+			
+		}
+		
+		
 	}
 	
+	private final void logs() {
+		System.out.println("cursor row = "+cursor.row.get());
+		System.out.println("text length = "+text.length());
+	}
 	
+	private final void updateScrollMin() {
+		scroll.setMin(-(text.getWidth()-getW()*.8f));
+	}
 	
 	@Override
 	protected void inTransforms() {
 		super.inTransforms();
 		
-		if(text != null) {
-			text.updatePosition();
-		}
+		if(text != null) { text.updatePosition(); }
 		
-		if(cursor != null) {
-			cursor.updateTransforms();
-		}
+		if(scroll != null) { updateScrollMin(); }
+		
+		if(cursor != null) { cursor.updateTransforms(); }
+		
+	}
+	
+	public final boolean isFocused() {
+		return focused;
+	}
+
+	public final void setFocused(boolean focused) {
+		this.focused = focused;
 	}
 
 	@Override
 	public final void keyPressed() {
+		if(!focused) { return; }
+		
 		cursor.blink.reset();
 		
-		switch(app.keyCode) {
-		case LEFT : cursor.row.back(); break;
-		case RIGHT : cursor.row.next(); break;
-		} 
 		
-		// FIXME method isValidChar need be inside in TextController or not? Think about that
-		if(text.isValidChar(app.key)) {
-		text.insert(cursor.row.get(), app.key);
-		cursor.row.next();
-		}
+		switch(app.keyCode) {
+		case LEFT :
+			cursor.row.back();
+			if(cursor.isInStart()) { return; }
+			scroll.append(cursor.row.getCurrentCharWidth());
+		break;
+		
+		case RIGHT :
+			cursor.row.next();
+			if(cursor.isInEnd()) { return; }
+			scroll.append(-cursor.row.getCurrentCharWidth());
+		break;
+		
+		case BACKSPACE :
+			if(cursor.isInStart()) { break; }
+			text.removeCharAt(cursor.row.get());
+			scroll.append(cursor.row.getCurrentCharWidth());
+			cursor.row.back();
+			
+		break;
+		case VK_HOME :
+			cursor.row.goToStart();
+			scroll.set(scroll.getMax());
+		break;
+		case VK_END :
+			cursor.row.goToEnd();
+			scroll.set(scroll.getMin());
+		break;
+		
+		default :
+			text.insert(cursor.row.get(), app.key);
+			scroll.append(-cursor.row.getCurrentCharWidth());
+		break;
+		
+		} 
+
+		updateScrollMin();
+		
 	}
 	
 	private final void checkDimensions() {
@@ -133,11 +200,17 @@ public final class TextField extends Component implements KeyPressable {
 			pg.text(get(),x,y);
 			}
 			pg.popStyle();
+			
+			updatePositionX();
 		}
 		
 		private final void updatePosition() {
-			x = LEFT_OFFSET;
+			updatePositionX();
 			y = TextField.this.getH()*.5f;
+		}
+		
+		private final void updatePositionX() {
+			if(scroll == null) { x = LEFT_OFFSET; } else { x = LEFT_OFFSET+scroll.get();}
 		}
 		
 		
@@ -148,7 +221,18 @@ public final class TextField extends Component implements KeyPressable {
 		public final void setHint(String hint) {
 			this.hint = hint;
 		}
+		
+		@Override
+		protected void inInserting() {
+			cursor.row.next();
+			updatePositionX();
+		}
 
+		private final float getX() { return x; }
+		
+		private final float getWidth() {
+			return pg.textWidth(get());
+		}
 
 		public final class Size extends AbstractSize {
 
@@ -211,12 +295,17 @@ public final class TextField extends Component implements KeyPressable {
 			weight.use(pg);
 			pg.line(positionX+LEFT_OFFSET, positionY, positionX+LEFT_OFFSET, height);
 			}
+
 		}
 		
 		private final void updateTransforms() {
 			positionY = TextField.this.getH()*.1f;
 			height = TextField.this.getH()*.9f;
 		}
+		
+		private final boolean isInStart() { return row.get() == 0; }
+		
+		private final boolean isInEnd() { return row.get() == text.length(); }
 		
 		public final class Blink {
 			private int duration,maxDuration;
@@ -276,7 +365,12 @@ public final class TextField extends Component implements KeyPressable {
 			}
 			
 			private final void updatePositionX() {
-				positionX = pg.textWidth(text.get().substring(0,row));
+				positionX = pg.textWidth(text.get().substring(0,row))+scroll.get();
+			}
+			
+			private final float getCurrentCharWidth() {
+				if(text.isEmpty()) { return 0; }
+				return pg.textWidth(text.get().charAt(min(row,text.length()-1)));
 			}
 		}
 		
