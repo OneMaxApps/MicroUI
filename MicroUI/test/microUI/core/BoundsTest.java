@@ -26,4 +26,5 @@ class BoundsTest extends TestInit {
 		bounds.setH(-100);
 		assertEquals(0,bounds.getH());
 	}
+	
 }

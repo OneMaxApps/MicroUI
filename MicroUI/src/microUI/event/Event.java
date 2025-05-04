@@ -70,7 +70,15 @@ public class Event extends MicroUI {
 	  public final void setEnable(boolean enable) { this.enable = enable; }
 	  public final boolean isEnable() { return enable; }
 	  
-	  public boolean inside() { return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; }
+	  public boolean inside() {
+		  if(w < 0 && h < 0) { return app.mouseX > x+w && app.mouseX < x && app.mouseY > y+h && app.mouseY < y; }
+		  
+		  if(w < 0) { return app.mouseX > x+w && app.mouseX < x && app.mouseY > y && app.mouseY < y+h; }
+		  
+		  if(h < 0) { return app.mouseX > x && app.mouseX < x+w && app.mouseY > y+h && app.mouseY < y; }
+		  
+		  return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; 
+	  }
 	  public boolean outside() { return !inside(); }
 	  public boolean pressed() {  return inside() && app.mousePressed; }
 	  public boolean longPressed(int seconds) {

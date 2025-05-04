@@ -9,7 +9,10 @@ public class TestInit {
 	
 	@BeforeAll
 	static void initContext() {
-		MicroUI.setContext(new PApplet());
+		final PApplet app = new PApplet();
+		app.width = 1080;
+		app.height = 720;
+		MicroUI.setContext(app);
 	}
 	
 	

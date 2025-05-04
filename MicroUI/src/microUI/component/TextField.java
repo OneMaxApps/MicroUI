@@ -2,6 +2,9 @@ package microUI.component;
 
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.RIGHT;
+import static processing.core.PApplet.max;
 
 import microUI.core.Component;
 import microUI.event.KeyPressable;
@@ -76,7 +79,16 @@ public final class TextField extends Component implements KeyPressable {
 	public final void keyPressed() {
 		cursor.blink.reset();
 		
-		text.insert(0, app.key);
+		switch(app.keyCode) {
+		case LEFT : cursor.row.back(); break;
+		case RIGHT : cursor.row.next(); break;
+		} 
+		
+		// FIXME method isValidChar need be inside in TextController or not? Think about that
+		if(text.isValidChar(app.key)) {
+		text.insert(cursor.row.get(), app.key);
+		cursor.row.next();
+		}
 	}
 	
 	private final void checkDimensions() {
@@ -84,7 +96,8 @@ public final class TextField extends Component implements KeyPressable {
 		if(pg == null) { return; }
 		
 		if((int) (getW()) != pg.width || (int) (getH()) != pg.height) {
-			pg = app.createGraphics((int) getW(), (int) getH(), app.sketchRenderer());
+			pg = app.createGraphics((int) max(1,getW()), (int) max(1,getH()), app.sketchRenderer());
+			System.out.println("PGraphics object was created");
 		}
 		
 	}
@@ -136,11 +149,6 @@ public final class TextField extends Component implements KeyPressable {
 			this.hint = hint;
 		}
 
-		// TODO Continue from here, think about that, how you can selected text width to the better way
-		private final float getTextWidthBehind(final int index) {
-			if(index < 0 || index > length()-1) { return 0; }
-			return pg.textWidth(get().substring(index));
-		}
 
 		public final class Size extends AbstractSize {
 
@@ -243,22 +251,33 @@ public final class TextField extends Component implements KeyPressable {
 			private final void set(final int row) {
 				if(row < 0 || row > text.length()) { return; }
 				this.row = row;
+				updatePositionX();
 			}
 			
 			private final int get() { return row; }
 			
-			private final void goToStart() { row = 0; }
+			private final void goToStart() { set(0); }
 			
-			private final void goToEnd() { row = text.length(); }
+			private final void goToEnd() { set(text.length()); }
 			
 			private final void back() {
-				if(row > 0) { row--; }
+				if(row > 0) {
+					row--;
+					updatePositionX();
+				}
+				
 			}
 			
 			private final void next() {
-				if(row < text.length()) { row++; }
+				if(row < text.length()) {
+					row++;
+					updatePositionX();
+				}
 			}
 			
+			private final void updatePositionX() {
+				positionX = pg.textWidth(text.get().substring(0,row));
+			}
 		}
 		
 		public final class Size extends AbstractSize {

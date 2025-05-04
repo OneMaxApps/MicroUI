@@ -1,10 +1,7 @@
 package microUI.core;
 
-import static processing.core.PApplet.constrain;
-
 public abstract class Bounds extends View {
 	protected float x,y,w,h;
-	private boolean allowNegativeDimensions,constrainInsideScreen;
 	
 	public Bounds(float x, float y, float w, float h) {
 		setTransforms(x,y,w,h);
@@ -41,12 +38,10 @@ public abstract class Bounds extends View {
 	
 	public void setW(final float w) {
 		if(this.w == w) { return; }
-		if(!isAllowedNegativeDimensions()) {
 		if(w < 0) { this.w = 0; return; }
-		}
-		
-		inTransforms();
 		this.w = w;
+		inTransforms();
+		
 	}
 	
 	
@@ -54,11 +49,9 @@ public abstract class Bounds extends View {
 	
 	public void setH(final float h) {
 		if(this.h == h) { return; }
-		if(!isAllowedNegativeDimensions()) {
 		if(h < 0) { this.h = 0; return; }
-		}
-		inTransforms();
 		this.h = h;
+		inTransforms();
 	}
 	
 	
@@ -99,45 +92,6 @@ public abstract class Bounds extends View {
 	}
 	
 	
-	protected void inTransforms() {
-		if(constrainInsideScreen) {
-			
-			if(allowNegativeDimensions) {
-				
-				if(w < 0) { x = constrain(x, -w, app.width);
-				} else {
-					x = constrain(x, 0, app.width-w);
-				}
-				
-				if(h < 0) { y = constrain(y, -h, app.height);
-				} else {
-					y = constrain(y, 0, app.height-h);
-				}
-				
-			} else {
-				x = constrain(x, 0, app.width-w);
-				y = constrain(y, 0, app.height-h);
-			}
-			
-		}
-	}
-	
-	
-	public final boolean isAllowedNegativeDimensions() {
-		return allowNegativeDimensions;
-	}
+	protected void inTransforms() {}
 
-	public final void allowNegativeDimensions(boolean allowNegativeDimensions) {
-		this.allowNegativeDimensions = allowNegativeDimensions;
-	}
-
-	
-	public final boolean isConstrainInsideScreen() {
-		return constrainInsideScreen;
-	}
-
-	public final void setConstrainInsideScreen(boolean constrainInsideScreen) {
-		this.constrainInsideScreen = constrainInsideScreen;
-	}
-	
 }

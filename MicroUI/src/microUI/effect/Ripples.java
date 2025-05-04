@@ -15,7 +15,6 @@ public final class Ripples extends View {
 	private final Event event;
 	private final Bounds form;
 	private PGraphics pg;
-	private int currentWidth,currentHeight;
 	
 	public Ripples(Bounds form) {
 		super();
@@ -23,7 +22,7 @@ public final class Ripples extends View {
 		event = new Event();
 		visible = true;
 		this.form = form;
-		pg = app.createGraphics(currentWidth = (int) form.getW(),currentHeight = (int) form.getH(),app.sketchRenderer());
+		createGraphics();
 	}
 
 	@Override
@@ -46,15 +45,25 @@ public final class Ripples extends View {
 	public final void checkResizing() {
 		if(!visible || app.mousePressed) { return; }
 		
-		if(currentWidth != (int) form.getW() || currentHeight != (int) form.getH()) {
-			pg = app.createGraphics(currentWidth = (int) form.getW(),currentHeight = (int) form.getH());
-		}
+		if(isResized()) { createGraphics(); }
+		
+	}
+	
+	private final boolean isResized() {
+		return pg.width != (int) form.getW() || pg.height != (int) form.getH();
 	}
 	
 	public final void initAnim() {
 		circle.resetSize();
 		circle.resetPosition();
 		circle.start = true;
+	}
+	
+	private final void createGraphics() {
+		if(form.getW() < 0 || form.getH() < 0) {
+			throw new IllegalArgumentException("Ripples can't have negative dimensions");
+		}
+		pg = app.createGraphics((int) form.getW(),(int) form.getH());
 	}
 
 	public final class Circle {

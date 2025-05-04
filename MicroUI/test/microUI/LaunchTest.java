@@ -6,8 +6,8 @@ import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
-	
-	private TextField textField;
+
+	TextField textField;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.LaunchTest");
@@ -20,20 +20,19 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		
 		textField = new TextField();
-		// textField.text.font.set(createFont("C:\\Windows\\Fonts\\BRUSHSCI.TTF",32));
-		textField.text.set("Smartphone");
-		// textField.text.size.set(80);
+		textField.text.set("Hello World");
+		
 	}
 		
 	@Override
 	public void draw() {
 		background(128);
 		textField.draw();
-		if(mouseButton == RIGHT) {
-			textField.setPosition(mouseX,mouseY);
-		}
+		
+		/*if(mousePressed) {
+			textField.setSize(mouseX,mouseY);
+		}*/
 	}
 
 	@Override
@@ -46,11 +45,5 @@ public final class LaunchTest extends PApplet {
 	public void keyReleased() {
 		Event.keyReleased();
 	}
-
-	@Override
-	public void mouseWheel(MouseEvent event) {
-		
-	}
-
 	
 }
