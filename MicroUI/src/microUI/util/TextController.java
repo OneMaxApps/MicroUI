@@ -2,8 +2,6 @@ package microUI.util;
 
 import static processing.core.PApplet.constrain;
 
-import microUI.component.TextField.Cursor;
-
 public class TextController {
 	private final StringBuilder sb;
 	private boolean validation;

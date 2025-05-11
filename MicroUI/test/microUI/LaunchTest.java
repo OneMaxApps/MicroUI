@@ -19,8 +19,8 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		textField = new TextField(0,0,400,100);
-		textField.text.set("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+		textField = new TextField();
+		textField.text.set("Hello World and you my love");
 		
 	}
 		

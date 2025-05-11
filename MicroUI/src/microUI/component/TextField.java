@@ -19,7 +19,7 @@ import microUI.util.Value;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
-// TODO Scroll need to be easy for using
+
 public final class TextField extends Component implements KeyPressable {
 	public final Text text;
 	public final Cursor cursor;
@@ -50,6 +50,8 @@ public final class TextField extends Component implements KeyPressable {
 	public final void update() {
 		event.listen(this);
 		
+		// logs();
+		
 		checkDimensions();
 		
 		if(event.pressed()) { cursor.blink.reset(); }
@@ -72,10 +74,10 @@ public final class TextField extends Component implements KeyPressable {
 		if(app.mousePressed && event.outside()) { focused = false; }
 		
 		if(event.pressed()) {
-			updateScrollMin();
+			updateScrollMax();
 			cursor.row.set((int) map(app.mouseX-getX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
-			if(app.mouseX-getX() < getW()*.1f) { scroll.append(cursor.row.getCurrentCharWidth()); }
-			if(app.mouseX-getX() > getW()*.8f) { scroll.append(-cursor.row.getCurrentCharWidth()); }
+			if(app.mouseX-getX() < getW()*.1f) { scroll.append(-cursor.row.getCurrentCharWidth()); }
+			if(app.mouseX-getX() > getW()*.9f) { scroll.append(cursor.row.getCurrentCharWidth()); }
 			
 		}
 		
@@ -83,12 +85,15 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	private final void logs() {
-		System.out.println("cursor row = "+cursor.row.get());
-		System.out.println("text length = "+text.length());
+		// System.out.println("cursor row = "+cursor.row.get());
+		// System.out.println("text length = "+text.length());
+		// System.out.println(cursor.positionX);
 	}
 	
-	private final void updateScrollMin() {
-		scroll.setMin(-(text.getWidth()-getW()*.8f));
+	private final void updateScrollMax() {
+		if(text.isEmpty()) { scroll.setMax(0); return; }
+		
+		scroll.setMax((text.getWidth()-getW()*.8f));
 	}
 	
 	@Override
@@ -97,7 +102,7 @@ public final class TextField extends Component implements KeyPressable {
 		
 		if(text != null) { text.updatePosition(); }
 		
-		if(scroll != null) { updateScrollMin(); }
+		if(scroll != null) { updateScrollMax(); }
 		
 		if(cursor != null) { cursor.updateTransforms(); }
 		
@@ -122,40 +127,40 @@ public final class TextField extends Component implements KeyPressable {
 		case LEFT :
 			cursor.row.back();
 			if(cursor.isInStart()) { return; }
-			scroll.append(cursor.row.getCurrentCharWidth());
+			scroll.append(-cursor.row.getBackCharWidth());
 		break;
 		
 		case RIGHT :
 			cursor.row.next();
 			if(cursor.isInEnd()) { return; }
-			scroll.append(-cursor.row.getCurrentCharWidth());
+			scroll.append(cursor.row.getNextCharWidth());
 		break;
 		
 		case BACKSPACE :
 			if(cursor.isInStart()) { break; }
-			text.removeCharAt(cursor.row.get());
-			scroll.append(cursor.row.getCurrentCharWidth());
+			text.removeCharAt(cursor.row.get()-1);
+			scroll.append(-cursor.row.getNextCharWidth());
 			cursor.row.back();
 			
 		break;
 		case VK_HOME :
 			cursor.row.goToStart();
-			scroll.set(scroll.getMax());
+			scroll.set(scroll.getMin());
 		break;
 		case VK_END :
 			cursor.row.goToEnd();
-			scroll.set(scroll.getMin());
+			scroll.set(scroll.getMax());
 		break;
 		
 		default :
 			text.insert(cursor.row.get(), app.key);
-			scroll.append(-cursor.row.getCurrentCharWidth());
+			scroll.append(cursor.row.getNextCharWidth());
 		break;
 		
 		} 
 
-		updateScrollMin();
-		
+		updateScrollMax();
+		cursor.row.updatePositionX();
 	}
 	
 	private final void checkDimensions() {
@@ -210,7 +215,7 @@ public final class TextField extends Component implements KeyPressable {
 		}
 		
 		private final void updatePositionX() {
-			if(scroll == null) { x = LEFT_OFFSET; } else { x = LEFT_OFFSET+scroll.get();}
+			if(scroll == null) { x = LEFT_OFFSET; } else { x = LEFT_OFFSET-scroll.get();}
 		}
 		
 		
@@ -365,12 +370,24 @@ public final class TextField extends Component implements KeyPressable {
 			}
 			
 			private final void updatePositionX() {
-				positionX = pg.textWidth(text.get().substring(0,row))+scroll.get();
+				if(text.isEmpty()) { positionX = 0; return; }
+				
+				positionX = pg.textWidth(text.get().substring(0,row))-scroll.get();
 			}
 			
 			private final float getCurrentCharWidth() {
 				if(text.isEmpty()) { return 0; }
 				return pg.textWidth(text.get().charAt(min(row,text.length()-1)));
+			}
+			
+			private final float getNextCharWidth() {
+				if(text.isEmpty()) { return 0; }
+				return pg.textWidth(text.get().charAt(min(row+1,text.length()-1)));
+			}
+			
+			private final float getBackCharWidth() {
+				if(text.isEmpty()) { return 0; }
+				return pg.textWidth(text.get().charAt(max(0,min(row-1,text.length()-1))));
 			}
 		}
 		
