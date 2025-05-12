@@ -13,6 +13,10 @@ public Value(float min, float max, float value) {
 	this.value = value;
 }
 
+public Value(float max) {
+	set(0,max,0);
+}
+
 public Value() {
 	set(0,100,0);
 }

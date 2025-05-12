@@ -3,7 +3,7 @@ package microUI.util;
 import static processing.core.PApplet.constrain;
 
 public class TextController {
-	private final StringBuilder sb;
+	protected final StringBuilder sb;
 	private boolean validation;
 	
 	public TextController(final String text) {
@@ -38,8 +38,10 @@ public class TextController {
 	public final void insert(final int pos, final char ch) {
 		if(pos < 0 || pos > length()) { return; }
 		if(validation) {
-		  if(isValidChar(ch)) { sb.insert(pos,ch); }
-		  inInserting();
+		  if(isValidChar(ch)) {
+			  sb.insert(pos,ch);
+			  inInserting();
+		  }
 		} else {
 		  sb.insert(pos,ch);
 		}
@@ -92,7 +94,7 @@ public class TextController {
 	}
 	
 	public final boolean isValidChar(final char ch) {
-		return " .,;:[]{}<>/|\\\"'?+-*=&!@#$%^`~_".contains(String.valueOf(ch)) || Character.isLetterOrDigit(ch);
+		return " .,;:()[]{}<>/|\\\"'?+-*=&!@#$%^`~_".contains(String.valueOf(ch)) || Character.isLetterOrDigit(ch);
 	}
 	
 	protected void inInserting() {}

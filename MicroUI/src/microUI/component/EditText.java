@@ -40,13 +40,15 @@ import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
 public class EditText extends Component implements Scrollable, KeyPressable {
+	protected final float SCROLL_WEIGHT,SHIFT_LEFT_SIDE;
+	
 	public Scroll scrollV,scrollH;
 	public final Items items;
 	public final Cursor cursor;
 	public final Selection selection;
 	
-	protected final float SCROLL_WEIGHT,SHIFT_LEFT_SIDE;
-	protected boolean isFocused;
+	
+	protected boolean focused;
 	protected PGraphics pg;
 	protected PFont font;
 	protected final Event event;
@@ -68,6 +70,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		
 		pg = app.createGraphics((int) w, (int) h, app.sketchRenderer());
 		event = new Event();
+		
+		scrollsValuesUpdate();
 		
 	}
 
@@ -96,14 +100,12 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	
 	@Override
 	public void update() {
-		// debug();
 		event.listen(this);
-		//fx.init();
 	
 		pg.beginDraw();
 			pg.background(fill.get());
 			items.draw(pg);
-			if(isFocused) { cursor.draw(pg); }
+			if(focused) { cursor.draw(pg); }
 			selection.draw();
 		pg.endDraw();
 		
@@ -116,8 +118,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		
 		if(!app.mousePressed) { autoCheckResize(); }
 		
-		if(event.clicked()) { isFocused = true; }
-		if(app.mousePressed && event.outside()) { isFocused = false; }
+		if(event.clicked()) { focused = true; }
+		if(app.mousePressed && event.outside() && !event.holding()) { focused = false; }
 		
 		
 		if(scrollH.value.getMax() == 0) {
@@ -179,7 +181,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	@Override
 	public final void mouseWheel(MouseEvent e) {
 		
-		if(isFocused) {
+		if(focused) {
 			scrollV.scrolling.init(e,event.inside());
 			scrollV.autoScroll();
 		}
@@ -190,7 +192,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	public final void keyPressed() {
 		scrollsValuesUpdate();
 		
-		if(!isFocused) { return; }
+		if(!focused) { return; }
 			
 		cursor.resetTimer();
 		
@@ -235,9 +237,9 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 
 	}
 	
-	public final boolean isFocused() { return isFocused; }
+	public final boolean isFocused() { return focused; }
 	
-	public final void setFocused(boolean isFocused) { this.isFocused = isFocused; }
+	public final void setFocused(boolean isFocused) { this.focused = isFocused; }
 
 	private final void removeEmptyItem(final int index) {
 		if(items.size() <= 1) { return; }
@@ -684,7 +686,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 					
 					textWidth = pg.textWidth(sb.toString());
 					
-					if(isFocused && isEditing) {
+					if(focused && isEditing) {
 						pg.pushStyle();
 						pg.fill(0,12);
 						pg.rect(0,getInsideY(),w,textSize);

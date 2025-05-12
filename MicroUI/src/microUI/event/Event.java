@@ -10,7 +10,7 @@ public class Event extends MicroUI {
    	  
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;
-	  private boolean holding,dragging,enable;
+	  private boolean holding,dragged,enable;
 	  private static final boolean[] keys = new boolean[Character.MAX_VALUE+1];
 
 	  public Event() {
@@ -27,7 +27,7 @@ public class Event extends MicroUI {
 	      
 	    if(!app.mousePressed) {
 	    	holding = false;
-	    	dragging = false;
+	    	dragged = false;
 	    }
 	    
 	    if(pressed()) {
@@ -52,7 +52,7 @@ public class Event extends MicroUI {
 		    
 		    if(!app.mousePressed) {
 		    	holding = false;
-		    	dragging = false;
+		    	dragged = false;
 		    }
 		    
 		    if(pressed()) {
@@ -95,11 +95,15 @@ public class Event extends MicroUI {
 		  
 	  }
 	  
-	  public boolean dragged() {
-		  if(pressed() && (app.mouseX != app.pmouseX || app.mouseY != app.pmouseY)) { return dragging = true;
+	  public boolean dragging() {
+		  if(pressed() && (app.mouseX != app.pmouseX || app.mouseY != app.pmouseY)) { return dragged = true;
 		  } else {
-			  	return dragging;
+			  	return dragged;
 			}
+	  }
+	  
+	  public boolean isDragged() {
+		  return dragged;
 	  }
 	  
 	  public boolean clicked() {
@@ -141,6 +145,6 @@ public class Event extends MicroUI {
 	  public final void resetState() {
 		  keyReleased();
 		  longPressed = wasPressed = clickCounter = 0;
-		  holding = dragging = false;
+		  holding = dragged = false;
 	  }
 	}
