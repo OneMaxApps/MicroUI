@@ -34,6 +34,7 @@ public final class Clipboard {
 	
 	public static final String get() {
 		if(usingLocalBuffer) {
+			
 		 return localBuffer;
 		} else {
 			try {
@@ -59,4 +60,8 @@ public final class Clipboard {
 	}
 	
 	public static final String usingTypeOfBuffer() { return usingLocalBuffer ? "Local Buffer" : "OS Buffer"; }
+
+	public static final boolean isEmpty() {
+		return get().isEmpty();
+	}
 }

@@ -52,7 +52,7 @@ public final class TextView extends Component {
 		  
 		  if(isAutoResize()) {
 			  
-			  app.textSize(max(min(w,h)/2,1));
+			  app.textSize(max(1,min(w,h)/4));
 			  
 		  } else {
 			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);

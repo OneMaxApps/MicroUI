@@ -53,7 +53,8 @@ public final class TextField extends Component implements KeyPressable {
 	private final Value scroll;
 	private PGraphics pg;
 	
-	private boolean focused;
+	private boolean focused,componentSizeChanged;
+	
 	
 	public TextField(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -66,8 +67,7 @@ public final class TextField extends Component implements KeyPressable {
 		
 		scroll = new Value(0);
 		
-		pg = app.createGraphics((int) w, (int) h, app.sketchRenderer());
-		
+		createPGraphics();
 	}
 	
 	public TextField() {
@@ -101,18 +101,24 @@ public final class TextField extends Component implements KeyPressable {
 			}
 		app.popStyle();
 		
+		events();
+	}
+	
+	private final void events() {
 		
 		if(event.pressed()) {
 			if(!focused) { focused = true; }
 			cursor.blink.reset();
 		}
 		
-		if(cannotBeFocused()) {
+		if(mustNotHaveFocus()) {
 			if(focused) { focused = false; }
 			selection.reset();
 		}
 		
-		if(event.holding()) {	
+		if(event.holding()) {
+			if(text.isEmpty()) { return; }
+			
 			cursor.row.set((int) map(app.mouseX-getX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
 			
 			if(app.frameCount%3 == 0) {
@@ -141,10 +147,9 @@ public final class TextField extends Component implements KeyPressable {
 				selection.selectAll();
 			}
 		}
-		
 	}
 	
-	private final boolean cannotBeFocused() {
+	private final boolean mustNotHaveFocus() {
 		return app.mousePressed && event.outside() && !event.holding();
 	}
 	
@@ -159,15 +164,16 @@ public final class TextField extends Component implements KeyPressable {
 	
 	private final void checkDimensions() {
 		if(app.mousePressed) { return; }
-		if(pg == null) { return; }
-		
-		if((int) (getW()) != pg.width || (int) (getH()) != pg.height) {
-			pg = app.createGraphics((int) max(1,getW()), (int) max(1,getH()), app.sketchRenderer());
-			System.out.println("PGraphics object was created");
-		}
-		
+		if(componentSizeChanged) { createPGraphics(); }
+	}
+	
+	private final void createPGraphics() {
+		pg = app.createGraphics((int) max(1,getW()), (int) max(1,getH()), app.sketchRenderer());
+		System.out.println("PGraphics object was created");
+		componentSizeChanged = false;
 	}
 
+	
 	@Override
 	protected void inTransforms() {
 		super.inTransforms();
@@ -180,6 +186,7 @@ public final class TextField extends Component implements KeyPressable {
 		
 		if(selection != null) { selection.updateTransforms(); }
 		
+		componentSizeChanged = true;
 	}
 	
 	public final boolean isFocused() {
@@ -199,6 +206,8 @@ public final class TextField extends Component implements KeyPressable {
 		if(Event.checkKey(CONTROL)) {
 			if(Event.checkKey(VK_C)) { Clipboard.set(selection.getText()); }
 			if(Event.checkKey(VK_V)) {
+				if(Clipboard.isEmpty()) { return; }
+				
 				for(char ch : Clipboard.get().toCharArray()) {
 					text.insert(cursor.row.get(), ch);
 					updateScrollMax();
@@ -417,8 +426,8 @@ public final class TextField extends Component implements KeyPressable {
 	public final class Cursor {
 		public final Color fill;
 		public final Size weight;
-		public final Row row;
 		public final Blink blink;
+		private final Row row;
 		private float positionX,positionY,height;
 		
 		private Cursor() {
@@ -481,7 +490,7 @@ public final class TextField extends Component implements KeyPressable {
 			private final void reset() { duration = 0; }
 			
 			public final void setRate(final float rate) {
-				if(rate < 0 || rate > maxDuration/2) { return; }
+				if(rate <= 0 || rate >= maxDuration/2) { return; }
 				this.rate = rate;
 			}
 		}

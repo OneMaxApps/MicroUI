@@ -26,7 +26,7 @@ public abstract class Layout extends Bounds implements Scrollable, KeyPressable,
 		fill.set(0,0,128,32);
 		margin = new Margin();
 		setVisible(true);
-		image = new BaseImage(app) {
+		image = new BaseImage() {
 			@Override
 			public void update() {
 				if(isLoaded()) {

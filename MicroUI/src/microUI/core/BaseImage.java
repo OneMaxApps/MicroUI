@@ -1,17 +1,21 @@
 package microUI.core;
 
 import microUI.util.Color;
-import processing.core.PApplet;
 import processing.core.PImage;
 
 public abstract class BaseImage extends Bounds {
 	public final Color tint;
 	protected PImage image;
 	
-	public BaseImage(PApplet app) {
+	public BaseImage() {
 		tint = new Color(255);
 	}
 	
+	@Override
+	public void draw() {
+		if(isLoaded()) { super.draw(); }
+	}
+
 	public final boolean isLoaded() {
 		return image != null;
 	}

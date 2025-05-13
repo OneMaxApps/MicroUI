@@ -18,38 +18,21 @@ public class Event extends MicroUI {
 	  }
 	  
 	  public void listen(Bounds form) {
-		if(!enable) { return; }
-		
-	    x = form.getX();
-	    y = form.getY();
-	    w = form.getW();
-	    h = form.getH();
-	      
-	    if(!app.mousePressed) {
-	    	holding = false;
-	    	dragged = false;
-	    }
-	    
-	    if(pressed()) {
-	    	wasPressed = 1;
-	    	if(app.frameCount%60 == 0) { longPressed++; }
-		     
-	    } else {
-	    	longPressed = 0;
-	     }
-	    
-	    if(outside()) { wasPressed = 0; }
-	    
+		  listener(form.getX(),form.getY(),form.getW(),form.getH());
 	  }
 	  
 	  public void listen(float x, float y, float w, float h) {
-		  	if(!enable) { return; }
+		  listener(x,y,w,h);
+	  }
+	  
+	  private final void listener(final float x, final float y, final float w, final float h) {
+		  if(!enable) { return; }
 			
 		    this.x = x;
 		    this.y = y;
 		    this.w = w;
 		    this.h = h;
-		    
+		      
 		    if(!app.mousePressed) {
 		    	holding = false;
 		    	dragged = false;
@@ -64,7 +47,6 @@ public class Event extends MicroUI {
 		     }
 		    
 		    if(outside()) { wasPressed = 0; }
-		    
 	  }
 	  
 	  public final void setEnable(boolean enable) { this.enable = enable; }

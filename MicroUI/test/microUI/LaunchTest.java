@@ -1,15 +1,15 @@
 package microUI;
 
-import microUI.component.EditText;
-import microUI.component.TextField;
+import microUI.component.Dial;
 import microUI.event.Event;
+import microUI.util.Clipboard;
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 
-	TextField textField;
-	EditText editText;
-	
+	private Dial dial;
+
 	public static void main(String[] args) {
 		PApplet.main("microUI.LaunchTest");
 	}
@@ -21,30 +21,24 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		textField = new TextField();
+		Clipboard.usingLocalBuffer();
 		
-		textField.text.setHint("you my love:)");
-		textField.text.font.set(createFont("C:\\Windows\\Fonts\\consola.ttf",32));
-		textField.fill.set(128,200,200);
-		textField.text.fill.set(255,0,255,128);
-		textField.cursor.fill.set(255,200);
-		textField.selection.fill.set(0,200,0,128);
-		textField.text.size.set(24);
-		
-		editText = new EditText();
+		dial = new Dial();
+		dial.hint.set("Bright Level");
+		dial.image.set("C:\\Users\\002\\Desktop\\dial_texture.PNG");
+		dial.arrow.set("C:\\Users\\002\\Desktop\\narrow.png");
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
-		editText.draw();
+		dial.draw();
 		
 	}
 
 	@Override
 	public void keyPressed() {
 		Event.keyPressed(this);
-		editText.keyPressed();
 	}
 	
 	@Override
@@ -52,4 +46,8 @@ public final class LaunchTest extends PApplet {
 		Event.keyReleased();
 	}
 	
+	@Override
+	public void mouseWheel(final MouseEvent event) {
+		dial.mouseWheel(event);
+	}
 }
