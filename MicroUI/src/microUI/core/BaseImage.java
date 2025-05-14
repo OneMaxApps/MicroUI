@@ -25,7 +25,7 @@ public abstract class BaseImage extends Bounds {
 		image = img;
 	}
 	
-	public final void set(final String path) {
+	public final void load(final String path) {
 		if(path == null) { return; }
 		image = app.loadImage(path);
 	}

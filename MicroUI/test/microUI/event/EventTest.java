@@ -175,16 +175,16 @@ class EventTest extends TestInit {
 	void keyPressedTest() {
 		final char symbolA = 'A',symbolB = 'B';
 		app.key = symbolA;
-		Event.keyPressed(app);
+		Event.keyPressed();
 		
 		assertTrue(Event.checkKey(symbolA));
 		
 		Event.keyReleased();
 		
 		app.key = symbolA;
-		Event.keyPressed(app);
+		Event.keyPressed();
 		app.key = symbolB;
-		Event.keyPressed(app);
+		Event.keyPressed();
 		
 		assertTrue(Event.checkKey(symbolA) && Event.checkKey(symbolB));
 		

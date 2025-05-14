@@ -2,11 +2,13 @@ package microUI.component;
 
 import static processing.core.PApplet.min;
 import static processing.core.PApplet.map;
+import static processing.core.PApplet.max;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 import static processing.core.PConstants.HALF_PI;
 import static processing.core.PConstants.TWO_PI;
 
+import microUI.Constants;
 import microUI.core.BaseImage;
 import microUI.core.Component;
 import microUI.event.Scrollable;
@@ -26,6 +28,7 @@ import processing.event.MouseEvent;
  7. Can set texture for arrow; DONE
  8. Can set value from outside; DONE
  */
+
 public final class Dial extends Component implements Scrollable {
 	private final static float RADIUS_START = HALF_PI*1.2f,
 							   RADIUS_END = TWO_PI+HALF_PI*.8f;
@@ -36,6 +39,7 @@ public final class Dial extends Component implements Scrollable {
 	public final Arrow arrow;
 	
 	private float centerX,centerY;
+	private boolean valueVisible;
 	
 	public Dial(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -46,11 +50,13 @@ public final class Dial extends Component implements Scrollable {
 		value = new Value();
 		hint = new TextView(x,y,min(w,h),min(w,h));
 		hint.setAutoResize(true);
+		hint.setAutoResizeMode(Constants.AUTO_RESIZE_MODE_TINY);
 		
 		image = new Image();
 		arrow = new Arrow();
 		
 		calculateCenter();
+		valueVisible = true;
 	}
 
 	public Dial() {
@@ -77,7 +83,9 @@ public final class Dial extends Component implements Scrollable {
 		
 		if(event.inside() || event.holding()) {
 			if(event.holding()) { value.append((app.pmouseY-app.mouseY)/2); }
-			valueOnDraw();
+			
+			if(isValueVisible()) { valueOnDraw(); }
+			
 		} else { hint.draw(); }
 		
 		app.popStyle();
@@ -88,7 +96,13 @@ public final class Dial extends Component implements Scrollable {
 		app.pushStyle();
 		app.fill(hint.fill.get());
 		if(hint.getFont() != null) { app.textFont(hint.getFont()); }
-		app.textSize(min(getW()*.4f,getH()*.4f));
+		
+		if(hint.isAutoResize()) {
+		app.textSize(max(1,min(w,h)/hint.getAutoResizeMode()));
+		} else {
+		app.textSize(hint.getTextSize());
+		}
+		
 		app.textAlign(CENTER,CENTER);
 		app.text((int) value.get(),x+min(w/2,h/2), y+min(w/2,h/2));
 		app.popStyle();
@@ -98,6 +112,16 @@ public final class Dial extends Component implements Scrollable {
 		centerX = x+min(w/2,h/2);
 		centerY = y+min(w/2,h/2);
 	}
+
+	public final boolean isValueVisible() {
+		return valueVisible;
+	}
+	
+
+	public final void setValueVisible(boolean valueVisible) {
+		this.valueVisible = valueVisible;
+	}
+	
 
 	@Override
 	protected void inTransforms() {

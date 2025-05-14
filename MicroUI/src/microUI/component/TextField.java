@@ -18,11 +18,11 @@ import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 
 import microUI.core.Component;
+import microUI.core.TextController;
 import microUI.event.Event;
 import microUI.event.KeyPressable;
 import microUI.util.Clipboard;
 import microUI.util.Color;
-import microUI.util.TextController;
 import microUI.util.Value;
 import processing.core.PFont;
 import processing.core.PGraphics;

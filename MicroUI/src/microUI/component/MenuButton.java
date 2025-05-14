@@ -4,27 +4,28 @@ import java.util.ArrayList;
 
 import microUI.event.Event;
 
-public class Spinner extends Button {
-	private boolean open,showSelectedItem,autoCloseable;
+public class MenuButton extends Button {
+	private boolean open,autoCloseable;
 	private ArrayList<Button> itemList;
 	private int select;
 	private float listHeight;
 	private Event localEvent;
 	
-	public Spinner(String title, float x, float y, float w, float h) {
+	public MenuButton(String title, float x, float y, float w, float h) {
 		super(title,x,y,w,h);
-		//shadow.invisible();
+		autoCloseable = true;
 		itemList = new ArrayList<Button>();
-		showSelectedItem = autoCloseable = true;
+		select = -1;
 		localEvent = new Event();
+		
 	}
 	
-	public Spinner(String title) {
+	public MenuButton(String title) {
 		this(title,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
 	}
 	
-	public Spinner() {
-		this("Spinner",app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
+	public MenuButton() {
+		this("Menu Button",app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
 	}
 	
 	@Override
@@ -35,6 +36,7 @@ public class Spinner extends Button {
 			if(localEvent.clicked()) { open = !open; }
 			
 			if(open) {
+				select = -1;
 				if(!itemList.isEmpty()) {
 					for(int i = 0; i < itemList.size(); i++) {
 						Button item = itemList.get(i);
@@ -48,21 +50,13 @@ public class Spinner extends Button {
 						
 						
 					}
-					if(select >= 0 && select < itemList.size()) {
-						if(showSelectedItem) {
-							app.pushStyle();
-							app.fill(0,234,0,32);
-							app.rect(itemList.get(select).getX(),itemList.get(select).getY(),itemList.get(select).getW(),itemList.get(select).getH());
-							app.popStyle();
-						}
-					}
 				}
 				
 				
 			}
 	}
 	
-	public Spinner setAutoCloseable(boolean a) {
+	public MenuButton setAutoCloseable(boolean a) {
 		autoCloseable = a;
 		return this;
 	}
@@ -71,12 +65,12 @@ public class Spinner extends Button {
 		return open;
 	}
 
-	public Spinner open() {
+	public MenuButton open() {
 		this.open = true;
 		return this;
 	}
 	
-	public Spinner close() {
+	public MenuButton close() {
 		this.open = false;
 		return this;
 	}
@@ -94,32 +88,22 @@ public class Spinner extends Button {
 		this.select = select;
 	}
 	
-	public Spinner add(String... title) {
+	public MenuButton add(String... title) {
 		for(int i = 0; i < title.length; i++) {
 			itemList.add(new Button(title[i],getX(),getY()+getH()+listHeight,getW(),getH()));
 			listHeight += getH();
-			//itemList.get(i).shadow.invisible();
 		}
 		
 		return this;
 	}
 	
-	public Spinner add(int... nums) {
+	public MenuButton add(int... nums) {
 		for(int i = 0; i < nums.length; i++) {
 			itemList.add(new Button(String.valueOf(nums[i]),getX(),getY()+getH()+listHeight,getW(),getH()));
 			listHeight += getH();
-			//itemList.get(i).shadow.invisible();
 		}
 		
 		return this;
-	}
-	
-	public boolean isShowSelectedItem() {
-		return showSelectedItem;
-	}
-
-	public void setShowSelectedItem(boolean showSelectedItem) {
-		this.showSelectedItem = showSelectedItem;
 	}
 	
 	@Override

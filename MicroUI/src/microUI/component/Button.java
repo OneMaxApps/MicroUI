@@ -1,15 +1,18 @@
 package microUI.component;
 
+import microUI.Constants;
 import microUI.core.AbstractButton;
 
 public class Button extends AbstractButton {
 	public final TextView text;
 
-	public Button(String text, float x, float y, float w, float h) {
+	public Button(String plainText, float x, float y, float w, float h) {
 		super(x, y, w, h);
-		this.text = new TextView(text, x, y, w, h);
-		this.text.setUpperCaseStyle(true);
-		this.text.setAutoResize(true);
+		text = new TextView(plainText, x, y, w, h) {{
+		setUpperCaseStyle(true);
+		setAutoResize(true);
+		setAutoResizeMode(Constants.AUTO_RESIZE_MODE_BIG);
+		}};
 	}
 
 	public Button(float x, float y, float w, float h) {
@@ -38,9 +41,7 @@ public class Button extends AbstractButton {
 	@Override
 	public void inTransforms() {
 		super.inTransforms();
-		if (text != null) {
-			text.setTransforms(this);
-		}
+		if (text != null) { text.setTransforms(this); }
 	}
 
 }

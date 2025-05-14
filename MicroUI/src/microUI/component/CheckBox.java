@@ -7,10 +7,11 @@ public class CheckBox extends AbstractButton {
 	private final Event eventInside;
 	private boolean included;
 	
-	
 	public CheckBox(float x, float y, float w, float h) {
 		super(x,y,w,h);
 		fill.set(0,200,0);
+		hover.fill.set(0,10);
+		
 		eventInside = new Event();
 		
 	}
@@ -32,7 +33,7 @@ public class CheckBox extends AbstractButton {
 		
 		if(!included) {
 			app.pushStyle();
-			app.fill(0,100);
+			app.fill(0,128);
 			app.rect(x, y, w, h);
 			app.popStyle();
 		}

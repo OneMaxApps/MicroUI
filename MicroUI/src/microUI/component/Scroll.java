@@ -8,7 +8,9 @@ import microUI.core.RangeControl;
 
 public final class Scroll extends RangeControl {
 	public final Button thumb;
-
+	private float distToThumb;
+	private boolean needRecalculateDistToThumb;
+	
 	public Scroll(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		fill.set(0,32);
@@ -28,21 +30,43 @@ public final class Scroll extends RangeControl {
 		super.update();
 		thumb.draw();
 		
+		
+		
 		if(thumb.event.holding()) {
+			calcDistFromMouseToThumb();
 			
 			switch(orientation) {
 				case Constants.HORIZONTAL :
-					thumb.setX(constrain(app.mouseX,getX(),getX()+getW()-thumb.getW()));
+					thumb.setX(constrain(app.mouseX+distToThumb,getX(),getX()+getW()-thumb.getW()));
 					value.setWithoutActions(map(thumb.getX(),getX(),getX()+getW()-thumb.getW(),value.getMin(),value.getMax()));
 				break;
 				
 				case Constants.VERTICAL :
-					thumb.setY(constrain(app.mouseY,getY(),getY()+getH()-thumb.getH()));
+					thumb.setY(constrain(app.mouseY+distToThumb,getY(),getY()+getH()-thumb.getH()));
 					value.setWithoutActions(map(thumb.getY(),getY()+getH()-thumb.getH(),getY(),value.getMin(),value.getMax()));
 				break;
 			}
 			
+		} else {
+			needRecalculateDistToThumb = true;
 		}
+		
+	}
+	
+	private final void calcDistFromMouseToThumb() {
+		if(!needRecalculateDistToThumb) { return; }
+		
+		switch(orientation) {
+			case Constants.HORIZONTAL :
+				 distToThumb = thumb.getX()-app.mouseX;
+			break;
+			
+			case Constants.VERTICAL :
+				distToThumb = thumb.getY()-app.mouseY;
+			break;
+		}
+		
+		needRecalculateDistToThumb = false;
 		
 	}
 

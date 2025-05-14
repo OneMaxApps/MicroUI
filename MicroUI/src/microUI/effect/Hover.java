@@ -9,7 +9,7 @@ public final class Hover extends View {
 	public final Color fill;
 	private final Component component;
 	
-	public Hover(Component component) {
+    public Hover(Component component) {
 		super();
 		this.component = component;
 		fill = new Color(0,100);

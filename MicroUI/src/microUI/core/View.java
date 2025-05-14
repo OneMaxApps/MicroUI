@@ -4,7 +4,7 @@ import microUI.MicroUI;
 
 public abstract class View extends MicroUI implements Visible {
 	protected boolean visible;
-
+	
 	@Override
 	public final boolean isVisible() { return visible; }
 	

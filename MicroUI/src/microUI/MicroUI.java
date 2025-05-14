@@ -3,15 +3,25 @@ package microUI;
 import processing.core.PApplet;
 
 public class MicroUI {
-
 	protected static PApplet app;
 	
-	public final static void setContext(final PApplet app) {
+	private static final int MAJOR = 2;
+	private static final int MINOR = 0;
+	private static final int PATCH = 0;
+	
+	private static final String VERSION = MAJOR+"."+MINOR+"."+PATCH;
+	
+	protected MicroUI() {}
+
+	public static final void setContext(final PApplet app) {
 		MicroUI.app = app;
 	}
 	
-	public final static PApplet getContext() {
+	public static final PApplet getContext() {
 		return app;
 	}
 	
+	public static final String getVersion() {
+		return VERSION;
+	}
 }

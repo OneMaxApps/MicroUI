@@ -4,6 +4,7 @@ import static processing.core.PApplet.ceil;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.min;
+import static processing.core.PApplet.max;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ public class GridLayout extends Layout {
 	  public final Transforming transforming;
 	  private boolean fillTheGrid;
 	  private int rows,columns;
-	  private ArrayList<Integer> elementRowList,elementColumnList;
+	  private ArrayList<Integer> rowList,columnList;
 	  private ArrayList<Float> elementDefaultWidth,elementDefaultHeight;
 	  
 	  
@@ -38,8 +39,8 @@ public class GridLayout extends Layout {
 	    setGrid(rows,columns);
 	    setElementsResizable(true);
 	    
-	    elementRowList = new ArrayList<Integer>();
-	    elementColumnList = new ArrayList<Integer>();
+	    rowList = new ArrayList<Integer>();
+	    columnList = new ArrayList<Integer>();
 	    elementDefaultWidth = new ArrayList<Float>();
 	    elementDefaultHeight = new ArrayList<Float>();
 	    transforming = new Transforming() {
@@ -47,42 +48,30 @@ public class GridLayout extends Layout {
 	    	public void updateForce() {
 				  
 				  for(int i = 0; i < elementList.size(); i++) {
-				  Bounds baseRectangle = elementList.get(i);
+				  Bounds bounds = elementList.get(i);
 				  
-				  if(elementRowList.get(i) < 0 || elementRowList.get(i) > getRows()-1 || elementColumnList.get(i) < 0 || elementColumnList.get(i) > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
+				  if(rowList.get(i) < 0 || rowList.get(i) > getRows()-1 || columnList.get(i) < 0 || columnList.get(i) > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
 				    
-				  if(baseRectangle instanceof Layout) {
-				    	Layout l = ((Layout) baseRectangle);
-					  	l.setPosition(
-					    		map(elementRowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-l.getW()/2-l.margin.getLeft(),
-					    		map(elementColumnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-l.getH()/2-l.margin.getUp()
+				  if(bounds instanceof Layout) {
+				    	Layout layout = (Layout) bounds;
+					  	layout.setPosition(
+					    		map(rowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-layout.getW()/2-layout.margin.getLeft(),
+					    		map(columnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-layout.getH()/2-layout.margin.getUp()
 					    );
 				    } else {
-				    	baseRectangle.setPosition(
-					    		map(elementRowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseRectangle.getW()/2,
-					    		map(elementColumnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseRectangle.getH()/2
+				    	bounds.setPosition(
+					    		map(rowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-bounds.getW()/2,
+					    		map(columnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-bounds.getH()/2
 					    );
 				    }
-				    /*
-				    if(baseRectangle instanceof CircleSeekBar) {
+				    
 					    if(isElementsResizable()) {
 					      if(isFillTheGrid()) {
-					    	baseRectangle.setSize(getW()/getRows(),getH()/getColumns());
+					        bounds.setSize(getW()/getRows(),getH()/getColumns());
 					      } else {
-					    	  baseRectangle.setSize(min(getW()/getRows(),elementDefaultWidth.get(i)),min(getH()/getColumns(),elementDefaultHeight.get(i)));
-					      }
-					    }
-				    } else {
-				    	*/
-					    if(isElementsResizable()) {
-					      if(isFillTheGrid()) {
-					        baseRectangle.setSize(getW()/getRows(),getH()/getColumns());
-					      } else {
-					    	baseRectangle.setSize(min(elementDefaultWidth.get(i),getW()/getRows()), min(elementDefaultHeight.get(i),getH()/getColumns()));
+					    	bounds.setSize(min(elementDefaultWidth.get(i),getW()/getRows()), min(elementDefaultHeight.get(i),getH()/getColumns()));
 					    }
 					  }
-					    
-				   // }
 				
 				  }
 			  }
@@ -100,6 +89,14 @@ public class GridLayout extends Layout {
 		  super.update();
 		  gridDraw();
 		  if(app.frameCount == 1 || app.frameCount%60*60 == 0) { transforming.updateForce(); }
+	  }
+	  
+	  public final boolean isEmpty() {
+		  return elementList.isEmpty();
+	  }
+	  
+	  public final boolean isFull() {
+		  return max(1,rows)*max(1,columns) == elementList.size();
 	  }
 	  
 	  private void elementsDraw() {
@@ -139,39 +136,25 @@ public class GridLayout extends Layout {
 	    setColumns(constrain(columns,1,columns));
 	  }
 	  
-	  public GridLayout add(Bounds baseRectangle, int row, int column) {
+	  public GridLayout add(Bounds bounds, int row, int column) {
 		  if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
-		    
-		  baseRectangle.setPosition(
-		    		map(row,0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseRectangle.getW()/2,
-		    		map(column,0,this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseRectangle.getH()/2
+		  if(!isEmptyCell(row,column)) { return this; }
+		  
+		  bounds.setPosition(
+		    		map(row,0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-bounds.getW()/2,
+		    		map(column,0,this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-bounds.getH()/2
 		  );
 		    
-		  /*
-		  if(baseRectangle instanceof CircleSeekBar) {
 			    if(isElementsResizable()) {
 			      if(isFillTheGrid()) {
-			    	baseRectangle.setSize(getW()/getRows(),getH()/getColumns());
-			      }
-			    }
-		    } else {
-		 */
-			    if(isElementsResizable()) {
-			      if(isFillTheGrid()) {
-			        baseRectangle.setSize(getW()/getRows(),getH()/getColumns());
+			        bounds.setSize(getW()/getRows(),getH()/getColumns());
 			      } else {
-			        if(baseRectangle.getW() > getW()/getRows() || baseRectangle.getW() < getW()/getRows()/2) { baseRectangle.setW(getW()/getRows()); }
-			        if(baseRectangle.getH() > getH()/getColumns() || baseRectangle.getH() < getH()/getColumns()/2) { baseRectangle.setH(getH()/getColumns()); }
+			        if(bounds.getW() > getW()/getRows() || bounds.getW() < getW()/getRows()/2) { bounds.setW(getW()/getRows()); }
+			        if(bounds.getH() > getH()/getColumns() || bounds.getH() < getH()/getColumns()/2) { bounds.setH(getH()/getColumns()); }
 			      }
 			    }
-		    //}
-		    
-	    /*
-		if(baseForm instanceof Button) {
-			((Button) baseForm).text.setTextSize(baseForm.getH()/3);
-		}*/
 	    
-		checkObject(baseRectangle,row,column);
+		checkObject(bounds,row,column);
 		
 		transforming.updateForce();
 		
@@ -179,9 +162,37 @@ public class GridLayout extends Layout {
 		return this;
 	  }
 	  
+	  private final boolean isEmptyCell(final int row, final int column) {
+		  boolean empty = true;
+		  
+		  for(int i = 0; i < elementList.size(); i++) {
+			  if(row == rowList.get(i) && column == columnList.get(i)) { empty = false; }
+		  }
+		  
+		  return empty;
+	  }
+	  
+	  public GridLayout add(Bounds bounds) {
+		if(isFull()) { return this; }
+		
+		mainLoop :
+		for(int column = 0; column < columns; column++) {
+			for(int row = 0; row < rows; row++) {
+				if(isEmptyCell(row,column)) {
+					add(bounds,row,column);
+					break mainLoop;
+				}
+			}
+		}
+		
+	    return this;
+	  }
+	  
 	  public GridLayout add(String txt, int row, int column) {
-		  TextView baseForm = new TextView(txt,0,0,0,0);
+		  if(!isEmptyCell(row,column)) { return this; }
 		  if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
+		  
+		  TextView baseForm = new TextView(txt,0,0,0,0);
 		    baseForm.setPosition(
 		    		map(row,0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-baseForm.getW()/2,
 		    		map(column,0,this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-baseForm.getH()/2
@@ -203,26 +214,25 @@ public class GridLayout extends Layout {
 		return this; 
 	  }
 	  
-	  private void checkObject(Bounds baseRectangle, int row, int column) {
+	  private void checkObject(Bounds bounds, int row, int column) {
 		    for(int i = 0; i < elementList.size(); i++) {
-		    	if(elementList.get(i) == baseRectangle) {
+		    	if(elementList.get(i) == bounds) {
 		    		return;
 		    	}
 		    }
-		    	elementList.add(baseRectangle);
-		    	elementRowList.add(row);
-				elementColumnList.add(column);
-				elementDefaultWidth.add(baseRectangle.getW());
-				elementDefaultHeight.add(baseRectangle.getH());
+		    	elementList.add(bounds);
+		    	rowList.add(row);
+				columnList.add(column);
+				elementDefaultWidth.add(bounds.getW());
+				elementDefaultHeight.add(bounds.getH());
 	  }
 
-	  
 	  public void remove(Bounds baseForm) {
 		  if(elementList.isEmpty()) { return; }
 		  for(int i = 0; i < elementList.size(); i++) {
 		    	if(elementList.get(i) == baseForm) {
-		    		elementRowList.remove(i);
-					elementColumnList.remove(i);
+		    		rowList.remove(i);
+					columnList.remove(i);
 		    		elementList.remove(i);
 		    		elementDefaultWidth.remove(i);
 					elementDefaultHeight.remove(i);
@@ -233,13 +243,11 @@ public class GridLayout extends Layout {
 	  public void remove(int index) {
 		  if(elementList.isEmpty()) { return; }
 		  elementList.remove(index);
-		  elementRowList.remove(index);
-		  elementColumnList.remove(index);
+		  rowList.remove(index);
+		  columnList.remove(index);
 		  elementDefaultWidth.remove(index);
 		  elementDefaultHeight.remove(index);
 	  }
-	  
-	  public ArrayList<Bounds> getElementList() { return elementList; }
 	  
 	  public boolean isFillTheGrid() {
 			return fillTheGrid;

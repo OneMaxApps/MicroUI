@@ -12,11 +12,11 @@ import microUI.util.Color;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
-public final class TextView extends Component {
+public class TextView extends Component {
 	  public final Shadow shadow;
 	  private final StringBuilder text;
 	  private PFont font;
-	  private int textSize;
+	  private int textSize,autoResizeMode;
 	  private boolean center,upperCaseStyle,lowerCaseStyle,autoResize;
 	  
 	   
@@ -24,6 +24,7 @@ public final class TextView extends Component {
 	    super(x,y,w,h);
 	    this.text = new StringBuilder(text);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
+	    autoResizeMode = 4;
 	    center = true;
 	    shadow = new Shadow();
 	    visible = true;
@@ -51,9 +52,7 @@ public final class TextView extends Component {
 		  if(font != null) { app.textFont(font,textSize); }
 		  
 		  if(isAutoResize()) {
-			  
-			  app.textSize(max(1,min(w,h)/4));
-			  
+			  app.textSize(max(1,min(w,h)/autoResizeMode));
 		  } else {
 			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
 		  }
@@ -71,7 +70,13 @@ public final class TextView extends Component {
 		  if(font != null) {
 			  pg.textFont(font,textSize);
 		  }
-		  pg.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
+		  
+		  if(isAutoResize()) {
+			  app.textSize(max(1,min(w,h)/autoResizeMode));
+		  } else {
+			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
+		  }
+		  
 		  if(center) {
 			  pg.textAlign(CENTER,CENTER);
 		  } else {
@@ -200,6 +205,13 @@ public final class TextView extends Component {
 		this.autoResize = autoResize;
 	  }
 
+	  public final int getAutoResizeMode() { return autoResizeMode; }
+	  
+	  public final void setAutoResizeMode(int autoResizeMode) {
+		if(autoResizeMode <= 0 || autoResizeMode > 5) { return; }
+		this.autoResizeMode = autoResizeMode;
+	  }
+
 
 
 	public final class Shadow extends View {
@@ -208,7 +220,7 @@ public final class TextView extends Component {
 		  
 		  public Shadow() {
 			  fill = new Color(0);
-			  extraSize = h*.025f;
+			  extraSize = h*.01f;
 			  invisible();
 		  }
 		  
@@ -219,7 +231,13 @@ public final class TextView extends Component {
 			  if(font != null) {
 				  app.textFont(font,textSize);
 			  }
-			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3+extraSize : 1 ) : textSize+extraSize);
+			  
+			  if(isAutoResize()) {
+				  app.textSize(max(1,min(w,h)/autoResizeMode)+extraSize);
+			  } else {
+				  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize+extraSize);
+			  }
+			  
 			  if(center) {
 			  app.textAlign(CENTER,CENTER);
 			  } else {
@@ -251,5 +269,5 @@ public final class TextView extends Component {
 			extraSize = size;
 		}
 
-	  } 
+	  }
 	}

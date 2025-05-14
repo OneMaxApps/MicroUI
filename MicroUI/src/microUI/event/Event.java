@@ -2,7 +2,6 @@ package microUI.event;
 
 import microUI.MicroUI;
 import microUI.core.Bounds;
-import processing.core.PApplet;
 
 public class Event extends MicroUI {
 
@@ -106,9 +105,9 @@ public class Event extends MicroUI {
 		  return clickCounter == count;
 	  }
 	  
-	  public static final void keyPressed(PApplet app) {
-		  keys[app.key] = true;
-		  keys[app.keyCode] = true;
+	  public static final void keyPressed() {
+		  keys[MicroUI.getContext().key] = true;
+		  keys[MicroUI.getContext().keyCode] = true;
 	  }
 	  
 	  public static final boolean checkKey(int ch) {

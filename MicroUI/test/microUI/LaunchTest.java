@@ -1,15 +1,14 @@
 package microUI;
 
-import microUI.component.Dial;
+import microUI.component.Scroll;
 import microUI.event.Event;
-import microUI.util.Clipboard;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
-
-	private Dial dial;
-
+	
+	private Scroll component;
+	
 	public static void main(String[] args) {
 		PApplet.main("microUI.LaunchTest");
 	}
@@ -17,28 +16,25 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void settings() { size(640,640); }
 	
-	
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		Clipboard.usingLocalBuffer();
-		
-		dial = new Dial();
-		dial.hint.set("Bright Level");
-		dial.image.set("C:\\Users\\002\\Desktop\\dial_texture.PNG");
-		dial.arrow.set("C:\\Users\\002\\Desktop\\narrow.png");
+		component = new Scroll();
+		// component.setOrientation(0);
+		// System.out.println(MicroUI.getVersion());
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
-		dial.draw();
+		component.draw();
 		
 	}
 
 	@Override
 	public void keyPressed() {
-		Event.keyPressed(this);
+		Event.keyPressed();
+		// component.keyPressed();
 	}
 	
 	@Override
@@ -48,6 +44,6 @@ public final class LaunchTest extends PApplet {
 	
 	@Override
 	public void mouseWheel(final MouseEvent event) {
-		dial.mouseWheel(event);
+		// component.mouseWheel(event);
 	}
 }
