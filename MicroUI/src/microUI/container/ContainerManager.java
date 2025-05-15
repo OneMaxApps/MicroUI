@@ -14,7 +14,7 @@ public final class ContainerManager extends View {
 	public ContainerManager() {
 		containerList = new ArrayList<Focusable>();
 		visible();
-		Metrics.registerContainerManager();
+		Metrics.Container.registerContainerManager();
 	}
 
 	@Override

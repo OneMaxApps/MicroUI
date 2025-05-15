@@ -10,7 +10,7 @@ public abstract class Component extends Bounds {
     
     public Component(float x, float y, float w, float h) {
         super(x, y, w, h);
-        Metrics.registerComponent();
+        Metrics.Core.registerComponent();
         fill = new Color(44);
         event = new Event();
       }

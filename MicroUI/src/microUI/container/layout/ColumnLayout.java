@@ -14,7 +14,7 @@ public class ColumnLayout extends Layout {
 	
 	public ColumnLayout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerColumnLayout();
+		Metrics.Container.registerColumnLayout();
 		
 		weightList = new ArrayList<Float>();
 		transforming = new Transforming() {

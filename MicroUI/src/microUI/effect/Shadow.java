@@ -28,7 +28,7 @@ public final class Shadow extends View {
 	    absoluteSize = 10;
 	    visible = true;
 	    
-	    Metrics.registerShadow();
+	    Metrics.Effect.registerShadow();
 	  }
 	  
 	  @Override

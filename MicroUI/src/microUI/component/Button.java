@@ -9,7 +9,7 @@ public class Button extends AbstractButton {
 
 	public Button(String plainText, float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerButton();
+		Metrics.Component.registerButton();
 		
 		text = new TextView(plainText, x, y, w, h);
 		text.setUpperCaseStyle(true);

@@ -13,7 +13,7 @@ public final class Slider extends RangeControl {
 	
 	public Slider(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerSlider();
+		Metrics.Component.registerSlider();
 		
 		level = new Rect(x,y,w,h);
 		level.fill.set(234);

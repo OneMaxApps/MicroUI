@@ -8,17 +8,18 @@ public class Value {
 private float min,max,value;;
 
 public Value(float min, float max, float value) {
+	Metrics.Util.registerValue();
 	this.min = min;
 	this.max = max;
 	this.value = value;
 }
 
 public Value(float max) {
-	set(0,max,0);
+	this(0,max,0);
 }
 
 public Value() {
-	set(0,100,0);
+	this(0,100,0);
 }
 
 public float getMin() {

@@ -37,7 +37,7 @@ public class GridLayout extends Layout {
 	  
 	  public GridLayout(PApplet app, float x, float y, float w, float h, int rows, int columns) {
 	    super(x,y,w,h);
-	    Metrics.registerGridLayout();
+	    Metrics.Container.registerGridLayout();
 	    
 	    setGrid(rows,columns);
 	    setElementsResizable(true);

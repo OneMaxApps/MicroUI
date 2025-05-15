@@ -15,7 +15,7 @@ public class RowLayout extends Layout {
 	
 	public RowLayout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerRowLayout();
+		Metrics.Container.registerRowLayout();
 		
 		weightList = new ArrayList<Float>();
 		

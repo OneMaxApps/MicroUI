@@ -22,7 +22,7 @@ public abstract class Layout extends Bounds implements Scrollable, KeyPressable,
 	
 	public Layout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerLayout();
+		Metrics.Container.registerLayout();
 		
 		elementList = new ArrayList<Bounds>();
 		fill = new Color();

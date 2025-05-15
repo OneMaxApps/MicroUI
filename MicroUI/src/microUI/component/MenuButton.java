@@ -14,7 +14,7 @@ public class MenuButton extends Button {
 	
 	public MenuButton(String title, float x, float y, float w, float h) {
 		super(title,x,y,w,h);
-		Metrics.registerMenuButton();
+		Metrics.Component.registerMenuButton();
 		
 		autoCloseable = true;
 		itemList = new ArrayList<Button>();

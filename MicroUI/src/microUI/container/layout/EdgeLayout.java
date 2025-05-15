@@ -13,7 +13,7 @@ public class EdgeLayout extends Layout {
 
 	public EdgeLayout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerEdgeLayout();
+		Metrics.Container.registerEdgeLayout();
 		
 		setCenter(true);
 		setElementsResizable(true);

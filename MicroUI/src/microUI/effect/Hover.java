@@ -12,7 +12,7 @@ public final class Hover extends View {
 	
     public Hover(Component component) {
 		super();
-		Metrics.registerHover();
+		Metrics.Effect.registerHover();
 		this.component = component;
 		fill = new Color(0,100);
 		visible();

@@ -7,7 +7,7 @@ public abstract class View extends MicroUI implements Visible {
 	protected boolean visible;
 	
 	public View() {
-		Metrics.registerView();
+		Metrics.Core.registerView();
 	}
 	
 	@Override

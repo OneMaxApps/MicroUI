@@ -9,6 +9,7 @@ public final class Stroke {
     private int weight;
     
     public Stroke() {
+      Metrics.Util.registerStroke();
       fill = new Color(0);
       weight = 2;
     }

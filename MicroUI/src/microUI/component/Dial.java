@@ -44,7 +44,7 @@ public final class Dial extends Component implements Scrollable {
 	
 	public Dial(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerDial();
+		Metrics.Component.registerDial();
 		
 		visible();
 		fill.set(32);

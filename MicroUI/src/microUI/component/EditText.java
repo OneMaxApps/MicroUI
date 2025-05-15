@@ -56,7 +56,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 
  	public EditText(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerEditText();
+		Metrics.Component.registerEditText();
 		
 		visible();
 		fill.set(255,255,232);

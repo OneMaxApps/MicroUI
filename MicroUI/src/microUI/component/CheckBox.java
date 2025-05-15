@@ -10,7 +10,7 @@ public class CheckBox extends AbstractButton {
 	
 	public CheckBox(float x, float y, float w, float h) {
 		super(x,y,w,h);
-		Metrics.registerCheckBox();
+		Metrics.Component.registerCheckBox();
 		
 		fill.set(0,200,0);
 		hover.fill.set(0,10);

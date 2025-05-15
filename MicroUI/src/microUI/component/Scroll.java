@@ -14,7 +14,7 @@ public final class Scroll extends RangeControl {
 	
 	public Scroll(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerScroll();
+		Metrics.Component.registerScroll();
 		
 		fill.set(0,32);
 		thumb = new Button("");

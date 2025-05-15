@@ -59,7 +59,7 @@ public final class TextField extends Component implements KeyPressable {
 	
 	public TextField(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerTextField();
+		Metrics.Component.registerTextField();
 		
 		fill.set(255);
 		visible();

@@ -25,7 +25,7 @@ public final class Ripples extends View {
 		this.form = form;
 		createGraphics();
 		
-		Metrics.registerRipples();
+		Metrics.Effect.registerRipples();
 	}
 
 	@Override

@@ -9,10 +9,12 @@ public class Color {
 	
 	public Color(float red, float green, float blue, float alpha) {
 		super();
+		Metrics.Util.registerColor();
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
 		this.alpha = alpha;
+		
 	}
 	
 	public Color(float red, float green, float blue) {
@@ -28,7 +30,7 @@ public class Color {
 	}
 	
 	public Color() {
-		set(128,MAX_VALUE);
+		this(128,MAX_VALUE);
 	}
 	
 	public void set(float red, float green, float blue, float alpha) {

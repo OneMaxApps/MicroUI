@@ -23,7 +23,7 @@ public final class TextView extends Component {
 	   
 	  public TextView(String text, float x, float y, float w, float h) {
 	    super(x,y,w,h);
-	    Metrics.registerTextView();
+	    Metrics.Component.registerTextView();
 	    
 	    this.text = new StringBuilder(text);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);

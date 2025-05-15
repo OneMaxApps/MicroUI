@@ -16,7 +16,7 @@ public class LinearLayout extends Layout {
 	
 	public LinearLayout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.registerLinearLayout();
+		Metrics.Container.registerLinearLayout();
 		
 		weightList = new ArrayList<Float>();
 		transforming = new Transforming() {

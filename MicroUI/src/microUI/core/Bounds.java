@@ -7,7 +7,7 @@ public abstract class Bounds extends View {
 	
 	public Bounds(float x, float y, float w, float h) {
 		setTransforms(x,y,w,h);
-		Metrics.registerBounds();
+		Metrics.Core.registerBounds();
 	}
 	
 	public Bounds(Bounds otherBounds) {

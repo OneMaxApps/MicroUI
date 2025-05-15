@@ -10,7 +10,7 @@ public abstract class BaseImage extends Bounds {
 	
 	public BaseImage() {
 		tint = new Color(255);
-		Metrics.registerImage();
+		Metrics.Core.registerImage();
 		
 	}
 	
