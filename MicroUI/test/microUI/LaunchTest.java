@@ -1,13 +1,14 @@
 package microUI;
 
-import microUI.component.Scroll;
+import microUI.component.MenuButton;
 import microUI.event.Event;
+import microUI.util.Metrics;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 	
-	private Scroll component;
+	private MenuButton component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.LaunchTest");
@@ -19,9 +20,10 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new Scroll();
+		component = new MenuButton();
 		// component.setOrientation(0);
 		// System.out.println(MicroUI.getVersion());
+		Metrics.printAllComponents();
 	}
 	
 	@Override

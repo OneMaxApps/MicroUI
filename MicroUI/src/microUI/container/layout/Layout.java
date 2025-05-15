@@ -9,6 +9,7 @@ import microUI.effect.Shadow;
 import microUI.event.KeyPressable;
 import microUI.event.Scrollable;
 import microUI.util.Color;
+import microUI.util.Metrics;
 import processing.event.MouseEvent;
 
 public abstract class Layout extends Bounds implements Scrollable, KeyPressable, Focusable  {
@@ -21,6 +22,8 @@ public abstract class Layout extends Bounds implements Scrollable, KeyPressable,
 	
 	public Layout(float x, float y, float w, float h) {
 		super(x, y, w, h);
+		Metrics.registerLayout();
+		
 		elementList = new ArrayList<Bounds>();
 		fill = new Color();
 		fill.set(0,0,128,32);

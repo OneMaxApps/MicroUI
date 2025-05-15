@@ -5,6 +5,7 @@ import static processing.core.PApplet.constrain;
 
 import microUI.Constants;
 import microUI.core.RangeControl;
+import microUI.util.Metrics;
 
 public final class Scroll extends RangeControl {
 	public final Button thumb;
@@ -13,6 +14,8 @@ public final class Scroll extends RangeControl {
 	
 	public Scroll(float x, float y, float w, float h) {
 		super(x, y, w, h);
+		Metrics.registerScroll();
+		
 		fill.set(0,32);
 		thumb = new Button("");
 		thumb.text.invisible();

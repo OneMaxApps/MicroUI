@@ -23,6 +23,7 @@ import microUI.event.Event;
 import microUI.event.KeyPressable;
 import microUI.util.Clipboard;
 import microUI.util.Color;
+import microUI.util.Metrics;
 import microUI.util.Value;
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -58,6 +59,8 @@ public final class TextField extends Component implements KeyPressable {
 	
 	public TextField(float x, float y, float w, float h) {
 		super(x, y, w, h);
+		Metrics.registerTextField();
+		
 		fill.set(255);
 		visible();
 		

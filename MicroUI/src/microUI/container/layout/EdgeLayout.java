@@ -3,6 +3,7 @@ package microUI.container.layout;
 import static processing.core.PApplet.min;
 
 import microUI.core.Bounds;
+import microUI.util.Metrics;
 
 public class EdgeLayout extends Layout {
 	private Bounds form;
@@ -12,6 +13,8 @@ public class EdgeLayout extends Layout {
 
 	public EdgeLayout(float x, float y, float w, float h) {
 		super(x, y, w, h);
+		Metrics.registerEdgeLayout();
+		
 		setCenter(true);
 		setElementsResizable(true);
 	}

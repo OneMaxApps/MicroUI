@@ -9,6 +9,7 @@ import static processing.core.PConstants.CORNER;
 import microUI.core.Component;
 import microUI.core.View;
 import microUI.util.Color;
+import microUI.util.Metrics;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
@@ -22,6 +23,8 @@ public class TextView extends Component {
 	   
 	  public TextView(String text, float x, float y, float w, float h) {
 	    super(x,y,w,h);
+	    Metrics.registerTextView();
+	    
 	    this.text = new StringBuilder(text);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
 	    autoResizeMode = 4;

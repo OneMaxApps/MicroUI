@@ -5,6 +5,7 @@ import java.util.List;
 
 import microUI.core.Focusable;
 import microUI.core.View;
+import microUI.util.Metrics;
 
 public final class ContainerManager extends View {
 	private final List<Focusable> containerList;
@@ -13,7 +14,7 @@ public final class ContainerManager extends View {
 	public ContainerManager() {
 		containerList = new ArrayList<Focusable>();
 		visible();
-		
+		Metrics.registerContainerManager();
 	}
 
 	@Override

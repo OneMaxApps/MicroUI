@@ -1,6 +1,7 @@
 package microUI.core;
 
 import microUI.util.Color;
+import microUI.util.Metrics;
 import processing.core.PImage;
 
 public abstract class BaseImage extends Bounds {
@@ -9,6 +10,8 @@ public abstract class BaseImage extends Bounds {
 	
 	public BaseImage() {
 		tint = new Color(255);
+		Metrics.registerImage();
+		
 	}
 	
 	@Override

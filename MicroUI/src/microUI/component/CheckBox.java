@@ -2,6 +2,7 @@ package microUI.component;
 
 import microUI.core.AbstractButton;
 import microUI.event.Event;
+import microUI.util.Metrics;
 
 public class CheckBox extends AbstractButton {
 	private final Event eventInside;
@@ -9,6 +10,8 @@ public class CheckBox extends AbstractButton {
 	
 	public CheckBox(float x, float y, float w, float h) {
 		super(x,y,w,h);
+		Metrics.registerCheckBox();
+		
 		fill.set(0,200,0);
 		hover.fill.set(0,10);
 		

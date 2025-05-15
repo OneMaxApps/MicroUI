@@ -1,9 +1,14 @@
 package microUI.core;
 
 import microUI.MicroUI;
+import microUI.util.Metrics;
 
 public abstract class View extends MicroUI implements Visible {
 	protected boolean visible;
+	
+	public View() {
+		Metrics.registerView();
+	}
 	
 	@Override
 	public final boolean isVisible() { return visible; }

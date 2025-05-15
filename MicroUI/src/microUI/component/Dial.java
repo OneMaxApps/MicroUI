@@ -12,6 +12,7 @@ import microUI.Constants;
 import microUI.core.BaseImage;
 import microUI.core.Component;
 import microUI.event.Scrollable;
+import microUI.util.Metrics;
 import microUI.util.Stroke;
 import microUI.util.Value;
 import processing.event.MouseEvent;
@@ -43,6 +44,8 @@ public final class Dial extends Component implements Scrollable {
 	
 	public Dial(float x, float y, float w, float h) {
 		super(x, y, w, h);
+		Metrics.registerDial();
+		
 		visible();
 		fill.set(32);
 		

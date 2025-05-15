@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import microUI.component.TextView;
 import microUI.core.Bounds;
+import microUI.util.Metrics;
 import processing.core.PApplet;
 
 public class GridLayout extends Layout {
@@ -36,6 +37,8 @@ public class GridLayout extends Layout {
 	  
 	  public GridLayout(PApplet app, float x, float y, float w, float h, int rows, int columns) {
 	    super(x,y,w,h);
+	    Metrics.registerGridLayout();
+	    
 	    setGrid(rows,columns);
 	    setElementsResizable(true);
 	    

@@ -2,12 +2,15 @@ package microUI.component;
 
 import microUI.Constants;
 import microUI.core.AbstractButton;
+import microUI.util.Metrics;
 
 public class Button extends AbstractButton {
 	public final TextView text;
 
 	public Button(String plainText, float x, float y, float w, float h) {
 		super(x, y, w, h);
+		Metrics.registerButton();
+		
 		text = new TextView(plainText, x, y, w, h) {{
 		setUpperCaseStyle(true);
 		setAutoResize(true);
