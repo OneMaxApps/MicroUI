@@ -1,6 +1,6 @@
 package microUI;
 
-import microUI.component.Button;
+import microUI.component.TextView;
 import microUI.event.Event;
 import microUI.util.Metrics;
 import processing.core.PApplet;
@@ -8,7 +8,7 @@ import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 	
-	private Button component;
+	private TextView component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.LaunchTest");
@@ -20,15 +20,17 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new Button();
-		Metrics.printAll();
+		component = new TextView("Hello World");
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
 		component.draw();
-		
+		if(frameCount % 30 == 0) {
+			Metrics.Core.printAll();
+			Metrics.Absolute.Core.printAll();
+		}
 	}
 
 	@Override
