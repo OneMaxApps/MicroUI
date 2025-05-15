@@ -1,6 +1,6 @@
 package microUI;
 
-import microUI.component.MenuButton;
+import microUI.component.Button;
 import microUI.event.Event;
 import microUI.util.Metrics;
 import processing.core.PApplet;
@@ -8,7 +8,7 @@ import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 	
-	private MenuButton component;
+	private Button component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.LaunchTest");
@@ -20,10 +20,8 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new MenuButton();
-		// component.setOrientation(0);
-		// System.out.println(MicroUI.getVersion());
-		Metrics.printAllComponents();
+		component = new Button();
+		Metrics.printAll();
 	}
 	
 	@Override

@@ -13,7 +13,7 @@ import microUI.util.Metrics;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
-public class TextView extends Component {
+public final class TextView extends Component {
 	  public final Shadow shadow;
 	  private final StringBuilder text;
 	  private PFont font;

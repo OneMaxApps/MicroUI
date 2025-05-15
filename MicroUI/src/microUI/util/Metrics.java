@@ -1,147 +1,170 @@
 package microUI.util;
 
-public final class Metrics {
-	private static int countOfViews,
-					   countOfBounds,
-					   countOfContainerManagers,
-					   countOfHovers,
-					   countOfRipples,
-					   countOfShadows,
-					   countOfImages,
+public  class Metrics {
+	private static int views,
+					   bounds,
+					   unsafeBounds,
+					   containerManagers,
+					   hovers,
+					   ripples,
+					   shadows,
+					   images,
 					   
-					   countOfComponents,
-						   countOfButtons,
-						   countOfCheckBoxes,
-						   countOfDials,
-						   countOfEditTexts,
-						   countOfMenuButtons,
-						   countOfScrolls,
-						   countOfSliders,
-						   countOfTextFields,
-						   countOfTextViews,
+					   components,
+						   buttons,
+						   checkBoxes,
+						   dials,
+						   editTexts,
+						   menuButtons,
+						   scrolls,
+						   sliders,
+						   textFields,
+						   textViews,
 						   
-					   countOfLayouts,
-						   countOfColumnLayouts,
-						   countOfRowLayouts,
-						   countOfGridLayouts,
-						   countOfEdgeLayouts,
-						   countOfLinearLayouts;
+					   layouts,
+						   columnLayouts,
+						   rowLayouts,
+						   gridLayouts,
+						   edgeLayouts,
+						   linearLayouts;
 	
 	private Metrics() {}
 	
-	public static final void registerView() { countOfViews++; }
-	public static final int getCountOfViews() { return countOfViews; }
+	public static void registerView() { views++; }
+	public static int getViews() { return views; }
 	
-	public static final void registerBounds() { countOfBounds++; }
-	public static final int getCountOfBounds() { return countOfBounds; }
+	public static void registerBounds() { bounds++; }
+	public static int getBounds() { return bounds; }
 	
-	public static final void registerContainerManager() { countOfContainerManagers++; }
-	public static final int getContainerManagers() { return countOfContainerManagers; }
-	
-	public static final void registerHover() { countOfHovers++; }
-	public static final int getHovers() { return countOfHovers; }
-	
-	public static final void registerRipples() { countOfRipples++; }
-	public static final int getRipples() { return countOfRipples; }
-	
-	public static final void registerShadow() { countOfShadows++; }
-	public static final int getShadows() { return countOfShadows; }
-	
-	public static final void registerImage() { countOfImages++; }
-	public static final int getImages() { return countOfImages; }
-	
-	
-	
-	public static final void registerComponent() { countOfComponents++; }
-	public static final int getComponents() { return countOfComponents; }
-	
-	public static final void registerButton() { countOfButtons++; }
-	public static final int getButtons() { return countOfButtons; }
-	
-	public static final void registerCheckBox() { countOfCheckBoxes++; }
-	public static final int getCheckBoxes() { return countOfCheckBoxes; }
-	
-	public static final void registerDial() { countOfDials++; }
-	public static final int getDials() { return countOfDials; }
-	
-	public static final void registerEditText() { countOfEditTexts++; }
-	public static final int getEditTexts() { return countOfEditTexts; }
-	
-	public static final void registerMenuButton() {
-		countOfComponents--;
-		countOfButtons--;
-		countOfMenuButtons++;
+	public static void registerUnsafeBounds() {
+		bounds--;
+		unsafeBounds++;
 	}
-	public static final int getMenuButtons() { return countOfMenuButtons; }
+	public static int getUnsafeBounds() { return unsafeBounds; }
 	
-	public static final void registerScroll() { countOfScrolls++; }
-	public static final int getScrolls() { return countOfScrolls; }
+	public static void registerContainerManager() { containerManagers++; }
+	public static int getContainerManagers() { return containerManagers; }
 	
-	public static final void registerSlider() { countOfSliders++; }
-	public static final int getSliders() { return countOfSliders; }
+	public static void registerHover() {
+		views--;
+		hovers++;
+	}
 	
-	public static final void registerTextField() { countOfTextFields++; }
-	public static final int getTextFields() { return countOfTextFields; }
+	public static int getHovers() { return hovers; }
 	
-	public static final void registerTextView() { countOfTextViews++; }
-	public static final int getTextViews() { return countOfTextViews; }
+	public static void registerRipples() {
+		views--;
+		ripples++;
+	}
 	
+	public static int getRipples() { return ripples; }
 	
-	public static final void registerLayout() { countOfLayouts++; }
-	public static final int getLayouts() { return countOfLayouts; }
+	public static void registerShadow() {
+		views--;
+		shadows++;
+	}
 	
-	public static final void registerColumnLayout() { countOfColumnLayouts++; }
-	public static final int getColumnLayouts() { return countOfColumnLayouts; }
+	public static int getShadows() { return shadows; }
 	
-	public static final void registerRowLayout() { countOfRowLayouts++; }
-	public static final int getRowLayouts() { return countOfRowLayouts; }
-	
-	public static final void registerGridLayout() { countOfGridLayouts++; }
-	public static final int getGridLayouts() { return countOfGridLayouts; }
-	
-	public static final void registerEdgeLayout() { countOfEdgeLayouts++; }
-	public static final int getEdgeLayouts() { return countOfEdgeLayouts; }
-	
-	public static final void registerLinearLayout() { countOfLinearLayouts++; }
-	public static final int getLinearLayouts() { return countOfLinearLayouts; }
+	public static void registerImage() { images++; }
+	public static int getImages() { return images; }
 	
 	
-	public static final void printAll() {
+	
+	public static void registerComponent() { components++; }
+	public static int getComponents() { return components; }
+	
+	public static void registerButton() { buttons++; }
+	public static int getButtons() { return buttons; }
+	
+	public static void registerCheckBox() { checkBoxes++; }
+	public static int getCheckBoxes() { return checkBoxes; }
+	
+	public static void registerDial() { dials++; }
+	public static int getDials() { return dials; }
+	
+	public static void registerEditText() { editTexts++; }
+	public static int getEditTexts() { return editTexts; }
+	
+	public static void registerMenuButton() {
+		buttons--;
+		menuButtons++;
+	}
+	
+	public static int getMenuButtons() { return menuButtons; }
+	
+	public static void registerScroll() { scrolls++; }
+	public static int getScrolls() { return scrolls; }
+	
+	public static void registerSlider() { sliders++; }
+	public static int getSliders() { return sliders; }
+	
+	public static void registerTextField() { textFields++; }
+	public static int getTextFields() { return textFields; }
+	
+	public static void registerTextView() {
+		views--;
+		textViews++;
+	}
+	public static int getTextViews() { return textViews; }
+	
+	
+	public static void registerLayout() { layouts++; }
+	public static int getLayouts() { return layouts; }
+	
+	public static void registerColumnLayout() { columnLayouts++; }
+	public static int getColumnLayouts() { return columnLayouts; }
+	
+	public static void registerRowLayout() { rowLayouts++; }
+	public static int getRowLayouts() { return rowLayouts; }
+	
+	public static void registerGridLayout() { gridLayouts++; }
+	public static int getGridLayouts() { return gridLayouts; }
+	
+	public static void registerEdgeLayout() { edgeLayouts++; }
+	public static int getEdgeLayouts() { return edgeLayouts; }
+	
+	public static void registerLinearLayout() { linearLayouts++; }
+	public static int getLinearLayouts() { return linearLayouts; }
+	
+	
+	public static void printAll() {
 		System.out.println("////////// ALL METRICS //////////");
-		System.out.println("  Views: "+countOfViews);
-		System.out.println("  Bounds: "+countOfBounds);
-		System.out.println("  ContainerManagers: "+countOfContainerManagers);
-		System.out.println("  Hovers: "+countOfHovers);
-		System.out.println("  Ripples: "+countOfRipples);
-		System.out.println("  Shadows: "+countOfShadows);
-		System.out.println("  Images: "+countOfImages);
+		System.out.println("  Views: "+views);
+		System.out.println("  Bounds: "+bounds);
+		System.out.println("  UnsafeBounds: "+unsafeBounds);
+		System.out.println("  ContainerManagers: "+containerManagers);
+		System.out.println("  Hovers: "+hovers);
+		System.out.println("  Ripples: "+ripples);
+		System.out.println("  Shadows: "+shadows);
+		System.out.println("  Images: "+images);
 		
 		printAllComponents();
 		printAllContainers();
 	}
 	
-	public static final void printAllComponents() {
+	public static void printAllComponents() {
 		System.out.println("////////// ALL COMPONENTS //////////");
-		System.out.println("Components: "+countOfComponents);
-		System.out.println("  Buttons: "+countOfButtons);
-		System.out.println("  CheckBoxes: "+countOfCheckBoxes);
-		System.out.println("  Dials: "+countOfDials);
-		System.out.println("  EditTexts: "+countOfEditTexts);
-		System.out.println("  MenuButtons: "+countOfMenuButtons);
-		System.out.println("  Scrolls: "+countOfScrolls);
-		System.out.println("  Sliders: "+countOfSliders);
-		System.out.println("  TextFields: "+countOfTextFields);
-		System.out.println("  TextViews: "+countOfTextViews);
+		System.out.println("Components: "+components);
+		System.out.println("  Buttons: "+buttons);
+		System.out.println("  CheckBoxes: "+checkBoxes);
+		System.out.println("  Dials: "+dials);
+		System.out.println("  EditTexts: "+editTexts);
+		System.out.println("  MenuButtons: "+menuButtons);
+		System.out.println("  Scrolls: "+scrolls);
+		System.out.println("  Sliders: "+sliders);
+		System.out.println("  TextFields: "+textFields);
+		System.out.println("  TextViews: "+textViews);
 	}
 	
-	public static final void printAllContainers() {
+	public static void printAllContainers() {
 		System.out.println("////////// ALL CONTAINERS //////////");
-		System.out.println("Layouts: "+countOfLayouts);
-		System.out.println("  ColumnLayouts: "+countOfColumnLayouts);
-		System.out.println("  RowLayouts: "+countOfRowLayouts);
-		System.out.println("  GridLayouts: "+countOfGridLayouts);
-		System.out.println("  EdgeLayouts: "+countOfEdgeLayouts);
-		System.out.println("  LinearLayouts: "+countOfLinearLayouts);
+		System.out.println("Layouts: "+layouts);
+		System.out.println("  ColumnLayouts: "+columnLayouts);
+		System.out.println("  RowLayouts: "+rowLayouts);
+		System.out.println("  GridLayouts: "+gridLayouts);
+		System.out.println("  EdgeLayouts: "+edgeLayouts);
+		System.out.println("  LinearLayouts: "+linearLayouts);
 	}
 
 }

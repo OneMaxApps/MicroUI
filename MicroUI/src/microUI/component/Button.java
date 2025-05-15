@@ -11,11 +11,11 @@ public class Button extends AbstractButton {
 		super(x, y, w, h);
 		Metrics.registerButton();
 		
-		text = new TextView(plainText, x, y, w, h) {{
-		setUpperCaseStyle(true);
-		setAutoResize(true);
-		setAutoResizeMode(Constants.AUTO_RESIZE_MODE_BIG);
-		}};
+		text = new TextView(plainText, x, y, w, h);
+		text.setUpperCaseStyle(true);
+		text.setAutoResize(true);
+		text.setAutoResizeMode(Constants.AUTO_RESIZE_MODE_BIG);
+		
 	}
 
 	public Button(float x, float y, float w, float h) {

@@ -12,10 +12,11 @@ public final class Hover extends View {
 	
     public Hover(Component component) {
 		super();
+		Metrics.registerHover();
 		this.component = component;
 		fill = new Color(0,100);
 		visible();
-		Metrics.registerHover();
+		
 	}
 
 	@Override
