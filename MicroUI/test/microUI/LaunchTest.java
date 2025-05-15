@@ -1,6 +1,7 @@
 package microUI;
 
-import microUI.component.TextView;
+import microUI.component.Button;
+import microUI.container.layout.GridLayout;
 import microUI.event.Event;
 import microUI.util.Metrics;
 import processing.core.PApplet;
@@ -8,7 +9,7 @@ import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 	
-	private TextView component;
+	GridLayout gridLayout;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.LaunchTest");
@@ -20,23 +21,26 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new TextView("Hello World");
+		
+		gridLayout = new GridLayout(9,12);
+		
+		for(; !gridLayout.isFull(); gridLayout.add(new Button()));
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
-		component.draw();
+		
 		if(frameCount % 30 == 0) {
-			Metrics.Core.printAll();
-			Metrics.Absolute.Core.printAll();
+			Metrics.printAll();
 		}
+		
+		gridLayout.draw();
 	}
 
 	@Override
 	public void keyPressed() {
 		Event.keyPressed();
-		// component.keyPressed();
 	}
 	
 	@Override
@@ -46,6 +50,6 @@ public final class LaunchTest extends PApplet {
 	
 	@Override
 	public void mouseWheel(final MouseEvent event) {
-		// component.mouseWheel(event);
+		
 	}
 }
