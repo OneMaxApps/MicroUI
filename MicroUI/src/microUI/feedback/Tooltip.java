@@ -1,11 +1,11 @@
 package microUI.feedback;
 
 import static processing.core.PApplet.constrain;
-import static processing.core.PApplet.max;
 import static processing.core.PConstants.CENTER;
 
 import microUI.container.layout.Layout;
 import microUI.core.Bounds;
+import microUI.core.GlobalTooltip;
 import microUI.core.TextController;
 import microUI.event.Event;
 import microUI.util.Color;
@@ -13,44 +13,19 @@ import microUI.util.Color;
 
 public final class Tooltip extends Bounds {
 	private final int SECONDS_FOR_SHOWING = 2;
-	private final int TEXT_SIZE = (int) max(14,app.height*.01f);
 	
-	public final Color fill;
 	public final Text text;
 	
+	private Color fill;
 	private final Event event;
 	private Layout layout;
-	
+
 	public Tooltip(Event event) {
-		fill = new Color();
-		fill.set(255,240,200,232);
+		fill = GlobalTooltip.DEFAULT_COLOR;
 		
 		text = new Text();
 		
 		this.event = event;
-	}
-	
-	@Override
-	public void draw() {
-		setVisible(event.inside(SECONDS_FOR_SHOWING) && !text.isEmpty());
-		
-		if(isVisible()) {
-			setPosition(constrain(app.mouseX,0,app.width-getW()),constrain(app.mouseY+text.getHeight()/2,0,app.height-getH()));
-			
-			if(layout != null) {
-				layout.setPosition(this);
-				setSize(layout);
-			} else {
-				setSize(text.getWidth(),text.getHeight());
-			}
-			
-			
-			
-		}
-		
-		super.draw();
-		
-		
 	}
 
 	@Override
@@ -66,6 +41,31 @@ public final class Tooltip extends Bounds {
 		
 	}
 	
+	public final void init() {
+		if(canBeVisible()) {
+			GlobalTooltip.onDraw(this);
+			visible();
+		} else { invisible(); }
+		
+		if(isVisible()) {
+			setPosition(constrain(app.mouseX,0,app.width-getW()),constrain(app.mouseY,0,app.height-getH()));
+			
+			if(layout != null) {
+				layout.setPosition(this);
+				setSize(layout);
+			} else {
+				setSize(text.getWidth(),text.getHeight());
+			}
+		}
+		
+	}
+	
+	
+	
+	private final boolean canBeVisible() {
+		return event.inside(SECONDS_FOR_SHOWING) && (!text.isEmpty() || layout != null);
+	}
+	
 	public final Layout getLayout() {
 		return layout;
 	}
@@ -74,8 +74,12 @@ public final class Tooltip extends Bounds {
 		this.layout = layout;
 	}
 
+	public final void setColor(final Color color) {
+		this.fill = color;
+	}
+	
 	public final class Text extends TextController {
-		public final Color fill;
+		private Color fill;
 		private int width,height;
 		
 		private Text() {
@@ -86,7 +90,7 @@ public final class Tooltip extends Bounds {
 		private final void draw() {
 			app.pushStyle();
 			fill.use();
-			app.textSize(TEXT_SIZE);
+			app.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
 			app.textAlign(CENTER,CENTER);
 			app.text(sb.toString(), x, y, w, h);
 			app.popStyle();
@@ -111,14 +115,14 @@ public final class Tooltip extends Bounds {
 		
 			app.pushStyle();
 			
-			app.textSize(TEXT_SIZE);
+			app.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
 			for(String line : LINES) {
 				if(app.textWidth(line) > maxWidth) { maxWidth = app.textWidth(line); }
 			}
 			
 			app.popStyle();
-			
-			width = (int) (maxWidth*1.1f);
+			final float SCALE_WIDTH = 1.1f;
+			width = (int) (maxWidth*SCALE_WIDTH);
 			
 		}
 		
@@ -126,9 +130,10 @@ public final class Tooltip extends Bounds {
 			final int LINES = sb.toString().split("\n").length;
 			
 			app.pushStyle();
-			app.textSize(TEXT_SIZE);
+			app.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
 			
-			height = (int) ((app.textAscent()+app.textDescent())*1.2f)*LINES;
+			final float SCALE_HEIGHT = 1.2f;
+			height = (int) ((app.textAscent()+app.textDescent())*SCALE_HEIGHT)*LINES;
 			
 			app.popStyle();
 		}
@@ -139,6 +144,8 @@ public final class Tooltip extends Bounds {
 			calculateHeight();
 		}
 		
-		
+		public final void setColor(final Color color) {
+			this.fill = color;
+		}
 	}
 }

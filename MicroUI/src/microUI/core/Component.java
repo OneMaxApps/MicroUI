@@ -23,13 +23,10 @@ public abstract class Component extends Bounds {
       this(0,0,0,0);
     }
     
-    
-    
     @Override
 	public void draw() {
 		super.draw();
-		tooltip.draw();
-		
+		tooltip.init();
 	}
 
 	public void setStyle(Component otherComponent) {

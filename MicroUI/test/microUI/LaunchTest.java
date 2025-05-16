@@ -5,6 +5,7 @@ import microUI.component.CheckBox;
 import microUI.component.Scroll;
 import microUI.component.Slider;
 import microUI.container.layout.GridLayout;
+import microUI.core.GlobalTooltip;
 import processing.core.PApplet;
 
 public final class LaunchTest extends PApplet {
@@ -46,6 +47,8 @@ public final class LaunchTest extends PApplet {
 	public void draw() {
 		background(200);
 		gridLayout.draw();
+		
+		GlobalTooltip.draw();
 	}
 
 }

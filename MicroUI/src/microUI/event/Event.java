@@ -4,7 +4,7 @@ import microUI.MicroUI;
 import microUI.core.Bounds;
 
 public class Event extends MicroUI {
-
+	  private static final int MIN_SHAKE_DIST = 3;
 	  public static final int PRESSED = 1, CLICKED = 2, MOVED = 3, INSIDE = 4, OUTSIDE = 5;
    	  
 	  private float x,y,w,h;
@@ -51,11 +51,15 @@ public class Event extends MicroUI {
 		    	counterOfSecondsForInside = 0;
 		    }
 		    
-		    if(app.mouseX != app.pmouseX || app.mouseY != app.pmouseY) { counterOfSecondsForInside = 0; }
+		    if(isMouseShaking()) { counterOfSecondsForInside = 0; }
 	  }
 	  
 	  public final void setEnable(boolean enable) { this.enable = enable; }
 	  public final boolean isEnable() { return enable; }
+	  
+	  public static final boolean isMouseShaking() {
+		  return app.mouseX - app.pmouseX > MIN_SHAKE_DIST || app.mouseY - app.pmouseY > MIN_SHAKE_DIST;
+	  }
 	  
 	  public boolean inside() {
 		  if(w < 0 && h < 0) { return app.mouseX > x+w && app.mouseX < x && app.mouseY > y+h && app.mouseY < y; }
