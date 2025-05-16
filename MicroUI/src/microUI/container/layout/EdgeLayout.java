@@ -2,6 +2,7 @@ package microUI.container.layout;
 
 import static processing.core.PApplet.min;
 
+import microUI.component.TextView;
 import microUI.core.Bounds;
 import microUI.util.Metrics;
 
@@ -71,6 +72,13 @@ public class EdgeLayout extends Layout {
 	
 	public EdgeLayout set(Bounds form) {
 		this.form = form;
+		defaultWidthOfElement = form.getW();
+		defaultHeightOfElement = form.getH();
+		return this;
+	}
+	
+	public EdgeLayout set(String text) {
+		this.form = new TextView(text);
 		defaultWidthOfElement = form.getW();
 		defaultHeightOfElement = form.getH();
 		return this;

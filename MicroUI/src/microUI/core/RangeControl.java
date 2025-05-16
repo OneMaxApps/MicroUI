@@ -1,6 +1,7 @@
 package microUI.core;
 
 import microUI.Constants;
+import microUI.container.layout.RowLayout;
 import microUI.event.Scrollable;
 import microUI.event.Scrolling;
 import microUI.util.Value;
@@ -22,6 +23,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		scrolling = new Scrolling(event);
 		orientation = Constants.HORIZONTAL;
 		visible();
+		
 	}
 	
 	public RangeControl() {

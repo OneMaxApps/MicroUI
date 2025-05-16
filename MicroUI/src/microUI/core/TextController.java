@@ -5,6 +5,7 @@ import static processing.core.PApplet.constrain;
 public class TextController {
 	protected final StringBuilder sb;
 	private boolean validation;
+	private static final String allowedChars = "!@#$%^&*()_-+=|\\/[]{}<>,. \'\";:№?*";
 	
 	public TextController(final String text) {
 		sb = new StringBuilder(text);
@@ -16,6 +17,10 @@ public class TextController {
 	}
 	
 	public final void set(final String text) {
+		if(text == null) { return; }
+		
+		inSetting();
+		
 		if(isEmpty()) {
 			insert(0,text);
 		} else {
@@ -94,8 +99,11 @@ public class TextController {
 	}
 	
 	public final boolean isValidChar(final char ch) {
-		return " .,;:()[]{}<>/|\\\"'?+-*=&!@#$%^`~_".contains(String.valueOf(ch)) || Character.isLetterOrDigit(ch);
+		return allowedChars.contains(String.valueOf(ch)) || Character.isLetterOrDigit(ch);
 	}
 	
 	protected void inInserting() {}
+	
+	protected void inSetting() {}
+	
 }

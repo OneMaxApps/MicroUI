@@ -9,6 +9,7 @@ public class Event extends MicroUI {
    	  
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;
+	  private int counterOfSecondsForInside;
 	  private boolean holding,dragged,enable;
 	  private static final boolean[] keys = new boolean[Character.MAX_VALUE+1];
 
@@ -45,7 +46,12 @@ public class Event extends MicroUI {
 		    	longPressed = 0;
 		     }
 		    
-		    if(outside()) { wasPressed = 0; }
+		    if(outside()) {
+		    	wasPressed = 0;
+		    	counterOfSecondsForInside = 0;
+		    }
+		    
+		    if(app.mouseX != app.pmouseX || app.mouseY != app.pmouseY) { counterOfSecondsForInside = 0; }
 	  }
 	  
 	  public final void setEnable(boolean enable) { this.enable = enable; }
@@ -60,6 +66,18 @@ public class Event extends MicroUI {
 		  
 		  return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; 
 	  }
+	  
+	  public boolean inside(final int targetOfSeconds) {
+		  
+		  if(inside() && counterOfSecondsForInside != targetOfSeconds) {
+			  if(app.frameCount%60 == 0) {
+				  counterOfSecondsForInside++;
+			  }
+		  }
+		  
+		  return inside() && counterOfSecondsForInside == targetOfSeconds;
+	  }
+	  
 	  public boolean outside() { return !inside(); }
 	  public boolean pressed() {  return inside() && app.mousePressed; }
 	  public boolean longPressed(int seconds) {
@@ -90,6 +108,7 @@ public class Event extends MicroUI {
 	  public boolean clicked() {
 	    if(inside() && !pressed() && wasPressed == 1) {
 	    	wasPressed = 0;
+	    	counterOfSecondsForInside = 0;
 	    	action();
 	    	return true;
 	    }
@@ -121,11 +140,12 @@ public class Event extends MicroUI {
 		  
 	  }
 	  
-	  public void action() {}
+	  public void action() { }
 	  
 	  public final void resetState() {
 		  keyReleased();
 		  longPressed = wasPressed = clickCounter = 0;
+		  counterOfSecondsForInside = 0;
 		  holding = dragged = false;
 	  }
 	}
