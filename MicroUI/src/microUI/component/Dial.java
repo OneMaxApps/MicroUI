@@ -12,7 +12,7 @@ import microUI.core.BaseImage;
 import microUI.core.Component;
 import microUI.core.Constants;
 import microUI.event.Scrollable;
-import microUI.util.Stroke;
+import microUI.graphics.Stroke;
 import microUI.util.Value;
 import processing.event.MouseEvent;
 

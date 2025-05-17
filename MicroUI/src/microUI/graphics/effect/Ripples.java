@@ -1,4 +1,4 @@
-package microUI.effect;
+package microUI.graphics.effect;
 
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.max;
@@ -7,7 +7,8 @@ import static processing.core.PApplet.min;
 import microUI.core.Bounds;
 import microUI.core.View;
 import microUI.event.Event;
-import microUI.util.Color;
+import microUI.graphics.Color;
+import microUI.util.Metrics;
 import processing.core.PGraphics;
 
 public final class Ripples extends View {
@@ -62,6 +63,7 @@ public final class Ripples extends View {
 	
 	private final void createGraphics() {
 		pg = app.createGraphics((int) max(1,form.getW()),(int) max(1,form.getH()));
+		Metrics.register(pg);
 	}
 
 	public final class Circle {

@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import microUI.graphics.Color;
+
 class ColorTest {
 	
 	@Test

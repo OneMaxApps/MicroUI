@@ -1,4 +1,4 @@
-package microUI.util;
+package microUI.graphics;
 
 import static processing.core.PConstants.SQUARE;
 

@@ -1,7 +1,7 @@
 package microUI.core;
 
 import microUI.feedback.Tooltip;
-import microUI.util.Color;
+import microUI.graphics.Color;
 
 public final class GlobalTooltip {
 	public static final Color DEFAULT_COLOR = new Color(255,230,200,255);

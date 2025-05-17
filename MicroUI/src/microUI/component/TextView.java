@@ -8,7 +8,7 @@ import static processing.core.PConstants.CORNER;
 
 import microUI.core.Component;
 import microUI.core.View;
-import microUI.util.Color;
+import microUI.graphics.Color;
 import processing.core.PFont;
 import processing.core.PGraphics;
 

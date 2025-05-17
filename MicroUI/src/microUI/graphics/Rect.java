@@ -1,8 +1,6 @@
 package microUI.graphics;
 
 import microUI.core.UnsafeBounds;
-import microUI.util.Color;
-import microUI.util.Stroke;
 
 public final class Rect extends UnsafeBounds {
     public final Stroke stroke;

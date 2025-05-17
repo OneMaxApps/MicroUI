@@ -13,5 +13,8 @@ public final class Constants {
 	public final static int AUTO_RESIZE_MODE_SMALL = 4;
 	public final static int AUTO_RESIZE_MODE_TINY = 5;
 	
+	public final static int VALIDATION_ALPHANUMERIC = 0;
+	public final static int VALIDATION_ONLY_DIGITS = 1;
+	public final static int VALIDATION_ONLY_LETTERS = 2;
 	
 }

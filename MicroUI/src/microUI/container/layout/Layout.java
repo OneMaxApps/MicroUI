@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import microUI.core.BaseImage;
 import microUI.core.Bounds;
 import microUI.core.Focusable;
-import microUI.effect.Shadow;
 import microUI.event.KeyPressable;
 import microUI.event.Scrollable;
-import microUI.util.Color;
+import microUI.graphics.Color;
+import microUI.graphics.effect.Shadow;
 import processing.event.MouseEvent;
 
 public abstract class Layout extends Bounds implements Scrollable, KeyPressable, Focusable  {

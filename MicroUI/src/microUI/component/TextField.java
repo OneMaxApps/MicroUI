@@ -21,27 +21,12 @@ import microUI.core.Component;
 import microUI.core.TextController;
 import microUI.event.Event;
 import microUI.event.KeyPressable;
+import microUI.graphics.Color;
 import microUI.util.Clipboard;
-import microUI.util.Color;
+import microUI.util.Metrics;
 import microUI.util.Value;
 import processing.core.PFont;
 import processing.core.PGraphics;
-
-// TASKS:
-/*
- 1. TextField it's simple line text input component and nothing else; DONE
- 2. Hint is working - DONE
- 3. Can moving - DONE
- 4. Can resize - DONE
- 5. Can change focus state outside without real actions for it - DONE
- 6. Can set ANY type of fonts for using inside the TextField - DONE
- 7. Can set style from other text field - DONE
- 8. Can change color of background - DONE
- 9. Can change color of text - DONE
- 10. Can change color of cursor - DONE
- 11. Can change color of selection - DONE
- 12. Can Use HotKeys like CTRL + V,C,X,A and HOME with END keys - DONE
- */
 
 public final class TextField extends Component implements KeyPressable {
 	private static final int LEFT_OFFSET = 10;
@@ -78,6 +63,7 @@ public final class TextField extends Component implements KeyPressable {
 	@Override
 	public final void update() {
 		event.listen(this);
+		tooltip.setAdditionalCondition(!focused);
 		
 		checkDimensions();
 		
@@ -170,8 +156,8 @@ public final class TextField extends Component implements KeyPressable {
 	
 	private final void createPGraphics() {
 		pg = app.createGraphics((int) max(1,getW()), (int) max(1,getH()), app.sketchRenderer());
-		System.out.println("PGraphics object was created");
 		componentSizeChanged = false;
+		Metrics.register(pg);
 	}
 
 	
@@ -439,7 +425,7 @@ public final class TextField extends Component implements KeyPressable {
 			updateTransforms();
 		}
 		
-		private final void draw(PGraphics pg) {
+		private final void draw(final PGraphics pg) {
 			if(pg == null) { return; }
 			
 			blink.updateState();

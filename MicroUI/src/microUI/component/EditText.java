@@ -33,8 +33,9 @@ import microUI.core.Constants;
 import microUI.event.Event;
 import microUI.event.KeyPressable;
 import microUI.event.Scrollable;
+import microUI.graphics.Color;
 import microUI.util.Clipboard;
-import microUI.util.Color;
+import microUI.util.Metrics;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
@@ -68,8 +69,9 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		cursor = new Cursor();
 		selection = new Selection();
 		
-		pg = app.createGraphics((int) w, (int) h, app.sketchRenderer());
-
+		//pg = app.createGraphics((int) w, (int) h, app.sketchRenderer());
+		createGraphics(w,h);
+		
 		scrollsValuesUpdate();
 		
 	}
@@ -166,8 +168,6 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		scrollsValuesUpdate();
 	}
 	
-	
-
 	@Override
 	public void inTransforms() {
 		super.inTransforms();
@@ -235,6 +235,11 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				break;
 		}
 
+	}
+	
+	private final void createGraphics(final float w, final float h) {
+		pg = app.createGraphics((int) w, (int) h, app.sketchRenderer());
+		Metrics.register(pg);
 	}
 	
 	public final boolean isFocused() { return focused; }
@@ -475,8 +480,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	
 	private final void autoCheckResize() {
 		if(pg.width != (int) w || pg.height != (int) h) {
-			pg = app.createGraphics((int) w, (int) h,app.sketchRenderer());
-			System.out.println("PGraphics was recreated");
+			createGraphics(w,h);
 		}
 	}
 	
@@ -499,7 +503,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			scrollV.value.set(0);
 		}
 		
-		private final void draw(PGraphics pg) {
+		private final void draw(final PGraphics pg) {
 			fill.use(pg);
 			if(font != null) { pg.textFont(font); }
 			pg.textSize(textSize);
@@ -674,7 +678,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			}
 
 			
-			private final void draw(PGraphics pg) {
+			private final void draw(final PGraphics pg) {
 				event.listen(x,getY(),x+w,getH());
 				
 				if(!isFullSelected && !isPartSelected) {
@@ -904,7 +908,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			fill = new Color(0);
 		}
 		
-		private final void draw(PGraphics pg) {
+		private final void draw(final PGraphics pg) {
 			posX = -scrollH.value.get()+pg.textWidth(items.list.get(getColumn()).sb.toString().substring(0, getRow()));
 			posY = items.list.get(getColumn()).getInsideY();
 			
