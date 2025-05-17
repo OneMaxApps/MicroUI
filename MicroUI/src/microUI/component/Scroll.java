@@ -83,6 +83,8 @@ public final class Scroll extends RangeControl {
 	private final void updateThumbTransforms() {
 		thumb.setTransforms(this);
 		
+		if(value.hasEqualMinMax()) { return; }
+		
 		switch(orientation) {
 		
 		case Constants.HORIZONTAL :

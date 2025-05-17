@@ -2,11 +2,11 @@ package microUI.container.layout;
 
 import java.util.ArrayList;
 
-import microUI.core.BaseImage;
+import microUI.core.AbstractImage;
 import microUI.core.Bounds;
-import microUI.core.Focusable;
-import microUI.event.KeyPressable;
-import microUI.event.Scrollable;
+import microUI.core.inteface.Focusable;
+import microUI.core.inteface.KeyPressable;
+import microUI.core.inteface.Scrollable;
 import microUI.graphics.Color;
 import microUI.graphics.effect.Shadow;
 import processing.event.MouseEvent;
@@ -14,7 +14,7 @@ import processing.event.MouseEvent;
 public abstract class Layout extends Bounds implements Scrollable, KeyPressable, Focusable  {
 	public final Color fill;
 	public final Margin margin;
-	public final BaseImage image;
+	public final AbstractImage image;
 	public final Shadow shadow;
 	protected boolean isElementsResizable;
 	protected final ArrayList<Bounds> elementList;
@@ -27,7 +27,7 @@ public abstract class Layout extends Bounds implements Scrollable, KeyPressable,
 		fill.set(0,0,128,32);
 		margin = new Margin();
 		setVisible(true);
-		image = new BaseImage() {
+		image = new AbstractImage() {
 			@Override
 			public void update() {
 				if(isLoaded()) {

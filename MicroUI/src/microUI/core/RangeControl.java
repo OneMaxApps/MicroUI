@@ -1,6 +1,6 @@
 package microUI.core;
 
-import microUI.event.Scrollable;
+import microUI.core.inteface.Scrollable;
 import microUI.event.Scrolling;
 import microUI.util.Value;
 import processing.event.MouseEvent;

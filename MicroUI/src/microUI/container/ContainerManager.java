@@ -3,8 +3,8 @@ package microUI.container;
 import java.util.ArrayList;
 import java.util.List;
 
-import microUI.core.Focusable;
 import microUI.core.View;
+import microUI.core.inteface.Focusable;
 
 public final class ContainerManager extends View {
 	private final List<Focusable> containerList;

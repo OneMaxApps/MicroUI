@@ -81,6 +81,10 @@ public final class Tooltip extends Bounds {
 		this.fill = color;
 	}
 	
+	/** For that cases when default conditions not enough inner.  
+	 *  
+	 *  This method giving possibility for using your own additional condition 
+	 */
 	public void setAdditionalCondition(boolean additionalCondition) {
 		this.additionalCondition = additionalCondition;
 	}

@@ -8,10 +8,10 @@ import static processing.core.PConstants.CORNER;
 import static processing.core.PConstants.HALF_PI;
 import static processing.core.PConstants.TWO_PI;
 
-import microUI.core.BaseImage;
+import microUI.core.AbstractImage;
 import microUI.core.Component;
 import microUI.core.Constants;
-import microUI.event.Scrollable;
+import microUI.core.inteface.Scrollable;
 import microUI.graphics.Stroke;
 import microUI.util.Value;
 import processing.event.MouseEvent;
@@ -153,7 +153,7 @@ public final class Dial extends Component implements Scrollable {
 		}
 	}
 	
-	public final class Image extends BaseImage {
+	public final class Image extends AbstractImage {
 
 		private Image() {
 			super();
@@ -171,7 +171,7 @@ public final class Dial extends Component implements Scrollable {
 		
 	}
 	
-	public final class Arrow extends BaseImage {
+	public final class Arrow extends AbstractImage {
 
 		public Arrow() {
 			super();

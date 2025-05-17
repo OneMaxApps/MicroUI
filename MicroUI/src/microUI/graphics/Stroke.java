@@ -3,14 +3,16 @@ package microUI.graphics;
 import static processing.core.PConstants.SQUARE;
 
 import microUI.core.MicroUI;
+import microUI.util.Metrics;
 
 public final class Stroke {
     public final Color fill;
     private int weight;
     
     public Stroke() {
+      Metrics.register("Stroke");
       
-    	fill = new Color(0);
+      fill = new Color(0);
       weight = 2;
     }
     

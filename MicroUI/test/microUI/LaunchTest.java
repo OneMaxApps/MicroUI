@@ -1,16 +1,16 @@
 package microUI;
 
-import microUI.component.TextField;
-import microUI.core.Constants;
+import microUI.component.EditText;
 import microUI.core.GlobalTooltip;
 import microUI.core.MicroUI;
 import microUI.event.Event;
+import microUI.util.Metrics;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 	
-	TextField component;
+	EditText component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microUI.LaunchTest");
@@ -23,15 +23,11 @@ public final class LaunchTest extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		
-		component = new TextField();
+		component = new EditText();
 		component.tooltip.text.set("Hello i'm "+component.getClass().getSimpleName());
-		component.text.setHint("Input your phone:");
-		component.text.setValidationMode(Constants.VALIDATION_ONLY_DIGITS);
-		component.text.setConstrain(true);
-		component.text.setMaxChars(-11);
+
+		Metrics.printAll();
 		
-		//Metrics.printAll();
-		//exit();
 	}
 	
 	@Override
@@ -39,15 +35,15 @@ public final class LaunchTest extends PApplet {
 		background(200);
 		
 		component.draw();
-		
-		// Metrics.printAll();
+		if(mouseButton == RIGHT) { component.setPosition(mouseX,mouseY); }
+		//Metrics.printAll();
 		
 		GlobalTooltip.draw();
 	}
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		// component.mouseWheel(event);
+		component.mouseWheel(event);
 	}
 
 	@Override
@@ -59,7 +55,6 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void keyReleased() {
 		Event.keyReleased();
-	
 	}
 	
 	

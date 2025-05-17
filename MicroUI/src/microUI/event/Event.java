@@ -7,7 +7,6 @@ public class Event extends MicroUI {
 	  private static final int MIN_SHAKE_DIST = 3;
 	  public static final int PRESSED = 1, CLICKED = 2, MOVED = 3, INSIDE = 4, OUTSIDE = 5;
 	 
-	  
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;
 	  private int counterForInsideState;
@@ -29,8 +28,6 @@ public class Event extends MicroUI {
 	  private final void listener(final float x, final float y, final float w, final float h) {
 		  if(!enable) { return; }
 			
-		  
-		  
 		    this.x = x;
 		    this.y = y;
 		    this.w = w;

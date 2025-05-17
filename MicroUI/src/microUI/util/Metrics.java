@@ -21,6 +21,10 @@ public final class Metrics {
 		metrics.put(key, metrics.getOrDefault(key, 0)+1);
 	}
 	
+	public static final void register(String key) {
+		metrics.put(key, metrics.getOrDefault(key, 0)+1);
+	}
+	
 	public static final void printAll() {
 		System.out.println("\n////////////////////");
 		metrics.forEach((k, v) -> {

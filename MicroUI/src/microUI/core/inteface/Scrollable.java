@@ -1,4 +1,4 @@
-package microUI.event;
+package microUI.core.inteface;
 
 import processing.event.MouseEvent;
 

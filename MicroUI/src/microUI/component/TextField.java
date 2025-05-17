@@ -19,8 +19,8 @@ import static processing.core.PConstants.RIGHT;
 
 import microUI.core.Component;
 import microUI.core.TextController;
+import microUI.core.inteface.KeyPressable;
 import microUI.event.Event;
-import microUI.event.KeyPressable;
 import microUI.graphics.Color;
 import microUI.util.Clipboard;
 import microUI.util.Metrics;
@@ -43,7 +43,6 @@ public final class TextField extends Component implements KeyPressable {
 	
 	public TextField(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		
 		fill.set(255);
 		visible();
 		

@@ -3,11 +3,11 @@ package microUI.core;
 import microUI.graphics.Color;
 import processing.core.PImage;
 
-public abstract class BaseImage extends Bounds {
+public abstract class AbstractImage extends Bounds {
 	public final Color tint;
 	protected PImage image;
 	
-	public BaseImage() {
+	public AbstractImage() {
 		tint = new Color(255);
 		
 	}

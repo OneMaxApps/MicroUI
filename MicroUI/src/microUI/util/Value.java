@@ -75,6 +75,8 @@ public void setWithoutActions(final float value) {
 	this.value = value;
 }
 
+public final boolean hasEqualMinMax() { return min == max; }
+
 public void action() {}
 
 }
