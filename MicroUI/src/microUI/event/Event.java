@@ -6,10 +6,11 @@ import microUI.core.MicroUI;
 public class Event extends MicroUI {
 	  private static final int MIN_SHAKE_DIST = 3;
 	  public static final int PRESSED = 1, CLICKED = 2, MOVED = 3, INSIDE = 4, OUTSIDE = 5;
-   	  
+	 
+	  
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;
-	  private int counterOfSecondsForInside;
+	  private int counterForInsideState;
 	  private boolean holding,dragged,enable;
 	  private static final boolean[] keys = new boolean[Character.MAX_VALUE+1];
 
@@ -50,10 +51,10 @@ public class Event extends MicroUI {
 		    
 		    if(outside()) {
 		    	wasPressed = 0;
-		    	counterOfSecondsForInside = 0;
+		    	counterForInsideState = 0;
 		    }
 		    
-		    if(isMouseShaking()) { counterOfSecondsForInside = 0; }
+		    if(isMouseShaking()) { counterForInsideState = 0; }
 		    
 	  }
 	  
@@ -76,13 +77,13 @@ public class Event extends MicroUI {
 	  
 	  public boolean inside(final int targetOfSeconds) {
 		  
-		  if(inside() && counterOfSecondsForInside != targetOfSeconds) {
+		  if(inside() && counterForInsideState != targetOfSeconds) {
 			  if(app.frameCount%60 == 0) {
-				  counterOfSecondsForInside++;
+				  counterForInsideState++;
 			  }
 		  }
 		  
-		  return inside() && counterOfSecondsForInside == targetOfSeconds;
+		  return inside() && counterForInsideState == targetOfSeconds;
 	  }
 	  
 	  public boolean outside() { return !inside(); }
@@ -115,7 +116,7 @@ public class Event extends MicroUI {
 	  public boolean clicked() {
 	    if(inside() && !pressed() && wasPressed == 1) {
 	    	wasPressed = 0;
-	    	counterOfSecondsForInside = 0;
+	    	counterForInsideState = 0;
 	    	action();
 	    	return true;
 	    }
@@ -131,6 +132,11 @@ public class Event extends MicroUI {
 		  return clickCounter == count;
 	  }
 	  
+	  /**
+	   * Updating inside states of keys.
+	   * 
+	   * He must be called first in PApplet method keyPressed() for correct initialization. 
+	   */
 	  public static final void keyPressed() {
 		  keys[MicroUI.getContext().key] = true;
 		  keys[MicroUI.getContext().keyCode] = true;
@@ -140,6 +146,11 @@ public class Event extends MicroUI {
 		  return keys[ch];
 	  }
 	  
+	  /**
+	   * Updating inside states of keys.
+	   * 
+	   * He must be called first in PApplet method keyReleased() for correct initialization. 
+	   */
 	  public static final void keyReleased() {
 		  for(int i = 0; i < keys.length; i++) {
 				  keys[i] = false;
@@ -152,7 +163,7 @@ public class Event extends MicroUI {
 	  public final void resetState() {
 		  keyReleased();
 		  longPressed = wasPressed = clickCounter = 0;
-		  counterOfSecondsForInside = 0;
+		  counterForInsideState = 0;
 		  holding = dragged = false;
 	  }
 	}

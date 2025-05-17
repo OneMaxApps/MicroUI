@@ -100,7 +100,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	@Override
 	public void update() {
 		event.listen(this);
-	
+		tooltip.setAdditionalCondition(!focused);
+		
 		pg.beginDraw();
 			pg.background(fill.get());
 			items.draw(pg);

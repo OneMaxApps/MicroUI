@@ -19,13 +19,16 @@ public final class Tooltip extends Bounds {
 	private Color fill;
 	private final Event event;
 	private Layout layout;
-
+	private boolean additionalCondition;
+	
 	public Tooltip(Event event) {
 		fill = GlobalTooltip.DEFAULT_COLOR;
 		
 		text = new Text();
 		
 		this.event = event;
+		
+		additionalCondition = true;
 	}
 
 	@Override
@@ -63,7 +66,7 @@ public final class Tooltip extends Bounds {
 	
 	
 	private final boolean canBeVisible() {
-		return event.inside(SECONDS_FOR_SHOWING) && (!text.isEmpty() || layout != null);
+		return additionalCondition && event.inside(SECONDS_FOR_SHOWING) && (!text.isEmpty() || layout != null);
 	}
 	
 	public final Layout getLayout() {
@@ -76,6 +79,10 @@ public final class Tooltip extends Bounds {
 
 	public final void setColor(final Color color) {
 		this.fill = color;
+	}
+	
+	public void setAdditionalCondition(boolean additionalCondition) {
+		this.additionalCondition = additionalCondition;
 	}
 	
 	public final class Text extends TextController {
