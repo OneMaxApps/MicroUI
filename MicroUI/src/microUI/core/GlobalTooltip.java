@@ -13,6 +13,10 @@ public final class GlobalTooltip {
 		GlobalTooltip.tooltip = tooltip;
 	}
 	
+	
+	/**
+	 * method draw is must be called in the end of main method draw() in PApplet
+	 */
 	public static final void draw() {
 		if(tooltip != null) {
 			tooltip.draw();

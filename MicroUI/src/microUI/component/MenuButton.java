@@ -3,7 +3,6 @@ package microUI.component;
 import java.util.ArrayList;
 
 import microUI.event.Event;
-import microUI.util.Metrics;
 
 public class MenuButton extends Button {
 	private boolean open,autoCloseable;
@@ -14,7 +13,6 @@ public class MenuButton extends Button {
 	
 	public MenuButton(String title, float x, float y, float w, float h) {
 		super(title,x,y,w,h);
-		Metrics.Component.registerMenuButton();
 		
 		autoCloseable = true;
 		itemList = new ArrayList<Button>();

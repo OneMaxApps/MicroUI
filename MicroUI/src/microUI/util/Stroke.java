@@ -2,15 +2,15 @@ package microUI.util;
 
 import static processing.core.PConstants.SQUARE;
 
-import microUI.MicroUI;
+import microUI.core.MicroUI;
 
 public final class Stroke {
     public final Color fill;
     private int weight;
     
     public Stroke() {
-      Metrics.Util.registerStroke();
-      fill = new Color(0);
+      
+    	fill = new Color(0);
       weight = 2;
     }
     

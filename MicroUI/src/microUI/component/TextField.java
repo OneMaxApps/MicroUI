@@ -6,10 +6,10 @@ import static java.awt.event.KeyEvent.VK_END;
 import static java.awt.event.KeyEvent.VK_HOME;
 import static java.awt.event.KeyEvent.VK_V;
 import static java.awt.event.KeyEvent.VK_X;
-import static processing.core.PApplet.map;
-import static processing.core.PApplet.min;
-import static processing.core.PApplet.max;
 import static processing.core.PApplet.constrain;
+import static processing.core.PApplet.map;
+import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 import static processing.core.PConstants.BACKSPACE;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CONTROL;
@@ -23,7 +23,6 @@ import microUI.event.Event;
 import microUI.event.KeyPressable;
 import microUI.util.Clipboard;
 import microUI.util.Color;
-import microUI.util.Metrics;
 import microUI.util.Value;
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -59,7 +58,6 @@ public final class TextField extends Component implements KeyPressable {
 	
 	public TextField(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.Component.registerTextField();
 		
 		fill.set(255);
 		visible();

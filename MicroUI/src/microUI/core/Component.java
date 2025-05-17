@@ -3,7 +3,6 @@ package microUI.core;
 import microUI.event.Event;
 import microUI.feedback.Tooltip;
 import microUI.util.Color;
-import microUI.util.Metrics;
 
 public abstract class Component extends Bounds {
     public final Color fill;
@@ -12,7 +11,7 @@ public abstract class Component extends Bounds {
     
     public Component(float x, float y, float w, float h) {
         super(x, y, w, h);
-        Metrics.Core.registerComponent();
+        
         fill = new Color(44);
         event = new Event();
         
@@ -30,6 +29,7 @@ public abstract class Component extends Bounds {
 	}
 
 	public void setStyle(Component otherComponent) {
+		if(otherComponent == null) { return; }
     	fill.set(otherComponent.fill);
 	}
      

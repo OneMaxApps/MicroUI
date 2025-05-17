@@ -1,6 +1,5 @@
 package microUI.core;
 
-import microUI.Constants;
 import microUI.event.Scrollable;
 import microUI.event.Scrolling;
 import microUI.util.Value;

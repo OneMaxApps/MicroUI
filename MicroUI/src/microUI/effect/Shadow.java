@@ -9,7 +9,6 @@ import microUI.container.layout.Layout;
 import microUI.core.Bounds;
 import microUI.core.View;
 import microUI.util.Color;
-import microUI.util.Metrics;
 
 public final class Shadow extends View {
 	  public final Color fill;
@@ -28,7 +27,6 @@ public final class Shadow extends View {
 	    absoluteSize = 10;
 	    visible = true;
 	    
-	    Metrics.Effect.registerShadow();
 	  }
 	  
 	  @Override

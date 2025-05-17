@@ -1,13 +1,11 @@
 package microUI.core;
 
-import microUI.util.Metrics;
-
 public abstract class Bounds extends View {
 	protected float x,y,w,h;
 	
 	public Bounds(float x, float y, float w, float h) {
 		setTransforms(x,y,w,h);
-		Metrics.Core.registerBounds();
+		
 	}
 	
 	public Bounds(Bounds otherBounds) {

@@ -1,6 +1,6 @@
 package microUI.util;
 
-import microUI.MicroUI;
+import microUI.core.MicroUI;
 import processing.core.PGraphics;
 
 public class Color {
@@ -9,7 +9,7 @@ public class Color {
 	
 	public Color(float red, float green, float blue, float alpha) {
 		super();
-		Metrics.Util.registerColor();
+		
 		this.red = red;
 		this.green = green;
 		this.blue = blue;

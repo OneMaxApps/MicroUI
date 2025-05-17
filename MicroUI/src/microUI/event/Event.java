@@ -1,7 +1,7 @@
 package microUI.event;
 
-import microUI.MicroUI;
 import microUI.core.Bounds;
+import microUI.core.MicroUI;
 
 public class Event extends MicroUI {
 	  private static final int MIN_SHAKE_DIST = 3;
@@ -28,6 +28,8 @@ public class Event extends MicroUI {
 	  private final void listener(final float x, final float y, final float w, final float h) {
 		  if(!enable) { return; }
 			
+		  
+		  
 		    this.x = x;
 		    this.y = y;
 		    this.w = w;
@@ -52,6 +54,7 @@ public class Event extends MicroUI {
 		    }
 		    
 		    if(isMouseShaking()) { counterOfSecondsForInside = 0; }
+		    
 	  }
 	  
 	  public final void setEnable(boolean enable) { this.enable = enable; }

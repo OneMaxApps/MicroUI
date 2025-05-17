@@ -1,4 +1,4 @@
-package microUI;
+package microUI.core;
 
 import processing.core.PApplet;
 

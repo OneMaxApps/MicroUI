@@ -8,7 +8,6 @@ import microUI.core.Bounds;
 import microUI.core.View;
 import microUI.event.Event;
 import microUI.util.Color;
-import microUI.util.Metrics;
 import processing.core.PGraphics;
 
 public final class Ripples extends View {
@@ -25,7 +24,6 @@ public final class Ripples extends View {
 		this.form = form;
 		createGraphics();
 		
-		Metrics.Effect.registerRipples();
 	}
 
 	@Override

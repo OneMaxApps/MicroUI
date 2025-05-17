@@ -1,4 +1,4 @@
-package microUI;
+package microUI.core;
 
 public final class Constants {
 	

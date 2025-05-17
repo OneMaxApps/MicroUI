@@ -2,10 +2,9 @@ package microUI.component;
 
 import static processing.core.PApplet.map;
 
-import microUI.Constants;
+import microUI.core.Constants;
 import microUI.core.RangeControl;
 import microUI.graphics.Rect;
-import microUI.util.Metrics;
 
 public final class Slider extends RangeControl {
 	
@@ -13,7 +12,6 @@ public final class Slider extends RangeControl {
 	
 	public Slider(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.Component.registerSlider();
 		
 		level = new Rect(x,y,w,h);
 		level.fill.set(234);

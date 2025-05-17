@@ -1,18 +1,17 @@
 package microUI.component;
 
-import static processing.core.PApplet.min;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 import static processing.core.PConstants.HALF_PI;
 import static processing.core.PConstants.TWO_PI;
 
-import microUI.Constants;
 import microUI.core.BaseImage;
 import microUI.core.Component;
+import microUI.core.Constants;
 import microUI.event.Scrollable;
-import microUI.util.Metrics;
 import microUI.util.Stroke;
 import microUI.util.Value;
 import processing.event.MouseEvent;
@@ -44,7 +43,7 @@ public final class Dial extends Component implements Scrollable {
 	
 	public Dial(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.Component.registerDial();
+		
 		
 		visible();
 		fill.set(32);

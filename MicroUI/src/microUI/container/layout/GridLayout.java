@@ -3,14 +3,13 @@ package microUI.container.layout;
 import static processing.core.PApplet.ceil;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
-import static processing.core.PApplet.min;
 import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 
 import java.util.ArrayList;
 
 import microUI.component.TextView;
 import microUI.core.Bounds;
-import microUI.util.Metrics;
 import processing.core.PApplet;
 
 public class GridLayout extends Layout {
@@ -37,7 +36,6 @@ public class GridLayout extends Layout {
 	  
 	  public GridLayout(PApplet app, float x, float y, float w, float h, int rows, int columns) {
 	    super(x,y,w,h);
-	    Metrics.Container.registerGridLayout();
 	    
 	    setGrid(rows,columns);
 	    setElementsResizable(true);

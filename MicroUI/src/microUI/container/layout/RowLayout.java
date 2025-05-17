@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import microUI.component.TextView;
 import microUI.core.Bounds;
-import microUI.util.Metrics;
 
 
 public class RowLayout extends Layout {
@@ -15,7 +14,6 @@ public class RowLayout extends Layout {
 	
 	public RowLayout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.Container.registerRowLayout();
 		
 		weightList = new ArrayList<Float>();
 		

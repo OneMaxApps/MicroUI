@@ -1,11 +1,10 @@
 package microUI.component;
 
-import static processing.core.PApplet.map;
 import static processing.core.PApplet.constrain;
+import static processing.core.PApplet.map;
 
-import microUI.Constants;
+import microUI.core.Constants;
 import microUI.core.RangeControl;
-import microUI.util.Metrics;
 
 public final class Scroll extends RangeControl {
 	public final Button thumb;
@@ -14,7 +13,6 @@ public final class Scroll extends RangeControl {
 	
 	public Scroll(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.Component.registerScroll();
 		
 		fill.set(0,32);
 		thumb = new Button("");

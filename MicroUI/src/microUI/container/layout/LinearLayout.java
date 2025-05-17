@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import microUI.component.TextView;
 import microUI.core.Bounds;
-import microUI.util.Metrics;
 
 public class LinearLayout extends Layout {
 	public final static int MODE_ROW = 0,MODE_COLUMN = 1;
@@ -16,7 +15,6 @@ public class LinearLayout extends Layout {
 	
 	public LinearLayout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.Container.registerLinearLayout();
 		
 		weightList = new ArrayList<Float>();
 		transforming = new Transforming() {

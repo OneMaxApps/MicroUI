@@ -27,15 +27,14 @@ import static processing.core.PConstants.UP;
 import java.util.ArrayList;
 import java.util.List;
 
-import microUI.Constants;
 import microUI.core.Component;
+import microUI.core.Constants;
 //import microUI.effect.Animation;
 import microUI.event.Event;
 import microUI.event.KeyPressable;
 import microUI.event.Scrollable;
 import microUI.util.Clipboard;
 import microUI.util.Color;
-import microUI.util.Metrics;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
@@ -52,11 +51,9 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	protected boolean focused;
 	protected PGraphics pg;
 	protected PFont font;
-	protected final Event event;
 
  	public EditText(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		Metrics.Component.registerEditText();
 		
 		visible();
 		fill.set(255,255,232);
@@ -72,8 +69,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		selection = new Selection();
 		
 		pg = app.createGraphics((int) w, (int) h, app.sketchRenderer());
-		event = new Event();
-		
+
 		scrollsValuesUpdate();
 		
 	}
@@ -932,7 +928,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			return posY;
 		}
 
-		protected final int getRow() {
+		public final int getRow() {
 			return constrain(row,0,getMaxCharsInRow());
 		}
 
@@ -944,7 +940,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			return column;
 		}
 
-		protected final int getColumnsCount() {
+		
+		public final int getColumnsCount() {
 			return items.list.size();
 		}
 	
@@ -997,6 +994,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			items.list.get(getColumn()).getStringBuilder().delete(getRow(), items.list.get(getColumn()).getText().length());
 			return txt;
 		}
+		
 	}
 		
 	public final class Selection {
