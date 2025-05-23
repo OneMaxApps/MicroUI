@@ -4,7 +4,6 @@ import microUI.component.EditText;
 import microUI.core.GlobalTooltip;
 import microUI.core.MicroUI;
 import microUI.event.Event;
-import microUI.util.Metrics;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -22,7 +21,7 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		Metrics.printAll();
+		// Metrics.printAll();
 		
 		component = new EditText();
 	}
