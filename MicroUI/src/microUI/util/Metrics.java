@@ -26,6 +26,8 @@ public final class Metrics {
 	}
 	
 	public static final void printAll() {
+		if(metrics.isEmpty()) { return; }
+		
 		System.out.println("\n////////////////////");
 		metrics.forEach((k, v) -> {
 			System.out.println(k+" : "+v);

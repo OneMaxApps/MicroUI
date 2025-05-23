@@ -184,6 +184,10 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 
 	}
 	
+	public final boolean isFocused() { return focused; }
+	
+	public final void setFocused(boolean isFocused) { this.focused = isFocused; }
+	
 	private final void initScrolls() {
 		scrollV.value.setMinMax(-1,0);
 		scrollV.setOrientation(Constants.VERTICAL);
@@ -206,9 +210,6 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		Metrics.register(pg);
 	}
 	
-	public final boolean isFocused() { return focused; }
-	
-	public final void setFocused(boolean isFocused) { this.focused = isFocused; }
 
 	private final void removeEmptyItem(final int index) {
 		if(items.size() <= 1) { return; }
@@ -230,6 +231,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			scrollH.setPosition(x,y+h-SCROLLS_WEIGHT);
 		}
 	}	
+	
 	private final void scrollsSizeUpdate() {
 		
 		if(scrollV != null && scrollH != null) {
@@ -244,26 +246,17 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 
 	private final void scrollsValuesUpdate() {
-		
-		if(scrollV != null && scrollH != null) {
-			float tempValueOfScrollH = scrollH.value.get(),
-				  tempValueOfScrollV = scrollV.value.get();
-			if(!items.list.isEmpty()) {
-				scrollH.value.setMax(items.getCurrent().getTextWidth());
-				scrollH.value.set(tempValueOfScrollH);
-			}
+		if(scrollV == null || scrollH == null) { return; }
+			
+			if(!items.isEmpty()) { scrollH.value.setMax(items.getCurrent().getTextWidth()); }
 			
 			if(items.getTotalHeight() > EditText.this.getH()) {
-				scrollV.value.setMinMax(h-items.getTotalHeight(), 0);
-				scrollV.value.set(max(tempValueOfScrollV,scrollV.value.getMin()));
+				scrollV.value.setMin(h-items.getTotalHeight());
 			} else {
-				// TODO: Check this area for strange behavior
-				scrollV.value.setMinMax(-items.getTotalHeight()-items.getTextSize(), 0);
-				scrollV.value.set(scrollV.value.getMax());
+				scrollV.value.setMin(1);
+				//scrollV.value.setMin(-items.getTotalHeight()-items.getTextSize());
 			}
-			
-		}
-		
+
 	}
 
 	private final void CTRLV() {
@@ -366,6 +359,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	
 	private final void keyBackspace() {
 		
+		scrollV.value.append(items.getFirst().getH());
+		
 		if(selection.isSelectedAllText()) {
 			items.deleteAllText();
 			selection.unselect();
@@ -373,6 +368,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			while(items.getTotalHeight() < EditText.this.getH()) { items.add(""); }
 			cursor.setColumn(0);
 			cursor.setRow(0);
+			scrollV.value.set(0);
 			return;
 		}
 		
@@ -485,6 +481,10 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 					item.setEditing(false);
 					}
 			}
+		}
+		
+		protected boolean isEmpty() {
+			return list.isEmpty();
 		}
 		
 		private final boolean itemInside(Item item) {

@@ -111,7 +111,6 @@ public class Color {
 		this.alpha = alpha;
 	}
 	
-	// TODO remove that argument and use static variable from class MicroUI for getting context PApplet
 	public void use() {
 		MicroUI.getContext().fill(get());
 	}

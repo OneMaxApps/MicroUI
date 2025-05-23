@@ -22,12 +22,9 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		
-		component = new EditText();
-		component.tooltip.text.set("Hello i'm "+component.getClass().getSimpleName());
-
 		Metrics.printAll();
 		
+		component = new EditText();
 	}
 	
 	@Override
@@ -35,26 +32,26 @@ public final class LaunchTest extends PApplet {
 		background(200);
 		
 		component.draw();
-		if(mouseButton == RIGHT) { component.setPosition(mouseX,mouseY); }
-		//Metrics.printAll();
 		
 		GlobalTooltip.draw();
 	}
 
 	@Override
-	public void mouseWheel(MouseEvent event) {
-		component.mouseWheel(event);
-	}
-
-	@Override
 	public void keyPressed() {
 		Event.keyPressed();
+		
 		component.keyPressed();
 	}
-
+	
 	@Override
 	public void keyReleased() {
 		Event.keyReleased();
+		
+	}
+
+	@Override
+	public void mouseWheel(MouseEvent event) {
+		component.mouseWheel(event);
 	}
 	
 	

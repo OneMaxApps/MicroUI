@@ -16,19 +16,6 @@ import microUI.graphics.Stroke;
 import microUI.util.Value;
 import processing.event.MouseEvent;
 
-// TODO Make all tasks in down
-/*
- TASKS:
- 1. Use class Value for controlling value; DONE
- 2. Make width and height neutral for real size because he will to use the minimal value from width and height; DONE
- 3. Can change color of circle; DONE
- 4. Can set texture for circle; DONE
- 5. Can look to meaning of value inside the circle; DONE
- 6. Can use mouse wheel for changing value; DONE
- 7. Can set texture for arrow; DONE
- 8. Can set value from outside; DONE
- */
-
 public final class Dial extends Component implements Scrollable {
 	private final static float RADIUS_START = HALF_PI*1.2f,
 							   RADIUS_END = TWO_PI+HALF_PI*.8f;
