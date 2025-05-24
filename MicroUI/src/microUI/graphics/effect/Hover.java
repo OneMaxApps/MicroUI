@@ -4,7 +4,6 @@ import microUI.core.Component;
 import microUI.core.View;
 import microUI.graphics.Color;
 
-
 public final class Hover extends View {
 	public final Color fill;
 	private final Component component;

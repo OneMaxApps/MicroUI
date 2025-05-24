@@ -1,4 +1,4 @@
-package microUI.services;
+package microUI.service;
 
 import java.util.ArrayList;
 import java.util.List;

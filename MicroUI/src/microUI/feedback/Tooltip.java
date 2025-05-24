@@ -8,7 +8,7 @@ import microUI.container.layout.Layout;
 import microUI.core.Bounds;
 import microUI.event.Event;
 import microUI.graphics.Color;
-import microUI.services.GlobalTooltip;
+import microUI.service.GlobalTooltip;
 
 
 public final class Tooltip extends Bounds {

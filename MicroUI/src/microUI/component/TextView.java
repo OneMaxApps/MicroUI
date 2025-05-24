@@ -219,7 +219,7 @@ public class TextView extends Component {
 		  public Color fill;
 		  private float extraSize,shiftX,shiftY;
 		  
-		  public Shadow() {
+		  private Shadow() {
 			  fill = new Color(0);
 			  extraSize = h*.01f;
 			  invisible();

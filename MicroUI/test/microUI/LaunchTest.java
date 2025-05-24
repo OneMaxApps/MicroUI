@@ -2,7 +2,7 @@ package microUI;
 
 import microUI.component.EditText;
 import microUI.event.Event;
-import microUI.services.GlobalTooltip;
+import microUI.service.GlobalTooltip;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
