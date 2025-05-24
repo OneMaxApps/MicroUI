@@ -1,8 +1,8 @@
-package microUI.core;
+package microUI.core.base;
 
+import microUI.core.style.Color;
 import microUI.event.Event;
 import microUI.feedback.Tooltip;
-import microUI.graphics.Color;
 
 public abstract class Component extends Bounds {
     public final Color fill;

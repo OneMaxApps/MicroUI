@@ -5,7 +5,8 @@ import static processing.core.PApplet.constrain;
 import java.util.ArrayList;
 
 import microUI.component.TextView;
-import microUI.core.Bounds;
+import microUI.core.base.Bounds;
+import microUI.core.base.Layout;
 
 
 public class RowLayout extends Layout {

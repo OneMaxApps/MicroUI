@@ -9,7 +9,8 @@ import static processing.core.PApplet.min;
 import java.util.ArrayList;
 
 import microUI.component.TextView;
-import microUI.core.Bounds;
+import microUI.core.base.Bounds;
+import microUI.core.base.Layout;
 import processing.core.PApplet;
 
 public class GridLayout extends Layout {

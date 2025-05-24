@@ -1,4 +1,4 @@
-package microUI.graphics;
+package microUI.core.style;
 
 import microUI.MicroUI;
 import microUI.util.Metrics;

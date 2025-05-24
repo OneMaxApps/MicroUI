@@ -5,7 +5,8 @@ import static processing.core.PApplet.constrain;
 import java.util.ArrayList;
 
 import microUI.component.TextView;
-import microUI.core.Bounds;
+import microUI.core.base.Bounds;
+import microUI.core.base.Layout;
 
 public class LinearLayout extends Layout {
 	public final static int MODE_ROW = 0,MODE_COLUMN = 1;

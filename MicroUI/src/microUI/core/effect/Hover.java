@@ -1,8 +1,8 @@
-package microUI.graphics.effect;
+package microUI.core.effect;
 
-import microUI.core.Component;
-import microUI.core.View;
-import microUI.graphics.Color;
+import microUI.core.base.Component;
+import microUI.core.base.View;
+import microUI.core.style.Color;
 
 public final class Hover extends View {
 	public final Color fill;

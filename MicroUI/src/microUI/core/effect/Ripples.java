@@ -1,13 +1,13 @@
-package microUI.graphics.effect;
+package microUI.core.effect;
 
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.max;
 import static processing.core.PApplet.min;
 
-import microUI.core.Bounds;
-import microUI.core.View;
+import microUI.core.base.Bounds;
+import microUI.core.base.View;
+import microUI.core.style.Color;
 import microUI.event.Event;
-import microUI.graphics.Color;
 import microUI.util.Metrics;
 import processing.core.PGraphics;
 

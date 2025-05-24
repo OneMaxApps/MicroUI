@@ -1,6 +1,6 @@
 package microUI.component;
 
-import microUI.abstracts.AbstractButton;
+import microUI.core.AbstractButton;
 import microUI.util.Constants;
 
 public class Button extends AbstractButton {

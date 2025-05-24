@@ -3,7 +3,7 @@ package microUI.component;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
-import microUI.abstracts.RangeControl;
+import microUI.core.RangeControl;
 import microUI.util.Constants;
 
 public final class Scroll extends RangeControl {

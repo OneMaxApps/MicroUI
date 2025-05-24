@@ -1,4 +1,4 @@
-package microUI.core;
+package microUI.core.base;
 
 public abstract class Bounds extends View {
 	protected float x,y,w,h;

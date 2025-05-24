@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import init.TestInit;
+import microUI.core.base.View;
 
 class ViewTest extends TestInit {
 

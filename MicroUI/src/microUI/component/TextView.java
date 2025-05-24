@@ -6,9 +6,9 @@ import static processing.core.PApplet.min;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
-import microUI.core.Component;
-import microUI.core.View;
-import microUI.graphics.Color;
+import microUI.core.base.Component;
+import microUI.core.base.View;
+import microUI.core.style.Color;
 import processing.core.PFont;
 import processing.core.PGraphics;
 

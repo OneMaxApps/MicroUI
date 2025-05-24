@@ -1,14 +1,14 @@
-package microUI.graphics.effect;
+package microUI.core.effect;
 
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PConstants.CORNERS;
 import static processing.core.PConstants.SQUARE;
 
-import microUI.container.layout.Layout;
-import microUI.core.Bounds;
-import microUI.core.View;
-import microUI.graphics.Color;
+import microUI.core.base.Bounds;
+import microUI.core.base.Layout;
+import microUI.core.base.View;
+import microUI.core.style.Color;
 
 public final class Shadow extends View {
 	  public final Color fill;

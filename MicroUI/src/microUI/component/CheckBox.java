@@ -1,6 +1,6 @@
 package microUI.component;
 
-import microUI.abstracts.AbstractButton;
+import microUI.core.AbstractButton;
 import microUI.event.Event;
 
 public class CheckBox extends AbstractButton {

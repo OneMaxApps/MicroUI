@@ -1,7 +1,7 @@
-package microUI.abstracts;
+package microUI.core;
 
-import microUI.core.Bounds;
-import microUI.graphics.Color;
+import microUI.core.base.Bounds;
+import microUI.core.style.Color;
 import processing.core.PImage;
 
 public abstract class AbstractImage extends Bounds {

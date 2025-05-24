@@ -3,7 +3,8 @@ package microUI.container.layout;
 import static processing.core.PApplet.min;
 
 import microUI.component.TextView;
-import microUI.core.Bounds;
+import microUI.core.base.Bounds;
+import microUI.core.base.Layout;
 
 public class EdgeLayout extends Layout {
 	private Bounds form;

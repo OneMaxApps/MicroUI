@@ -1,4 +1,4 @@
-package microUI.core;
+package microUI.core.base;
 
 import microUI.MicroUI;
 import microUI.core.interfaces.Visible;

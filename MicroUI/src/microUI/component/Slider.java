@@ -2,9 +2,9 @@ package microUI.component;
 
 import static processing.core.PApplet.map;
 
-import microUI.abstracts.RangeControl;
-import microUI.graphics.Color;
-import microUI.graphics.Stroke;
+import microUI.core.RangeControl;
+import microUI.core.style.Color;
+import microUI.core.style.Stroke;
 import microUI.util.Constants;
 import microUI.util.UnsafeBounds;
 

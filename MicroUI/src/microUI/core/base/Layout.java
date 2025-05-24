@@ -1,14 +1,14 @@
-package microUI.container.layout;
+package microUI.core.base;
 
 import java.util.ArrayList;
 
-import microUI.abstracts.AbstractImage;
-import microUI.core.Bounds;
+import microUI.container.layout.EdgeLayout;
+import microUI.core.AbstractImage;
+import microUI.core.effect.Shadow;
 import microUI.core.interfaces.Focusable;
 import microUI.core.interfaces.KeyPressable;
 import microUI.core.interfaces.Scrollable;
-import microUI.graphics.Color;
-import microUI.graphics.effect.Shadow;
+import microUI.core.style.Color;
 import processing.event.MouseEvent;
 
 public abstract class Layout extends Bounds implements Scrollable, KeyPressable, Focusable  {
@@ -201,8 +201,8 @@ public abstract class Layout extends Bounds implements Scrollable, KeyPressable,
 
 	protected abstract class Transforming {
 		private float layX,layY,layW,layH;
-		  
-		  protected final void autoUpdate() {
+		
+		  public final void autoUpdate() {
 			  if(layX != x) {
 				  layX = x;
 				  updateForce();
@@ -225,7 +225,7 @@ public abstract class Layout extends Bounds implements Scrollable, KeyPressable,
 		  }
 		  
 		  
-		  protected abstract void updateForce();
+		  public abstract void updateForce();
 
 	}
 }

@@ -1,7 +1,7 @@
 package microUI.event;
 
 import microUI.MicroUI;
-import microUI.core.Bounds;
+import microUI.core.base.Bounds;
 
 public class Event extends MicroUI {
 	  private static final int MIN_SHAKE_DIST = 3;

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import init.TestInit;
 import microUI.MicroUI;
-import microUI.core.Bounds;
+import microUI.core.base.Bounds;
 import processing.core.PApplet;
 
 class PhysicsTest extends TestInit {

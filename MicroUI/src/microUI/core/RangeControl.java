@@ -1,6 +1,6 @@
-package microUI.abstracts;
+package microUI.core;
 
-import microUI.core.Component;
+import microUI.core.base.Component;
 import microUI.core.interfaces.Scrollable;
 import microUI.event.Scrolling;
 import microUI.util.Constants;

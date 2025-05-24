@@ -1,9 +1,9 @@
-package microUI.abstracts;
+package microUI.core;
 
-import microUI.core.Component;
-import microUI.graphics.Stroke;
-import microUI.graphics.effect.Hover;
-import microUI.graphics.effect.Ripples;
+import microUI.core.base.Component;
+import microUI.core.effect.Hover;
+import microUI.core.effect.Ripples;
+import microUI.core.style.Stroke;
 
 public abstract class AbstractButton extends Component {
 	public final Ripples ripples;

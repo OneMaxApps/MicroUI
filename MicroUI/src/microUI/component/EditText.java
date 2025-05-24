@@ -27,11 +27,11 @@ import static processing.core.PConstants.UP;
 import java.util.ArrayList;
 import java.util.List;
 
-import microUI.core.Component;
+import microUI.core.base.Component;
 import microUI.core.interfaces.KeyPressable;
 import microUI.core.interfaces.Scrollable;
+import microUI.core.style.Color;
 import microUI.event.Event;
-import microUI.graphics.Color;
 import microUI.util.Clipboard;
 import microUI.util.Constants;
 import microUI.util.Metrics;
@@ -554,10 +554,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				Item item = list.get(i);
 				if(itemInside(item)) {
 					item.draw(pg);
-					if(item.isEditing()) { cursor.setColumn(i); }
-					// It's can to brake logic
-					if(cursor.getColumn() == i) { item.setEditing(true); }
-					
+					if(item.isEditing()) { cursor.setColumn(i); }	
 				} else {
 					item.setEditing(false);
 					}

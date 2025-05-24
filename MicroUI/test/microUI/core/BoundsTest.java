@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import init.TestInit;
+import microUI.core.base.Bounds;
 
 class BoundsTest extends TestInit {
 	private static Bounds bounds;
