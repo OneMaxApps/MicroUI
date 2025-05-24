@@ -1,5 +1,6 @@
-package microUI.core;
+package microUI.abstracts;
 
+import microUI.core.Bounds;
 import microUI.graphics.Color;
 import processing.core.PImage;
 

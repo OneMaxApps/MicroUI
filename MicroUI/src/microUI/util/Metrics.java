@@ -3,7 +3,7 @@ package microUI.util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import microUI.core.MicroUI;
+import microUI.MicroUI;
 import processing.core.PGraphics;
 
 public final class Metrics {
@@ -11,8 +11,8 @@ public final class Metrics {
 	
 	private Metrics() {}
 	
-	public static final void register(PGraphics obj) {
-		final String key = obj.getClass().getSimpleName();
+	public static final void register(PGraphics pg) {
+		final String key = pg.getClass().getSimpleName();
 		metrics.put(key, metrics.getOrDefault(key, 0)+1);
 	}
 	

@@ -1,9 +1,8 @@
 package microUI;
 
 import microUI.component.EditText;
-import microUI.core.GlobalTooltip;
-import microUI.core.MicroUI;
 import microUI.event.Event;
+import microUI.services.GlobalTooltip;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -24,11 +23,12 @@ public final class LaunchTest extends PApplet {
 		// Metrics.printAll();
 		
 		component = new EditText();
+		component.tooltip.text.set("It's yout working place");
 	}
 	
 	@Override
 	public void draw() {
-		background(200);
+		background(0);
 		
 		component.draw();
 		

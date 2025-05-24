@@ -8,11 +8,11 @@ import static processing.core.PConstants.CORNER;
 import static processing.core.PConstants.HALF_PI;
 import static processing.core.PConstants.TWO_PI;
 
-import microUI.core.AbstractImage;
+import microUI.abstracts.AbstractImage;
 import microUI.core.Component;
-import microUI.core.Constants;
-import microUI.core.inteface.Scrollable;
+import microUI.core.interfaces.Scrollable;
 import microUI.graphics.Stroke;
+import microUI.util.Constants;
 import microUI.util.Value;
 import processing.event.MouseEvent;
 

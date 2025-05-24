@@ -1,7 +1,7 @@
 package microUI.event;
 
+import microUI.MicroUI;
 import microUI.core.Bounds;
-import microUI.core.MicroUI;
 
 public class Event extends MicroUI {
 	  private static final int MIN_SHAKE_DIST = 3;
@@ -100,13 +100,12 @@ public class Event extends MicroUI {
 	  }
 	  
 	  public boolean dragging() {
-		  if(pressed() && (app.mouseX != app.pmouseX || app.mouseY != app.pmouseY)) { return dragged = true;
-		  } else {
-			  	return dragged;
-			}
+		  return holding() && (app.mouseX != app.pmouseX || app.mouseY != app.pmouseY);
 	  }
 	  
-	  public boolean isDragged() {
+	  public boolean dragged() {
+		  if(dragging()) { dragged = true; }
+		  
 		  return dragged;
 	  }
 	  

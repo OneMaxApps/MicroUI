@@ -28,17 +28,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import microUI.core.Component;
-import microUI.core.Constants;
-import microUI.core.inteface.KeyPressable;
-import microUI.core.inteface.Scrollable;
+import microUI.core.interfaces.KeyPressable;
+import microUI.core.interfaces.Scrollable;
 import microUI.event.Event;
 import microUI.graphics.Color;
 import microUI.util.Clipboard;
+import microUI.util.Constants;
 import microUI.util.Metrics;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
+// TODO Search the bugs if they exists
 public class EditText extends Component implements Scrollable, KeyPressable {
 	protected final float LEFT_OFFSET = 10, SCROLLS_WEIGHT;
 	
@@ -83,6 +84,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	
 	@Override
 	public void update() {
+		debug();
+		
 		event.listen(this);
 		tooltip.setAdditionalCondition(!focused);
 		
@@ -111,6 +114,36 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			scrollH.value.set(scrollH.value.getMin());
 		}
 		
+		
+		if(scrollH.value.getMax() != 0) {
+			scrollH.setVisible(event.inside() || scrollH.event.holding());
+		} else {
+			if(!scrollH.event.holding()) {
+				scrollH.invisible();
+			}
+		}
+		
+		if(items.getTotalHeight() > getH()) {
+			scrollV.setVisible(event.inside() || scrollH.event.holding());
+		} else {
+			if(!scrollV.event.holding()) {
+				scrollV.invisible();
+			}
+		}
+		
+	}
+	
+	private final void debug() {
+		app.pushStyle();
+		app.fill(255,255,0);
+		app.textSize(16);
+		app.text( "Scroll H value: " + scrollH.value.get() + " Min: " + scrollH.value.getMin() + " Max: " + scrollH.value.getMax()
+		+ " \n" + "Scroll V value: " + scrollV.value.get() + " Min: " + scrollV.value.getMin() + " Max: " + scrollV.value.getMax()
+		+ " \n" + ""
+		+ " \n" + ""
+		+ " \n" + ""
+		, 16 , 16);
+		app.popStyle();
 	}
 	
 	@Override
@@ -159,19 +192,60 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		}
 			
 		switch(app.keyCode) {
-			case UP:    items.goUpToEditing(); 		break;
-			case DOWN:  items.goDownToEditing(); 	break;	
-			case LEFT:  cursor.back();				break;	
-			case RIGHT: cursor.next();				break;
-			case TAB:   keyTab();					break;
+			case UP:
+				items.goUpToEditing();
+				selection.unselect();
+			break;
+			
+			case DOWN:
+				items.goDownToEditing();
+				selection.unselect();
+			break;
+			
+			case LEFT:
+				cursor.back();
+				selection.unselect();
+			break;
+			
+			case RIGHT:
+				cursor.next();
+				selection.unselect();
+			break;
+			
+			case TAB:
+				keyTab();
+				selection.unselect();
+			break;
+			
 			case BACKSPACE:	 keyBackspace(); 		break;
-			case VK_HOME : keyHome();				break;	
-			case VK_END: keyEnd();					break;	
-			case VK_PAGE_UP: keyPageUp(); 			break;	
-			case VK_PAGE_DOWN: keyPageDown(); 		break;
-			case VK_ENTER: keyEnter();				break;
+			
+			case VK_HOME :
+				keyHome();
+				selection.unselect();
+			break;
+			
+			case VK_END:
+				keyEnd();
+				selection.unselect();
+			break;
+			
+			case VK_PAGE_UP:
+				keyPageUp();
+				selection.unselect();
+			break;
+			
+			case VK_PAGE_DOWN:
+				keyPageDown(); 
+				selection.unselect();
+			break;
+			
+			case VK_ENTER:
+				keyEnter();
+				items.deleteAllSelectedText();
+				selection.unselect();
+			break;
+			
 			default:
-				
 				items.deleteAllSelectedText();
 				selection.unselect();
 				
@@ -181,7 +255,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				}
 				break;
 		}
-
+		
 	}
 	
 	public final boolean isFocused() { return focused; }
@@ -197,7 +271,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		scrollV.scrolling.setVelocity(.1f);
 		
 		
-		scrollH.value.setMinMax(-LEFT_OFFSET, 0);
+		scrollH.value.setMin(-LEFT_OFFSET);
 		scrollH.setPosition(x,y+h-SCROLLS_WEIGHT);
 		scrollH.setSize(w,SCROLLS_WEIGHT);
 		
@@ -248,13 +322,17 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	private final void scrollsValuesUpdate() {
 		if(scrollV == null || scrollH == null) { return; }
 			
-			if(!items.isEmpty()) { scrollH.value.setMax(items.getCurrent().getTextWidth()); }
+			if(!items.isEmpty()) {
+				scrollH.value.setMax(items.getCurrent().getTextWidth());
+				
+			} else {
+				scrollH.value.set(scrollH.value.getMin());
+			}
 			
 			if(items.getTotalHeight() > EditText.this.getH()) {
 				scrollV.value.setMin(h-items.getTotalHeight());
 			} else {
-				scrollV.value.setMin(1);
-				//scrollV.value.setMin(-items.getTotalHeight()-items.getTextSize());
+				scrollV.value.setMin(0);
 			}
 
 	}
@@ -379,7 +457,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			return;
 		}
 		
-		if(!items.getCurrent().isEmpty() && cursor.getRow() == 0) {
+		if(!items.getCurrent().isEmpty() && cursor.getRow() == 0 && cursor.getColumn() != 0) {
 			final String textFromRightSideToCursor = cursor.getTextOfRightSide();
 			cursor.setColumn(cursor.getColumn()-1);
 			cursor.goInEnd();
@@ -477,6 +555,9 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				if(itemInside(item)) {
 					item.draw(pg);
 					if(item.isEditing()) { cursor.setColumn(i); }
+					// It's can to brake logic
+					if(cursor.getColumn() == i) { item.setEditing(true); }
+					
 				} else {
 					item.setEditing(false);
 					}
@@ -519,6 +600,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			}
 			
 			scrollsValuesUpdate();
+			
 		}
 		
 		public final int getTextSize() { return textSize; }
@@ -677,7 +759,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 						}
 					}
 				
-				if(event.pressed()) {
+				if(event.pressed() && !scrollH.event.holding() && !scrollV.event.holding()) {
 					isEditing = true;
 					final float LOCAL_MOUSE_X = app.mouseX-x+scrollH.value.get();
 					
@@ -694,6 +776,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 					}
 					
 					cursor.resetTimer();
+					
+					scrollsValuesUpdate();
 				}
 				
 				if(app.mousePressed && event.outside()) {
@@ -1071,11 +1155,9 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		}
 		
 		private final boolean isAllowedStateToStartSelecting() {
-			return event.pressed() &&
+			return event.holding() &&
 				   !scrollV.thumb.event.holding() &&
-				   !scrollH.thumb.event.holding() &&
-				   !scrollV.event.inside() &&
-				   !scrollH.event.inside();
+				   !scrollH.thumb.event.holding();
 		}
 		
 		private final boolean isSelecting() { return isSelecting; }
@@ -1125,7 +1207,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		}
 		
 		public final String getText() {
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			int countOfLines = getSelectedLines();
 			
 			

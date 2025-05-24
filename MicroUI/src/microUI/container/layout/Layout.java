@@ -2,11 +2,11 @@ package microUI.container.layout;
 
 import java.util.ArrayList;
 
-import microUI.core.AbstractImage;
+import microUI.abstracts.AbstractImage;
 import microUI.core.Bounds;
-import microUI.core.inteface.Focusable;
-import microUI.core.inteface.KeyPressable;
-import microUI.core.inteface.Scrollable;
+import microUI.core.interfaces.Focusable;
+import microUI.core.interfaces.KeyPressable;
+import microUI.core.interfaces.Scrollable;
 import microUI.graphics.Color;
 import microUI.graphics.effect.Shadow;
 import processing.event.MouseEvent;

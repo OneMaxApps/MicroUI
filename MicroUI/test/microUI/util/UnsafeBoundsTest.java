@@ -1,4 +1,4 @@
-package microUI.core;
+package microUI.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import init.TestInit;
+import microUI.util.UnsafeBounds;
 
 class UnsafeBoundsTest extends TestInit {
 private static UnsafeBounds unsafeBounds;

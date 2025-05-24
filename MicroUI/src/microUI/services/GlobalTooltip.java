@@ -1,4 +1,4 @@
-package microUI.core;
+package microUI.services;
 
 import microUI.feedback.Tooltip;
 import microUI.graphics.Color;

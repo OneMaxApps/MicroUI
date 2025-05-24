@@ -1,8 +1,10 @@
-package microUI.core;
+package microUI.abstracts;
 
 import static processing.core.PApplet.constrain;
 
-public class TextController {
+import microUI.util.Constants;
+
+public abstract class TextController {
 	protected final StringBuilder sb;
 	private boolean validation,constrain;
 	private static final String additionalSymbols = "!@#$%^&*()_-+=|\\/[]{}<>,. \'\";:№?*";

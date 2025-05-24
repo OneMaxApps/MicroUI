@@ -1,6 +1,7 @@
 package microUI.core;
 
-import microUI.core.inteface.Visible;
+import microUI.MicroUI;
+import microUI.core.interfaces.Visible;
 import microUI.util.Metrics;
 
 public abstract class View extends MicroUI implements Visible {

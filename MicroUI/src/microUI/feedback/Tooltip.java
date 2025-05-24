@@ -3,12 +3,12 @@ package microUI.feedback;
 import static processing.core.PApplet.constrain;
 import static processing.core.PConstants.CENTER;
 
+import microUI.abstracts.TextController;
 import microUI.container.layout.Layout;
 import microUI.core.Bounds;
-import microUI.core.GlobalTooltip;
-import microUI.core.TextController;
 import microUI.event.Event;
 import microUI.graphics.Color;
+import microUI.services.GlobalTooltip;
 
 
 public final class Tooltip extends Bounds {

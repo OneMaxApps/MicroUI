@@ -17,9 +17,9 @@ import static processing.core.PConstants.CORNER;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 
+import microUI.abstracts.TextController;
 import microUI.core.Component;
-import microUI.core.TextController;
-import microUI.core.inteface.KeyPressable;
+import microUI.core.interfaces.KeyPressable;
 import microUI.event.Event;
 import microUI.graphics.Color;
 import microUI.util.Clipboard;

@@ -1,10 +1,10 @@
-package microUI.container;
+package microUI.services;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import microUI.core.View;
-import microUI.core.inteface.Focusable;
+import microUI.core.interfaces.Focusable;
 
 public final class ContainerManager extends View {
 	private final List<Focusable> containerList;

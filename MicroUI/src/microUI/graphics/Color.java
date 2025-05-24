@@ -1,6 +1,6 @@
 package microUI.graphics;
 
-import microUI.core.MicroUI;
+import microUI.MicroUI;
 import microUI.util.Metrics;
 import processing.core.PGraphics;
 

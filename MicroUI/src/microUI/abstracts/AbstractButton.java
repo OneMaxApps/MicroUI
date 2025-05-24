@@ -1,5 +1,6 @@
-package microUI.core;
+package microUI.abstracts;
 
+import microUI.core.Component;
 import microUI.graphics.Stroke;
 import microUI.graphics.effect.Hover;
 import microUI.graphics.effect.Ripples;

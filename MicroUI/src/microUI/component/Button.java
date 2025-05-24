@@ -1,7 +1,7 @@
 package microUI.component;
 
-import microUI.core.AbstractButton;
-import microUI.core.Constants;
+import microUI.abstracts.AbstractButton;
+import microUI.util.Constants;
 
 public class Button extends AbstractButton {
 	public final TextView text;

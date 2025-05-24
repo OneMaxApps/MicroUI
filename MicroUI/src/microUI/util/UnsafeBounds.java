@@ -1,4 +1,6 @@
-package microUI.core;
+package microUI.util;
+
+import microUI.core.Bounds;
 
 public abstract class UnsafeBounds extends Bounds {
 	private boolean allowNegativeDimensions;

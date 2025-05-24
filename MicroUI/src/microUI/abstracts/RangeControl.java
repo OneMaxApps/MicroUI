@@ -1,7 +1,9 @@
-package microUI.core;
+package microUI.abstracts;
 
-import microUI.core.inteface.Scrollable;
+import microUI.core.Component;
+import microUI.core.interfaces.Scrollable;
 import microUI.event.Scrolling;
+import microUI.util.Constants;
 import microUI.util.Value;
 import processing.event.MouseEvent;
 

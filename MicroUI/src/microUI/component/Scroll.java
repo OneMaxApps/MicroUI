@@ -3,8 +3,8 @@ package microUI.component;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
-import microUI.core.Constants;
-import microUI.core.RangeControl;
+import microUI.abstracts.RangeControl;
+import microUI.util.Constants;
 
 public final class Scroll extends RangeControl {
 	public final Button thumb;
@@ -83,16 +83,18 @@ public final class Scroll extends RangeControl {
 	private final void updateThumbTransforms() {
 		thumb.setTransforms(this);
 		
-		if(value.hasEqualMinMax()) { return; }
+		
 		
 		switch(orientation) {
 		
 		case Constants.HORIZONTAL :
 			thumb.setW(getW()/10);
+			if(value.hasEqualMinMax()) { return; }
 			thumb.setX(map(value.get(),value.getMin(),value.getMax(),getX(),getX()+getW()-getW()/10));
 			break;
 		case Constants.VERTICAL :
 			thumb.setH(getH()/10);
+			if(value.hasEqualMinMax()) { return; }
 			thumb.setY(map(value.get(),value.getMin(),value.getMax(),getY()+getH()-thumb.getH(),getY()));
 			break;
 		}

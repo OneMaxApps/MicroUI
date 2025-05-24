@@ -1,4 +1,4 @@
-package microUI.core.inteface;
+package microUI.core.interfaces;
 
 public interface Focusable {
 	
