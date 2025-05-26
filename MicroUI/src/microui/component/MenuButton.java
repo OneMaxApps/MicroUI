@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import microui.event.Event;
 
 
-// TODO: Correct closing other sub menu when opens more than 1
 
 public class MenuButton extends Button {
 	private boolean open,autoCloseable,isRoot;
 	private ArrayList<Button> itemList;
-	public int select,onItem;
+	private int select,recentOpenedItemId;
 	private float listHeight;
 	private Event localEvent;
 	private MenuButton root;
@@ -43,35 +42,34 @@ public class MenuButton extends Button {
 			if(localEvent.clicked()) {
 				open = !open;
 				closeAllInner();
-				closeAllSubMenu();
 			}
 			
 			if(open) {
 				select = -1;
 				if(!itemList.isEmpty()) {
+					
 					for(int i = 0; i < itemList.size(); i++) {
 						Button item = itemList.get(i);
 						item.text.setTextSize(text.getTextSize());
-						if(item.event.inside()) {
-							onItem = i;
-						}
 						item.draw();
 						
-						if(!(item instanceof MenuButton)) {
-							if(item.event.pressed()) {
-								select = i;
-								if(autoCloseable) {
-									if(isRoot) { close(); } else { root.close(); }
-									
-									root.closeAllInner();
-									
-								}
+						if(item.event.clicked()) {
+							if(i != -1) {
+								recentOpenedItemId = i;
 							}
 						}
 						
-						
-						
+						if(!(item instanceof MenuButton)) {
+							if(item.event.pressed()) {
+								recentOpenedItemId = select = i;
+								if(autoCloseable) {
+									if(isRoot) { close(); } else { root.close(); }								
+									root.closeAllInner();	
+								}
+							}
+						}
 					}
+					
 				}
 				
 				
@@ -83,6 +81,11 @@ public class MenuButton extends Button {
 				app.fill(255,128);
 				app.rect(getX()+getW()*.2f,getY()+getH()*.8f,getW()*.6f,getH()*.1f);
 				app.popStyle();
+			}
+			
+			if(recentOpenedItemId != -1) {
+				closeAllSubMenu();
+				//recentOpenedItemId = -1;
 			}
 	}
 	
@@ -107,8 +110,8 @@ public class MenuButton extends Button {
 	
 	public void closeAllSubMenu() {
 		for(int i = 0; i < itemList.size(); i++) {
+			if(i == recentOpenedItemId) { continue; }
 			Button item = itemList.get(i);
-			if(i != onItem) {
 			if(item instanceof MenuButton subMenu) {
 				subMenu.close();
 				subMenu.closeAllInner();
@@ -122,7 +125,6 @@ public class MenuButton extends Button {
 					}
 				}
 			}
-		  }
 		}
 	}
 	

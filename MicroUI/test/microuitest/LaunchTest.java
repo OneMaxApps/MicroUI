@@ -52,11 +52,10 @@ public final class LaunchTest extends PApplet {
 		background(232);
 		
 		component.draw();
-		System.out.println(component.onItem);
 		//Metrics.printAll();
 		GlobalTooltip.draw();
 		
-		//if(mouseButton == RIGHT) { component.closeAllSubMenu(); }
+		if(mouseButton == RIGHT) { component.closeAllSubMenu(); }
 	}
 
 	@Override
