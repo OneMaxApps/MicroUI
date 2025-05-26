@@ -4,12 +4,16 @@ import java.util.ArrayList;
 
 import microui.event.Event;
 
+
+// TODO: Correct closing other sub menu when opens more than 1
+
 public class MenuButton extends Button {
-	private boolean open,autoCloseable;
+	private boolean open,autoCloseable,isRoot;
 	private ArrayList<Button> itemList;
-	private int select;
+	public int select,onItem;
 	private float listHeight;
 	private Event localEvent;
+	private MenuButton root;
 	
 	public MenuButton(String title, float x, float y, float w, float h) {
 		super(title,x,y,w,h);
@@ -18,7 +22,9 @@ public class MenuButton extends Button {
 		itemList = new ArrayList<Button>();
 		select = -1;
 		localEvent = new Event();
+		isRoot = true;
 		
+		root = this;
 	}
 	
 	public MenuButton(String title) {
@@ -34,7 +40,11 @@ public class MenuButton extends Button {
 			localEvent.listen(this);
 			
 			super.update();
-			if(localEvent.clicked()) { open = !open; }
+			if(localEvent.clicked()) {
+				open = !open;
+				closeAllInner();
+				closeAllSubMenu();
+			}
 			
 			if(open) {
 				select = -1;
@@ -42,10 +52,21 @@ public class MenuButton extends Button {
 					for(int i = 0; i < itemList.size(); i++) {
 						Button item = itemList.get(i);
 						item.text.setTextSize(text.getTextSize());
+						if(item.event.inside()) {
+							onItem = i;
+						}
 						item.draw();
-						if(item.event.pressed()) {
-							select = i;
-							if(autoCloseable) { close(); }
+						
+						if(!(item instanceof MenuButton)) {
+							if(item.event.pressed()) {
+								select = i;
+								if(autoCloseable) {
+									if(isRoot) { close(); } else { root.close(); }
+									
+									root.closeAllInner();
+									
+								}
+							}
 						}
 						
 						
@@ -54,6 +75,14 @@ public class MenuButton extends Button {
 				}
 				
 				
+			}
+			
+			if(!isRoot) {
+				app.pushStyle();
+				app.noStroke();
+				app.fill(255,128);
+				app.rect(getX()+getW()*.2f,getY()+getH()*.8f,getW()*.6f,getH()*.1f);
+				app.popStyle();
 			}
 	}
 	
@@ -76,6 +105,48 @@ public class MenuButton extends Button {
 		return this;
 	}
 	
+	public void closeAllSubMenu() {
+		for(int i = 0; i < itemList.size(); i++) {
+			Button item = itemList.get(i);
+			if(i != onItem) {
+			if(item instanceof MenuButton subMenu) {
+				subMenu.close();
+				subMenu.closeAllInner();
+				
+				if(item instanceof MenuButton innerMenu) {
+					for(Button innerItem : innerMenu.itemList) {
+						if(innerItem instanceof MenuButton innerItemSubMenu) {
+						innerItemSubMenu.close();
+						innerItemSubMenu.closeAllInner();
+						}
+					}
+				}
+			}
+		  }
+		}
+	}
+	
+	public void closeAllInner() {
+		if(!open) {
+			if(itemList.isEmpty()) { return ; }
+			
+			for(int i = 0; i < itemList.size(); i++) {
+				if(itemList.get(i) instanceof MenuButton subMenu) {
+					
+					for(int j = 0; j < subMenu.itemList.size(); j++) {
+						if(subMenu.itemList.get(j) instanceof MenuButton innerSubMenu) {
+							innerSubMenu.close();
+						}
+					}
+					
+					subMenu.close();
+				}
+			}
+			
+		}
+
+	}
+	
 	public int getSelect() {
 		return select;
 	}
@@ -90,9 +161,21 @@ public class MenuButton extends Button {
 	}
 	
 	public MenuButton add(String... title) {
-		for(int i = 0; i < title.length; i++) {
-			itemList.add(new Button(title[i],getX(),getY()+getH()+listHeight,getW(),getH()));
-			listHeight += getH();
+		if(isRoot) {
+			for(int i = 0; i < title.length; i++) {
+				itemList.add(new Button(title[i],getX(),getY()+getH()+listHeight,getW(),getH()));
+				listHeight += getH();
+			}
+		} else {
+			final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW() < app.width; 
+			for(int i = 0; i < title.length; i++) {
+				if(CAN_BE_IN_RIGHT_SIDE) {
+					itemList.add(new Button(title[i],getX()+getW(),getY()+listHeight,getW(),getH()));
+				} else {
+					itemList.add(new Button(title[i],getX()-getW(),getY()+listHeight,getW(),getH()));
+				}
+				listHeight += getH();
+			}
 		}
 		
 		return this;
@@ -100,8 +183,34 @@ public class MenuButton extends Button {
 	
 	public MenuButton add(int... nums) {
 		for(int i = 0; i < nums.length; i++) {
-			itemList.add(new Button(String.valueOf(nums[i]),getX(),getY()+getH()+listHeight,getW(),getH()));
-			listHeight += getH();
+			add(String.valueOf(nums[i]));
+		}
+		return this;
+	}
+	
+	public MenuButton add(MenuButton... subMenu) {
+		
+		if(isRoot) {
+			for(int i = 0; i < subMenu.length; i++) {
+				itemList.add(subMenu[i]);
+				subMenu[i].setTransforms(getX(),getY()+getH()+listHeight,getW(),getH());
+				subMenu[i].isRoot = false;
+				subMenu[i].root = root;
+				listHeight += getH();
+			}
+		} else {
+			final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW() < app.width; 
+			for(int i = 0; i < subMenu.length; i++) {
+				itemList.add(subMenu[i]);
+				if(CAN_BE_IN_RIGHT_SIDE) {
+					subMenu[i].setTransforms(getX()+getW(),getY()+listHeight,getW(),getH());
+				} else {
+					subMenu[i].setTransforms(getX()-getW(),getY()+listHeight,getW(),getH());
+				}
+				subMenu[i].isRoot = false;
+				subMenu[i].root = root;
+				listHeight += getH();
+			}
 		}
 		
 		return this;
@@ -112,10 +221,24 @@ public class MenuButton extends Button {
 		super.setPosition(x, y);
 		if(itemList == null) { return; }
 		
-		for(int i = 0; i < itemList.size(); i++) {
-			Button item = itemList.get(i);
-			item.setPosition(x,y+getH()*(i+1));
+		if(isRoot) {
+			for(int i = 0; i < itemList.size(); i++) {
+				Button item = itemList.get(i);
+				item.setPosition(x,y+getH()*(i+1));
+			}
+			
+		} else {
+			final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
+			
+			for(int i = 0; i < itemList.size(); i++) {
+				Button item = itemList.get(i);
+				
+				if(CAN_BE_IN_RIGHT_SIDE) { item.setPosition(x+w,y+getH()*(1+i)-getH()); }
+				else { item.setPosition(x-w,y+getH()*(1+i)-getH()); }
+			}
+			
 		}
+
 	}
 	
 	@Override
@@ -126,10 +249,25 @@ public class MenuButton extends Button {
 		
 		listHeight = itemList.size()*h;
 		
-		for(int i = 0; i < itemList.size(); i++) {
-			Button item = itemList.get(i);
-			item.setPosition(getX(),getY()+getH()*(i+1));
-			item.setSize(w, getH());
+		if(isRoot) {
+			
+			for(int i = 0; i < itemList.size(); i++) {
+				Button item = itemList.get(i);
+				item.setPosition(x,y+getH()*(i+1));
+				item.setSize(w, getH());
+			}
+			
+		} else {
+			final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
+			
+			for(int i = 0; i < itemList.size(); i++) {
+				Button item = itemList.get(i);
+				item.setSize(w, getH());
+				
+				if(CAN_BE_IN_RIGHT_SIDE) { item.setPosition(x+w,y+getH()*(1+i)-getH()); }
+				else { item.setPosition(x-w,y+getH()*(1+i)-getH()); }
+			}
+			
 		}
 	}
 	

@@ -1,7 +1,7 @@
 package microuitest;
 
 import microui.MicroUI;
-import microui.component.EditText;
+import microui.component.MenuButton;
 import microui.event.Event;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
@@ -9,7 +9,7 @@ import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 	
-	EditText component;
+	MenuButton component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
@@ -22,26 +22,48 @@ public final class LaunchTest extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 
-		component = new EditText();
-		component.tooltip.text.set("It's your working place");
-		component.createFont("C:\\Windows\\Fonts\\consolai.ttf");
+		component = new MenuButton("File",200,200,100,30);
+		
+		MenuButton subOpenMenu = new MenuButton("Open");
+		component.add(subOpenMenu);
+		
+		subOpenMenu.add("From System Files","From Recents","From NetWork");
+		
+		
+		component.add("Save");
+		
+		MenuButton subMenuAbout = new MenuButton("About");
+		
+		component.add(subMenuAbout);
+		
+		subMenuAbout.add("MicroUI","View","Bounds","Component");
+		
+		MenuButton subMenuAbstractButton = new MenuButton("AbstractButton");
+				
+		subMenuAbout.add(subMenuAbstractButton);
+		
+		subMenuAbstractButton.add("Button","MenuButton","CheckBox");
+		
+		
 	}
 	
 	@Override
 	public void draw() {
-		background(0);
+		background(232);
 		
 		component.draw();
-		
+		System.out.println(component.onItem);
 		//Metrics.printAll();
 		GlobalTooltip.draw();
+		
+		//if(mouseButton == RIGHT) { component.closeAllSubMenu(); }
 	}
 
 	@Override
 	public void keyPressed() {
 		Event.keyPressed();
 		
-		component.keyPressed();
+		//component.keyPressed();
 	}
 	
 	@Override
@@ -52,7 +74,7 @@ public final class LaunchTest extends PApplet {
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		component.mouseWheel(event);
+		//component.mouseWheel(event);
 	}
 	
 	
