@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import microUI.core.style.Color;
+import microui.core.style.Color;
 
 class ColorTest {
 	

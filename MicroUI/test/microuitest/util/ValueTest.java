@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import microUI.util.Value;
+import microui.util.Value;
 
 class ValueTest {
 	private Value value = new Value(0,10,5);

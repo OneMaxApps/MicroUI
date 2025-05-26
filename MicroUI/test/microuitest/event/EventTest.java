@@ -7,8 +7,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import init.TestInit;
-import microUI.MicroUI;
-import microUI.event.Event;
+import microui.MicroUI;
+import microui.event.Event;
 import processing.core.PApplet;
 
 class EventTest extends TestInit {

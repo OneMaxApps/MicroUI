@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import init.TestInit;
-import microUI.util.UnsafeBounds;
+import microui.util.UnsafeBounds;
 
 class UnsafeBoundsTest extends TestInit {
 private static UnsafeBounds unsafeBounds;

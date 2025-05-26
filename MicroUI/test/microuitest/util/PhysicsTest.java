@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import init.TestInit;
-import microUI.MicroUI;
-import microUI.core.base.Bounds;
-import microUI.util.Physics;
+import microui.MicroUI;
+import microui.core.base.Bounds;
+import microui.util.Physics;
 import processing.core.PApplet;
 
 class PhysicsTest extends TestInit {

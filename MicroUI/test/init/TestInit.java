@@ -2,7 +2,7 @@ package init;
 
 import org.junit.jupiter.api.BeforeAll;
 
-import microUI.MicroUI;
+import microui.MicroUI;
 import processing.core.PApplet;
 
 public class TestInit {

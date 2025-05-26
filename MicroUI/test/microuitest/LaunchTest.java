@@ -1,9 +1,9 @@
 package microuitest;
 
-import microUI.MicroUI;
-import microUI.component.EditText;
-import microUI.event.Event;
-import microUI.service.GlobalTooltip;
+import microui.MicroUI;
+import microui.component.EditText;
+import microui.event.Event;
+import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -21,10 +21,10 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		// Metrics.printAll();
-		
+
 		component = new EditText();
-		component.tooltip.text.set("It's yout working place");
+		component.tooltip.text.set("It's your working place");
+		component.createFont("C:\\Windows\\Fonts\\consolai.ttf");
 	}
 	
 	@Override
@@ -33,6 +33,7 @@ public final class LaunchTest extends PApplet {
 		
 		component.draw();
 		
+		//Metrics.printAll();
 		GlobalTooltip.draw();
 	}
 
