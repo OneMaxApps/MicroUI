@@ -12,8 +12,8 @@ import microui.service.GlobalTooltip;
 
 
 public final class Tooltip extends Bounds {
-	private final int SECONDS_FOR_SHOWING = 2
-					 ,PADDING_X = 10;
+	private static final int SECONDS_FOR_SHOWING = 2
+					 		,PADDING_X = 10;
 	
 	public final Text text;
 	
@@ -75,10 +75,12 @@ public final class Tooltip extends Bounds {
 	}
 
 	public final void setLayout(Layout layout) {
+		if(layout == null) { return; }
 		this.layout = layout;
 	}
 
 	public final void setColor(final Color color) {
+		if(color == null) { return; }
 		this.fill = color;
 	}
 	
@@ -157,6 +159,7 @@ public final class Tooltip extends Bounds {
 		}
 		
 		public final void setColor(final Color color) {
+			if(color == null) { return; }
 			this.fill = color;
 		}
 	}

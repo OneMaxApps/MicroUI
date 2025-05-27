@@ -89,7 +89,7 @@ public class Color {
 	}
 
 	public final void setGreen(float green) {
-		if(green < MIN_VALUE || blue > MAX_VALUE) { return; }
+		if(green < MIN_VALUE || green > MAX_VALUE) { return; }
 		this.green = green;
 	}
 

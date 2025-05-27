@@ -66,6 +66,7 @@ public abstract class Bounds extends View {
 	}
 	
 	public void setSize(final Bounds otherBounds) {
+		if(otherBounds == null) { return; }
 		setW(otherBounds.getW());
 		setH(otherBounds.getH());
 	}
@@ -79,6 +80,7 @@ public abstract class Bounds extends View {
 	}
 	
 	public void setTransforms(Bounds otherBounds) {
+		if(otherBounds == null) { return; }
 		setTransforms(otherBounds.getX(),otherBounds.getY(),otherBounds.getW(),otherBounds.getH());
 	}
 	
@@ -89,6 +91,7 @@ public abstract class Bounds extends View {
 	}
 	
 	public void setPosition(Bounds otherBounds) {
+		if(otherBounds == null) { return; }
 		setPosition(otherBounds.getX(),otherBounds.getY());
 	}
 	

@@ -1,28 +1,29 @@
 package microui.component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import microui.core.style.Color;
 import microui.event.Event;
 
 
 
-public class MenuButton extends Button {
-	private boolean open,autoCloseable,isRoot;
-	private ArrayList<Button> itemList;
-	private int select,recentOpenedItemId;
+public final class MenuButton extends Button {
+	private boolean open,autoClose,isRoot;
+	private final ArrayList<Button> itemList;
+	private int selectedId;
 	private float listHeight;
-	private Event localEvent;
+	private final Event localEvent;
 	private MenuButton root;
 	
 	public MenuButton(String title, float x, float y, float w, float h) {
 		super(title,x,y,w,h);
 		
-		autoCloseable = true;
+		autoClose = true;
 		itemList = new ArrayList<Button>();
-		select = -1;
+		selectedId = -1;
 		localEvent = new Event();
 		isRoot = true;
-		
 		root = this;
 	}
 	
@@ -34,18 +35,19 @@ public class MenuButton extends Button {
 		this("Menu Button",app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
 	}
 	
+	// TODO: Check deeper inside
 	@Override
-	public void update() {
-			localEvent.listen(this);
-			
+	public final void update() {
 			super.update();
+			localEvent.listen(this);
 			if(localEvent.clicked()) {
 				open = !open;
-				closeAllInner();
+				if(!open) { closeAllSubMenus(); }
 			}
 			
 			if(open) {
-				select = -1;
+				selectedId = -1;
+				
 				if(!itemList.isEmpty()) {
 					
 					for(int i = 0; i < itemList.size(); i++) {
@@ -55,16 +57,17 @@ public class MenuButton extends Button {
 						
 						if(item.event.clicked()) {
 							if(i != -1) {
-								recentOpenedItemId = i;
+								selectedId = i;
+								closeAllSubMenusWithoutSelected();
 							}
 						}
 						
 						if(!(item instanceof MenuButton)) {
 							if(item.event.pressed()) {
-								recentOpenedItemId = select = i;
-								if(autoCloseable) {
+								selectedId = i;
+								if(autoClose) {
 									if(isRoot) { close(); } else { root.close(); }								
-									root.closeAllInner();	
+									root.closeAllSubMenus();	
 								}
 							}
 						}
@@ -83,208 +86,167 @@ public class MenuButton extends Button {
 				app.popStyle();
 			}
 			
-			if(recentOpenedItemId != -1) {
-				closeAllSubMenu();
-				//recentOpenedItemId = -1;
+	}
+	
+	public final void setAutoClose(boolean autoClose) {
+		this.autoClose = autoClose;
+	}
+	
+	public final boolean isOpen() { return open; }
+
+	public final void open() { this.open = true; }
+	
+	public final void close() { this.open = false; }
+	
+	public final int getSelectedId() {
+		return selectedId;
+	}
+	
+	public final boolean isSelected(final String TITLE) {
+		boolean selected = false;
+		
+		for(int i = 0; i < itemList.size(); i++) {
+			final Button ITEM = itemList.get(i);
+			
+			if(ITEM.text.get().equals(TITLE) && i == selectedId) { selected = true; }
+			
+			if(selected) { return true; }
+			
+			if(ITEM instanceof MenuButton subMenu) {
+				selected = subMenu.isSelected(TITLE);
 			}
+			
+		}
+		
+		return selected;
 	}
 	
-	public MenuButton setAutoCloseable(boolean a) {
-		autoCloseable = a;
-		return this;
-	}
-	
-	public boolean isOpen() {
-		return open;
+	public final void setSelectedId(final int SELECTED_ID) {
+		if(SELECTED_ID < 0 || SELECTED_ID >= itemList.size()) { throw new IndexOutOfBoundsException("Index out of bounds of selecting"); }
+		this.selectedId = SELECTED_ID;
+		if(open) { open = !open; }
 	}
 
-	public MenuButton open() {
-		this.open = true;
-		return this;
+	public final void add(final String... TITLE) {
+		if(isRoot) {
+			rootListState(TITLE);
+		} else {
+			childListState(TITLE);
+		}
+		
 	}
 	
-	public MenuButton close() {
-		this.open = false;
-		return this;
+	public final void add(final int... NUMBERS) {
+		add(Arrays.stream(NUMBERS).mapToObj(String::valueOf).toArray(String[]::new));
 	}
 	
-	public void closeAllSubMenu() {
+	public final void add(final MenuButton... SUB_MENU) {
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
+		for(int i = 0; i < SUB_MENU.length; i++) {
+			itemList.add(SUB_MENU[i]);
+			SUB_MENU[i].setRoot(root);
+			if(isRoot) {
+				SUB_MENU[i].setTransforms(getX(),getY()+getH()+listHeight,getW(),getH());
+			} else {
+				SUB_MENU[i].setTransforms(CAN_BE_IN_RIGHT_SIDE ? getX()+getW() : getX()-getW(),getY()+listHeight,getW(),getH());
+			}
+			listHeight += getH();
+		}
+	}
+	
+	@Override
+	public final void inTransforms() {
+		super.inTransforms();
+		if(itemList == null) { return; }
+		
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
+		
 		for(int i = 0; i < itemList.size(); i++) {
-			if(i == recentOpenedItemId) { continue; }
-			Button item = itemList.get(i);
-			if(item instanceof MenuButton subMenu) {
-				subMenu.close();
-				subMenu.closeAllInner();
-				
-				if(item instanceof MenuButton innerMenu) {
-					for(Button innerItem : innerMenu.itemList) {
-						if(innerItem instanceof MenuButton innerItemSubMenu) {
-						innerItemSubMenu.close();
-						innerItemSubMenu.closeAllInner();
-						}
-					}
-				}
+			final Button ITEM = itemList.get(i);
+			ITEM.setSize(w, getH());
+			
+			if(isRoot) {
+				ITEM.setPosition(x,y+getH()*(i+1));
+			} else {
+				ITEM.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getW() : getX()-getW(),y+getH()*(1+i)-getH());
+			}
+		}
+		
+	}
+	
+	public final void remove(final int INDEX) {
+		if(itemList == null || itemList.isEmpty() || INDEX < 0 || INDEX >= itemList.size()) { return; }
+		
+		itemList.remove(INDEX);
+		listHeight -= getH();
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
+		for(int i = 0; i < itemList.size(); i++) {
+			final Button ITEM = itemList.get(i);
+			if(isRoot) {
+				ITEM.setPosition(getX(),getY()+getH()*(i+1));
+			} else {
+				ITEM.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getW() : getX()-getW(),y+getH()*(1+i)-getH());
 			}
 		}
 	}
 	
-	public void closeAllInner() {
-		if(!open) {
-			if(itemList.isEmpty()) { return ; }
+	public final int getItemsCount() { return itemList.size(); }
+	
+	public final void setItemsColor(final Color COLOR) {
+		for(Button item : itemList) {
+			item.fill.set(COLOR);
 			
+			if(item instanceof MenuButton subMenu) {
+				subMenu.setItemsColor(COLOR);
+			}
+		}
+	}
+	
+	
+	private final void closeAllSubMenusWithoutSelected() {
+		if(itemList.isEmpty() || selectedId == -1) { return; }
+		for(int i = 0; i < itemList.size(); i++) {
+			if(i == selectedId) { continue; }
+			if(itemList.get(i) instanceof MenuButton subMenu) {
+				subMenu.closeAllSubMenus();
+				subMenu.close();
+			}
+		}
+	}
+	
+	private final void closeAllSubMenus() {
+		if(itemList.isEmpty()) { return; }
+		
+		if(!open) {
 			for(int i = 0; i < itemList.size(); i++) {
 				if(itemList.get(i) instanceof MenuButton subMenu) {
-					
-					for(int j = 0; j < subMenu.itemList.size(); j++) {
-						if(subMenu.itemList.get(j) instanceof MenuButton innerSubMenu) {
-							innerSubMenu.close();
-						}
-					}
-					
 					subMenu.close();
+					subMenu.closeAllSubMenus();
 				}
-			}
-			
+			}	
 		}
 
 	}
 	
-	public int getSelect() {
-		return select;
-	}
-	
-	public boolean selected(String title) {
-		return itemList.get(select).text.get().equals(title);
-	}
-
-	public void setSelect(int select) {
-		if(select < 0 || select > itemList.size()-1) { throw new IndexOutOfBoundsException("Index out of bounds of selecting"); }
-		this.select = select;
-	}
-	
-	public MenuButton add(String... title) {
-		if(isRoot) {
-			for(int i = 0; i < title.length; i++) {
-				itemList.add(new Button(title[i],getX(),getY()+getH()+listHeight,getW(),getH()));
-				listHeight += getH();
-			}
-		} else {
-			final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW() < app.width; 
-			for(int i = 0; i < title.length; i++) {
-				if(CAN_BE_IN_RIGHT_SIDE) {
-					itemList.add(new Button(title[i],getX()+getW(),getY()+listHeight,getW(),getH()));
-				} else {
-					itemList.add(new Button(title[i],getX()-getW(),getY()+listHeight,getW(),getH()));
-				}
-				listHeight += getH();
-			}
-		}
-		
-		return this;
-	}
-	
-	public MenuButton add(int... nums) {
-		for(int i = 0; i < nums.length; i++) {
-			add(String.valueOf(nums[i]));
-		}
-		return this;
-	}
-	
-	public MenuButton add(MenuButton... subMenu) {
-		
-		if(isRoot) {
-			for(int i = 0; i < subMenu.length; i++) {
-				itemList.add(subMenu[i]);
-				subMenu[i].setTransforms(getX(),getY()+getH()+listHeight,getW(),getH());
-				subMenu[i].isRoot = false;
-				subMenu[i].root = root;
-				listHeight += getH();
-			}
-		} else {
-			final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW() < app.width; 
-			for(int i = 0; i < subMenu.length; i++) {
-				itemList.add(subMenu[i]);
-				if(CAN_BE_IN_RIGHT_SIDE) {
-					subMenu[i].setTransforms(getX()+getW(),getY()+listHeight,getW(),getH());
-				} else {
-					subMenu[i].setTransforms(getX()-getW(),getY()+listHeight,getW(),getH());
-				}
-				subMenu[i].isRoot = false;
-				subMenu[i].root = root;
-				listHeight += getH();
-			}
-		}
-		
-		return this;
-	}
-	
-	@Override
-	public void setPosition(float x, float y) {
-		super.setPosition(x, y);
-		if(itemList == null) { return; }
-		
-		if(isRoot) {
-			for(int i = 0; i < itemList.size(); i++) {
-				Button item = itemList.get(i);
-				item.setPosition(x,y+getH()*(i+1));
-			}
-			
-		} else {
-			final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
-			
-			for(int i = 0; i < itemList.size(); i++) {
-				Button item = itemList.get(i);
-				
-				if(CAN_BE_IN_RIGHT_SIDE) { item.setPosition(x+w,y+getH()*(1+i)-getH()); }
-				else { item.setPosition(x-w,y+getH()*(1+i)-getH()); }
-			}
-			
-		}
-
-	}
-	
-	@Override
-	public void setSize(float w, float h) {
-		super.setSize(w, h);
-		
-		if(itemList == null) { return; }
-		
-		listHeight = itemList.size()*h;
-		
-		if(isRoot) {
-			
-			for(int i = 0; i < itemList.size(); i++) {
-				Button item = itemList.get(i);
-				item.setPosition(x,y+getH()*(i+1));
-				item.setSize(w, getH());
-			}
-			
-		} else {
-			final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
-			
-			for(int i = 0; i < itemList.size(); i++) {
-				Button item = itemList.get(i);
-				item.setSize(w, getH());
-				
-				if(CAN_BE_IN_RIGHT_SIDE) { item.setPosition(x+w,y+getH()*(1+i)-getH()); }
-				else { item.setPosition(x-w,y+getH()*(1+i)-getH()); }
-			}
-			
+	private final void rootListState(final String... TITLE) {
+		for(int i = 0; i < TITLE.length; i++) {
+			itemList.add(new Button(TITLE[i],getX(),getY()+getH()+listHeight,getW(),getH()));
+			listHeight += getH();
 		}
 	}
 	
-	@Override
-	public void setTransforms(float x, float y, float w, float h) {
-		setPosition(x,y);
-		setSize(w,h);
-	}
-	
-	public void remove(int index) {
-		itemList.remove(index);
-		listHeight -= getH();
-		for(int i = 0; i < itemList.size(); i++) {
-			Button item = itemList.get(i);
-			item.setPosition(getX(),getY()+getH()*(i+1));
+	private final void childListState(final String... TITLE) {
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width; 
+		for(int i = 0; i < TITLE.length; i++) {
+			itemList.add(new Button(TITLE[i],CAN_BE_IN_RIGHT_SIDE ? getX()+getW() : getX()-getW(),getY()+listHeight,getW(),getH()));
+			listHeight += getH();
 		}
 	}
+	
+	private final void setRoot(final MenuButton ROOT) {
+		if(ROOT == null) { return; }
+		this.root = ROOT;
+		if(ROOT != this) { isRoot = false; }
+	}
+	
 }
