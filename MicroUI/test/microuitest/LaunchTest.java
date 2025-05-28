@@ -3,13 +3,12 @@ package microuitest;
 import microui.MicroUI;
 import microui.component.MenuButton;
 import microui.event.Event;
-import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 	
-	MenuButton component;
+	MenuButton menu;
 	
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
@@ -21,41 +20,46 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
+		
+		/*
+		menu = new MenuButton("File",0,0,140,24);
+		menu.add("Open","Save");
+		
+		MenuButton subMenuSaveAs = new MenuButton("Save As...");
+		menu.add(subMenuSaveAs);
+		subMenuSaveAs.add("PNG");
+		
+		MenuButton subMenuJPEGQuality = new MenuButton("JPEG");
+		subMenuSaveAs.add(subMenuJPEGQuality);
+		subMenuJPEGQuality.add("Low Quality","Middle Quality","High Quality");
+		
+		MenuButton subMenuPDFQuality = new MenuButton("PDF");
+		subMenuSaveAs.add(subMenuPDFQuality);
+		subMenuPDFQuality.add("Low Quality","Middle Quality","High Quality");
+		*/
+		
+		
+		
+		menu = new MenuButton("File",0,0,140,24);
+		menu.add("Open","Save")
+			.addSubMenu(new MenuButton("Save As...")
+		    .add("PNG")
+		    .addSubMenu(new MenuButton("JPEG"),"Low Quality","Middle Quality","High Quality")
+		    .add("PDF"))
+			.build();
 
-		component = new MenuButton("File",200,200,100,30);
-		
-		MenuButton subOpenMenu = new MenuButton("Open");
-		component.add(subOpenMenu);
-		
-		subOpenMenu.add("From System Files","From Recents","From NetWork");
-		
-		
-		component.add("Save");
-		
-		MenuButton subMenuAbout = new MenuButton("About");
-		
-		component.add(subMenuAbout);
-		
-		subMenuAbout.add("MicroUI","View","Bounds","Component");
-		
-		MenuButton subMenuAbstractButton = new MenuButton("AbstractButton");
-				
-		subMenuAbout.add(subMenuAbstractButton);
-		
-		subMenuAbstractButton.add("Button","MenuButton","CheckBox");
-		
-		
 	}
 	
 	@Override
 	public void draw() {
-		background(232);
+		background(128);
 		
-		component.draw();
-		//Metrics.printAll();
-		GlobalTooltip.draw();
+		menu.draw();
+
+		// GlobalTooltip.draw();
 		
-		if(mouseButton == RIGHT) { component.closeAllSubMenu(); }
+		
+
 	}
 
 	@Override
