@@ -64,7 +64,7 @@ public final class LaunchTest extends PApplet {
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		//component.mouseWheel(event);
+		menu.mouseWheel(event);
 	}
 	
 	

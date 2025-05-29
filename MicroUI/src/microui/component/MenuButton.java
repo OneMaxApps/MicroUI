@@ -3,10 +3,12 @@ package microui.component;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
 import microui.event.Event;
+import processing.event.MouseEvent;
 
-public class MenuButton extends Button {
+public class MenuButton extends Button implements Scrollable {
 	private boolean open,autoClose,isRoot;
 	private final ArrayList<Button> itemList;
 	private int selectedId;
@@ -14,6 +16,7 @@ public class MenuButton extends Button {
 	private final Event innerEvent;
 	private MenuButton root;
 	private float markX,markY,markW,markH;
+	private final Scrolling scrolling;
 	
 	public MenuButton(String title, float x, float y, float w, float h) {
 		super(title,x,y,w,h);
@@ -24,8 +27,8 @@ public class MenuButton extends Button {
 		innerEvent = new Event();
 		isRoot = true;
 		root = this;
-		
 		calculateMarkBounds();
+		scrolling = new Scrolling();
 	}
 	
 	public MenuButton(String title) {
@@ -192,6 +195,18 @@ public class MenuButton extends Button {
 	}
 	
 	
+	
+	@Override
+	public void mouseWheel(MouseEvent e) {
+		scrolling.init(e);
+		
+		for(Button item : itemList) {
+			if(item instanceof MenuButton subMenu) {
+				subMenu.mouseWheel(e);
+			}
+		}
+	}
+
 	private final MenuButton setRootForSubMenus() {
 		for(Button item : itemList) {
 			if(item instanceof MenuButton subMenu) {
@@ -295,5 +310,33 @@ public class MenuButton extends Button {
 		markW = getW()*.6f;
 		markH = getH()*.05f;
 		
+	}
+	
+	private final class Scrolling {
+		private final Event event;
+		
+		private Scrolling() {
+			event = new Event();
+		}
+		
+		// FIXME: that calculating positions are incorrect
+		private final void init(final MouseEvent e) {
+			event.listen(x,y+h,w,listHeight);
+			if(!event.inside()) { return; }
+			
+			for(int i = 0; i < itemList.size(); i++) {
+				final Button item = itemList.get(i);
+				
+				
+				
+				if(e.getCount() > 0) {
+					item.setY(item.getY()+item.getH());
+				} else {
+					item.setY(item.getY()-item.getH());
+				}
+
+			}
+			
+		}
 	}
 }
