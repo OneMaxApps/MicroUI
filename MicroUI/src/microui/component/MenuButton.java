@@ -42,6 +42,7 @@ public class MenuButton extends Button implements Scrollable {
 	@Override
 	public final void update() {
 			super.update();
+			scrolling.update();
 			innerEvent.listen(this);
 			
 			if(innerEvent.clicked()) {
@@ -51,7 +52,6 @@ public class MenuButton extends Button implements Scrollable {
 			
 			itemsOnDraw();
 			markOnDraw();
-			
 	}
 	
 	public final void setAutoClose(boolean autoClose) {
@@ -135,6 +135,7 @@ public class MenuButton extends Button implements Scrollable {
 		
 		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
 		
+		listHeight = 0;
 		for(int i = 0; i < itemList.size(); i++) {
 			final Button ITEM = itemList.get(i);
 			ITEM.setSize(w, getH());
@@ -144,9 +145,13 @@ public class MenuButton extends Button implements Scrollable {
 			} else {
 				ITEM.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getW() : getX()-getW(),y+getH()*(1+i)-getH());
 			}
+			
+			listHeight += ITEM.getH();
 		}
 		
 		calculateMarkBounds();
+		
+		
 	}
 	
 	public final void remove(final int index) {
@@ -194,10 +199,12 @@ public class MenuButton extends Button implements Scrollable {
 		throw new IllegalArgumentException(title+" item is not exists");
 	}
 	
-	
+	public final ArrayList<Button> getItems() {
+		return itemList;
+	}
 	
 	@Override
-	public void mouseWheel(MouseEvent e) {
+	public final void mouseWheel(MouseEvent e) {
 		scrolling.init(e);
 		
 		for(Button item : itemList) {
@@ -272,9 +279,10 @@ public class MenuButton extends Button implements Scrollable {
 	private final void markOnDraw() {
 			app.pushStyle();
 			app.noStroke();
-			if(!isRoot) { app.fill(255,128); } else { app.fill(0,255,0,128); }
+			if(open) { app.fill(0,255,0,128); } else { app.fill(255,128); }
 			app.rect(markX,markY,markW,markH);
 			app.popStyle();
+			
 	}
 	
 	private final void itemsOnDraw() {
@@ -312,22 +320,30 @@ public class MenuButton extends Button implements Scrollable {
 		
 	}
 	
-	private final class Scrolling {
+	public final class Scrolling {
 		private final Event event;
+		private boolean enable;
 		
 		private Scrolling() {
 			event = new Event();
+			enable = true;
 		}
 		
-		// FIXME: that calculating positions are incorrect
+		private final void update() {
+			if(isRoot) {
+				event.listen(itemList.get(0).getX(),y+h,itemList.get(0).getW(),listHeight);
+			} else {
+				event.listen(itemList.get(0).getX(),y,itemList.get(0).getW(),listHeight);
+			}
+		}
+		
 		private final void init(final MouseEvent e) {
-			event.listen(x,y+h,w,listHeight);
+			if(!enable) { return; }
+			
 			if(!event.inside()) { return; }
 			
 			for(int i = 0; i < itemList.size(); i++) {
 				final Button item = itemList.get(i);
-				
-				
 				
 				if(e.getCount() > 0) {
 					item.setY(item.getY()+item.getH());
@@ -337,6 +353,23 @@ public class MenuButton extends Button implements Scrollable {
 
 			}
 			
+			if(e.getCount() > 0) {
+				itemList.add(0,itemList.remove(itemList.size()-1));
+				itemList.get(0).setY(itemList.get(1).getY()-itemList.get(0).getH());
+			} else {
+				itemList.add(itemList.size()-1,itemList.remove(0));
+				itemList.get(itemList.size()-1).setY(itemList.get(itemList.size()-2).getY()+itemList.get(itemList.size()-1).getH());
+			}
+			
 		}
+
+		public final boolean isEnable() {
+			return enable;
+		}
+
+		public final void setEnable(boolean enable) {
+			this.enable = enable;
+		}
+		
 	}
 }
