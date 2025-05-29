@@ -13,6 +13,7 @@ public class MenuButton extends Button {
 	private float listHeight;
 	private final Event innerEvent;
 	private MenuButton root;
+	private float markX,markY,markW,markH;
 	
 	public MenuButton(String title, float x, float y, float w, float h) {
 		super(title,x,y,w,h);
@@ -23,6 +24,8 @@ public class MenuButton extends Button {
 		innerEvent = new Event();
 		isRoot = true;
 		root = this;
+		
+		calculateMarkBounds();
 	}
 	
 	public MenuButton(String title) {
@@ -40,7 +43,7 @@ public class MenuButton extends Button {
 			
 			if(innerEvent.clicked()) {
 				open = !open;
-				if(!open) { closeAllSubMenus(); }
+				if(!open) { closeAllSubMenus(); } else { selectedId = -1; }
 			}
 			
 			itemsOnDraw();
@@ -63,20 +66,17 @@ public class MenuButton extends Button {
 	}
 	
 	public final boolean isSelected(final String title) {
+		if(selectedId == -1) { return false; }
+		
 		boolean selected = false;
 		
-		for(int i = 0; i < itemList.size(); i++) {
-			final Button ITEM = itemList.get(i);
-			
-			if(ITEM.text.get().equals(title) && i == selectedId) { selected = true; }
+			if(itemList.get(selectedId).text.get().equals(title)) { selected = true; }
 			
 			if(selected) { return true; }
 			
-			if(ITEM instanceof MenuButton subMenu) {
+			if(itemList.get(selectedId) instanceof MenuButton subMenu) {
 				selected = subMenu.isSelected(title);
 			}
-			
-		}
 		
 		return selected;
 	}
@@ -114,6 +114,8 @@ public class MenuButton extends Button {
 			}
 			listHeight += getH();
 		}
+		
+		setRootForSubMenus();
 	}
 	
 	
@@ -141,6 +143,7 @@ public class MenuButton extends Button {
 			}
 		}
 		
+		calculateMarkBounds();
 	}
 	
 	public final void remove(final int index) {
@@ -171,15 +174,32 @@ public class MenuButton extends Button {
 		}
 	}
 	
+	public final Button getItem(final String title) {
+
+		for(Button item : itemList) {
+			if(item.text.get().equals(title)) {
+				return item;
+			}
+		}
+		
+		for(Button item : itemList) {
+			if(item instanceof MenuButton subMenu) {
+				return subMenu.getItem(title);
+			}
+		}
+		
+		throw new IllegalArgumentException(title+" item is not exists");
+	}
 	
-	public final MenuButton build() {
+	
+	private final MenuButton setRootForSubMenus() {
 		for(Button item : itemList) {
 			if(item instanceof MenuButton subMenu) {
 				subMenu.setRoot(root);
 				for(Button innerItem : subMenu.itemList) {
 					if(innerItem instanceof MenuButton innerSubMenu) {
 						innerSubMenu.setRoot(root);
-						innerSubMenu.build();
+						innerSubMenu.setRootForSubMenus();
 					}
 				}
 			}
@@ -235,25 +255,15 @@ public class MenuButton extends Button {
 	}
 	
 	private final void markOnDraw() {
-		if(!isRoot) {
 			app.pushStyle();
 			app.noStroke();
-			app.fill(255,128);
-			app.rect(getX()+getW()*.2f,getY()+getH()*.8f,getW()*.6f,getH()*.05f);
+			if(!isRoot) { app.fill(255,128); } else { app.fill(0,255,0,128); }
+			app.rect(markX,markY,markW,markH);
 			app.popStyle();
-		} else {
-			app.pushStyle();
-			app.noStroke();
-			app.fill(0,255,0,128);
-			app.rect(getX()+getW()*.2f,getY()+getH()*.8f,getW()*.6f,getH()*.05f);
-			app.popStyle();
-		}
 	}
 	
 	private final void itemsOnDraw() {
 		if(open) {
-			selectedId = -1;
-			
 			if(!itemList.isEmpty()) {
 				
 				for(int i = 0; i < itemList.size(); i++) {
@@ -277,5 +287,13 @@ public class MenuButton extends Button {
 			
 			
 		}
+	}
+
+	private final void calculateMarkBounds() {
+		markX = getX()+getW()*.2f;
+		markY = getY()+getH()*.8f;
+		markW = getW()*.6f;
+		markH = getH()*.05f;
+		
 	}
 }

@@ -5,7 +5,7 @@ import microui.feedback.Tooltip;
 
 public final class GlobalTooltip {
 	public static final Color DEFAULT_COLOR = new Color(255,230,200,255);
-	public static final int DEFAULT_TEXT_SIZE = 18;
+	public static final int DEFAULT_TEXT_SIZE = 14;
 	
 	private static Tooltip tooltip;
 	
