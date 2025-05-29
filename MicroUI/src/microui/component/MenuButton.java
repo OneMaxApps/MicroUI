@@ -45,6 +45,7 @@ public class MenuButton extends Button implements Scrollable {
 			scrolling.update();
 			innerEvent.listen(this);
 			
+			
 			if(innerEvent.clicked()) {
 				open = !open;
 				if(!open) { closeAllSubMenus(); } else { selectedId = -1; }
@@ -52,6 +53,7 @@ public class MenuButton extends Button implements Scrollable {
 			
 			itemsOnDraw();
 			markOnDraw();
+			checkClosingFromOut();
 	}
 	
 	public final void setAutoClose(boolean autoClose) {
@@ -125,6 +127,15 @@ public class MenuButton extends Button implements Scrollable {
 	public final MenuButton addSubMenu(final MenuButton subMenu, final String... items) {
 		add(subMenu);
 		subMenu.add(items);
+		return this;
+	}
+	
+	public final MenuButton addSubMenu(final String... items) {
+		final MenuButton subMenu = new MenuButton(items[0]);
+		add(subMenu);
+		String[] itemsCopy = Arrays.copyOfRange(items, 1, items.length);
+		subMenu.add(itemsCopy);
+		
 		return this;
 	}
 	
@@ -212,6 +223,33 @@ public class MenuButton extends Button implements Scrollable {
 				subMenu.mouseWheel(e);
 			}
 		}
+	}
+	
+	private final void checkClosingFromOut() {
+		if(!open) { return; }
+		boolean inside = false;
+		
+		inside = checkInsideToAnyIn();
+		
+		if(app.mousePressed && !event.inside() && !inside) {
+			close();
+		}
+		
+	}
+	
+	private final boolean checkInsideToAnyIn() {
+		boolean insideState = false;
+		if(scrolling.event.inside()) { insideState = true; }
+		
+		for(Button item : itemList) {
+			if(item instanceof MenuButton subMenu) {
+				if(subMenu.checkInsideToAnyIn()) {
+					insideState = true;
+				}
+			}
+		}
+		
+		return insideState;
 	}
 
 	private final MenuButton setRootForSubMenus() {

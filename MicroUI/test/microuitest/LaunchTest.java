@@ -25,16 +25,19 @@ public final class LaunchTest extends PApplet {
 		MicroUI.setContext(this);
 
 		menu = new MenuButton("File",0,0,140,24);
-		menu.add("Open","Save")
+		menu.addSubMenu("Open","From System","From NetWork","From USB");
+		menu.add("Save")
 			.addSubMenu(new MenuButton("Save As...")
 			    .add("PNG")
-			    .addSubMenu(new MenuButton("JPEG"),"Low Quality","Middle Quality","High Quality")
+			    .addSubMenu("JPEG","Low Quality","Middle Quality","High Quality")
 			    .add("PDF")
 			    .add("XML"))
 			.add("Rename");
 		
-		menu.getItem("PDF").fill.set(255,0,0);
-		menu.getItem("XML").tooltip.text.set("XML (eXtensible Markup Language) – это язык разметки,\nпредназначенный для хранения\nи передачи структурированных данных.");
+		
+		//menu.getItem("PDF").fill.set(255,0,0);
+		//menu.getItem("XML").tooltip.text.set("XML (eXtensible Markup Language) – это язык разметки,\nпредназначенный для хранения\nи передачи структурированных данных.");
+		
 		menu.fill.set(32);
 		menu.setItemsColor(menu.fill);
 	}
