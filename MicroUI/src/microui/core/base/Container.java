@@ -15,6 +15,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	public final Texture image;
 	public final Shadow shadow;
 	public final ResizeHandle resizeHandle;
+	private final Container context;
 	
 	protected Container(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -26,6 +27,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		shadow = new Shadow(this);
 		shadow.invisible();
 		resizeHandle = new ResizeHandle();
+		context = this;
 	}
 	
 	@Override
@@ -46,6 +48,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			app.popStyle();
 			
 			resizeHandle.draw();
+			
 	}
 	
 	@Override
@@ -76,6 +79,22 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		}
 	}
 	
+	public final float getRealX() {
+		return x;
+	}
+	
+	public final float getRealY() {
+		return y;
+	}
+	
+	public final float getRealW() {
+		return w;
+	}
+	
+	public final float getRealH() {
+		return h;
+	}
+	
 	@Override
 	public void inTransforms() {
 		if(image != null) { image.setTransforms(this); }
@@ -92,6 +111,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		
 		private Margin() {
 			autoCenterMode = true;
+			
 		}
 
 		public void set(float left, float up, float right, float down) {
@@ -155,7 +175,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		private final Dots dots;
 		
 		private ResizeHandle() {
-			visible();
+			invisible();
 			fill = new Color(255);
 			dots = new Dots();
 		}
@@ -221,41 +241,40 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 						
 						switch(mode) {
 							case LEFT :
-								tmpX = Container.this.getX();
-								tmpY = Container.this.getY();
+								tmpX = getRealX();
+								tmpY = getRealY();
 								
-								Container.this.setPosition(app.mouseX,app.mouseY);
+								context.setPosition(app.mouseX,app.mouseY);
 								
+								difX = tmpX-getRealX();
+								difY = tmpY-getRealY();
 								
-								difX = tmpX-Container.this.getX();
-								difY = tmpY-Container.this.getY();
-								
-								Container.this.setSize(Container.this.getW()+difX,Container.this.getH()+difY);
+								context.setSize(getRealW()+difX,getRealH()+difY);
 							break;
 							
 							case RIGHT :
-								tmpY = Container.this.getY();
+								tmpY = getRealY();
 								
-								Container.this.setW(app.mouseX-Container.this.getX());
-								Container.this.setY(app.mouseY);
+								context.setW(app.mouseX-getRealX());
+								context.setY(app.mouseY);
 								
-								difY = tmpY-Container.this.getY();
+								difY = tmpY-getRealY();
 								
-								Container.this.setH(Container.this.getH()+difY);
+								context.setH(getRealH()+difY);
 							break;
 							
 							case DOWN_LEFT :
-								tmpX = Container.this.getX();
+								tmpX = getRealX();
 								
-								Container.this.setX(app.mouseX);
-								Container.this.setH(app.mouseY-Container.this.getY());
+								context.setX(app.mouseX);
+								context.setH(app.mouseY-getRealY());
 								
-								difX = tmpX-Container.this.getX();
+								difX = tmpX-getRealX();
 								
-								Container.this.setW(Container.this.getW()+difX);
+								context.setW(getRealW()+difX);
 							break;
 							
-							case DOWN_RIGHT : Container.this.setSize(app.mouseX-Container.this.getX(),app.mouseY-Container.this.getY()); break;
+							case DOWN_RIGHT : context.setSize(app.mouseX-getRealX(),app.mouseY-getRealY()); break;
 						}
 					}
 				}
@@ -268,10 +287,10 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 
 				private final void calcTransforms() {
 					switch(mode) {
-						case LEFT : setPosition(Container.this); break;
-						case RIGHT : setPosition(Container.this.getX()+Container.this.getW()-w,Container.this.getY()); break;
-						case DOWN_LEFT : setPosition(Container.this.getX(),Container.this.getY()+Container.this.getH()-h); break;
-						case DOWN_RIGHT : setPosition(Container.this.getX()+Container.this.getW()-w,Container.this.getY()+Container.this.getH()-h); break;
+						case LEFT : setPosition(getRealX(),getRealY()); break;
+						case RIGHT : setPosition(getRealX()+getRealW()-w,getRealY()); break;
+						case DOWN_LEFT : setPosition(getRealX(),getRealY()+getRealH()-h); break;
+						case DOWN_RIGHT : setPosition(getRealX()+getRealW()-w,getRealY()+getRealH()-h); break;
 					}
 				}
 				

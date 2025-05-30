@@ -1,16 +1,15 @@
 package microuitest;
 
 import microui.MicroUI;
-import microui.component.Button;
 import microui.container.EdgeContainer;
-import microui.event.Event;
+import microui.container.layout.LinearLayout;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
-import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 	
-	EdgeContainer container;
+	private EdgeContainer edgeContainer;
+	private LinearLayout layout;
 	
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
@@ -22,37 +21,23 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		container = new EdgeContainer();
-		container.set(new Button());
-		container.margin.set(100);
+		edgeContainer = new EdgeContainer();
+		edgeContainer.margin.set(10);
+		
+		
+		layout = new LinearLayout();
+		layout.add(edgeContainer, .5f);
+		layout.resizeHandle.visible();
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
-		
-		container.draw();
+
+		layout.draw();
 		
 		GlobalTooltip.draw();
 		
 	}
-	
-	@Override
-	public void keyPressed() {
-		Event.keyPressed();
-		
-	}
-	
-	@Override
-	public void keyReleased() {
-		Event.keyReleased();
-		
-	}
-
-	@Override
-	public void mouseWheel(MouseEvent event) {
-		
-	}
-	
 	
 }
