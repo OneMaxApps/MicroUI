@@ -1,7 +1,8 @@
 package microuitest;
 
 import microui.MicroUI;
-import microui.container.layout.LinearLayout;
+import microui.component.Button;
+import microui.container.EdgeContainer;
 import microui.event.Event;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
@@ -9,7 +10,7 @@ import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 	
-	LinearLayout container;
+	EdgeContainer container;
 	
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
@@ -21,15 +22,18 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		container = new LinearLayout();
-		
+		container = new EdgeContainer();
+		container.set(new Button());
+		container.setCenter(true).setUp(true);
+		container.margin.set(100);
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
+		
 		container.draw();
-		System.out.println(frameRate);
+		
 		GlobalTooltip.draw();
 	}
 	

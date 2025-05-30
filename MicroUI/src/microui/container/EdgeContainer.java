@@ -12,7 +12,7 @@ import processing.event.MouseEvent;
 public class EdgeContainer extends Container {
 	
 	private Bounds bounds;
-	private boolean left,up,right,down,center,centerHorizontal,centerVertical;
+	private boolean left,up,right,down,center,centerHorizontal,centerVertical,dirtyState;
 	private float defaultWidthOfElement,defaultHeightOfElement;
 	
 
@@ -29,53 +29,46 @@ public class EdgeContainer extends Container {
 	@Override
 	public void draw() {
 		super.draw();
-		update();
-	}
-	
-	@Override
-	public void update() {
-		if(visible) {
-			super.update();
-		}
-		
 		if(bounds != null) {
-			updateSize(bounds);
-			updatePosition(bounds);
 			bounds.draw();
 		}
+		
+		if(dirtyState) {
+			updateState();
+			dirtyState = false;
+		}
 	}
 	
-	public void updatePosition(Bounds form) {
+	public void updateState() {
+		if(bounds == null) { return; }
 		
-		if(left) { form.setX(getX()); }
-		if(up) { form.setY(getY()); }
-		if(right) { form.setX(getX()+getW()-form.getW()); }
-		if(down) { form.setY(getY()+getH()-form.getH()); }
+		if(left) { bounds.setX(getX()); }
+		if(up) { bounds.setY(getY()); }
+		if(right) { bounds.setX(getX()+getW()-bounds.getW()); }
+		if(down) { bounds.setY(getY()+getH()-bounds.getH()); }
 		
 		if(center) {
-			form.setPosition(getX()+getW()/2-form.getW()/2,getY()+getH()/2-form.getH()/2);
+			bounds.setPosition(getX()+getW()/2-bounds.getW()/2,getY()+getH()/2-bounds.getH()/2);
 		}
 		
 		if(centerHorizontal) {
-			form.setX(getX()+getW()/2-form.getW()/2);
+			bounds.setX(getX()+getW()/2-bounds.getW()/2);
 		}
 		
 		if(centerVertical) {
-			form.setY(getY()+getH()/2-form.getH()/2);
+			bounds.setY(getY()+getH()/2-bounds.getH()/2);
 		}
 		
+		bounds.setSize(min(getW(),defaultWidthOfElement), min(getH(),defaultHeightOfElement));
+
 	}
 	
-	public void updateSize(Bounds f) {
-		f.setSize(min(getW(),defaultWidthOfElement), min(getH(),defaultHeightOfElement));
-	}
 	
-	
-	
-	public EdgeContainer set(Bounds form) {
-		this.bounds = form;
-		defaultWidthOfElement = form.getW();
-		defaultHeightOfElement = form.getH();
+	public EdgeContainer set(Bounds bounds) {
+		this.bounds = bounds;
+		defaultWidthOfElement = bounds.getW();
+		defaultHeightOfElement = bounds.getH();
+		dirtyState = true;
 		return this;
 	}
 	
@@ -83,6 +76,7 @@ public class EdgeContainer extends Container {
 		this.bounds = new TextView(text);
 		defaultWidthOfElement = bounds.getW();
 		defaultHeightOfElement = bounds.getH();
+		dirtyState = true;
 		return this;
 	}
 
@@ -91,12 +85,15 @@ public class EdgeContainer extends Container {
 	}
 
 	public EdgeContainer setLeft(boolean left) {
+		if(this.left == left) { return this; }
+		
 		this.left = left;
+		
 		if(left) {
-			right = false;
-			center = false;
-			centerHorizontal = false;
+			right = center = centerHorizontal = false;
 		}
+		
+		dirtyState = true;
 		return this;
 	}
 
@@ -105,13 +102,14 @@ public class EdgeContainer extends Container {
 	}
 
 	public EdgeContainer setUp(boolean up) {
+		if(this.up == up) { return this; }
+		
 		this.up = up;
 		
 		if(up) {
-			down = false;
-			center = false;
-			centerVertical = false;
+			down = center = centerVertical = false;
 		}
+		dirtyState = true;
 		return this;
 	}
 
@@ -120,12 +118,13 @@ public class EdgeContainer extends Container {
 	}
 
 	public EdgeContainer setRight(boolean right) {
+		if(this.right == right) { return this; }
+		
 		this.right = right;
 		if(right) {
-		left = false;
-		center = false;
-		centerHorizontal = false;
+			left = center = centerHorizontal = false;
 		}
+		dirtyState = true;
 		return this;
 	}
 
@@ -134,12 +133,13 @@ public class EdgeContainer extends Container {
 	}
 
 	public EdgeContainer setDown(boolean down) {
+		if(this.down == down) { return this; }
+		
 		this.down = down;
 		if(down) {
-		up = false;
-		center = false;
-		centerVertical = false;
+			up = center = centerVertical = false;
 		}
+		dirtyState = true;
 		return this;
 	}
 	
@@ -148,20 +148,27 @@ public class EdgeContainer extends Container {
 	}
 
 	public EdgeContainer setCenter(boolean center) {
+		if(this.center == center) { return this; }
+		
 		this.center = center;
 		if(center) {
-		  left = false;
-		  up = false;
-		  right = false;
-		  down = false;
-		  centerHorizontal = true;
-		  centerVertical = true;
+		  left = up = right = down = false;
+		  centerHorizontal = centerVertical = true;
 		}
+		dirtyState = true;
 		return this;
 	}
 	
 	public Bounds getElement() { return bounds; }
 	
+	
+	
+	@Override
+	public void inTransforms() {
+		super.inTransforms();
+		updateState();
+	}
+
 	@Override
 	public void mouseWheel(MouseEvent e) {
 		if(bounds instanceof Scrollable b) {
