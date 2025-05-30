@@ -14,12 +14,10 @@ import microui.core.base.Layout;
 import processing.core.PApplet;
 
 public class GridLayout extends Layout {
-	  public final Transforming transforming;
 	  private boolean fillTheGrid;
 	  private int rows,columns;
-	  private ArrayList<Integer> rowList,columnList;
-	  private ArrayList<Float> elementDefaultWidth,elementDefaultHeight;
-	  
+	  private final ArrayList<Integer> rowList,columnList;
+	  private final ArrayList<Float> elementDefaultWidth,elementDefaultHeight;
 	  
 	  public GridLayout() {
 		  this(1);
@@ -45,40 +43,7 @@ public class GridLayout extends Layout {
 	    columnList = new ArrayList<Integer>();
 	    elementDefaultWidth = new ArrayList<Float>();
 	    elementDefaultHeight = new ArrayList<Float>();
-	    transforming = new Transforming() {
-	    	@Override
-	    	public void updateForce() {
-				  
-				  for(int i = 0; i < elementList.size(); i++) {
-				  Bounds bounds = elementList.get(i);
-				  
-				  if(rowList.get(i) < 0 || rowList.get(i) > getRows()-1 || columnList.get(i) < 0 || columnList.get(i) > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
-				    
-				  if(bounds instanceof Layout) {
-				    	Layout layout = (Layout) bounds;
-					  	layout.setPosition(
-					    		map(rowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-layout.getW()/2-layout.margin.getLeft(),
-					    		map(columnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-layout.getH()/2-layout.margin.getUp()
-					    );
-				    } else {
-				    	bounds.setPosition(
-					    		map(rowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-bounds.getW()/2,
-					    		map(columnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-bounds.getH()/2
-					    );
-				    }
-				    
-					    if(isElementsResizable()) {
-					      if(isFillTheGrid()) {
-					        bounds.setSize(getW()/getRows(),getH()/getColumns());
-					      } else {
-					    	bounds.setSize(min(elementDefaultWidth.get(i),getW()/getRows()), min(elementDefaultHeight.get(i),getH()/getColumns()));
-					    }
-					  }
-				
-				  }
-			  }
-	    };
-	  	}
+	  }
 	  
 	  @Override
 		public void draw() {
@@ -90,7 +55,7 @@ public class GridLayout extends Layout {
 	  public void update() {
 		  super.update();
 		  gridDraw();
-		  if(app.frameCount == 1 || app.frameCount%60*60 == 0) { transforming.updateForce(); }
+		  recalcListState();
 	  }
 	  
 	  public final boolean isEmpty() {
@@ -102,15 +67,10 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  private void elementsDraw() {
-			app.pushStyle();
-			if(!elementList.isEmpty()) {
-			    for(int i = elementList.size()-1; i >= 0; i--) {
-			    	elementList.get(i).draw();
-			    }
-			}
-			
-			
-		    app.popStyle();
+		  	if(elementList.isEmpty()) { return; }
+		  	app.pushStyle();
+		  	elementList.forEach(elements -> elements.draw());
+		  	app.popStyle();
 	  }
 	  
 	  private void gridDraw() {
@@ -139,27 +99,12 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  public GridLayout add(Bounds bounds, int row, int column) {
-		  if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
-		  if(!isEmptyCell(row,column)) { return this; }
-		  
-		  bounds.setPosition(
-		    		map(row,0,this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-bounds.getW()/2,
-		    		map(column,0,this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-bounds.getH()/2
-		  );
-		    
-			    if(isElementsResizable()) {
-			      if(isFillTheGrid()) {
-			        bounds.setSize(getW()/getRows(),getH()/getColumns());
-			      } else {
-			        if(bounds.getW() > getW()/getRows() || bounds.getW() < getW()/getRows()/2) { bounds.setW(getW()/getRows()); }
-			        if(bounds.getH() > getH()/getColumns() || bounds.getH() < getH()/getColumns()/2) { bounds.setH(getH()/getColumns()); }
-			      }
-			    }
+		if(row < 0 || row > getRows()-1 || column < 0 || column > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
+		if(!isEmptyCell(row,column)) { return this; }
 	    
 		checkObject(bounds,row,column);
-		
-		transforming.updateForce();
-		
+
+		recalcListState();
 		
 		return this;
 	  }
@@ -211,7 +156,7 @@ public class GridLayout extends Layout {
 	    
 		checkObject(baseForm,row,column);
 		
-		transforming.updateForce();
+		recalcListState();
 		
 		return this; 
 	  }
@@ -260,10 +205,35 @@ public class GridLayout extends Layout {
 	  }
 
 	  @Override
-	  public void inTransforms() {
-			super.inTransforms();
-			if(transforming != null) { transforming.autoUpdate(); }	
+	  protected final void recalcListState() {
+		  
+		  for(int i = 0; i < elementList.size(); i++) {
+			  Bounds bounds = elementList.get(i);
+			  
+			  if(rowList.get(i) < 0 || rowList.get(i) > getRows()-1 || columnList.get(i) < 0 || columnList.get(i) > getColumns()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
+			    
+			  if(bounds instanceof Layout) {
+			    	Layout layout = (Layout) bounds;
+				  	layout.setPosition(
+				    		map(rowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-layout.getW()/2-layout.margin.getLeft(),
+				    		map(columnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-layout.getH()/2-layout.margin.getUp()
+				    );
+			    } else {
+			    	bounds.setPosition(
+				    		map(rowList.get(i),0,GridLayout.this.rows,getX(),getX()+getW())+((getW()/getRows())/2)-bounds.getW()/2,
+				    		map(columnList.get(i),0,GridLayout.this.columns,getY(),getY()+getH())+((getH()/getColumns())/2)-bounds.getH()/2
+				    );
+			    }
+			    
+				    if(isElementsResizable()) {
+				      if(isFillTheGrid()) {
+				        bounds.setSize(getW()/getRows(),getH()/getColumns());
+				      } else {
+				    	bounds.setSize(min(elementDefaultWidth.get(i),getW()/getRows()), min(elementDefaultHeight.get(i),getH()/getColumns()));
+				    }
+				  }
+			
+			  }
 	  }
-
 	  
 } 

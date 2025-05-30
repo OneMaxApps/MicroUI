@@ -2,93 +2,24 @@ package microui.core.base;
 
 import java.util.ArrayList;
 
-import microui.container.layout.EdgeLayout;
-import microui.core.AbstractImage;
-import microui.core.effect.Shadow;
-import microui.core.interfaces.Focusable;
+import microui.container.EdgeContainer;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
-import microui.core.style.Color;
 import processing.event.MouseEvent;
 
-public abstract class Layout extends Bounds implements Scrollable, KeyPressable, Focusable  {
-	public final Color fill;
-	public final Margin margin;
-	public final AbstractImage image;
-	public final Shadow shadow;
+// [] TODO: add method setVisibleComponents()
+// [] TODO: add method setVisibleAllComponents()
+
+public abstract class Layout extends Container {
 	protected boolean isElementsResizable;
 	protected final ArrayList<Bounds> elementList;
 	
 	public Layout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		
+
 		elementList = new ArrayList<Bounds>();
-		fill = new Color();
-		fill.set(0,0,128,32);
-		margin = new Margin();
-		setVisible(true);
-		image = new AbstractImage() {
-			@Override
-			public void update() {
-				if(isLoaded()) {
-					  app.pushStyle();
-					  app.tint(tint.get());
-					  app.image(image,x,y,w,h);
-					  app.popStyle();
-				  }
-			}
-		};
-		image.setTransforms(this);
-		
-		shadow = new Shadow(this);
-		shadow.invisible();
-	}
-
-	@Override
-	public void update() {
-			if(image.isLoaded()) {
-					image.draw();
-			} else {
-				app.pushStyle();
-					app.stroke(0);
-					app.strokeWeight(1);
-					app.fill(fill.get());
-					app.rect(getX(), getY(), getW(), getH());
-				app.popStyle();
-			}
-			
-			app.pushStyle();
-			shadow.draw();
-			app.popStyle();
-		
 	}
 	
-
-	@Override
-	public float getX() {
-		return super.getX()+margin.getLeft();
-	}
-
-	@Override
-	public float getY() {
-		return super.getY()+margin.getUp();
-	}
-
-	@Override
-	public float getW() {
-		return super.getW()-margin.getRight();
-	}
-
-	@Override
-	public float getH() {
-		return super.getH()-margin.getDown();
-	}
-	
-	@Override
-	public void inTransforms() {
-		if(image != null) { image.setTransforms(this); }
-	}
-
 	public boolean isElementsResizable() {
 		return isElementsResizable;
 	}
@@ -101,8 +32,8 @@ public abstract class Layout extends Bounds implements Scrollable, KeyPressable,
 		
 		setVisible(v);
 		for(Bounds form : elementList) {
-			if(form instanceof EdgeLayout) {
-				EdgeLayout e = (EdgeLayout) form;
+			if(form instanceof EdgeContainer) {
+				EdgeContainer e = (EdgeContainer) form;
 				if(e.getElement() instanceof Layout) {
 					((Layout) (e.getElement())).setVisibleTotal(v);
 				}
@@ -138,94 +69,14 @@ public abstract class Layout extends Bounds implements Scrollable, KeyPressable,
 		});
 	}
 
-	public class Margin {
-		private float left, up, right, down;
-
-		public Margin() {
-		}
-
-		public Margin(float margin) {
-			set(margin);
-		}
-
-		public Margin(float left, float up, float right, float down) {
-			set(left, up, right, down);
-		}
-
-		public void set(float left, float up, float right, float down) {
-			setLeft(left);
-			setUp(up);
-			setRight(right);
-			setDown(down);
-			
-		}
-
-		public void set(float margin) {
-			set(margin, margin, margin, margin);
-			
-		}
-
-		public void setLeft(float left) {
-			this.left = left;
-		}
-
-		public void setUp(float up) {
-			this.up = up;
-			
-		}
-
-		public void setRight(float right) {
-			this.right = left == 0 ? right : right+left;
-		}
-
-		public void setDown(float down) {
-			this.down = up == 0 ? down : down+up;
-		}
-
-		public float getLeft() {
-			return left;
-		}
-
-		public float getUp() {
-			return up;
-		}
-
-		public float getRight() {
-			return right;
-		}
-
-		public float getDown() {
-			return down;
-		}
-	}
-
-	protected abstract class Transforming {
-		private float layX,layY,layW,layH;
+	@Override
+	public void inTransforms() {
+		super.inTransforms();
 		
-		  public final void autoUpdate() {
-			  if(layX != x) {
-				  layX = x;
-				  updateForce();
-			  }
-			  
-			  if(layY != y) {
-				  layY = y;
-				  updateForce();
-			  }
-			  
-			  if(layW != w) {
-				  layW = w;
-				  updateForce();
-			  }
-			  
-			  if(layH != h) {
-				  layH = h;
-				  updateForce();
-			  }
-		  }
-		  
-		  
-		  public abstract void updateForce();
-
+		if(elementList == null) { return; }
+		recalcListState();
 	}
+	
+	protected abstract void recalcListState();
+	
 }

@@ -7,63 +7,16 @@ import java.util.ArrayList;
 import microui.component.TextView;
 import microui.core.base.Bounds;
 import microui.core.base.Layout;
+import microui.util.Constants;
 
 public class LinearLayout extends Layout {
-	public final static int MODE_ROW = 0,MODE_COLUMN = 1;
 	private int mode;
-	private ArrayList<Float> weightList;
-	public final Transforming transforming;
-	
+	private final ArrayList<Float> weightList;
+
 	public LinearLayout(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		
 		weightList = new ArrayList<Float>();
-		transforming = new Transforming() {
-		@Override
-			public final void updateForce() {
-		  	for(int i = 0; i < elementList.size(); i++) {
-		  		Bounds baseRectangle = elementList.get(i);
-
-		  		switch(mode) {
-		  		
-			  		case MODE_ROW :
-				  		if(isElementsResizable()) {
-							if(i == 0) {
-							baseRectangle.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
-							} else {
-								baseRectangle.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
-							}
-				  		} else {
-				  			if(i == 0) {
-								baseRectangle.setPosition(getX(),getY());
-							} else {
-								baseRectangle.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
-							}
-				  		}
-			  		break;
-			  		
-			  		
-			  		case MODE_COLUMN:
-				  		if(isElementsResizable()) {
-							if(i == 0) {
-								baseRectangle.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
-							} else {
-								baseRectangle.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
-							}
-				  		} else {
-				  			if(i == 0) {
-				  				baseRectangle.setPosition(getX(), getY());
-								} else {
-									baseRectangle.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getH());
-								}
-				  		}
-			  		break;
-			  		
-		  		}
-		  		
-		  	 }
-			}
-		};
 		
 		isElementsResizable = true;
 	}
@@ -75,13 +28,16 @@ public class LinearLayout extends Layout {
 	@Override
 	public void draw() {
 		super.draw();
-		update();
+		
+		if(!elementList.isEmpty()) {
+			elementList.forEach(element -> element.draw());
+		};
 	}
 	
 	public final void setMode(int mode) {
-		if(mode !=  MODE_ROW && mode != MODE_COLUMN) { throw new IndexOutOfBoundsException("out of types exception"); }
+		if(mode !=  Constants.HORIZONTAL && mode != Constants.VERTICAL) { throw new IndexOutOfBoundsException("out of types exception"); }
 		this.mode = mode;
-		transforming.updateForce();
+		recalcListState();
 	}
 	
 	public final boolean isMode(int mode) {
@@ -94,35 +50,22 @@ public class LinearLayout extends Layout {
 	
 	public final void setHorizontalMode() {
 		mode = 0;
-		transforming.updateForce();
+		recalcListState();
 	}
 	
 	public final void setVerticalMode() {
 		mode = 1;
-		transforming.updateForce();
+		recalcListState();
 	}
 	
 	public final void swapModes() {
 		if(mode == 0) {
 			mode = 1;
-			transforming.updateForce();
+			recalcListState();
 			return;
 		}
 		if(mode == 1) { mode = 0; }
-		transforming.updateForce();
-	}
-	
-	@Override
-	public void update() {
-		if(visible) {
-			super.update();
-		}
-		if(!elementList.isEmpty()) {
-			elementList.forEach(element -> element.draw());
-		};
-		
-		if(app.frameCount == 1 || app.frameCount%60*60 == 0) { transforming.updateForce(); }
-
+		recalcListState();
 	}
 	
 	public LinearLayout add(Bounds baseRectangle, float weight) {
@@ -140,7 +83,7 @@ public class LinearLayout extends Layout {
 		weightList.add(constrain(weight,0,1f-maxSize));
 		}
 		
-		transforming.updateForce();
+		recalcListState();
 		
 		return this;
 	}
@@ -154,41 +97,51 @@ public class LinearLayout extends Layout {
 		if(index < 0 || index > elementList.size()-1) { throw new IndexOutOfBoundsException(); }
 		elementList.remove(index);
 		weightList.remove(index);
-		transforming.updateForce();
-		
+		recalcListState();
 	}
+	
+	@Override
+	protected final void recalcListState() {
+		for(int i = 0; i < elementList.size(); i++) {
+	  		Bounds bounds = elementList.get(i);
 
-	@Override
-	public void setX(float x) {
-		super.setX(x);
-		if(transforming != null) {
-			transforming.autoUpdate();
-		}
+	  		switch(mode) {
+	  		
+		  		case Constants.HORIZONTAL :
+			  		if(isElementsResizable()) {
+						if(i == 0) {
+						bounds.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
+						} else {
+							bounds.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
+						}
+			  		} else {
+			  			if(i == 0) {
+							bounds.setPosition(getX(),getY());
+						} else {
+							bounds.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
+						}
+			  		}
+		  		break;
+		  		
+		  		
+		  		case Constants.VERTICAL:
+			  		if(isElementsResizable()) {
+						if(i == 0) {
+							bounds.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
+						} else {
+							bounds.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
+						}
+			  		} else {
+			  			if(i == 0) {
+			  				bounds.setPosition(getX(), getY());
+							} else {
+								bounds.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getH());
+							}
+			  		}
+		  		break;
+		  		
+	  		}
+	  		
+	  	 }
 	}
-	
-	@Override
-	public void setY(float y) {
-		super.setY(y);
-		if(transforming != null) {
-			transforming.autoUpdate();
-		}
-	}
-	
-	@Override
-	public void setW(float w) {
-		super.setW(w);
-		if(transforming != null) {
-			transforming.autoUpdate();
-		}
-	}
-	
-	@Override
-	public void setH(float h) {
-		super.setH(h);
-		if(transforming != null) {
-			transforming.autoUpdate();
-		}
-	}
-	
-	
 }

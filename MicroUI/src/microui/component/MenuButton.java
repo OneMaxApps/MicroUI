@@ -9,7 +9,7 @@ import microui.event.Event;
 import processing.event.MouseEvent;
 
 public class MenuButton extends Button implements Scrollable {
-	private boolean open,autoClose,isRoot;
+	private boolean open,autoClose,isRoot,markVisible;
 	private final ArrayList<Button> itemList;
 	private int selectedId;
 	private float listHeight;
@@ -26,6 +26,7 @@ public class MenuButton extends Button implements Scrollable {
 		selectedId = -1;
 		innerEvent = new Event();
 		isRoot = true;
+		markVisible = true;
 		root = this;
 		calculateMarkBounds();
 		scrolling = new Scrolling();
@@ -193,6 +194,7 @@ public class MenuButton extends Button implements Scrollable {
 		}
 	}
 	
+	// FIXME: can't call from setup()
 	public final Button getItem(final String title) {
 
 		for(Button item : itemList) {
@@ -214,6 +216,24 @@ public class MenuButton extends Button implements Scrollable {
 		return itemList;
 	}
 	
+	public final boolean isMarkVisible() {
+		return markVisible;
+	}
+
+	public final void setMarkVisible(boolean markVisible) {
+		this.markVisible = markVisible;
+	}
+	
+	public final void setMarksVisible(boolean markVisible) {
+		this.markVisible = markVisible;
+		
+		itemList.forEach(i -> {
+			if(i instanceof MenuButton subMenu) {
+				subMenu.setMarksVisible(markVisible);
+			}
+		});
+	}
+
 	@Override
 	public final void mouseWheel(MouseEvent e) {
 		scrolling.init(e);
@@ -243,7 +263,7 @@ public class MenuButton extends Button implements Scrollable {
 		
 		for(Button item : itemList) {
 			if(item instanceof MenuButton subMenu) {
-				if(subMenu.checkInsideToAnyIn()) {
+				if(subMenu.checkInsideToAnyIn() && subMenu.isOpen()) {
 					insideState = true;
 				}
 			}
@@ -315,6 +335,7 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	private final void markOnDraw() {
+			if(!markVisible) { return; }
 			app.pushStyle();
 			app.noStroke();
 			if(open) { app.fill(0,255,0,128); } else { app.fill(255,128); }
@@ -368,6 +389,8 @@ public class MenuButton extends Button implements Scrollable {
 		}
 		
 		private final void update() {
+			if(itemList.isEmpty()) { return; }
+			
 			if(isRoot) {
 				event.listen(itemList.get(0).getX(),y+h,itemList.get(0).getW(),listHeight);
 			} else {

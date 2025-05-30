@@ -1,8 +1,7 @@
 package microuitest;
 
 import microui.MicroUI;
-import microui.component.MenuButton;
-import microui.core.style.Color;
+import microui.container.layout.LinearLayout;
 import microui.event.Event;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
@@ -10,8 +9,7 @@ import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
 	
-	Color color = new Color();
-	MenuButton menu;
+	LinearLayout container;
 	
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
@@ -23,34 +21,16 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-
-		menu = new MenuButton("File",0,0,140,24);
-		menu.addSubMenu("Open","From System","From NetWork","From USB");
-		menu.add("Save")
-			.addSubMenu(new MenuButton("Save As...")
-			    .add("PNG")
-			    .addSubMenu("JPEG","Low Quality","Middle Quality","High Quality")
-			    .add("PDF")
-			    .add("XML"))
-			.add("Rename");
+		container = new LinearLayout();
 		
-		
-		//menu.getItem("PDF").fill.set(255,0,0);
-		//menu.getItem("XML").tooltip.text.set("XML (eXtensible Markup Language) – это язык разметки,\nпредназначенный для хранения\nи передачи структурированных данных.");
-		
-		menu.fill.set(32);
-		menu.setItemsColor(menu.fill);
 	}
 	
 	@Override
 	public void draw() {
-		background(color.get());
-		
-		menu.draw();
-		
+		background(128);
+		container.draw();
+		System.out.println(frameRate);
 		GlobalTooltip.draw();
-		
-		if(mouseButton == RIGHT) { menu.setPosition(mouseX,mouseY); }
 	}
 	
 	@Override
@@ -67,7 +47,7 @@ public final class LaunchTest extends PApplet {
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		menu.mouseWheel(event);
+		
 	}
 	
 	

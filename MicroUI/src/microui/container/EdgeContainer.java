@@ -1,25 +1,28 @@
-package microui.container.layout;
+package microui.container;
 
 import static processing.core.PApplet.min;
 
 import microui.component.TextView;
 import microui.core.base.Bounds;
-import microui.core.base.Layout;
+import microui.core.base.Container;
+import microui.core.interfaces.KeyPressable;
+import microui.core.interfaces.Scrollable;
+import processing.event.MouseEvent;
 
-public class EdgeLayout extends Layout {
-	private Bounds form;
+public class EdgeContainer extends Container {
+	
+	private Bounds bounds;
 	private boolean left,up,right,down,center,centerHorizontal,centerVertical;
 	private float defaultWidthOfElement,defaultHeightOfElement;
 	
 
-	public EdgeLayout(float x, float y, float w, float h) {
+	public EdgeContainer(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		
 		setCenter(true);
-		setElementsResizable(true);
 	}
 	
-	public EdgeLayout() {
+	public EdgeContainer() {
 		this(0,0,app.width,app.height);
 	}
 	
@@ -35,10 +38,10 @@ public class EdgeLayout extends Layout {
 			super.update();
 		}
 		
-		if(form != null) {
-			updateSize(form);
-			updatePosition(form);
-			form.draw();
+		if(bounds != null) {
+			updateSize(bounds);
+			updatePosition(bounds);
+			bounds.draw();
 		}
 	}
 	
@@ -64,22 +67,22 @@ public class EdgeLayout extends Layout {
 	}
 	
 	public void updateSize(Bounds f) {
-		if(isElementsResizable()) {
-			f.setSize(min(getW(),defaultWidthOfElement), min(getH(),defaultHeightOfElement));
-		}
+		f.setSize(min(getW(),defaultWidthOfElement), min(getH(),defaultHeightOfElement));
 	}
 	
-	public EdgeLayout set(Bounds form) {
-		this.form = form;
+	
+	
+	public EdgeContainer set(Bounds form) {
+		this.bounds = form;
 		defaultWidthOfElement = form.getW();
 		defaultHeightOfElement = form.getH();
 		return this;
 	}
 	
-	public EdgeLayout set(String text) {
-		this.form = new TextView(text);
-		defaultWidthOfElement = form.getW();
-		defaultHeightOfElement = form.getH();
+	public EdgeContainer set(String text) {
+		this.bounds = new TextView(text);
+		defaultWidthOfElement = bounds.getW();
+		defaultHeightOfElement = bounds.getH();
 		return this;
 	}
 
@@ -87,7 +90,7 @@ public class EdgeLayout extends Layout {
 		return left;
 	}
 
-	public EdgeLayout setLeft(boolean left) {
+	public EdgeContainer setLeft(boolean left) {
 		this.left = left;
 		if(left) {
 			right = false;
@@ -101,7 +104,7 @@ public class EdgeLayout extends Layout {
 		return up;
 	}
 
-	public EdgeLayout setUp(boolean up) {
+	public EdgeContainer setUp(boolean up) {
 		this.up = up;
 		
 		if(up) {
@@ -116,7 +119,7 @@ public class EdgeLayout extends Layout {
 		return right;
 	}
 
-	public EdgeLayout setRight(boolean right) {
+	public EdgeContainer setRight(boolean right) {
 		this.right = right;
 		if(right) {
 		left = false;
@@ -130,7 +133,7 @@ public class EdgeLayout extends Layout {
 		return down;
 	}
 
-	public EdgeLayout setDown(boolean down) {
+	public EdgeContainer setDown(boolean down) {
 		this.down = down;
 		if(down) {
 		up = false;
@@ -144,7 +147,7 @@ public class EdgeLayout extends Layout {
 		return center;
 	}
 
-	public EdgeLayout setCenter(boolean center) {
+	public EdgeContainer setCenter(boolean center) {
 		this.center = center;
 		if(center) {
 		  left = false;
@@ -157,15 +160,19 @@ public class EdgeLayout extends Layout {
 		return this;
 	}
 	
-	public Bounds getElement() { return form; }
-
+	public Bounds getElement() { return bounds; }
+	
 	@Override
-	public void setVisibleTotal(boolean v) {
-		super.setVisibleTotal(v);
-		if(form instanceof Layout) {
-			((Layout) form).setVisibleTotal(v);
+	public void mouseWheel(MouseEvent e) {
+		if(bounds instanceof Scrollable b) {
+			b.mouseWheel(e);
 		}
 	}
-	
-	
+
+	@Override
+	public void keyPressed() {
+		if(bounds instanceof KeyPressable b) {
+			b.keyPressed();
+		}
+	}
 }

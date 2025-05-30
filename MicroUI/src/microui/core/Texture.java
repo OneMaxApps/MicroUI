@@ -4,11 +4,11 @@ import microui.core.base.Bounds;
 import microui.core.style.Color;
 import processing.core.PImage;
 
-public abstract class AbstractImage extends Bounds {
+public class Texture extends Bounds {
 	public final Color tint;
 	protected PImage image;
 	
-	public AbstractImage() {
+	public Texture() {
 		tint = new Color(255);
 		
 	}
@@ -16,6 +16,17 @@ public abstract class AbstractImage extends Bounds {
 	@Override
 	public void draw() {
 		if(isLoaded()) { super.draw(); }
+	}
+	
+	
+	@Override
+	public void update() {
+		if(isLoaded()) {
+			  app.pushStyle();
+			  app.tint(tint.get());
+			  app.image(image,x,y,w,h);
+			  app.popStyle();
+		  }
 	}
 
 	public final boolean isLoaded() {
