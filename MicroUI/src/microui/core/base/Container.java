@@ -6,6 +6,7 @@ import microui.core.interfaces.Focusable;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
+import microui.event.Event;
 
 
 public abstract class Container extends Bounds implements Scrollable, KeyPressable, Focusable {
@@ -13,6 +14,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	public final Margin margin;
 	public final Texture image;
 	public final Shadow shadow;
+	public final ResizeHandle resizeHandle;
 	
 	protected Container(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -23,6 +25,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		image.setTransforms(this);
 		shadow = new Shadow(this);
 		shadow.invisible();
+		resizeHandle = new ResizeHandle();
 	}
 	
 	@Override
@@ -41,7 +44,8 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			app.pushStyle();
 			shadow.draw();
 			app.popStyle();
-		
+			
+			resizeHandle.draw();
 	}
 	
 	@Override
@@ -56,24 +60,38 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 
 	@Override
 	public float getW() {
-		return super.getW()-margin.getRight();
+		if(margin.isAutoCenterMode()) {
+			return super.getW()-(margin.getRight()+margin.getLeft());
+		} else {
+			return super.getW()-margin.getRight();
+		}
 	}
 
 	@Override
 	public float getH() {
-		return super.getH()-margin.getDown();
+		if(margin.isAutoCenterMode()) {
+			return super.getH()-(margin.getDown()+margin.getUp());
+		} else {
+			return super.getH()+margin.getDown();
+		}
 	}
 	
 	@Override
 	public void inTransforms() {
 		if(image != null) { image.setTransforms(this); }
+		
+		if(resizeHandle != null) {
+			resizeHandle.dots.inTransforms();
+		}
 	}
 	
 	
 	public final class Margin {
 		private float left, up, right, down;
-
+		private boolean autoCenterMode;
+		
 		private Margin() {
+			autoCenterMode = true;
 		}
 
 		public void set(float left, float up, float right, float down) {
@@ -99,11 +117,11 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		}
 
 		public void setRight(float right) {
-			this.right = left == 0 ? right : right+left;
+			this.right = right;
 		}
 
 		public void setDown(float down) {
-			this.down = up == 0 ? down : down+up;
+			this.down = down;
 		}
 
 		public float getLeft() {
@@ -121,6 +139,143 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		public float getDown() {
 			return down;
 		}
+
+		public final boolean isAutoCenterMode() {
+			return autoCenterMode;
+		}
+
+		public final void setAutoCenterMode(boolean autoCenterMode) {
+			this.autoCenterMode = autoCenterMode;
+		}
 		
+	}
+	
+	public final class ResizeHandle extends View {
+		public final Color fill;
+		private final Dots dots;
+		
+		private ResizeHandle() {
+			visible();
+			fill = new Color(255);
+			dots = new Dots();
+		}
+		
+		@Override
+		public void update() {
+			fill.use();
+			dots.draw();
+			
+		}
+		
+		
+
+		private final class Dots {
+			private static final int LEFT = 0,
+									 RIGHT = 1,
+									 DOWN_LEFT = 2,
+									 DOWN_RIGHT = 3,
+									 
+									 DOTS_COUNT = 4;
+			
+			private final Dot[] dots;
+
+			private Dots() {
+				dots = new Dot[DOTS_COUNT];
+				for(int i = 0; i < DOTS_COUNT; i++) {
+					dots[i] = new Dot(i);
+				}
+				
+				inTransforms();
+			}
+
+			private final void draw() {
+				for(Dot dot : dots) {
+					dot.draw();
+				}
+			}
+			
+			private final void inTransforms() {
+				for(Dot dot : dots) {
+					dot.inTransforms();
+				}
+			}
+			
+			private final class Dot extends Bounds {
+				private final int mode;
+				private final Event event;
+				private float tmpX,tmpY,difX,difY;
+				
+				public Dot(final int mode) {
+					this.mode = mode;
+					visible();
+					setSize(10,10);
+					event = new Event();
+				}
+
+				@Override
+				public void update() {
+					event.listen(this);
+					app.rect(x, y, w, h);
+					if(event.holding()) {
+						
+						
+						switch(mode) {
+							case LEFT :
+								tmpX = Container.this.getX();
+								tmpY = Container.this.getY();
+								
+								Container.this.setPosition(app.mouseX,app.mouseY);
+								
+								
+								difX = tmpX-Container.this.getX();
+								difY = tmpY-Container.this.getY();
+								
+								Container.this.setSize(Container.this.getW()+difX,Container.this.getH()+difY);
+							break;
+							
+							case RIGHT :
+								tmpY = Container.this.getY();
+								
+								Container.this.setW(app.mouseX-Container.this.getX());
+								Container.this.setY(app.mouseY);
+								
+								difY = tmpY-Container.this.getY();
+								
+								Container.this.setH(Container.this.getH()+difY);
+							break;
+							
+							case DOWN_LEFT :
+								tmpX = Container.this.getX();
+								
+								Container.this.setX(app.mouseX);
+								Container.this.setH(app.mouseY-Container.this.getY());
+								
+								difX = tmpX-Container.this.getX();
+								
+								Container.this.setW(Container.this.getW()+difX);
+							break;
+							
+							case DOWN_RIGHT : Container.this.setSize(app.mouseX-Container.this.getX(),app.mouseY-Container.this.getY()); break;
+						}
+					}
+				}
+
+				@Override
+				protected void inTransforms() {
+					super.inTransforms();
+					calcTransforms();
+				}
+
+				private final void calcTransforms() {
+					switch(mode) {
+						case LEFT : setPosition(Container.this); break;
+						case RIGHT : setPosition(Container.this.getX()+Container.this.getW()-w,Container.this.getY()); break;
+						case DOWN_LEFT : setPosition(Container.this.getX(),Container.this.getY()+Container.this.getH()-h); break;
+						case DOWN_RIGHT : setPosition(Container.this.getX()+Container.this.getW()-w,Container.this.getY()+Container.this.getH()-h); break;
+					}
+				}
+				
+			}
+		}
 	}
 }

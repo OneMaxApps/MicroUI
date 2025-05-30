@@ -24,7 +24,6 @@ public final class LaunchTest extends PApplet {
 		MicroUI.setContext(this);
 		container = new EdgeContainer();
 		container.set(new Button());
-		container.setCenter(true).setUp(true);
 		container.margin.set(100);
 	}
 	
@@ -35,6 +34,7 @@ public final class LaunchTest extends PApplet {
 		container.draw();
 		
 		GlobalTooltip.draw();
+		
 	}
 	
 	@Override
