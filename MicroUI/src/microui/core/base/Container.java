@@ -30,6 +30,14 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		context = this;
 	}
 	
+	
+	
+	@Override
+	public void draw() {
+		super.draw();
+		resizeHandle.draw();
+	}
+
 	@Override
 	public void update() {
 			if(image.isLoaded()) {
@@ -46,8 +54,6 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			app.pushStyle();
 			shadow.draw();
 			app.popStyle();
-			
-			resizeHandle.draw();
 			
 	}
 	
@@ -87,11 +93,11 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		return y;
 	}
 	
-	public final float getRealW() {
+	public final float getRealWidth() {
 		return w;
 	}
 	
-	public final float getRealH() {
+	public final float getRealHight() {
 		return h;
 	}
 	
@@ -170,21 +176,34 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	public final class ResizeHandle extends View {
 		public final Color fill;
 		private final Dots dots;
+		private boolean enable;
 		
 		private ResizeHandle() {
-			invisible();
+			visible();
 			fill = new Color(255);
 			dots = new Dots();
 		}
 		
 		@Override
+		public void draw() {
+			if(enable) {
+				super.draw();
+			}
+		}
+
+		@Override
 		public void update() {
 			fill.use();
 			dots.draw();
-			
 		}
 		
-		
+		public final boolean isEnable() {
+			return enable;
+		}
+
+		public final void setEnable(boolean enable) {
+			this.enable = enable;
+		}
 
 		private final class Dots {
 			private static final int LEFT = 0,
@@ -246,7 +265,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 								difX = tmpX-getRealX();
 								difY = tmpY-getRealY();
 								
-								context.setSize(getRealW()+difX,getRealH()+difY);
+								context.setSize(getRealWidth()+difX,getRealHight()+difY);
 							break;
 							
 							case RIGHT :
@@ -257,7 +276,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 								
 								difY = tmpY-getRealY();
 								
-								context.setHeight(getRealH()+difY);
+								context.setHeight(getRealHight()+difY);
 							break;
 							
 							case DOWN_LEFT :
@@ -268,7 +287,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 								
 								difX = tmpX-getRealX();
 								
-								context.setWidth(getRealW()+difX);
+								context.setWidth(getRealWidth()+difX);
 							break;
 							
 							case DOWN_RIGHT : context.setSize(app.mouseX-getRealX(),app.mouseY-getRealY()); break;
@@ -285,9 +304,9 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				private final void calcTransforms() {
 					switch(mode) {
 						case LEFT : setPosition(getRealX(),getRealY()); break;
-						case RIGHT : setPosition(getRealX()+getRealW()-w,getRealY()); break;
-						case DOWN_LEFT : setPosition(getRealX(),getRealY()+getRealH()-h); break;
-						case DOWN_RIGHT : setPosition(getRealX()+getRealW()-w,getRealY()+getRealH()-h); break;
+						case RIGHT : setPosition(getRealX()+getRealWidth()-w,getRealY()); break;
+						case DOWN_LEFT : setPosition(getRealX(),getRealY()+getRealHight()-h); break;
+						case DOWN_RIGHT : setPosition(getRealX()+getRealWidth()-w,getRealY()+getRealHight()-h); break;
 					}
 				}
 				

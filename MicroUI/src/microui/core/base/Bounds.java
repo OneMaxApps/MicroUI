@@ -39,8 +39,7 @@ public abstract class Bounds extends View {
 	
 	public void setWidth(final float w) {
 		if(this.w == w) { return; }
-		if(w < 0) { this.w = 0; return; }
-		this.w = w;
+		this.w = Math.max(0, w);
 		onChangeBounds();
 	}
 	
@@ -48,16 +47,19 @@ public abstract class Bounds extends View {
 	public float getHeight() { return h; }
 	
 	public void setHeight(final float h) {
-		if(this.h == h) { return; }
-		if(h < 0) { this.h = 0; return; }
-		this.h = h;
+		if(this.h == h) { return; }	
+		this.h = Math.max(0, h);
 		onChangeBounds();
 	}
 	
 	
 	public void setSize(float w, float h) {
-		setWidth(w);
-		setHeight(h);
+		if(this.w == w && this.h == h) { return; }
+		
+		this.w = Math.max(0, w);
+		this.h = Math.max(0, h);
+		
+		onChangeBounds();	
 	}
 	
 	public void setSize(float size) {
@@ -66,16 +68,20 @@ public abstract class Bounds extends View {
 	
 	public void setSize(final Bounds otherBounds) {
 		if(otherBounds == null) { return; }
-		setWidth(otherBounds.getWidth());
-		setHeight(otherBounds.getHeight());
+		setSize(otherBounds.getWidth(),otherBounds.getHeight());
 	}
 	
-	
 	public void setBounds(float x, float y, float w, float h) {
-		setX(x);
-		setY(y);
-		setWidth(w);
-		setHeight(h);
+		boolean hasChanges = this.x != x || this.y != y || this.w != w || this.h != h;
+		
+		if(hasChanges) {
+			this.x = x;
+			this.y = y;
+			this.w = Math.max(0, w);
+			this.h = Math.max(0, h);
+			onChangeBounds();
+		}
+		
 	}
 	
 	public void setBounds(Bounds otherBounds) {
@@ -85,8 +91,12 @@ public abstract class Bounds extends View {
 	
 	
 	public void setPosition(float x, float y) {
-		setX(x);
-		setY(y);
+		if(this.x == x && this.y == y) { return; }
+		
+		this.x = x;
+		this.y = y;
+		onChangeBounds();
+		
 	}
 	
 	public void setPosition(Bounds otherBounds) {

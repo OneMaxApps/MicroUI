@@ -11,7 +11,6 @@ import microui.component.TextView;
 import microui.core.base.Bounds;
 import microui.core.base.Container;
 import microui.core.base.Layout;
-import processing.core.PApplet;
 
 public class GridLayout extends Layout {
 	  private boolean fillTheGrid;
@@ -24,16 +23,16 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  public GridLayout(int cells) {
-		  this(app,0,0,app.width,app.height,cells,cells);
+		  this(0,0,app.width,app.height,cells,cells);
 	  }
 	  
 	  public GridLayout(int rows, int columns) {
-		  this(app,0,0,app.width,app.height,rows,columns);
+		  this(0,0,app.width,app.height,rows,columns);
 	  }
 	  
-	  public GridLayout(PApplet app, float x, float y, float w, float h) { this(app,x,y,w,h,3,3); }
+	  public GridLayout(float x, float y, float w, float h) { this(x,y,w,h,3,3); }
 	  
-	  public GridLayout(PApplet app, float x, float y, float w, float h, int rows, int columns) {
+	  public GridLayout(float x, float y, float w, float h, int rows, int columns) {
 	    super(x,y,w,h);
 	    
 	    setGrid(rows,columns);
@@ -55,7 +54,7 @@ public class GridLayout extends Layout {
 	  public void update() {
 		  super.update();
 		  gridDraw();
-		  recalcListState();
+		  
 	  }
 	  
 	  public final boolean isEmpty() {
@@ -103,8 +102,6 @@ public class GridLayout extends Layout {
 		if(!isEmptyCell(row,column)) { return this; }
 	    
 		addIfAbsent(bounds,row,column);
-
-		recalcListState();
 		
 		return this;
 	  }
@@ -151,6 +148,8 @@ public class GridLayout extends Layout {
 				rowList.add(column);
 				elementDefaultWidth.add(bounds.getWidth());
 				elementDefaultHeight.add(bounds.getHeight());
+				
+				recalcListState();
 	  }
 
 	  public void remove(Bounds bounds) {
@@ -189,9 +188,17 @@ public class GridLayout extends Layout {
 		  for(int i = 0; i < elementList.size(); i++) {
 			  Bounds bounds = elementList.get(i);
 			  
+			  if(isElementsResizable()) {
+			      if(isFillTheGrid()) {
+			        bounds.setSize(getWidth()/getColumns(),getHeight()/getRows());
+			      } else {
+			    	bounds.setSize(min(elementDefaultWidth.get(i),getWidth()/getColumns()), min(elementDefaultHeight.get(i),getHeight()/getRows()));
+			    }
+			  }
+			  
 			  if(bounds instanceof Container container) {
-				  container.setX(map(columnList.get(i),0,cols,getX(),getX()+getWidth())+((getWidth()/getColumns()/2)-container.getRealW()/2));
-				  container.setY(map(rowList.get(i),0,rows,getY(),getY()+getHeight())+((getHeight()/getRows()/2)-container.getRealH()/2));
+				  container.setX(map(columnList.get(i),0,cols,getX(),getX()+getWidth())+((getWidth()/getColumns()/2)-container.getRealWidth()/2));
+				  container.setY(map(rowList.get(i),0,rows,getY(),getY()+getHeight())+((getHeight()/getRows()/2)-container.getRealHight()/2));
 
 			    } else {
 			    	
@@ -200,16 +207,7 @@ public class GridLayout extends Layout {
 				    		map(rowList.get(i),0,GridLayout.this.rows,getY(),getY()+getHeight())+((getHeight()/getRows())/2)-bounds.getHeight()/2
 				    );
 			    }
-			    
 			  
-				    if(isElementsResizable()) {
-				      if(isFillTheGrid()) {
-				        bounds.setSize(getWidth()/getColumns(),getHeight()/getRows());
-				      } else {
-				    	bounds.setSize(min(elementDefaultWidth.get(i),getWidth()/getColumns()), min(elementDefaultHeight.get(i),getHeight()/getRows()));
-				    }
-				  }
-			
 			  }
 	  }
 	  

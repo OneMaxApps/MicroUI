@@ -54,26 +54,31 @@ public abstract class Layout extends Container {
 		recalcListState();
 	}
 	
-	public void setVisibleContainers(boolean v) {
-		setVisible(v);
+	/**
+	 * Changing visible state for all inner layouts and for himself
+	 */
+	public void setVisibleLayouts(boolean visible) {
+		setVisible(visible);
 		
 		for(View view : elementList) {
 			if(view instanceof Layout layout) {
-				layout.setVisibleContainers(v);
-			}
-			if(view instanceof Container container) {
-				container.setVisible(v);
+				layout.setVisibleLayouts(visible);
 			}
 		}
 		
 	}
 	
-	public void setVisibleComponents(boolean v) {
+	/**
+	 * Changing visible state for all inner components
+	 */
+	public void setVisibleComponents(boolean visible) {
+		
 		for(View view : elementList) {
 			if(view instanceof Component component) {
-				component.setVisible(v);
+				component.setVisible(visible);
 			}
-		}	
+		}
+		
 	}
 	
 	protected abstract void recalcListState();
