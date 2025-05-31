@@ -153,7 +153,7 @@ public class TextView extends Component {
 		  if(textSize < 1) { return; }
 		  app.textSize(textSize);
 		  float textHeight = app.textAscent()+app.textDescent();
-		  if(textHeight > getH()) { return; }
+		  if(textHeight > getHeight()) { return; }
 		  if(textSize >= 1) { this.textSize = (int) textSize; }
 	  }
 	  

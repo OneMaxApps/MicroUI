@@ -19,14 +19,14 @@ private static UnsafeBounds unsafeBounds;
 	
 	@Test
 	void setNegativeW() {
-		unsafeBounds.setW(-100);
-		assertEquals(-100,unsafeBounds.getW());
+		unsafeBounds.setWidth(-100);
+		assertEquals(-100,unsafeBounds.getWidth());
 	}
 	
 	@Test
 	void setNegativeH() {
-		unsafeBounds.setH(-100);
-		assertEquals(-100,unsafeBounds.getH());
+		unsafeBounds.setHeight(-100);
+		assertEquals(-100,unsafeBounds.getHeight());
 	}
 	
 }

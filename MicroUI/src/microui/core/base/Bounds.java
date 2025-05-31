@@ -4,12 +4,12 @@ public abstract class Bounds extends View {
 	protected float x,y,w,h;
 	
 	public Bounds(float x, float y, float w, float h) {
-		setTransforms(x,y,w,h);
+		setBounds(x,y,w,h);
 		
 	}
 	
 	public Bounds(Bounds otherBounds) {
-		this(otherBounds.getX(),otherBounds.getY(),otherBounds.getW(),otherBounds.getH());
+		this(otherBounds.getX(),otherBounds.getY(),otherBounds.getWidth(),otherBounds.getHeight());
 	}
 	
 	public Bounds() {
@@ -22,7 +22,7 @@ public abstract class Bounds extends View {
 	public void setX(final float x) {
 		if(this.x == x) { return; }
 		this.x = x;
-		inTransforms();
+		onChangeBounds();
 	}
 	
 	
@@ -31,34 +31,33 @@ public abstract class Bounds extends View {
 	public void setY(final float y) {
 		if(this.y == y) { return; }
 		this.y = y;
-		inTransforms();
+		onChangeBounds();
 	}
 	
 	
-	public float getW() { return w; }
+	public float getWidth() { return w; }
 	
-	public void setW(final float w) {
+	public void setWidth(final float w) {
 		if(this.w == w) { return; }
 		if(w < 0) { this.w = 0; return; }
 		this.w = w;
-		inTransforms();
-		
+		onChangeBounds();
 	}
 	
 	
-	public float getH() { return h; }
+	public float getHeight() { return h; }
 	
-	public void setH(final float h) {
+	public void setHeight(final float h) {
 		if(this.h == h) { return; }
 		if(h < 0) { this.h = 0; return; }
 		this.h = h;
-		inTransforms();
+		onChangeBounds();
 	}
 	
 	
 	public void setSize(float w, float h) {
-		setW(w);
-		setH(h);
+		setWidth(w);
+		setHeight(h);
 	}
 	
 	public void setSize(float size) {
@@ -67,21 +66,21 @@ public abstract class Bounds extends View {
 	
 	public void setSize(final Bounds otherBounds) {
 		if(otherBounds == null) { return; }
-		setW(otherBounds.getW());
-		setH(otherBounds.getH());
+		setWidth(otherBounds.getWidth());
+		setHeight(otherBounds.getHeight());
 	}
 	
 	
-	public void setTransforms(float x, float y, float w, float h) {
+	public void setBounds(float x, float y, float w, float h) {
 		setX(x);
 		setY(y);
-		setW(w);
-		setH(h);
+		setWidth(w);
+		setHeight(h);
 	}
 	
-	public void setTransforms(Bounds otherBounds) {
+	public void setBounds(Bounds otherBounds) {
 		if(otherBounds == null) { return; }
-		setTransforms(otherBounds.getX(),otherBounds.getY(),otherBounds.getW(),otherBounds.getH());
+		setBounds(otherBounds.getX(),otherBounds.getY(),otherBounds.getWidth(),otherBounds.getHeight());
 	}
 	
 	
@@ -96,6 +95,6 @@ public abstract class Bounds extends View {
 	}
 	
 	
-	protected void inTransforms() {}
+	public void onChangeBounds() {}
 
 }

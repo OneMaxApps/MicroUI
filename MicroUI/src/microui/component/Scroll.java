@@ -38,13 +38,13 @@ public final class Scroll extends RangeControl {
 			
 			switch(orientation) {
 				case Constants.HORIZONTAL :
-					thumb.setX(constrain(app.mouseX+distToThumb,getX(),getX()+getW()-thumb.getW()));
-					value.setWithoutActions(map(thumb.getX(),getX(),getX()+getW()-thumb.getW(),value.getMin(),value.getMax()));
+					thumb.setX(constrain(app.mouseX+distToThumb,getX(),getX()+getWidth()-thumb.getWidth()));
+					value.setWithoutActions(map(thumb.getX(),getX(),getX()+getWidth()-thumb.getWidth(),value.getMin(),value.getMax()));
 				break;
 				
 				case Constants.VERTICAL :
-					thumb.setY(constrain(app.mouseY+distToThumb,getY(),getY()+getH()-thumb.getH()));
-					value.setWithoutActions(map(thumb.getY(),getY()+getH()-thumb.getH(),getY(),value.getMin(),value.getMax()));
+					thumb.setY(constrain(app.mouseY+distToThumb,getY(),getY()+getHeight()-thumb.getHeight()));
+					value.setWithoutActions(map(thumb.getY(),getY()+getHeight()-thumb.getHeight(),getY(),value.getMin(),value.getMax()));
 				break;
 			}
 			
@@ -72,8 +72,8 @@ public final class Scroll extends RangeControl {
 	}
 
 	@Override
-	public void inTransforms() {
-		super.inTransforms();
+	public void onChangeBounds() {
+		super.onChangeBounds();
 		
 		if(thumb == null) { return; }
 		updateThumbTransforms();
@@ -81,23 +81,23 @@ public final class Scroll extends RangeControl {
 	}
 	
 	private final void updateThumbTransforms() {
-		thumb.setTransforms(this);
+		thumb.setBounds(this);
 		
 		
 		
 		switch(orientation) {
 		
 		case Constants.HORIZONTAL :
-			thumb.setW(getW()/10);
+			thumb.setWidth(getWidth()/10);
 			if(value.hasEqualMinMax()) { return; }
-			final float NEW_POS_X = map(value.get(),value.getMin(),value.getMax(),getX(),getX()+getW()-thumb.getW());
-			thumb.setX(constrain(NEW_POS_X,getX(),getX()+getW()-thumb.getW()));
+			final float NEW_POS_X = map(value.get(),value.getMin(),value.getMax(),getX(),getX()+getWidth()-thumb.getWidth());
+			thumb.setX(constrain(NEW_POS_X,getX(),getX()+getWidth()-thumb.getWidth()));
 			break;
 		case Constants.VERTICAL :
-			thumb.setH(getH()/10);
+			thumb.setHeight(getHeight()/10);
 			if(value.hasEqualMinMax()) { return; }
-			final float NEW_POS_Y = map(value.get(),value.getMax(),value.getMin(),getY(),getY()+getH()-thumb.getH());
-			thumb.setY(constrain(NEW_POS_Y,getY(),getY()+getH()-thumb.getH()));
+			final float NEW_POS_Y = map(value.get(),value.getMax(),value.getMin(),getY(),getY()+getHeight()-thumb.getHeight());
+			thumb.setY(constrain(NEW_POS_Y,getY(),getY()+getHeight()-thumb.getHeight()));
 			break;
 		}
 		

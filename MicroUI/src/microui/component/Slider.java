@@ -36,10 +36,10 @@ public final class Slider extends RangeControl {
 		
 		if(event.holding()) {
 			switch(orientation) {
-			case Constants.HORIZONTAL: value.set(map(app.mouseX,getX(),getX()+getW(),value.getMin(),value.getMax())); break;
-			case Constants.VERTICAL: value.set(map(app.mouseY,getY(),getY()+getH(),value.getMin(),value.getMax())); break;
+			case Constants.HORIZONTAL: value.set(map(app.mouseX,getX(),getX()+getWidth(),value.getMin(),value.getMax())); break;
+			case Constants.VERTICAL: value.set(map(app.mouseY,getY(),getY()+getHeight(),value.getMin(),value.getMax())); break;
 			}
-			inTransforms();
+			onChangeBounds();
 		}
 		
 		
@@ -47,22 +47,22 @@ public final class Slider extends RangeControl {
 	}
 
 	@Override
-	public void inTransforms() {
+	public void onChangeBounds() {
 		if(level == null) { return; }
 		
-		level.setTransforms(this);
+		level.setBounds(this);
 		
 		switch(orientation) {
 		
 			case Constants.HORIZONTAL:
-				level.setW(map(value.get(),value.getMin(),value.getMax(),0,getW()));
+				level.setWidth(map(value.get(),value.getMin(),value.getMax(),0,getWidth()));
 				
 			break;
 			
 			case Constants.VERTICAL:
-				level.setY(getY()+getH());
-				level.setW(getW());
-				level.setH(map(value.get(),value.getMin(),value.getMax(),0,-getH()));
+				level.setY(getY()+getHeight());
+				level.setWidth(getWidth());
+				level.setHeight(map(value.get(),value.getMin(),value.getMax(),0,-getHeight()));
 			break;
 			
 		}

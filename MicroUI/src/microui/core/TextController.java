@@ -66,6 +66,10 @@ public abstract class TextController {
 		return sb.toString();
 	}
 	
+	public final int getDigits() {
+		return Integer.parseInt(0+sb.toString());
+	}
+	
 	public final StringBuilder getStringBuilder() { return sb; }
 	
 	public final void insert(final int pos, final char ch) {

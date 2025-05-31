@@ -18,24 +18,24 @@ public abstract class UnsafeBounds extends Bounds {
 	}
 
 	@Override
-	public void setW(final float w) {
+	public void setWidth(final float w) {
 		if(this.w == w) { return; }
 		if(!isAllowedNegativeDimensions()) {
 		if(w < 0) { this.w = 0; return; }
 		}
 		this.w = w;
-		inTransforms();
+		onChangeBounds();
 		
 	}
 	
 	@Override
-	public void setH(final float h) {
+	public void setHeight(final float h) {
 		if(this.h == h) { return; }
 		if(!isAllowedNegativeDimensions()) {
 		if(h < 0) { this.h = 0; return; }
 		}
 		this.h = h;
-		inTransforms();
+		onChangeBounds();
 	}
 	
 	public final boolean isAllowedNegativeDimensions() {

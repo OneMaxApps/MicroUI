@@ -72,6 +72,15 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	public final boolean isSelected(final String title) {
+		
+		for(Button item : itemList) {
+			if(item.text.get().equals(title)) { return true; }
+		}
+		
+		return false;
+	}
+	
+	public final boolean isSelectedDeep(final String title) {
 		if(selectedId == -1) { return false; }
 		
 		boolean selected = false;
@@ -81,7 +90,7 @@ public class MenuButton extends Button implements Scrollable {
 			if(selected) { return true; }
 			
 			if(itemList.get(selectedId) instanceof MenuButton subMenu) {
-				selected = subMenu.isSelected(title);
+				selected = subMenu.isSelectedDeep(title);
 			}
 		
 		return selected;
@@ -109,16 +118,16 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	public final void add(final MenuButton... subMenu) {
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < app.width;
 		for(int i = 0; i < subMenu.length; i++) {
 			itemList.add(subMenu[i]);
 			subMenu[i].setRoot(root);
 			if(isRoot) {
-				subMenu[i].setTransforms(getX(),getY()+getH()+listHeight,getW(),getH());
+				subMenu[i].setBounds(getX(),getY()+getHeight()+listHeight,getWidth(),getHeight());
 			} else {
-				subMenu[i].setTransforms(CAN_BE_IN_RIGHT_SIDE ? getX()+getW() : getX()-getW(),getY()+listHeight,getW(),getH());
+				subMenu[i].setBounds(CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),getY()+listHeight,getWidth(),getHeight());
 			}
-			listHeight += getH();
+			listHeight += getHeight();
 		}
 		
 		setRootForSubMenus();
@@ -141,24 +150,24 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	@Override
-	public final void inTransforms() {
-		super.inTransforms();
+	public final void onChangeBounds() {
+		super.onChangeBounds();
 		if(itemList == null) { return; }
 		
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < app.width;
 		
 		listHeight = 0;
 		for(int i = 0; i < itemList.size(); i++) {
 			final Button ITEM = itemList.get(i);
-			ITEM.setSize(w, getH());
+			ITEM.setSize(w, getHeight());
 			
 			if(isRoot) {
-				ITEM.setPosition(x,y+getH()*(i+1));
+				ITEM.setPosition(x,y+getHeight()*(i+1));
 			} else {
-				ITEM.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getW() : getX()-getW(),y+getH()*(1+i)-getH());
+				ITEM.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),y+getHeight()*(1+i)-getHeight());
 			}
 			
-			listHeight += ITEM.getH();
+			listHeight += ITEM.getHeight();
 		}
 		
 		calculateMarkBounds();
@@ -170,14 +179,14 @@ public class MenuButton extends Button implements Scrollable {
 		if(itemList == null || itemList.isEmpty() || index < 0 || index >= itemList.size()) { return; }
 		
 		itemList.remove(index);
-		listHeight -= getH();
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width;
+		listHeight -= getHeight();
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < app.width;
 		for(int i = 0; i < itemList.size(); i++) {
 			final Button item = itemList.get(i);
 			if(isRoot) {
-				item.setPosition(getX(),getY()+getH()*(i+1));
+				item.setPosition(getX(),getY()+getHeight()*(i+1));
 			} else {
-				item.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getW() : getX()-getW(),y+getH()*(1+i)-getH());
+				item.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),y+getHeight()*(1+i)-getHeight());
 			}
 		}
 	}
@@ -193,10 +202,10 @@ public class MenuButton extends Button implements Scrollable {
 			}
 		}
 	}
-	
-	// FIXME: can't call from setup()
-	public final Button getItem(final String title) {
 
+	public final Button getItemDeep(final String title) {
+		Button ref = null;
+		
 		for(Button item : itemList) {
 			if(item.text.get().equals(title)) {
 				return item;
@@ -205,11 +214,26 @@ public class MenuButton extends Button implements Scrollable {
 		
 		for(Button item : itemList) {
 			if(item instanceof MenuButton subMenu) {
-				return subMenu.getItem(title);
+				if(ref == null) {
+					ref =  subMenu.getItemDeep(title);
+				}
 			}
 		}
 		
-		throw new IllegalArgumentException(title+" item is not exists");
+		if(isRoot && ref == null) { throw new IllegalArgumentException(title + "  is not exists"); }
+		
+		return ref;
+	}
+	
+	public final Button getItem(final String title) {
+		
+		for(Button item : itemList) {
+			if(item.text.get().equals(title)) {
+				return item;
+			}
+		}
+		
+		throw new IllegalArgumentException(title + "  is not exists");
 	}
 	
 	public final ArrayList<Button> getItems() {
@@ -315,16 +339,16 @@ public class MenuButton extends Button implements Scrollable {
 	
 	private final void rootListState(final String... title) {
 		for(int i = 0; i < title.length; i++) {
-			itemList.add(new Button(title[i],getX(),getY()+getH()+listHeight,getW(),getH()));
-			listHeight += getH();
+			itemList.add(new Button(title[i],getX(),getY()+getHeight()+listHeight,getWidth(),getHeight()));
+			listHeight += getHeight();
 		}
 	}
 	
 	private final void childListState(final String... title) {
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getW()*2 < app.width; 
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < app.width; 
 		for(int i = 0; i < title.length; i++) {
-			itemList.add(new Button(title[i],CAN_BE_IN_RIGHT_SIDE ? getX()+getW() : getX()-getW(),getY()+listHeight,getW(),getH()));
-			listHeight += getH();
+			itemList.add(new Button(title[i],CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),getY()+listHeight,getWidth(),getHeight()));
+			listHeight += getHeight();
 		}
 	}
 	
@@ -372,10 +396,10 @@ public class MenuButton extends Button implements Scrollable {
 	}
 
 	private final void calculateMarkBounds() {
-		markX = getX()+getW()*.2f;
-		markY = getY()+getH()*.8f;
-		markW = getW()*.6f;
-		markH = getH()*.05f;
+		markX = getX()+getWidth()*.2f;
+		markY = getY()+getHeight()*.8f;
+		markW = getWidth()*.6f;
+		markH = getHeight()*.05f;
 		
 	}
 	
@@ -392,34 +416,32 @@ public class MenuButton extends Button implements Scrollable {
 			if(itemList.isEmpty()) { return; }
 			
 			if(isRoot) {
-				event.listen(itemList.get(0).getX(),y+h,itemList.get(0).getW(),listHeight);
+				event.listen(itemList.get(0).getX(),y+h,itemList.get(0).getWidth(),listHeight);
 			} else {
-				event.listen(itemList.get(0).getX(),y,itemList.get(0).getW(),listHeight);
+				event.listen(itemList.get(0).getX(),y,itemList.get(0).getWidth(),listHeight);
 			}
 		}
 		
 		private final void init(final MouseEvent e) {
-			if(!enable) { return; }
-			
-			if(!event.inside()) { return; }
+			if(!enable || !event.inside() || itemList.size() <= 1) { return; }
 			
 			for(int i = 0; i < itemList.size(); i++) {
 				final Button item = itemList.get(i);
 				
 				if(e.getCount() > 0) {
-					item.setY(item.getY()+item.getH());
+					item.setY(item.getY()+item.getHeight());
 				} else {
-					item.setY(item.getY()-item.getH());
+					item.setY(item.getY()-item.getHeight());
 				}
 
 			}
-			
+						
 			if(e.getCount() > 0) {
 				itemList.add(0,itemList.remove(itemList.size()-1));
-				itemList.get(0).setY(itemList.get(1).getY()-itemList.get(0).getH());
+				itemList.get(0).setY(itemList.get(1).getY()-itemList.get(0).getHeight());
 			} else {
 				itemList.add(itemList.size()-1,itemList.remove(0));
-				itemList.get(itemList.size()-1).setY(itemList.get(itemList.size()-2).getY()+itemList.get(itemList.size()-1).getH());
+				itemList.get(itemList.size()-1).setY(itemList.get(itemList.size()-2).getY()+itemList.get(itemList.size()-1).getHeight());
 			}
 			
 		}

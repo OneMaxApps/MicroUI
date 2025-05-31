@@ -107,14 +107,14 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 	
 	@Override
-	public void inTransforms() {
-		super.inTransforms();
+	public void onChangeBounds() {
+		super.onChangeBounds();
 		if(scrollH == null || scrollV == null) { return; }
 		
 		scrollsTransformsUpdate();
 		
-		scrollH.inTransforms();
-		scrollV.inTransforms();
+		scrollH.onChangeBounds();
+		scrollV.onChangeBounds();
 		
 	}
 
@@ -309,7 +309,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				scrollH.value.set(scrollH.value.getMin());
 			}
 			
-			if(items.getTotalHeight() > EditText.this.getH()) {
+			if(items.getTotalHeight() > EditText.this.getHeight()) {
 				scrollV.value.setMin(h-items.getTotalHeight());
 			} else {
 				scrollV.value.setMin(0);
@@ -351,7 +351,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				
 				
 				cursor.goInEnd();
-				if(cursor.getPosY() > EditText.this.getH()*.9f) {
+				if(cursor.getPosY() > EditText.this.getHeight()*.9f) {
 					scrollV.value.append(-items.getTextSize());
 				}
 			}
@@ -407,7 +407,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	private final void keyEnd() {
 		cursor.setRow(cursor.getMaxCharsInRow());
 		
-		if(items.getCurrent().getTextWidth() > EditText.this.getW()) {
+		if(items.getCurrent().getTextWidth() > EditText.this.getWidth()) {
 			scrollH.value.set(scrollH.value.getMax()*.5f);
 		}
 	}
@@ -426,7 +426,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			//items.deleteAllText();
 			selection.unselect();
 			items.clear();
-			while(items.getTotalHeight() < EditText.this.getH()) { items.add(""); }
+			while(items.getTotalHeight() < EditText.this.getHeight()) { items.add(""); }
 			cursor.setColumn(0);
 			cursor.setRow(0);
 			scrollV.value.set(0);
@@ -518,7 +518,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			fill = new Color(0);
 			textSize = 32;
 			list = new ArrayList<Item>();
-			for(int i = 0; i < getH()/textSize; i++) {
+			for(int i = 0; i < getHeight()/textSize; i++) {
 				list.add(new Item(i*textSize,""));
 				totalHeight += textSize;
 			}
@@ -549,7 +549,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		}
 		
 		private final boolean itemInside(Item item) {
-			return item.getY() > getY()-item.getH() && item.getY() < getY()+getH();
+			return item.getY() > getY()-item.getH() && item.getY() < getY()+getHeight();
 		}
 		
 		private final void deleteAllSelectedText() {
@@ -675,7 +675,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				scrollV.value.set(tempValueOfScrollV);
 			}
 			
-			if(cursor.getPosY() > getH()*.8f) {
+			if(cursor.getPosY() > getHeight()*.8f) {
 				scrollV.value.append(-textSize);
 			}
 		}
@@ -997,14 +997,14 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		
 		protected final void back() {
 			if(getRow() > 0) { row--; }
-			if(posX < getW()/2) {
+			if(posX < getWidth()/2) {
 				scrollH.value.append(-items.getTextSize()/2);
 			}
 		}
 		
 		protected final void next() {
 			if(getRow() < getMaxCharsInRow()) { row++; }
-			if(posX > getW()*.8f) {
+			if(posX > getWidth()*.8f) {
 				scrollH.value.append(items.getTextSize());
 			}
 		}
@@ -1068,22 +1068,22 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				if(startRow == -1) { startRow = cursor.getRow(); }
 				endRow = cursor.getRow();
 				
-				if(items.getTotalHeight() > EditText.this.getH()) {
+				if(items.getTotalHeight() > EditText.this.getHeight()) {
 				
-					if(cursor.getPosY() < getH()*.2f) {
-						scrollV.value.append(getH()*.01f);
+					if(cursor.getPosY() < getHeight()*.2f) {
+						scrollV.value.append(getHeight()*.01f);
 					}
 					
-					if(cursor.getPosY() > getH()*.8f) {
-						scrollV.value.append(-getH()*.01f);
+					if(cursor.getPosY() > getHeight()*.8f) {
+						scrollV.value.append(-getHeight()*.01f);
 					}
 					
-					if(cursor.getPosX() < getW()*.2f) {
-						scrollH.value.append(-getW()*.01f);
+					if(cursor.getPosX() < getWidth()*.2f) {
+						scrollH.value.append(-getWidth()*.01f);
 					}
 					
-					if(cursor.getPosX() > getW()*.8f) {
-						scrollH.value.append(getW()*.01f);
+					if(cursor.getPosX() > getWidth()*.8f) {
+						scrollH.value.append(getWidth()*.01f);
 					}
 				
 				}

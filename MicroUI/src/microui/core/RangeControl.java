@@ -17,7 +17,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		value = new Value(0,100,0) {
 			@Override
 			public void action() {
-				inTransforms();
+				onChangeBounds();
 			}
 		};
 		scrolling = new Scrolling(event);
@@ -53,11 +53,11 @@ public abstract class RangeControl extends Component implements Scrollable {
 	public final void setOrientation(final int orientation) {
 		if(orientation != Constants.HORIZONTAL && orientation != Constants.VERTICAL) { return; }
 		if(this.orientation == orientation) { return; }
-		final float w = getW(), h = getH();
+		final float w = getWidth(), h = getHeight();
 		this.orientation = orientation;
-		setW(h);
-		setH(w);
-		inTransforms();
+		setWidth(h);
+		setHeight(w);
+		onChangeBounds();
 	}
 	
 	public final void autoScroll() {

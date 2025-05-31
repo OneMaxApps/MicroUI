@@ -110,15 +110,15 @@ public class LinearLayout extends Layout {
 		  		case Constants.HORIZONTAL :
 			  		if(isElementsResizable()) {
 						if(i == 0) {
-						bounds.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
+						bounds.setBounds(getX(),getY(),getWidth()*weightList.get(i),getHeight());
 						} else {
-							bounds.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
+							bounds.setBounds(elementList.get(i-1).getX()+elementList.get(i-1).getWidth(),getY(),getWidth()*weightList.get(i),getHeight());
 						}
 			  		} else {
 			  			if(i == 0) {
 							bounds.setPosition(getX(),getY());
 						} else {
-							bounds.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
+							bounds.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getWidth(),getY());
 						}
 			  		}
 		  		break;
@@ -127,15 +127,15 @@ public class LinearLayout extends Layout {
 		  		case Constants.VERTICAL:
 			  		if(isElementsResizable()) {
 						if(i == 0) {
-							bounds.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
+							bounds.setBounds(getX(),getY(),getWidth(),getHeight()*weightList.get(0));
 						} else {
-							bounds.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
+							bounds.setBounds(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getHeight(),getWidth(),getHeight()*weightList.get(i));
 						}
 			  		} else {
 			  			if(i == 0) {
 			  				bounds.setPosition(getX(), getY());
 							} else {
-								bounds.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getH());
+								bounds.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getHeight());
 							}
 			  		}
 		  		break;

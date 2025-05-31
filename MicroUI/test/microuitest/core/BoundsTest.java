@@ -18,14 +18,14 @@ class BoundsTest extends TestInit {
 	
 	@Test
 	void setW() {
-		bounds.setW(-100);
-		assertEquals(0,bounds.getW());
+		bounds.setWidth(-100);
+		assertEquals(0,bounds.getWidth());
 	}
 	
 	@Test
 	void setH() {
-		bounds.setH(-100);
-		assertEquals(0,bounds.getH());
+		bounds.setHeight(-100);
+		assertEquals(0,bounds.getHeight());
 	}
 	
 }

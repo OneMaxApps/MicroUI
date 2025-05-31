@@ -21,12 +21,12 @@ public final class Hover extends View {
 		if(component.event.inside()) {
 			app.pushStyle();
 			fill.use();
-			app.rect(component.getX(),component.getY(),component.getW(),component.getH());
+			app.rect(component.getX(),component.getY(),component.getWidth(),component.getHeight());
 			app.popStyle();
 		
 			if(component.event.pressed()) {
 				app.fill(0,64);
-				app.rect(component.getX(),component.getY(),component.getW(),component.getH());
+				app.rect(component.getX(),component.getY(),component.getWidth(),component.getHeight());
 			}
 		
 		}

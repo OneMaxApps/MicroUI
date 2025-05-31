@@ -43,14 +43,14 @@ public final class Shadow extends View {
 	    	  if(form instanceof Layout) {
     			  app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
 	    		  form.getY()-map(i,0f,absoluteSize,0f,upSize),
-	    		  form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),
-	    		  form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize));
+	    		  form.getX()+form.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
+	    		  form.getY()+form.getHeight()+map(i,0f,absoluteSize,0f,downSize));
     		  } else {
 		    	  if(form instanceof Bounds) {
 		    		 app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
 		             form.getY()-map(i,0f,absoluteSize,0f,upSize),
-		             form.getX()+form.getW()+map(i,0f,absoluteSize,0f,rightSize),
-		             form.getY()+form.getH()+map(i,0f,absoluteSize,0f,downSize),leftSize,upSize,rightSize,downSize);
+		             form.getX()+form.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
+		             form.getY()+form.getHeight()+map(i,0f,absoluteSize,0f,downSize),leftSize,upSize,rightSize,downSize);
 		    	  } 
 	    		  
 	    	  }

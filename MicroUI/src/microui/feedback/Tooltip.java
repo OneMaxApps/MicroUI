@@ -5,7 +5,7 @@ import static processing.core.PConstants.CENTER;
 
 import microui.core.TextController;
 import microui.core.base.Bounds;
-import microui.core.base.Layout;
+import microui.core.base.Container;
 import microui.core.style.Color;
 import microui.event.Event;
 import microui.service.GlobalTooltip;
@@ -19,7 +19,7 @@ public final class Tooltip extends Bounds {
 	
 	private Color fill;
 	private final Event event;
-	private Layout layout;
+	private Container container;
 	private boolean additionalCondition;
 	
 	public Tooltip(Event event) {
@@ -37,8 +37,8 @@ public final class Tooltip extends Bounds {
 		fill.use();
 		app.rect(x,y,w,h);
 		
-		if(layout != null) {
-			layout.draw();
+		if(container != null) {
+			container.draw();
 		} else {
 			text.draw();
 		}
@@ -52,11 +52,11 @@ public final class Tooltip extends Bounds {
 		} else { invisible(); }
 		
 		if(isVisible()) {
-			setPosition(constrain(app.mouseX+PADDING_X,0,app.width-getW()),constrain(app.mouseY,0,app.height-getH()));
+			setPosition(constrain(app.mouseX+PADDING_X,0,app.width-getWidth()),constrain(app.mouseY,0,app.height-getHeight()));
 			
-			if(layout != null) {
-				layout.setPosition(this);
-				setSize(layout);
+			if(container != null) {
+				container.setPosition(this);
+				setSize(container);
 			} else {
 				setSize(text.getWidth(),text.getHeight());
 			}
@@ -67,16 +67,16 @@ public final class Tooltip extends Bounds {
 	
 	
 	private final boolean canBeVisible() {
-		return additionalCondition && event.inside(SECONDS_FOR_SHOWING) && (!text.isEmpty() || layout != null);
+		return additionalCondition && event.inside(SECONDS_FOR_SHOWING) && (!text.isEmpty() || container != null);
 	}
 	
-	public final Layout getLayout() {
-		return layout;
+	public final Container getContainer() {
+		return container;
 	}
 
-	public final void setLayout(Layout layout) {
-		if(layout == null) { return; }
-		this.layout = layout;
+	public final void setContainer(Container container) {
+		if(container == null) { return; }
+		this.container = container;
 	}
 
 	public final void setColor(final Color color) {
@@ -85,7 +85,7 @@ public final class Tooltip extends Bounds {
 	}
 	
 	/** For that cases when default conditions not enough inner.  
-	 *  
+	 *  <p>
 	 *  This method giving possibility for using your own additional condition 
 	 */
 	public void setAdditionalCondition(boolean additionalCondition) {

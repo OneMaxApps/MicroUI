@@ -2,13 +2,9 @@ package microui.core.base;
 
 import java.util.ArrayList;
 
-import microui.container.EdgeContainer;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import processing.event.MouseEvent;
-
-// [] TODO: add method setVisibleComponents()
-// [] TODO: add method setVisibleAllComponents()
 
 public abstract class Layout extends Container {
 	protected boolean isElementsResizable;
@@ -26,25 +22,6 @@ public abstract class Layout extends Container {
 
 	public void setElementsResizable(boolean r) {
 		isElementsResizable = r;
-	}
-	
-	public void setVisibleTotal(boolean v) {
-		
-		setVisible(v);
-		for(Bounds form : elementList) {
-			if(form instanceof EdgeContainer) {
-				EdgeContainer e = (EdgeContainer) form;
-				if(e.getElement() instanceof Layout) {
-					((Layout) (e.getElement())).setVisibleTotal(v);
-				}
-			} else {
-				if(form instanceof Layout) {
-					((Layout) (form)).setVisibleTotal(v);
-				} 	
-			}
-			
-		}
-		
 	}
 	
 	public ArrayList<Bounds> getElements() {
@@ -70,11 +47,33 @@ public abstract class Layout extends Container {
 	}
 
 	@Override
-	public void inTransforms() {
-		super.inTransforms();
+	public void onChangeBounds() {
+		super.onChangeBounds();
 		
 		if(elementList == null) { return; }
 		recalcListState();
+	}
+	
+	public void setVisibleContainers(boolean v) {
+		setVisible(v);
+		
+		for(View view : elementList) {
+			if(view instanceof Layout layout) {
+				layout.setVisibleContainers(v);
+			}
+			if(view instanceof Container container) {
+				container.setVisible(v);
+			}
+		}
+		
+	}
+	
+	public void setVisibleComponents(boolean v) {
+		for(View view : elementList) {
+			if(view instanceof Component component) {
+				component.setVisible(v);
+			}
+		}	
 	}
 	
 	protected abstract void recalcListState();

@@ -70,15 +70,15 @@ public class RowLayout extends Layout {
 	  		Bounds bounds = elementList.get(i);
 	  		if(isElementsResizable()) {
 				if(i == 0) {
-				bounds.setTransforms(getX(),getY(),getW()*weightList.get(i),getH());
+				bounds.setBounds(getX(),getY(),getWidth()*weightList.get(i),getHeight());
 				} else {
-					bounds.setTransforms(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY(),getW()*weightList.get(i),getH());
+					bounds.setBounds(elementList.get(i-1).getX()+elementList.get(i-1).getWidth(),getY(),getWidth()*weightList.get(i),getHeight());
 				}
 	  		} else {
 	  			if(i == 0) {
 					bounds.setPosition(getX(),getY());
 				} else {
-					bounds.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getW(),getY());
+					bounds.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getWidth(),getY());
 				}
 	  		}
 	  	}

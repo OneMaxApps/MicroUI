@@ -40,9 +40,9 @@ public class Button extends AbstractButton {
 	}
 
 	@Override
-	public void inTransforms() {
-		super.inTransforms();
-		if (text != null) { text.setTransforms(this); }
+	public void onChangeBounds() {
+		super.onChangeBounds();
+		if (text != null) { text.setBounds(this); }
 	}
 
 }

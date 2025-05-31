@@ -113,8 +113,8 @@ public final class Dial extends Component implements Scrollable {
 	
 
 	@Override
-	protected void inTransforms() {
-		super.inTransforms();
+	public void onChangeBounds() {
+		super.onChangeBounds();
 		
 		if(hint != null) {
 			hint.setPosition(x,y);
@@ -176,9 +176,9 @@ public final class Dial extends Component implements Scrollable {
 		
 		private final void updateTransforms() {
 			
-			w = min(Dial.this.getW()*.16f,Dial.this.getH()*.16f);
-			h = min(Dial.this.getW()*.08f,Dial.this.getH()*.08f);
-			x = min(Dial.this.getW(),Dial.this.getH())/2-w;
+			w = min(Dial.this.getWidth()*.16f,Dial.this.getHeight()*.16f);
+			h = min(Dial.this.getWidth()*.08f,Dial.this.getHeight()*.08f);
+			x = min(Dial.this.getWidth(),Dial.this.getHeight())/2-w;
 			
 		}
 	}

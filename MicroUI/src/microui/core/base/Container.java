@@ -23,7 +23,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		fill = new Color(0,0,128,32);
 		margin = new Margin();
 		image = new Texture();
-		image.setTransforms(this);
+		image.setBounds(this);
 		shadow = new Shadow(this);
 		shadow.invisible();
 		resizeHandle = new ResizeHandle();
@@ -39,7 +39,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 					app.stroke(0);
 					app.strokeWeight(1);
 					app.fill(fill.get());
-					app.rect(getX(), getY(), getW(), getH());
+					app.rect(getX(), getY(), getWidth(), getHeight());
 				app.popStyle();
 			}
 			
@@ -62,20 +62,20 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	}
 
 	@Override
-	public float getW() {
+	public float getWidth() {
 		if(margin.isAutoCenterMode()) {
-			return super.getW()-(margin.getRight()+margin.getLeft());
+			return super.getWidth()-(margin.getRight()+margin.getLeft());
 		} else {
-			return super.getW()-margin.getRight();
+			return super.getWidth()-margin.getRight();
 		}
 	}
 
 	@Override
-	public float getH() {
+	public float getHeight() {
 		if(margin.isAutoCenterMode()) {
-			return super.getH()-(margin.getDown()+margin.getUp());
+			return super.getHeight()-(margin.getDown()+margin.getUp());
 		} else {
-			return super.getH()+margin.getDown();
+			return super.getHeight()-margin.getDown();
 		}
 	}
 	
@@ -96,12 +96,9 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	}
 	
 	@Override
-	public void inTransforms() {
-		if(image != null) { image.setTransforms(this); }
-		
-		if(resizeHandle != null) {
-			resizeHandle.dots.inTransforms();
-		}
+	public void onChangeBounds() {
+		if(image != null) { image.setBounds(this); }
+		if(resizeHandle != null) { resizeHandle.dots.inTransforms(); }
 	}
 	
 	
@@ -216,7 +213,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			
 			private final void inTransforms() {
 				for(Dot dot : dots) {
-					dot.inTransforms();
+					dot.onChangeBounds();
 				}
 			}
 			
@@ -255,23 +252,23 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 							case RIGHT :
 								tmpY = getRealY();
 								
-								context.setW(app.mouseX-getRealX());
+								context.setWidth(app.mouseX-getRealX());
 								context.setY(app.mouseY);
 								
 								difY = tmpY-getRealY();
 								
-								context.setH(getRealH()+difY);
+								context.setHeight(getRealH()+difY);
 							break;
 							
 							case DOWN_LEFT :
 								tmpX = getRealX();
 								
 								context.setX(app.mouseX);
-								context.setH(app.mouseY-getRealY());
+								context.setHeight(app.mouseY-getRealY());
 								
 								difX = tmpX-getRealX();
 								
-								context.setW(getRealW()+difX);
+								context.setWidth(getRealW()+difX);
 							break;
 							
 							case DOWN_RIGHT : context.setSize(app.mouseX-getRealX(),app.mouseY-getRealY()); break;
@@ -280,8 +277,8 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				}
 
 				@Override
-				protected void inTransforms() {
-					super.inTransforms();
+				public void onChangeBounds() {
+					super.onChangeBounds();
 					calcTransforms();
 				}
 

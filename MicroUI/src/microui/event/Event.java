@@ -18,7 +18,7 @@ public class Event extends MicroUI {
 	  }
 	  
 	  public void listen(Bounds form) {
-		  listener(form.getX(),form.getY(),form.getW(),form.getH());
+		  listener(form.getX(),form.getY(),form.getWidth(),form.getHeight());
 	  }
 	  
 	  public void listen(float x, float y, float w, float h) {

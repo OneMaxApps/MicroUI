@@ -77,10 +77,10 @@ public class GridLayout extends Layout {
 		  app.pushStyle();
 			  app.noFill();
 			  app.stroke(0);
-		      for(float x = getX(); x < getX()+getW(); x += getW()/getColumns()) {
-		        for(float y = getY(); y < getY()+getH(); y += getH()/getRows()) {
-		          if(ceil(x) < getX()+getW() && ceil(y) < getY()+getH()) {
-		        	  app.rect(x,y,getW()/cols,getH()/rows);
+		      for(float x = getX(); x < getX()+getWidth(); x += getWidth()/getColumns()) {
+		        for(float y = getY(); y < getY()+getHeight(); y += getHeight()/getRows()) {
+		          if(ceil(x) < getX()+getWidth() && ceil(y) < getY()+getHeight()) {
+		        	  app.rect(x,y,getWidth()/cols,getHeight()/rows);
 		          }
 		        }
 		      }
@@ -149,8 +149,8 @@ public class GridLayout extends Layout {
 		    	elementList.add(bounds);
 		    	columnList.add(row);
 				rowList.add(column);
-				elementDefaultWidth.add(bounds.getW());
-				elementDefaultHeight.add(bounds.getH());
+				elementDefaultWidth.add(bounds.getWidth());
+				elementDefaultHeight.add(bounds.getHeight());
 	  }
 
 	  public void remove(Bounds bounds) {
@@ -190,23 +190,23 @@ public class GridLayout extends Layout {
 			  Bounds bounds = elementList.get(i);
 			  
 			  if(bounds instanceof Container container) {
-				  container.setX(map(columnList.get(i),0,cols,getX(),getX()+getW())+((getW()/getColumns()/2)-container.getRealW()/2));
-				  container.setY(map(rowList.get(i),0,rows,getY(),getY()+getH())+((getH()/getRows()/2)-container.getRealH()/2));
+				  container.setX(map(columnList.get(i),0,cols,getX(),getX()+getWidth())+((getWidth()/getColumns()/2)-container.getRealW()/2));
+				  container.setY(map(rowList.get(i),0,rows,getY(),getY()+getHeight())+((getHeight()/getRows()/2)-container.getRealH()/2));
 
 			    } else {
 			    	
 			    	bounds.setPosition(
-				    		map(columnList.get(i),0,GridLayout.this.cols,getX(),getX()+getW())+((getW()/getColumns())/2)-bounds.getW()/2,
-				    		map(rowList.get(i),0,GridLayout.this.rows,getY(),getY()+getH())+((getH()/getRows())/2)-bounds.getH()/2
+				    		map(columnList.get(i),0,GridLayout.this.cols,getX(),getX()+getWidth())+((getWidth()/getColumns())/2)-bounds.getWidth()/2,
+				    		map(rowList.get(i),0,GridLayout.this.rows,getY(),getY()+getHeight())+((getHeight()/getRows())/2)-bounds.getHeight()/2
 				    );
 			    }
 			    
 			  
 				    if(isElementsResizable()) {
 				      if(isFillTheGrid()) {
-				        bounds.setSize(getW()/getColumns(),getH()/getRows());
+				        bounds.setSize(getWidth()/getColumns(),getHeight()/getRows());
 				      } else {
-				    	bounds.setSize(min(elementDefaultWidth.get(i),getW()/getColumns()), min(elementDefaultHeight.get(i),getH()/getRows()));
+				    	bounds.setSize(min(elementDefaultWidth.get(i),getWidth()/getColumns()), min(elementDefaultHeight.get(i),getHeight()/getRows()));
 				    }
 				  }
 			

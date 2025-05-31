@@ -70,15 +70,15 @@ public class ColumnLayout extends Layout {
 	  		Bounds baseForm = elementList.get(i);
 	  		if(isElementsResizable()) {
 				if(i == 0) {
-				baseForm.setTransforms(getX(),getY(),getW(),getH()*weightList.get(0));
+				baseForm.setBounds(getX(),getY(),getWidth(),getHeight()*weightList.get(0));
 				} else {
-				baseForm.setTransforms(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getH(),getW(),getH()*weightList.get(i));
+				baseForm.setBounds(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getHeight(),getWidth(),getHeight()*weightList.get(i));
 				}
 	  		} else {
 	  			if(i == 0) {
 					baseForm.setPosition(getX(), getY());
 					} else {
-					baseForm.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getH());
+					baseForm.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getHeight());
 					}
 	  		}
 	  	}

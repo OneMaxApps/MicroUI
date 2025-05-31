@@ -44,38 +44,38 @@ public class EdgeContainer extends Container {
 		
 		if(left) { bounds.setX(getX()); }
 		if(up) { bounds.setY(getY()); }
-		if(right) { bounds.setX(getX()+getW()-bounds.getW()); }
-		if(down) { bounds.setY(getY()+getH()-bounds.getH()); }
+		if(right) { bounds.setX(getX()+getWidth()-bounds.getWidth()); }
+		if(down) { bounds.setY(getY()+getHeight()-bounds.getHeight()); }
 		
 		if(center) {
-			bounds.setPosition(getX()+getW()/2-bounds.getW()/2,getY()+getH()/2-bounds.getH()/2);
+			bounds.setPosition(getX()+getWidth()/2-bounds.getWidth()/2,getY()+getHeight()/2-bounds.getHeight()/2);
 		}
 		
 		if(centerHorizontal) {
-			bounds.setX(getX()+getW()/2-bounds.getW()/2);
+			bounds.setX(getX()+getWidth()/2-bounds.getWidth()/2);
 		}
 		
 		if(centerVertical) {
-			bounds.setY(getY()+getH()/2-bounds.getH()/2);
+			bounds.setY(getY()+getHeight()/2-bounds.getHeight()/2);
 		}
 		
-		bounds.setSize(min(getW(),defaultWidthOfElement), min(getH(),defaultHeightOfElement));
+		bounds.setSize(min(getWidth(),defaultWidthOfElement), min(getHeight(),defaultHeightOfElement));
 
 	}
 	
 	
 	public EdgeContainer set(Bounds bounds) {
 		this.bounds = bounds;
-		defaultWidthOfElement = bounds.getW();
-		defaultHeightOfElement = bounds.getH();
+		defaultWidthOfElement = bounds.getWidth();
+		defaultHeightOfElement = bounds.getHeight();
 		dirtyState = true;
 		return this;
 	}
 	
 	public EdgeContainer set(String text) {
 		this.bounds = new TextView(text);
-		defaultWidthOfElement = bounds.getW();
-		defaultHeightOfElement = bounds.getH();
+		defaultWidthOfElement = bounds.getWidth();
+		defaultHeightOfElement = bounds.getHeight();
 		dirtyState = true;
 		return this;
 	}
@@ -164,8 +164,8 @@ public class EdgeContainer extends Container {
 	
 	
 	@Override
-	public void inTransforms() {
-		super.inTransforms();
+	public void onChangeBounds() {
+		super.onChangeBounds();
 		updateState();
 	}
 

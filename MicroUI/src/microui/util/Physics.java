@@ -6,10 +6,10 @@ public final class Physics {
 	
 	public final static boolean collision(final Bounds form, final  Bounds otherForm) {
 		
-		if(form.getX() > otherForm.getX()-form.getW() 		&&
-		   form.getX() < otherForm.getX()+otherForm.getW()	&&
-		   form.getY() > otherForm.getY()-form.getH()		&&
-		   form.getY() < otherForm.getY()+otherForm.getH()) {
+		if(form.getX() > otherForm.getX()-form.getWidth() 		&&
+		   form.getX() < otherForm.getX()+otherForm.getWidth()	&&
+		   form.getY() > otherForm.getY()-form.getHeight()		&&
+		   form.getY() < otherForm.getY()+otherForm.getHeight()) {
 		   return true;
 		}
 		
@@ -23,8 +23,8 @@ public final class Physics {
 		if(collision(form,otherForm)) {
 			form.setPosition(px,py);
 			if(collision(form,otherForm)) {
-				if(form.getX()+form.getW()/2 < otherForm.getX()+otherForm.getW()/2) { form.setX(otherForm.getX()-form.getW()); } else { form.setX(otherForm.getX()+otherForm.getW()); }
-				if(form.getY()+form.getH()/2 < otherForm.getY()+otherForm.getH()/2) { form.setY(otherForm.getY()-form.getH()); } else { form.setY(otherForm.getY()+otherForm.getH()); }
+				if(form.getX()+form.getWidth()/2 < otherForm.getX()+otherForm.getWidth()/2) { form.setX(otherForm.getX()-form.getWidth()); } else { form.setX(otherForm.getX()+otherForm.getWidth()); }
+				if(form.getY()+form.getHeight()/2 < otherForm.getY()+otherForm.getHeight()/2) { form.setY(otherForm.getY()-form.getHeight()); } else { form.setY(otherForm.getY()+otherForm.getHeight()); }
 			}
 		}
 		

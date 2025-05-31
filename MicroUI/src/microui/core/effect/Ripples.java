@@ -38,7 +38,7 @@ public final class Ripples extends View {
 		pg.clear();
 		circle.draw(pg);
 		pg.endDraw();
-		app.image(pg, form.getX(),form.getY(),form.getW(),form.getH());
+		app.image(pg, form.getX(),form.getY(),form.getWidth(),form.getHeight());
 		}
 		
 		if(event.clicked()) { initAnim(); }
@@ -52,7 +52,7 @@ public final class Ripples extends View {
 	}
 	
 	private final boolean isResized() {
-		return pg.width != (int) form.getW() || pg.height != (int) form.getH();
+		return pg.width != (int) form.getWidth() || pg.height != (int) form.getHeight();
 	}
 	
 	public final void initAnim() {
@@ -62,7 +62,7 @@ public final class Ripples extends View {
 	}
 	
 	private final void createGraphics() {
-		pg = app.createGraphics((int) max(1,form.getW()),(int) max(1,form.getH()));
+		pg = app.createGraphics((int) max(1,form.getWidth()),(int) max(1,form.getHeight()));
 		Metrics.register(pg);
 	}
 
@@ -86,12 +86,12 @@ public final class Ripples extends View {
 		}
 		
 		private final void incSize() {
-			radius += constrain(min(form.getW()*.2f,form.getH()*.2f),1,20);
+			radius += constrain(min(form.getWidth()*.2f,form.getHeight()*.2f),1,20);
 		}
 		
 		private final void playAnim() {
 			incSize();
-			if(radius > max(form.getW()*2,form.getH()*2)) {
+			if(radius > max(form.getWidth()*2,form.getHeight()*2)) {
 				radius = 0;
 				start = false;
 			}
