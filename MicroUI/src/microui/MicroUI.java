@@ -13,9 +13,9 @@ public class MicroUI {
 	
 	protected MicroUI() {}
 
-	public static final void setContext(final PApplet app) {
-		if(app != null && MicroUI.app == null) {
-			MicroUI.app = app;
+	public static final void setContext(final PApplet applet) {
+		if(applet != null && MicroUI.app == null) {
+			MicroUI.app = applet;
 		}
 	}
 	
@@ -26,5 +26,4 @@ public class MicroUI {
 	public static final String getVersion() {
 		return VERSION;
 	}
-	
 }

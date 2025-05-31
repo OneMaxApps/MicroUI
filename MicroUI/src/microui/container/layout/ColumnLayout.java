@@ -15,8 +15,7 @@ public class ColumnLayout extends Layout {
 		super(x, y, w, h);
 		
 		weightList = new ArrayList<Float>();
-		isElementsResizable = true;
-		
+
 	}
 	
 	public ColumnLayout() {
@@ -67,20 +66,12 @@ public class ColumnLayout extends Layout {
 	@Override
 	protected final void recalcListState() {
 		for(int i = 0; i < elementList.size(); i++) {
-	  		Bounds baseForm = elementList.get(i);
-	  		if(isElementsResizable()) {
-				if(i == 0) {
-				baseForm.setBounds(getX(),getY(),getWidth(),getHeight()*weightList.get(0));
-				} else {
-				baseForm.setBounds(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getHeight(),getWidth(),getHeight()*weightList.get(i));
-				}
-	  		} else {
-	  			if(i == 0) {
-					baseForm.setPosition(getX(), getY());
-					} else {
-					baseForm.setPosition(getX(), elementList.get(i-1).getY()+elementList.get(i-1).getHeight());
-					}
-	  		}
+	  		Bounds bounds = elementList.get(i);
+			if(i == 0) {
+				bounds.setBounds(getX(),getY(),getWidth(),getHeight()*weightList.get(0));
+			} else {
+				bounds.setBounds(getX(),elementList.get(i-1).getY()+elementList.get(i-1).getHeight(),getWidth(),getHeight()*weightList.get(i));
+			}
 	  	}
 	}
 }

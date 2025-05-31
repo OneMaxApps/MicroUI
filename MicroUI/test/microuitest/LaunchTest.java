@@ -2,15 +2,14 @@ package microuitest;
 
 import microui.MicroUI;
 import microui.component.Button;
-import microui.component.Slider;
-import microui.container.EdgeContainer;
-import microui.container.layout.GridLayout;
+import microui.core.style.Color;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
 public final class LaunchTest extends PApplet {
 	
-	EdgeContainer edgeContainer;
+	Button button;
+	Color color = new Color();
 	
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
@@ -22,27 +21,16 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
+		button = new Button();
 		
-		edgeContainer = new EdgeContainer();
-		edgeContainer.resizeHandle.setEnable(true);
-		edgeContainer.invisible();
-		edgeContainer.setCenter(true);
-		
-		GridLayout grid = new GridLayout(5,9);
-		grid.add(new Button());
-		grid.add(new GridLayout(4,1).add(new Slider()).add(new GridLayout(4)));
-		
-		edgeContainer.set(grid);
-		
-		grid.setVisibleComponents(true);
-		
+		button.eventCallBack.onHolding(() -> color.set(random(255)));
 	}
 	
 	@Override
 	public void draw() {
-		background(128);
+		background(color.get());
 		
-		edgeContainer.draw();
+		button.draw();
 		
 		GlobalTooltip.draw();
 	}

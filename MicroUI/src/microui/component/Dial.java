@@ -126,10 +126,10 @@ public final class Dial extends Component implements Scrollable {
 		}
 		
 		if(arrow != null) {
-			arrow.updateTransforms();
+			arrow.onChangeBounds();
 		}
-		calculateCenter();
 		
+		calculateCenter();
 		
 	}
 
@@ -163,7 +163,7 @@ public final class Dial extends Component implements Scrollable {
 		public Arrow() {
 			super();
 			visible();
-			updateTransforms();
+			onChangeBounds();
 		}
 
 		@Override
@@ -174,12 +174,12 @@ public final class Dial extends Component implements Scrollable {
 			app.pop();
 		}
 		
-		private final void updateTransforms() {
-			
+		@Override
+		public void onChangeBounds() {
 			w = min(Dial.this.getWidth()*.16f,Dial.this.getHeight()*.16f);
 			h = min(Dial.this.getWidth()*.08f,Dial.this.getHeight()*.08f);
 			x = min(Dial.this.getWidth(),Dial.this.getHeight())/2-w;
-			
 		}
+		
 	}
 }

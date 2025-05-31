@@ -36,8 +36,7 @@ public class GridLayout extends Layout {
 	    super(x,y,w,h);
 	    
 	    setGrid(rows,columns);
-	    setElementsResizable(true);
-	    
+
 	    columnList = new ArrayList<Integer>();
 	    rowList = new ArrayList<Integer>();
 	    elementDefaultWidth = new ArrayList<Float>();
@@ -95,13 +94,15 @@ public class GridLayout extends Layout {
 	  public void setGrid(int columns, int rows) {
 	    setColumns(max(1,columns));
 	    setRows(max(1,rows));
+	    
+	    recalcListState();
 	  }
 	  
-	  public GridLayout add(Bounds bounds, int row, int column) {
-		if(row < 0 || row > getColumns()-1 || column < 0 || column > getRows()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
-		if(!isEmptyCell(row,column)) { return this; }
+	  public GridLayout add(Bounds bounds, int col, int row) {
+		if(col < 0 || col > getColumns()-1 || row < 0 || row > getRows()-1) { throw new IndexOutOfBoundsException("index out of bounds of grid"); }
+		if(!isEmptyCell(col,row)) { return this; }
 	    
-		addIfAbsent(bounds,row,column);
+		addIfAbsent(bounds,col,row);
 		
 		return this;
 	  }
@@ -134,6 +135,11 @@ public class GridLayout extends Layout {
 	  
 	  public GridLayout add(String txt, int column, int row) {
 		add(new TextView(txt),column,row);
+		return this; 
+	  }
+	  
+	  public GridLayout add(String txt) {
+		add(new TextView(txt));
 		return this; 
 	  }
 	  
@@ -188,13 +194,11 @@ public class GridLayout extends Layout {
 		  for(int i = 0; i < elementList.size(); i++) {
 			  Bounds bounds = elementList.get(i);
 			  
-			  if(isElementsResizable()) {
-			      if(isFillTheGrid()) {
-			        bounds.setSize(getWidth()/getColumns(),getHeight()/getRows());
-			      } else {
-			    	bounds.setSize(min(elementDefaultWidth.get(i),getWidth()/getColumns()), min(elementDefaultHeight.get(i),getHeight()/getRows()));
-			    }
-			  }
+			  	if(isFillTheGrid()) {
+		    	  bounds.setSize(getWidth()/getColumns(),getHeight()/getRows());
+		      	} else {
+		      	  bounds.setSize(min(elementDefaultWidth.get(i),getWidth()/getColumns()), min(elementDefaultHeight.get(i),getHeight()/getRows()));
+		      	}
 			  
 			  if(bounds instanceof Container container) {
 				  container.setX(map(columnList.get(i),0,cols,getX(),getX()+getWidth())+((getWidth()/getColumns()/2)-container.getRealWidth()/2));

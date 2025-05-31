@@ -10,13 +10,17 @@ import processing.event.MouseEvent;
 
 public class MenuButton extends Button implements Scrollable {
 	private boolean open,autoClose,isRoot,markVisible;
-	private final ArrayList<Button> itemList;
+	
 	private int selectedId;
+	
 	private float listHeight;
-	private final Event innerEvent;
-	private MenuButton root;
 	private float markX,markY,markW,markH;
+	
+	private final ArrayList<Button> itemList;
+	private final Event innerEvent;
 	private final Scrolling scrolling;
+	
+	private MenuButton root;
 	
 	public MenuButton(String title, float x, float y, float w, float h) {
 		super(title,x,y,w,h);

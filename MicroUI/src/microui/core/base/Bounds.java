@@ -63,6 +63,8 @@ public abstract class Bounds extends View {
 	}
 	
 	public void setSize(float size) {
+		if(w == size && h == size) { return; }
+		
 		setSize(size,size);
 	}
 	
@@ -84,7 +86,7 @@ public abstract class Bounds extends View {
 		
 	}
 	
-	public void setBounds(Bounds otherBounds) {
+	public void setBounds(final Bounds otherBounds) {
 		if(otherBounds == null) { return; }
 		setBounds(otherBounds.getX(),otherBounds.getY(),otherBounds.getWidth(),otherBounds.getHeight());
 	}
@@ -95,12 +97,14 @@ public abstract class Bounds extends View {
 		
 		this.x = x;
 		this.y = y;
+		
 		onChangeBounds();
 		
 	}
 	
 	public void setPosition(Bounds otherBounds) {
 		if(otherBounds == null) { return; }
+		
 		setPosition(otherBounds.getX(),otherBounds.getY());
 	}
 	

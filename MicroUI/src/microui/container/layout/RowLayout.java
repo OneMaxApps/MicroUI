@@ -17,7 +17,6 @@ public class RowLayout extends Layout {
 		
 		weightList = new ArrayList<Float>();
 		
-		isElementsResizable = true;
 	}
 	
 	public RowLayout() {
@@ -68,19 +67,11 @@ public class RowLayout extends Layout {
 	protected final void recalcListState() {
 		for(int i = 0; i < elementList.size(); i++) {
 	  		Bounds bounds = elementList.get(i);
-	  		if(isElementsResizable()) {
-				if(i == 0) {
+			if(i == 0) {
 				bounds.setBounds(getX(),getY(),getWidth()*weightList.get(i),getHeight());
-				} else {
-					bounds.setBounds(elementList.get(i-1).getX()+elementList.get(i-1).getWidth(),getY(),getWidth()*weightList.get(i),getHeight());
-				}
-	  		} else {
-	  			if(i == 0) {
-					bounds.setPosition(getX(),getY());
-				} else {
-					bounds.setPosition(elementList.get(i-1).getX()+elementList.get(i-1).getWidth(),getY());
-				}
-	  		}
+			} else {
+				bounds.setBounds(elementList.get(i-1).getX()+elementList.get(i-1).getWidth(),getY(),getWidth()*weightList.get(i),getHeight());
+			}
 	  	}
 	}
 }

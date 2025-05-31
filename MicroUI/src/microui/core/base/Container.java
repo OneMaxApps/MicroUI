@@ -97,7 +97,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		return w;
 	}
 	
-	public final float getRealHight() {
+	public final float getRealHeight() {
 		return h;
 	}
 	

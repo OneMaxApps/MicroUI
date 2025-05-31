@@ -12,23 +12,23 @@ public abstract class AbstractButton extends Component {
 	
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
+		visible();
 		ripples = new Ripples(this);
 		hover = new Hover(this);
 		stroke = new Stroke();
-		visible();
 	}
 
 	@Override
 	public void update() {
 		event.listen(this);
+		
 		app.pushStyle();
-		stroke.get();
-		fill.use();
-		app.rect(x, y, w, h);
-		hover.draw();
-		ripples.draw();
+			stroke.get();
+			fill.use();
+			app.rect(x, y, w, h);
+			hover.draw();
+			ripples.draw();
 		app.popStyle();
-	
 	}
 	
 }

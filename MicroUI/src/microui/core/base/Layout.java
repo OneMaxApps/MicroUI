@@ -7,21 +7,12 @@ import microui.core.interfaces.Scrollable;
 import processing.event.MouseEvent;
 
 public abstract class Layout extends Container {
-	protected boolean isElementsResizable;
 	protected final ArrayList<Bounds> elementList;
 	
 	public Layout(float x, float y, float w, float h) {
 		super(x, y, w, h);
 
 		elementList = new ArrayList<Bounds>();
-	}
-	
-	public boolean isElementsResizable() {
-		return isElementsResizable;
-	}
-
-	public void setElementsResizable(boolean r) {
-		isElementsResizable = r;
 	}
 	
 	public ArrayList<Bounds> getElements() {
@@ -31,8 +22,8 @@ public abstract class Layout extends Container {
 	@Override
 	public void mouseWheel(MouseEvent e) {
 		elementList.forEach(element -> {
-			if(element instanceof Scrollable) {
-				((Scrollable) element).mouseWheel(e);
+			if(element instanceof Scrollable sc) {
+				sc.mouseWheel(e);
 			}
 		});
 	}
@@ -40,8 +31,8 @@ public abstract class Layout extends Container {
 	@Override
 	public void keyPressed() {
 		elementList.forEach(element -> {
-			if(element instanceof KeyPressable) {
-				((KeyPressable) element).keyPressed();
+			if(element instanceof KeyPressable kp) {
+				kp.keyPressed();
 			}
 		});
 	}
@@ -50,7 +41,6 @@ public abstract class Layout extends Container {
 	public void onChangeBounds() {
 		super.onChangeBounds();
 		
-		if(elementList == null) { return; }
 		recalcListState();
 	}
 	

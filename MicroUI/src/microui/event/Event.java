@@ -33,15 +33,11 @@ public class Event extends MicroUI {
 		    this.w = w;
 		    this.h = h;
 		      
-		    if(!app.mousePressed) {
-		    	holding = false;
-		    	dragged = false;
-		    }
+		    if(!app.mousePressed) { holding = dragged = false; }
 		    
 		    if(pressed()) {
 		    	wasPressed = 1;
 		    	if(app.frameCount%60 == 0) { longPressed++; }
-			     
 		    } else {
 		    	longPressed = 0;
 		     }
@@ -130,8 +126,9 @@ public class Event extends MicroUI {
 	  
 	  /**
 	   * Updating inside states of keys.
-	   * 
+	   * <p>
 	   * He must be called first in PApplet method keyPressed() for correct initialization. 
+	   *</p>
 	   */
 	  public static final void keyPressed() {
 		  keys[MicroUI.getContext().key] = true;
@@ -146,6 +143,7 @@ public class Event extends MicroUI {
 	   * Updating inside states of keys.
 	   * <p>
 	   * He must be called first in PApplet method keyReleased() for correct initialization. 
+	   *</p>
 	   */
 	  public static final void keyReleased() {
 		  for(int i = 0; i < keys.length; i++) {
@@ -165,4 +163,5 @@ public class Event extends MicroUI {
 		  secondsSinceMouseInside = 0;
 		  holding = dragged = false;
 	  }
+	  
 	}
