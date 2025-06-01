@@ -14,7 +14,7 @@ public final class EventCallback {
 	private OnHoldingListener 		onHoldingListener;
 	private OnDoubleClickListener 	onDoubleClickListener;
 	
-	private boolean isPressed,isHolding,isEnable;
+	private boolean isPressed,isHolding,isEnable,clicked;
 	
 	private float pressedCurrentDuration,pressedDurationMax;
 	private int countOfClicks;
@@ -28,11 +28,13 @@ public final class EventCallback {
 	public final void listen() {
 		if(!isEnable) { return; }
 		
+		clicked = clickedStateUpdate();
+		
 		if(pressed()) { isPressed = true; } else { isHolding = false; }
 		
-		if(!inside()) { isPressed = false; }
+		if(outside()) { isPressed = false; }
 	
-		if(onClickListener != null && clicked()) 				{ onClickListener.onClick(); }
+		if(onClickListener != null && clicked) 					{ onClickListener.onClick(); }
 		if(onInsideListener != null && inside()) 				{ onInsideListener.onInside(); }
 		if(onOutsideListener != null && outside())		   		{ onOutsideListener.onOutside(); }
 		if(onPressedListener != null && pressed())				{ onPressedListener.onPressed(); }
@@ -58,7 +60,7 @@ public final class EventCallback {
 	public final void setOnHoldingListener(OnHoldingListener onHolding) { this.onHoldingListener = onHolding; }
 	public final void setOnDoubleClickListener(OnDoubleClickListener onDoubleClickListener) { this.onDoubleClickListener = onDoubleClickListener; }
 	
-	private final boolean clicked() {
+	private final boolean clickedStateUpdate() {
 		if(!MicroUI.getContext().mousePressed && inside() && isPressed) {
 			isPressed = false;
 			countOfClicks++;

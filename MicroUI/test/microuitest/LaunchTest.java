@@ -1,15 +1,12 @@
 package microuitest;
 
 import microui.MicroUI;
-import microui.component.Button;
-import microui.core.style.Color;
+import microui.component.MenuButton;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
 public final class LaunchTest extends PApplet {
-	
-	Button button;
-	Color color = new Color();
+	MenuButton menu;
 	
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
@@ -21,20 +18,24 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		button = new Button();
-		button.text.setAutoResize(false);
+		menu = new MenuButton("File",0,0,100,20);
 		
-		button.eventCallBack.setOnDoubleClickListener(() -> color.set(random(255),random(255),random(255)));
-		button.eventCallBack.setOnClickListener(() -> button.text.setTextSize(random(10,20)));
-		button.eventCallBack.setOnLongPressedListener(() -> button.text.setTextSize(random(10,20)));
+		menu.add(new MenuButton("New","Java Project","Maven Project"),
+				 new MenuButton("Open File"),
+				 new MenuButton("Open Projects from File System"),
+				 new MenuButton("Recent Files"),
+				 new MenuButton("Close Editor"),
+				 new MenuButton("Close All Editor"),
+				 new MenuButton("Save"),
+				 new MenuButton("Save As..."));
 		
 	}
 	
 	@Override
 	public void draw() {
-		background(color.get());
+		background(128);
 		
-		button.draw();
+		menu.draw();
 		
 		GlobalTooltip.draw();
 	}

@@ -9,7 +9,7 @@ import microui.event.Event;
 import processing.event.MouseEvent;
 
 public class MenuButton extends Button implements Scrollable {
-	private boolean open,autoClose,isRoot,markVisible;
+	private boolean isOpen,isAutoClose,isRoot,isMarkVisible;
 	
 	private int selectedId;
 	
@@ -25,12 +25,12 @@ public class MenuButton extends Button implements Scrollable {
 	public MenuButton(String title, float x, float y, float w, float h) {
 		super(title,x,y,w,h);
 		
-		autoClose = true;
+		isAutoClose = true;
 		itemList = new ArrayList<Button>();
 		selectedId = -1;
 		innerEvent = new Event();
 		isRoot = true;
-		markVisible = true;
+		isMarkVisible = true;
 		root = this;
 		calculateMarkBounds();
 		scrolling = new Scrolling();
@@ -38,6 +38,11 @@ public class MenuButton extends Button implements Scrollable {
 	
 	public MenuButton(String title) {
 		this(title,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
+	}
+	
+	public MenuButton(String title, String... items) {
+		this(title,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
+		add(items);
 	}
 	
 	public MenuButton() {
@@ -52,8 +57,8 @@ public class MenuButton extends Button implements Scrollable {
 			
 			
 			if(innerEvent.clicked()) {
-				open = !open;
-				if(!open) { closeAllSubMenus(); } else { selectedId = -1; }
+				isOpen = !isOpen;
+				if(!isOpen) { closeAllSubMenus(); } else { selectedId = -1; }
 			}
 			
 			itemsOnDraw();
@@ -62,14 +67,14 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	public final void setAutoClose(boolean autoClose) {
-		this.autoClose = autoClose;
+		this.isAutoClose = autoClose;
 	}
 	
-	public final boolean isOpen() { return open; }
+	public final boolean isOpen() { return isOpen; }
 
-	public final void open() { this.open = true; }
+	public final void open() { this.isOpen = true; }
 	
-	public final void close() { this.open = false; }
+	public final void close() { this.isOpen = false; }
 	
 	public final int getSelectedId() {
 		return selectedId;
@@ -103,7 +108,7 @@ public class MenuButton extends Button implements Scrollable {
 	public final void setSelectedId(final int selectedId) {
 		if(selectedId < 0 || selectedId >= itemList.size()) { throw new IndexOutOfBoundsException("Index out of bounds of selecting"); }
 		this.selectedId = selectedId;
-		if(open) { open = !open; }
+		if(isOpen) { isOpen = !isOpen; }
 	}
 
 	public final MenuButton add(final String... title) {
@@ -245,15 +250,15 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	public final boolean isMarkVisible() {
-		return markVisible;
+		return isMarkVisible;
 	}
 
 	public final void setMarkVisible(boolean markVisible) {
-		this.markVisible = markVisible;
+		this.isMarkVisible = markVisible;
 	}
 	
 	public final void setMarksVisible(boolean markVisible) {
-		this.markVisible = markVisible;
+		this.isMarkVisible = markVisible;
 		
 		itemList.forEach(i -> {
 			if(i instanceof MenuButton subMenu) {
@@ -274,7 +279,7 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	private final void checkClosingFromOut() {
-		if(!open) { return; }
+		if(!isOpen) { return; }
 		boolean inside = false;
 		
 		inside = checkInsideToAnyIn();
@@ -330,7 +335,7 @@ public class MenuButton extends Button implements Scrollable {
 	private final void closeAllSubMenus() {
 		if(itemList.isEmpty()) { return; }
 		
-		if(!open) {
+		if(!isOpen) {
 			for(int i = 0; i < itemList.size(); i++) {
 				if(itemList.get(i) instanceof MenuButton subMenu) {
 					subMenu.close();
@@ -363,17 +368,17 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	private final void markOnDraw() {
-			if(!markVisible) { return; }
+			if(!isMarkVisible) { return; }
 			app.pushStyle();
 			app.noStroke();
-			if(open) { app.fill(0,255,0,128); } else { app.fill(255,128); }
+			if(isOpen) { app.fill(0,255,0,128); } else { app.fill(255,128); }
 			app.rect(markX,markY,markW,markH);
 			app.popStyle();
 			
 	}
 	
 	private final void itemsOnDraw() {
-		if(open) {
+		if(isOpen) {
 			if(!itemList.isEmpty()) {
 				
 				for(int i = 0; i < itemList.size(); i++) {
@@ -385,7 +390,7 @@ public class MenuButton extends Button implements Scrollable {
 						closeAllSubMenusWithoutSelected();
 						
 						if(!(item instanceof MenuButton)) {
-							if(autoClose) {
+							if(isAutoClose) {
 								root.close();					
 								root.closeAllSubMenus();	
 							}
