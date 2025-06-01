@@ -3,7 +3,7 @@ package microui.event;
 import microui.MicroUI;
 import microui.core.base.Bounds;
 
-public final class EventCallBack {
+public final class EventCallback {
 	private final Bounds bounds;
 	
 	private OnClickListener   		onClickListener;
@@ -12,34 +12,37 @@ public final class EventCallBack {
 	private OnPressedListener 		onPressedListener;
 	private OnLongPressedListener 	onLongPressedListener;
 	private OnHoldingListener 		onHoldingListener;
+	private OnDoubleClickListener 	onDoubleClickListener;
 	
-	private boolean pressed,holding,enable;
+	private boolean isPressed,isHolding,isEnable;
 	
 	private float pressedCurrentDuration,pressedDurationMax;
+	private int countOfClicks;
 	
-	public EventCallBack(Bounds otherBounds) {
+	public EventCallback(Bounds otherBounds) {
 		bounds = otherBounds;
-		enable = true;
+		isEnable = true;
 		pressedDurationMax = 3;
 	}
 	
 	public final void listen() {
-		if(!enable) { return; }
+		if(!isEnable) { return; }
 		
-		if(pressed()) { pressed = true; } else { holding = false; }
+		if(pressed()) { isPressed = true; } else { isHolding = false; }
 		
-		if(!inside()) { pressed = false; }
-		
-		if(onClickListener != null && clicked()) 			{ onClickListener.onClick(); }
-		if(onInsideListener != null && inside()) 			{ onInsideListener.onInside(); }
-		if(onOutsideListener != null && outside())		    { onOutsideListener.onOutside(); }
-		if(onPressedListener != null && pressed())			{ onPressedListener.onPressed(); }
-		if(onLongPressedListener != null && longPressed())  { onLongPressedListener.onLongPressed(); }
-		if(onHoldingListener != null && holding()) 			{ onHoldingListener.onHolding(); }
+		if(!inside()) { isPressed = false; }
+	
+		if(onClickListener != null && clicked()) 				{ onClickListener.onClick(); }
+		if(onInsideListener != null && inside()) 				{ onInsideListener.onInside(); }
+		if(onOutsideListener != null && outside())		   		{ onOutsideListener.onOutside(); }
+		if(onPressedListener != null && pressed())				{ onPressedListener.onPressed(); }
+		if(onLongPressedListener != null && longPressed())  	{ onLongPressedListener.onLongPressed(); }
+		if(onHoldingListener != null && holding()) 				{ onHoldingListener.onHolding(); }
+		if(onDoubleClickListener != null && doubleClicked()) 	{ onDoubleClickListener.onDoubleClick(); }
 	}
 	
-	public final boolean isEnable() { return enable; }
-	public final void setEnable(boolean enable) { this.enable = enable; }
+	public final boolean isEnable() { return isEnable; }
+	public final void setEnable(boolean enable) { this.isEnable = enable; }
 	
 	public final float getPressedDurationMax() { return pressedDurationMax; }
 	public final void setPressedDurationMax(float pressedDurationMax) {
@@ -53,10 +56,12 @@ public final class EventCallBack {
 	public final void setOnPressedListener(OnPressedListener onPressed) { this.onPressedListener = onPressed; }
 	public final void setOnLongPressedListener(OnLongPressedListener onLongPressed) { this.onLongPressedListener = onLongPressed; }
 	public final void setOnHoldingListener(OnHoldingListener onHolding) { this.onHoldingListener = onHolding; }
+	public final void setOnDoubleClickListener(OnDoubleClickListener onDoubleClickListener) { this.onDoubleClickListener = onDoubleClickListener; }
 	
 	private final boolean clicked() {
-		if(!MicroUI.getContext().mousePressed && inside() && pressed) {
-			pressed = false;
+		if(!MicroUI.getContext().mousePressed && inside() && isPressed) {
+			isPressed = false;
+			countOfClicks++;
 			return true;
 		}
 		
@@ -77,7 +82,7 @@ public final class EventCallBack {
 	private final boolean longPressed() {
 		if(pressed()) {
 			if(pressedCurrentDuration < pressedDurationMax) {
-				if(MicroUI.getContext().frameCount%60 == 0) { pressedCurrentDuration++; }
+				if(MicroUI.getContext().millis()%60 == 0) { pressedCurrentDuration++; }
 			}
 		} else {
 			pressedCurrentDuration = 0;
@@ -86,9 +91,22 @@ public final class EventCallBack {
 		return pressed() && pressedCurrentDuration >= pressedDurationMax;
 	}
 	private final boolean holding() {
-		if(pressed()) { holding = true; }
+		if(pressed()) { isHolding = true; }
 		
-		return MicroUI.getContext().mousePressed && holding;
+		return MicroUI.getContext().mousePressed && isHolding;
+	}
+	
+	private final boolean doubleClicked() {
+		if(MicroUI.getContext().millis()%60 == 0) {
+			if(countOfClicks != 0) { countOfClicks--; }
+		}
+		
+		if(countOfClicks == 2) {
+			countOfClicks = 0;
+			return true;
+		}
+		
+		return false;
 	}
 
 	public interface OnClickListener { void onClick(); }
@@ -97,4 +115,5 @@ public final class EventCallBack {
 	public interface OnPressedListener { void onPressed(); }
 	public interface OnLongPressedListener { void onLongPressed(); }
 	public interface OnHoldingListener { void onHolding(); }
+	public interface OnDoubleClickListener { void onDoubleClick(); }
 }

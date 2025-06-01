@@ -22,8 +22,11 @@ public final class LaunchTest extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		button = new Button();
+		button.text.setAutoResize(false);
 		
-		//button.eventCallBack.onHolding(() -> button.setPosition(mouseX,mouseY));
+		button.eventCallBack.setOnDoubleClickListener(() -> color.set(random(255),random(255),random(255)));
+		button.eventCallBack.setOnClickListener(() -> button.text.setTextSize(random(10,20)));
+		button.eventCallBack.setOnLongPressedListener(() -> button.text.setTextSize(random(10,20)));
 		
 	}
 	
