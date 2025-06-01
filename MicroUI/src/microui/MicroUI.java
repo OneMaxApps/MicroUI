@@ -2,6 +2,8 @@ package microui;
 
 import processing.core.PApplet;
 
+// Status: STABLE - Do not modify
+// Last Reviewed: 01.06.2025
 public class MicroUI {
 	protected static PApplet app;
 	

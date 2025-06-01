@@ -4,6 +4,8 @@ import microui.core.base.Bounds;
 import microui.core.style.Color;
 import processing.core.PImage;
 
+// Status: Stable - Do not modify
+// Last Reviewed: 01.06.2025
 public class Texture extends Bounds {
 	public final Color tint;
 	protected PImage image;

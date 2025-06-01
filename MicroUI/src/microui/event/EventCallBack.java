@@ -5,13 +5,16 @@ import microui.core.base.Bounds;
 
 public final class EventCallBack {
 	private final Bounds bounds;
-	private OnClick onClick;
-	private OnInside onInside;
-	private OnOutside onOutside;
-	private OnPressed onPressed;
-	private OnLongPressed onLongPressed;
-	private OnHolding onHolding;
+	
+	private OnClickListener   		onClickListener;
+	private OnInsideListener  		onInsideListener;
+	private OnOutsideListener 		onOutsideListener;
+	private OnPressedListener 		onPressedListener;
+	private OnLongPressedListener 	onLongPressedListener;
+	private OnHoldingListener 		onHoldingListener;
+	
 	private boolean pressed,holding,enable;
+	
 	private float pressedCurrentDuration,pressedDurationMax;
 	
 	public EventCallBack(Bounds otherBounds) {
@@ -20,58 +23,36 @@ public final class EventCallBack {
 		pressedDurationMax = 3;
 	}
 	
-	
 	public final void listen() {
 		if(!enable) { return; }
 		
-		if(MicroUI.getContext().mousePressed) {
-			pressed = true;
-		} else {
-			holding = false;
-		}
+		if(pressed()) { pressed = true; } else { holding = false; }
+		
 		if(!inside()) { pressed = false; }
 		
-		if(onClick != null) { 
-			if(clicked()) { onClick.action(); }
-		}
-		
-		if(onInside != null) {
-			if(inside()) { onInside.action(); }
-		}
-		
-		if(onOutside != null) {
-			if(outside()) { onOutside.action(); }
-		}
-		
-		if(onPressed != null) {
-			if(pressed()) { onPressed.action(); }
-		}
-		
-		if(onLongPressed != null) {
-			if(longPressed()) { onLongPressed.action(); }
-		}
-		
-		if(onHolding != null) {
-			if(holding()) { onHolding.action(); }
-		}
+		if(onClickListener != null && clicked()) 			{ onClickListener.onClick(); }
+		if(onInsideListener != null && inside()) 			{ onInsideListener.onInside(); }
+		if(onOutsideListener != null && outside())		    { onOutsideListener.onOutside(); }
+		if(onPressedListener != null && pressed())			{ onPressedListener.onPressed(); }
+		if(onLongPressedListener != null && longPressed())  { onLongPressedListener.onLongPressed(); }
+		if(onHoldingListener != null && holding()) 			{ onHoldingListener.onHolding(); }
 	}
 	
-	public final boolean isEnable() {
-		return enable;
-	}
-
-	public final void setEnable(boolean enable) {
-		this.enable = enable;
-	}
+	public final boolean isEnable() { return enable; }
+	public final void setEnable(boolean enable) { this.enable = enable; }
 	
-	public final float getPressedDurationMax() {
-		return pressedDurationMax;
-	}
-
+	public final float getPressedDurationMax() { return pressedDurationMax; }
 	public final void setPressedDurationMax(float pressedDurationMax) {
 		if(pressedDurationMax <= 0) { return; }
 		this.pressedDurationMax = pressedDurationMax;
 	}
+	
+	public final void setOnClickListener(OnClickListener onClick) { this.onClickListener = onClick; }
+	public final void setOnInsideListener(OnInsideListener onInside) { this.onInsideListener = onInside; }
+	public final void setOnOutsideListener(OnOutsideListener onOutside) { this.onOutsideListener = onOutside; }
+	public final void setOnPressedListener(OnPressedListener onPressed) { this.onPressedListener = onPressed; }
+	public final void setOnLongPressedListener(OnLongPressedListener onLongPressed) { this.onLongPressedListener = onLongPressed; }
+	public final void setOnHoldingListener(OnHoldingListener onHolding) { this.onHoldingListener = onHolding; }
 	
 	private final boolean clicked() {
 		if(!MicroUI.getContext().mousePressed && inside() && pressed) {
@@ -81,22 +62,18 @@ public final class EventCallBack {
 		
 		return false;
 	}
-	
 	private final boolean inside() {
 		return MicroUI.getContext().mouseX > bounds.getX()
 			&& MicroUI.getContext().mouseX < bounds.getX()+bounds.getWidth()
 			&& MicroUI.getContext().mouseY > bounds.getY()
 			&& MicroUI.getContext().mouseY < bounds.getY()+bounds.getHeight();
 	}
-	
 	private final boolean outside() {
 		return !inside();
 	}
-	
 	private final boolean pressed() {
 		return inside() && MicroUI.getContext().mousePressed;
 	}
-	
 	private final boolean longPressed() {
 		if(pressed()) {
 			if(pressedCurrentDuration < pressedDurationMax) {
@@ -108,49 +85,16 @@ public final class EventCallBack {
 		
 		return pressed() && pressedCurrentDuration >= pressedDurationMax;
 	}
-
 	private final boolean holding() {
 		if(pressed()) { holding = true; }
 		
 		return MicroUI.getContext().mousePressed && holding;
 	}
-	
-	public interface OnClick { void action(); }
-	
-	public final void onClick(OnClick onClick) {
-		this.onClick = onClick;
-	}
-	
-	
-	public interface OnInside { void action(); }
-	
-	public final void onInside(OnInside onInside) {
-		this.onInside = onInside;
-	}
-	
-	
-	public interface OnOutside { void action(); }
-	
-	public final void onOutside(OnOutside onOutside) {
-		this.onOutside = onOutside;
-	}
-	
-	
-	public interface OnPressed { void action(); }
-	
-	public final void onPressed(OnPressed onPressed) {
-		this.onPressed = onPressed;
-	}
-	
-	public interface OnLongPressed { void action(); }
-	
-	public final void onLongPressed(OnLongPressed onLongPressed) {
-		this.onLongPressed = onLongPressed;
-	}
-	
-	public interface OnHolding { void action(); }
-	
-	public final void onHolding(OnHolding onHolding) {
-		this.onHolding = onHolding;
-	}
+
+	public interface OnClickListener { void onClick(); }
+	public interface OnInsideListener { void onInside(); }
+	public interface OnOutsideListener { void onOutside(); }
+	public interface OnPressedListener { void onPressed(); }
+	public interface OnLongPressedListener { void onLongPressed(); }
+	public interface OnHoldingListener { void onHolding(); }
 }

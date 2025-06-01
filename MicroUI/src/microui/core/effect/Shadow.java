@@ -12,13 +12,13 @@ import microui.core.style.Color;
 
 public final class Shadow extends View {
 	  public final Color fill;
-	  private final Bounds form;
+	  private final Bounds bounds;
 	  private int leftSize,rightSize,upSize,downSize;
 	  private byte absoluteSize;
 	  
-	  public Shadow(Bounds form) {
+	  public Shadow(Bounds bounds) {
 		super();
-	    this.form = form;
+	    this.bounds = bounds;
 	    fill = new Color(34);
 	    leftSize = 10;
 	    upSize = 10;
@@ -31,7 +31,7 @@ public final class Shadow extends View {
 	  
 	  @Override
 	  public void update() {
-	    if(form.isVisible()) {
+	    if(bounds.isVisible()) {
 	      app.pushStyle();
 	      
 	      for(int i = 0; i < absoluteSize; i++) {
@@ -40,17 +40,17 @@ public final class Shadow extends View {
 	    	  app.stroke(fill.get(),constrain(164-i*20,0,255));
 	    	  app.noFill();
 	    	  app.rectMode(CORNERS);
-	    	  if(form instanceof Layout) {
-    			  app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
-	    		  form.getY()-map(i,0f,absoluteSize,0f,upSize),
-	    		  form.getX()+form.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
-	    		  form.getY()+form.getHeight()+map(i,0f,absoluteSize,0f,downSize));
+	    	  if(bounds instanceof Layout) {
+    			  app.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
+	    		  bounds.getY()-map(i,0f,absoluteSize,0f,upSize),
+	    		  bounds.getX()+bounds.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
+	    		  bounds.getY()+bounds.getHeight()+map(i,0f,absoluteSize,0f,downSize));
     		  } else {
-		    	  if(form instanceof Bounds) {
-		    		 app.rect(form.getX()-map(i,0f,absoluteSize,0f,leftSize),
-		             form.getY()-map(i,0f,absoluteSize,0f,upSize),
-		             form.getX()+form.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
-		             form.getY()+form.getHeight()+map(i,0f,absoluteSize,0f,downSize),leftSize,upSize,rightSize,downSize);
+		    	  if(bounds instanceof Bounds) {
+		    		 app.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
+		             bounds.getY()-map(i,0f,absoluteSize,0f,upSize),
+		             bounds.getX()+bounds.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
+		             bounds.getY()+bounds.getHeight()+map(i,0f,absoluteSize,0f,downSize),leftSize,upSize,rightSize,downSize);
 		    	  } 
 	    		  
 	    	  }

@@ -202,7 +202,7 @@ public class GridLayout extends Layout {
 			  
 			  if(bounds instanceof Container container) {
 				  container.setX(map(columnList.get(i),0,cols,getX(),getX()+getWidth())+((getWidth()/getColumns()/2)-container.getRealWidth()/2));
-				  container.setY(map(rowList.get(i),0,rows,getY(),getY()+getHeight())+((getHeight()/getRows()/2)-container.getRealHight()/2));
+				  container.setY(map(rowList.get(i),0,rows,getY(),getY()+getHeight())+((getHeight()/getRows()/2)-container.getRealHeight()/2));
 
 			    } else {
 			    	

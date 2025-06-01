@@ -23,7 +23,8 @@ public final class LaunchTest extends PApplet {
 		MicroUI.setContext(this);
 		button = new Button();
 		
-		button.eventCallBack.onHolding(() -> color.set(random(255)));
+		//button.eventCallBack.onHolding(() -> button.setPosition(mouseX,mouseY));
+		
 	}
 	
 	@Override

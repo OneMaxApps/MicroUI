@@ -4,6 +4,8 @@ import microui.MicroUI;
 import microui.core.interfaces.Visible;
 import microui.util.Metrics;
 
+// Status: STABLE - Do not modify
+// Last Reviewed: 01.06.2025
 public abstract class View extends MicroUI implements Visible {
 	protected boolean visible;
 	

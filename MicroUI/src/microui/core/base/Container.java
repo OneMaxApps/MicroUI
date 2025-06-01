@@ -265,7 +265,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 								difX = tmpX-getRealX();
 								difY = tmpY-getRealY();
 								
-								context.setSize(getRealWidth()+difX,getRealHight()+difY);
+								context.setSize(getRealWidth()+difX,getRealHeight()+difY);
 							break;
 							
 							case RIGHT :
@@ -276,7 +276,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 								
 								difY = tmpY-getRealY();
 								
-								context.setHeight(getRealHight()+difY);
+								context.setHeight(getRealHeight()+difY);
 							break;
 							
 							case DOWN_LEFT :
@@ -305,8 +305,8 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 					switch(mode) {
 						case LEFT : setPosition(getRealX(),getRealY()); break;
 						case RIGHT : setPosition(getRealX()+getRealWidth()-w,getRealY()); break;
-						case DOWN_LEFT : setPosition(getRealX(),getRealY()+getRealHight()-h); break;
-						case DOWN_RIGHT : setPosition(getRealX()+getRealWidth()-w,getRealY()+getRealHight()-h); break;
+						case DOWN_LEFT : setPosition(getRealX(),getRealY()+getRealHeight()-h); break;
+						case DOWN_RIGHT : setPosition(getRealX()+getRealWidth()-w,getRealY()+getRealHeight()-h); break;
 					}
 				}
 				

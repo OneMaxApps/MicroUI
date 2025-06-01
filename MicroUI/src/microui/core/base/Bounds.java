@@ -1,5 +1,7 @@
 package microui.core.base;
 
+// Status: STABLE - Do not modify
+// Last Reviewed: 01.06.2025
 public abstract class Bounds extends View {
 	protected float x,y,w,h;
 	
