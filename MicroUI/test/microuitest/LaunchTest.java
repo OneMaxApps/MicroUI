@@ -29,7 +29,7 @@ public final class LaunchTest extends PApplet {
 				 new MenuButton("Save"),
 				 new MenuButton("Save As..."));
 		
-		menu.eventCallBack.addOnDoubleClickListener(() -> background(random(255)));
+		menu.eventCallBack.addOnLongPressedListener(() -> background(random(255)));
 	}
 	
 	@Override

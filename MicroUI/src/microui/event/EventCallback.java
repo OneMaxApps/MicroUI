@@ -17,18 +17,17 @@ public final class EventCallback {
 	private List<OnHoldingListener> onHoldingList;
 	private List<OnDoubleClickListener> onDoubleClickList;
 
-	private boolean clickedStateTrigger, isHolding, isEnable, clicked;
+	private boolean hasClickedStateTriggered, isHolding, isEnable, clicked;
 
 	private int countOfClicks;
 	
-	private float pressedCurrentDuration, pressedDurationMax;
-	
-	private long clickedTimePrev,clickedTimeNow,delta;
+	private long clickedTimePrev,clickedTimeNow,delta, millisToPressed,millisToPressedNow,millisToPressedMax;
 
 	public EventCallback(Bounds otherBounds) {
 		bounds = otherBounds;
 		isEnable = true;
-		pressedDurationMax = 3;
+		final int THREE_SECONDS = 3000;
+		millisToPressedMax = THREE_SECONDS;
 	}
 
 	public final void listen() {
@@ -39,13 +38,16 @@ public final class EventCallback {
 		clicked = clickedStateUpdate();
 
 		if (pressed()) {
-			clickedStateTrigger = true;
+			hasClickedStateTriggered = true;
+			if(millisToPressed == 0) { millisToPressed = System.currentTimeMillis(); }
+			millisToPressedNow = System.currentTimeMillis()-millisToPressed;
 		} else {
 			isHolding = false;
+			millisToPressed = millisToPressedNow = 0;
 		}
 
 		if (outside()) {
-			clickedStateTrigger = false;
+			hasClickedStateTriggered = false;
 		}
 
 		if (onClickList != null && clicked) {
@@ -86,15 +88,13 @@ public final class EventCallback {
 		this.isEnable = enable;
 	}
 
-	public final float getPressedDurationMax() {
-		return pressedDurationMax;
+	public final long getMillisToPressedMax() {
+		return millisToPressedMax;
 	}
 
-	public final void setPressedDurationMax(float pressedDurationMax) {
-		if (pressedDurationMax <= 0) {
-			return;
-		}
-		this.pressedDurationMax = pressedDurationMax;
+	public final void setMillisToPressedMax(long millisToPressedMax) {
+		if(millisToPressedMax <= 0) { return; }
+		this.millisToPressedMax = millisToPressedMax;
 	}
 
 	public final void clearAll() {
@@ -158,9 +158,9 @@ public final class EventCallback {
 	}
 
 	private final boolean clickedStateUpdate() {
-		if (!MicroUI.getContext().mousePressed && inside() && clickedStateTrigger) {
-			clickedStateTrigger = false;
-			updateDelta();
+		if (!MicroUI.getContext().mousePressed && inside() && hasClickedStateTriggered) {
+			hasClickedStateTriggered = false;
+			updateDeltaTimeBetweenClicks();
 			if(delta < 1000) { countOfClicks++; } else { countOfClicks = 0; }
 			return true;
 		}
@@ -184,17 +184,8 @@ public final class EventCallback {
 	}
 
 	private final boolean longPressed() {
-		if (pressed()) {
-			if (pressedCurrentDuration < pressedDurationMax) {
-				if (MicroUI.getContext().millis() % 60 == 0) {
-					pressedCurrentDuration++;
-				}
-			}
-		} else {
-			pressedCurrentDuration = 0;
-		}
-
-		return pressed() && pressedCurrentDuration >= pressedDurationMax;
+		System.out.println(millisToPressedNow);
+		return millisToPressedNow >= millisToPressedMax;
 	}
 
 	private final boolean holding() {
@@ -206,23 +197,18 @@ public final class EventCallback {
 	}
 
 	private final boolean doubleClicked() {
-		if (delta > 1000) {
-			if (countOfClicks != 0) {
-				countOfClicks--;
-			}
-		}
-
 		if (countOfClicks == 2) {
 			countOfClicks = 0;
 			return true;
 		}
-
 		return false;
 	}
 	
-	private final void updateDelta() {
+	private final void updateDeltaTimeBetweenClicks() {
 		clickedTimePrev = clickedTimeNow;
 		clickedTimeNow = System.currentTimeMillis();
 		delta = clickedTimeNow-clickedTimePrev;
 	}
+	
+	
 }
