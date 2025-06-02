@@ -19,34 +19,35 @@ public final class EventCallback {
 
 	private boolean hasClickedStateTriggered, isHolding, isEnable, clicked;
 
-	private int countOfClicks;
+	private int clickCount;
 	
-	private long clickedTimePrev,clickedTimeNow,delta, millisToPressed,millisToPressedNow,millisToPressedMax;
+	private long clickedTimePrev,clickedTimeNow,delta, pressStartTime,currentPressDuration,longPressThreshold,doubleClickThreshold;
 
 	public EventCallback(Bounds otherBounds) {
 		bounds = otherBounds;
 		isEnable = true;
-		final int THREE_SECONDS = 3000;
-		millisToPressedMax = THREE_SECONDS;
+		final int ONE_SECOND = 1000, THREE_SECONDS = 3000;
+		longPressThreshold = THREE_SECONDS;
+		doubleClickThreshold = ONE_SECOND;
 	}
 
 	public final void listen() {
-		if (!isEnable) {
-			return;
-		}
+		if (!isEnable) { return; }
 
-		clicked = clickedStateUpdate();
+		clicked = isClicked();
 
-		if (pressed()) {
+		if (isPressed(bounds)) {
+			isHolding = true;
 			hasClickedStateTriggered = true;
-			if(millisToPressed == 0) { millisToPressed = System.currentTimeMillis(); }
-			millisToPressedNow = System.currentTimeMillis()-millisToPressed;
+			if(pressStartTime == 0) { pressStartTime = System.currentTimeMillis(); }
+			currentPressDuration = System.currentTimeMillis()-pressStartTime;
 		} else {
-			isHolding = false;
-			millisToPressed = millisToPressedNow = 0;
+			pressStartTime = currentPressDuration = 0;
 		}
+		
+		if(!MicroUI.getContext().mousePressed) { isHolding = false; }
 
-		if (outside()) {
+		if (isOutside(bounds)) {
 			hasClickedStateTriggered = false;
 		}
 
@@ -54,23 +55,23 @@ public final class EventCallback {
 			onClickList.forEach(listener -> listener.onClick());
 		}
 
-		if (onInsideList != null && inside()) {
+		if (onInsideList != null && isInside(bounds)) {
 			onInsideList.forEach(listener -> listener.onInside());
 		}
 
-		if (onOutsideList != null && outside()) {
+		if (onOutsideList != null && isOutside(bounds)) {
 			onOutsideList.forEach(listener -> listener.onOutside());
 		}
 		
-		if (onPressedList != null && pressed()) {
+		if (onPressedList != null && isPressed(bounds)) {
 			onPressedList.forEach(listener -> listener.onPressed());
 		}
 		
-		if (onLongPressedList != null && longPressed()) {
+		if (onLongPressedList != null && isLongPressed()) {
 			onLongPressedList.forEach(listener -> listener.onLongPressed());
 		}
 		
-		if (onHoldingList != null && holding()) {
+		if (onHoldingList != null && isHolding) {
 			onHoldingList.forEach(listener -> listener.onHolding());
 		}
 		
@@ -88,23 +89,32 @@ public final class EventCallback {
 		this.isEnable = enable;
 	}
 
-	public final long getMillisToPressedMax() {
-		return millisToPressedMax;
+	public final long getLongPressThreshold() {
+		return longPressThreshold;
 	}
 
-	public final void setMillisToPressedMax(long millisToPressedMax) {
-		if(millisToPressedMax <= 0) { return; }
-		this.millisToPressedMax = millisToPressedMax;
+	public final void setLongPressThreshold(long longPressThreshold) {
+		if(longPressThreshold <= 0) { return; }
+		this.longPressThreshold = longPressThreshold;
+	}
+
+	public final long getDoubleClickThreshold() {
+		return doubleClickThreshold;
+	}
+
+	public final void setDoubleClickThreshold(long doubleClickThreshold) {
+		if(doubleClickThreshold <= 0) { return; }
+		this.doubleClickThreshold = doubleClickThreshold;
 	}
 
 	public final void clearAll() {
-		if(onClickList != null) { onClickList.clear(); }
-		if(onInsideList != null) { onInsideList.clear(); }
-		if(onOutsideList != null) { onOutsideList.clear(); }
-		if(onPressedList != null) { onPressedList.clear(); }
-		if(onLongPressedList != null) { onLongPressedList.clear(); }
-		if(onHoldingList != null) { onHoldingList.clear(); }
-		if(onDoubleClickList != null) { onDoubleClickList.clear(); }
+		clearList(onClickList);
+		clearList(onInsideList);
+		clearList(onOutsideList);
+		clearList(onPressedList);
+		clearList(onLongPressedList);
+		clearList(onHoldingList);
+		clearList(onDoubleClickList);
 	}
 	
 	public final void addOnClickListener(OnClickListener onClick) {
@@ -157,48 +167,39 @@ public final class EventCallback {
 		onDoubleClickList.add(onDoubleClickListener);
 	}
 
-	private final boolean clickedStateUpdate() {
-		if (!MicroUI.getContext().mousePressed && inside() && hasClickedStateTriggered) {
+	private final boolean isClicked() {
+		if (!MicroUI.getContext().mousePressed && isInside(bounds) && hasClickedStateTriggered) {
 			hasClickedStateTriggered = false;
 			updateDeltaTimeBetweenClicks();
-			if(delta < 1000) { countOfClicks++; } else { countOfClicks = 0; }
+			if(delta < doubleClickThreshold) { clickCount++; } else { clickCount = 0; }
 			return true;
 		}
 
 		return false;
 	}
 
-	private final boolean inside() {
+	private static final boolean isInside(Bounds bounds) {
 		return MicroUI.getContext().mouseX > bounds.getX()
 			&& MicroUI.getContext().mouseX < bounds.getX() + bounds.getWidth()
 			&& MicroUI.getContext().mouseY > bounds.getY()
 			&& MicroUI.getContext().mouseY < bounds.getY() + bounds.getHeight();
 	}
 
-	private final boolean outside() {
-		return !inside();
+	private static final boolean isOutside(Bounds bounds) {
+		return !isInside(bounds);
 	}
 
-	private final boolean pressed() {
-		return inside() && MicroUI.getContext().mousePressed;
+	private static final boolean isPressed(Bounds bounds) {
+		return isInside(bounds) && MicroUI.getContext().mousePressed;
 	}
 
-	private final boolean longPressed() {
-		System.out.println(millisToPressedNow);
-		return millisToPressedNow >= millisToPressedMax;
-	}
-
-	private final boolean holding() {
-		if (pressed()) {
-			isHolding = true;
-		}
-
-		return MicroUI.getContext().mousePressed && isHolding;
+	private final boolean isLongPressed() {
+		return currentPressDuration >= longPressThreshold;
 	}
 
 	private final boolean doubleClicked() {
-		if (countOfClicks == 2) {
-			countOfClicks = 0;
+		if (clickCount == 2) {
+			clickCount = 0;
 			return true;
 		}
 		return false;
@@ -210,5 +211,10 @@ public final class EventCallback {
 		delta = clickedTimeNow-clickedTimePrev;
 	}
 	
-	
+	private final void clearList(List<?> list) {
+		if(list != null) {
+			list.clear();
+			list = null;
+		}
+	}
 }
