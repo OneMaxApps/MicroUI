@@ -19,8 +19,11 @@ public final class EventCallback {
 
 	private boolean clickedStateTrigger, isHolding, isEnable, clicked;
 
-	private float pressedCurrentDuration, pressedDurationMax;
 	private int countOfClicks;
+	
+	private float pressedCurrentDuration, pressedDurationMax;
+	
+	private long clickedTimePrev,clickedTimeNow,delta;
 
 	public EventCallback(Bounds otherBounds) {
 		bounds = otherBounds;
@@ -95,13 +98,13 @@ public final class EventCallback {
 	}
 
 	public final void clearAll() {
-		onClickList.clear();
-		onInsideList.clear();
-		onOutsideList.clear();
-		onPressedList.clear();
-		onLongPressedList.clear();
-		onHoldingList.clear();
-		onDoubleClickList.clear();
+		if(onClickList != null) { onClickList.clear(); }
+		if(onInsideList != null) { onInsideList.clear(); }
+		if(onOutsideList != null) { onOutsideList.clear(); }
+		if(onPressedList != null) { onPressedList.clear(); }
+		if(onLongPressedList != null) { onLongPressedList.clear(); }
+		if(onHoldingList != null) { onHoldingList.clear(); }
+		if(onDoubleClickList != null) { onDoubleClickList.clear(); }
 	}
 	
 	public final void addOnClickListener(OnClickListener onClick) {
@@ -109,6 +112,7 @@ public final class EventCallback {
 			onClickList = new ArrayList<OnClickListener>();
 		}
 		onClickList.add(onClick);
+		
 	}
 
 	public final void addOnInsideListener(OnInsideListener onInside) {
@@ -156,7 +160,8 @@ public final class EventCallback {
 	private final boolean clickedStateUpdate() {
 		if (!MicroUI.getContext().mousePressed && inside() && clickedStateTrigger) {
 			clickedStateTrigger = false;
-			countOfClicks++;
+			updateDelta();
+			if(delta < 1000) { countOfClicks++; } else { countOfClicks = 0; }
 			return true;
 		}
 
@@ -165,9 +170,9 @@ public final class EventCallback {
 
 	private final boolean inside() {
 		return MicroUI.getContext().mouseX > bounds.getX()
-				&& MicroUI.getContext().mouseX < bounds.getX() + bounds.getWidth()
-				&& MicroUI.getContext().mouseY > bounds.getY()
-				&& MicroUI.getContext().mouseY < bounds.getY() + bounds.getHeight();
+			&& MicroUI.getContext().mouseX < bounds.getX() + bounds.getWidth()
+			&& MicroUI.getContext().mouseY > bounds.getY()
+			&& MicroUI.getContext().mouseY < bounds.getY() + bounds.getHeight();
 	}
 
 	private final boolean outside() {
@@ -201,7 +206,7 @@ public final class EventCallback {
 	}
 
 	private final boolean doubleClicked() {
-		if (MicroUI.getContext().millis() % 60 == 0) {
+		if (delta > 1000) {
 			if (countOfClicks != 0) {
 				countOfClicks--;
 			}
@@ -214,32 +219,10 @@ public final class EventCallback {
 
 		return false;
 	}
-
-	public interface OnClickListener {
-		void onClick();
-	}
-
-	public interface OnInsideListener {
-		void onInside();
-	}
-
-	public interface OnOutsideListener {
-		void onOutside();
-	}
-
-	public interface OnPressedListener {
-		void onPressed();
-	}
-
-	public interface OnLongPressedListener {
-		void onLongPressed();
-	}
-
-	public interface OnHoldingListener {
-		void onHolding();
-	}
-
-	public interface OnDoubleClickListener {
-		void onDoubleClick();
+	
+	private final void updateDelta() {
+		clickedTimePrev = clickedTimeNow;
+		clickedTimeNow = System.currentTimeMillis();
+		delta = clickedTimeNow-clickedTimePrev;
 	}
 }

@@ -20,7 +20,7 @@ public final class LaunchTest extends PApplet {
 		MicroUI.setContext(this);
 		menu = new MenuButton("File",0,0,100,20);
 		
-		menu.add(new MenuButton("New","Java Project","Maven Project"),
+		menu.add(new MenuButton("New"),
 				 new MenuButton("Open File"),
 				 new MenuButton("Open Projects from File System"),
 				 new MenuButton("Recent Files"),
@@ -29,6 +29,7 @@ public final class LaunchTest extends PApplet {
 				 new MenuButton("Save"),
 				 new MenuButton("Save As..."));
 		
+		menu.eventCallBack.addOnDoubleClickListener(() -> background(random(255)));
 	}
 	
 	@Override
