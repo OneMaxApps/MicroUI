@@ -17,7 +17,7 @@ public final class EventCallback {
 	private List<OnHoldingListener> onHoldingList;
 	private List<OnDoubleClickListener> onDoubleClickList;
 
-	private boolean hasClickedStateTriggered, isHolding, isEnable, clicked;
+	private boolean hasClickedStateTriggered, isHolding, isEnable, isClicked;
 
 	private int clickCount;
 	
@@ -34,7 +34,7 @@ public final class EventCallback {
 	public final void listen() {
 		if (!isEnable) { return; }
 
-		clicked = isClicked();
+		if(isInside(bounds)) { isClicked = isClicked(); } else { hasClickedStateTriggered = false; }
 
 		if (isPressed(bounds)) {
 			isHolding = true;
@@ -47,38 +47,8 @@ public final class EventCallback {
 		
 		if(!MicroUI.getContext().mousePressed) { isHolding = false; }
 
-		if (isOutside(bounds)) {
-			hasClickedStateTriggered = false;
-		}
-
-		if (onClickList != null && clicked) {
-			onClickList.forEach(listener -> listener.onClick());
-		}
-
-		if (onInsideList != null && isInside(bounds)) {
-			onInsideList.forEach(listener -> listener.onInside());
-		}
-
-		if (onOutsideList != null && isOutside(bounds)) {
-			onOutsideList.forEach(listener -> listener.onOutside());
-		}
 		
-		if (onPressedList != null && isPressed(bounds)) {
-			onPressedList.forEach(listener -> listener.onPressed());
-		}
-		
-		if (onLongPressedList != null && isLongPressed()) {
-			onLongPressedList.forEach(listener -> listener.onLongPressed());
-		}
-		
-		if (onHoldingList != null && isHolding) {
-			onHoldingList.forEach(listener -> listener.onHolding());
-		}
-		
-		if (onDoubleClickList != null && doubleClicked()) {
-			onDoubleClickList.forEach(listener -> listener.onDoubleClick());
-		}
-
+		listeners();
 	}
 
 	public final boolean isEnable() {
@@ -177,6 +147,36 @@ public final class EventCallback {
 
 		return false;
 	}
+	
+	private final void listeners() {
+		if (onClickList != null && isClicked) {
+			onClickList.forEach(listener -> listener.onClick());
+		}
+
+		if (onInsideList != null && isInside(bounds)) {
+			onInsideList.forEach(listener -> listener.onInside());
+		}
+
+		if (onOutsideList != null && isOutside(bounds)) {
+			onOutsideList.forEach(listener -> listener.onOutside());
+		}
+		
+		if (onPressedList != null && isPressed(bounds)) {
+			onPressedList.forEach(listener -> listener.onPressed());
+		}
+		
+		if (onLongPressedList != null && isLongPressed()) {
+			onLongPressedList.forEach(listener -> listener.onLongPressed());
+		}
+		
+		if (onHoldingList != null && isHolding) {
+			onHoldingList.forEach(listener -> listener.onHolding());
+		}
+		
+		if (onDoubleClickList != null && doubleClicked()) {
+			onDoubleClickList.forEach(listener -> listener.onDoubleClick());
+		}
+	}
 
 	private static final boolean isInside(Bounds bounds) {
 		return MicroUI.getContext().mouseX > bounds.getX()
@@ -212,9 +212,6 @@ public final class EventCallback {
 	}
 	
 	private final void clearList(List<?> list) {
-		if(list != null) {
-			list.clear();
-			list = null;
-		}
+		if(list != null) { list.clear(); }
 	}
 }
