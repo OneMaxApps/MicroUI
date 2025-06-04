@@ -16,19 +16,24 @@ public final class EventCallback {
 	private List<OnLongPressedListener> onLongPressedList;
 	private List<OnHoldingListener> onHoldingList;
 	private List<OnDoubleClickListener> onDoubleClickList;
+	private List<OnDraggedListener> onDraggedList;
+	private List<OnDraggingListener> onDraggingList;
+	private List<OnShakeListener> onShakeList;
+	
+	private boolean hasClickedStateTriggered, isHolding, isEnable, isClicked, isDragged;
 
-	private boolean hasClickedStateTriggered, isHolding, isEnable, isClicked;
-
-	private int clickCount;
+	private int clickCount,distForShake;
 	
 	private long clickedTimePrev,clickedTimeNow,delta, pressStartTime,currentPressDuration,longPressThreshold,doubleClickThreshold;
 
 	public EventCallback(Bounds otherBounds) {
 		bounds = otherBounds;
 		isEnable = true;
-		final int ONE_SECOND = 1000, THREE_SECONDS = 3000;
+		final int ONE_SECOND = 1000, THREE_SECONDS = 3000, THREE_PIXELS = 3;
 		longPressThreshold = THREE_SECONDS;
 		doubleClickThreshold = ONE_SECOND;
+		
+		distForShake = THREE_PIXELS;
 	}
 
 	public final void listen() {
@@ -45,8 +50,10 @@ public final class EventCallback {
 			pressStartTime = currentPressDuration = 0;
 		}
 		
-		if(!MicroUI.getContext().mousePressed) { isHolding = false; }
-
+		if(!MicroUI.getContext().mousePressed) {
+			isHolding = false;
+			isDragged = false;
+		}
 		
 		listeners();
 	}
@@ -76,6 +83,15 @@ public final class EventCallback {
 		if(doubleClickThreshold <= 0) { return; }
 		this.doubleClickThreshold = doubleClickThreshold;
 	}
+	
+	public final int getDistForShake() {
+		return distForShake;
+	}
+
+	public final void setDistForShake(int distForShake) {
+		if(distForShake <= 0) { return; }
+		this.distForShake = distForShake;
+	}
 
 	public final void clearAll() {
 		clearList(onClickList);
@@ -85,6 +101,24 @@ public final class EventCallback {
 		clearList(onLongPressedList);
 		clearList(onHoldingList);
 		clearList(onDoubleClickList);
+		clearList(onDraggedList);
+		clearList(onDraggingList);
+		clearList(onShakeList);
+	}
+	
+	public final void clear(EventType type) {
+		switch(type) {
+			case CLICKED : onClickList.clear(); break;
+			case DOUBLE_CLICKED : onDoubleClickList.clear(); break; 
+			case DRAGGED : onDraggedList.clear(); break; 
+			case DRAGGING : onDraggingList.clear(); break; 
+			case HOLDING : onHoldingList.clear(); break; 
+			case INSIDE : onInsideList.clear(); break; 
+			case OUTSIDE : onOutsideList.clear(); break; 
+			case LONG_PRESSED : onLongPressedList.clear(); break; 
+			case PRESSED : onPressedList.clear(); break;
+			case SHAKE : onShakeList.clear(); break;
+		}
 	}
 	
 	public final void addOnClickListener(OnClickListener onClick) {
@@ -136,7 +170,29 @@ public final class EventCallback {
 		}
 		onDoubleClickList.add(onDoubleClickListener);
 	}
+	
+	public final void addOnDraggedListener(OnDraggedListener onDraggedListener) {
+		if(onDraggedList == null) {
+			onDraggedList = new ArrayList<OnDraggedListener>();
+		}
+		onDraggedList.add(onDraggedListener);
+	}
+	
+	public final void addOnDraggingListener(OnDraggingListener onDraggingListener) {
+		if(onDraggingList == null) {
+			onDraggingList = new ArrayList<OnDraggingListener>();
+		}
+		onDraggingList.add(onDraggingListener);
+	}
+	
+	public final void addOnShakeListener(OnShakeListener onShakeListener) {
+		if(onShakeList == null) {
+			onShakeList = new ArrayList<OnShakeListener>();
+		}
+		onShakeList.add(onShakeListener);
+	}
 
+	
 	private final boolean isClicked() {
 		if (!MicroUI.getContext().mousePressed && isInside(bounds) && hasClickedStateTriggered) {
 			hasClickedStateTriggered = false;
@@ -173,8 +229,20 @@ public final class EventCallback {
 			onHoldingList.forEach(listener -> listener.onHolding());
 		}
 		
-		if (onDoubleClickList != null && doubleClicked()) {
+		if (onDoubleClickList != null && isDoubleClicked()) {
 			onDoubleClickList.forEach(listener -> listener.onDoubleClick());
+		}
+		
+		if(onDraggedList != null && isDragged()) {
+			onDraggedList.forEach(listener -> listener.onDragged());
+		}
+		
+		if(onDraggingList != null && isDragging()) {
+			onDraggingList.forEach(listener -> listener.onDragging());
+		}
+		
+		if(onShakeList != null && isShaking()) {
+			onShakeList.forEach(listener -> listener.onShake());
 		}
 	}
 
@@ -197,9 +265,31 @@ public final class EventCallback {
 		return currentPressDuration >= longPressThreshold;
 	}
 
-	private final boolean doubleClicked() {
+	private final boolean isDoubleClicked() {
 		if (clickCount == 2) {
 			clickCount = 0;
+			return true;
+		}
+		return false;
+	}
+	
+	private final boolean isDragged() {
+		if(isDragging()) { isDragged = true; }
+		
+		return isDragged;
+	}
+	
+	private final boolean isDragging() {
+		if(isPressed(bounds)) {
+			if(MicroUI.getContext().mouseX != MicroUI.getContext().pmouseX || MicroUI.getContext().mouseY != MicroUI.getContext().pmouseY) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private final boolean isShaking() {
+		if(Math.abs(MicroUI.getContext().mouseX - MicroUI.getContext().pmouseX) > distForShake || Math.abs(MicroUI.getContext().mouseY - MicroUI.getContext().pmouseY) > distForShake) {
 			return true;
 		}
 		return false;
@@ -214,4 +304,5 @@ public final class EventCallback {
 	private final void clearList(List<?> list) {
 		if(list != null) { list.clear(); }
 	}
+	
 }

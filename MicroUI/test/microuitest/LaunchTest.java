@@ -1,12 +1,12 @@
 package microuitest;
 
 import microui.MicroUI;
-import microui.component.MenuButton;
+import microui.component.Button;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
 public final class LaunchTest extends PApplet {
-	MenuButton menu;
+	Button button;
 	
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
@@ -18,26 +18,15 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		menu = new MenuButton("File",0,0,100,20);
-		
-		menu.add(new MenuButton("New"),
-				 new MenuButton("Open File"),
-				 new MenuButton("Open Projects from File System"),
-				 new MenuButton("Recent Files"),
-				 new MenuButton("Close Editor"),
-				 new MenuButton("Close All Editor"),
-				 new MenuButton("Save"),
-				 new MenuButton("Save As..."));
-		
-		menu.eventCallBack.addOnClickListener(() -> background(random(255)));
-		
+		button = new Button();
+		button.eventCallBack.addOnShakeListener(() -> button.fill.set(random(255)));
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
 		
-		menu.draw();
+		button.draw();
 		
 		GlobalTooltip.draw();
 	}
