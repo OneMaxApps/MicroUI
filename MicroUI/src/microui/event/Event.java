@@ -87,7 +87,6 @@ public class Event extends MicroUI {
 	  }
 
 	  public boolean holding() {
-		  action();
 		  if(pressed()) { return holding = true;
 		  } else {
 			  	return holding;
@@ -109,7 +108,6 @@ public class Event extends MicroUI {
 	    if(inside() && !pressed() && wasPressed == 1) {
 	    	wasPressed = 0;
 	    	secondsSinceMouseInside = 0;
-	    	action();
 	    	return true;
 	    }
 	    return false;
@@ -151,11 +149,6 @@ public class Event extends MicroUI {
 		  }
 		  
 	  }
-	  
-	  /**
-	   * additional action for specific logic
-	   */
-	  public void action() { }
 	  
 	  public final void resetState() {
 		  keyReleased();

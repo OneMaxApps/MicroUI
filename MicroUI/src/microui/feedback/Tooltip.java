@@ -7,27 +7,43 @@ import microui.core.TextController;
 import microui.core.base.Bounds;
 import microui.core.base.Container;
 import microui.core.style.Color;
-import microui.event.Event;
+import microui.event.EventCallback;
+import microui.event.EventType;
 import microui.service.GlobalTooltip;
 
 
 public final class Tooltip extends Bounds {
-	private static final int SECONDS_FOR_SHOWING = 2
-					 		,PADDING_X = 10;
+	private static final int PADDING_X = 10;
 	
 	public final Text text;
 	
 	private Color fill;
-	private final Event event;
 	private Container container;
-	private boolean additionalCondition;
+	private boolean canBeVisible;
+	private Boolean additionalCondition;
 	
-	public Tooltip(Event event) {
+	public Tooltip(EventCallback event) {
 		fill = GlobalTooltip.DEFAULT_COLOR;
 		
 		text = new Text();
 		
-		this.event = event;
+		event.addListener(EventType.INSIDE_LONG, () -> {
+			canBeVisible = additionalCondition && (!text.isEmpty() || container != null);
+		});
+		
+		event.addListener(EventType.OUTSIDE, () -> {
+			if(canBeVisible) {
+				event.resetInsideTimer();
+				canBeVisible = false;
+			}
+		});
+		
+		event.addListener(EventType.SHAKE, () -> {
+			if(canBeVisible) {
+				event.resetInsideTimer();
+				canBeVisible = false;
+			}
+		});
 		
 		additionalCondition = true;
 	}
@@ -46,7 +62,7 @@ public final class Tooltip extends Bounds {
 	}
 	
 	public final void init() {
-		if(canBeVisible()) {
+		if(canBeVisible) {
 			GlobalTooltip.onDraw(this);
 			visible();
 		} else { invisible(); }
@@ -62,12 +78,6 @@ public final class Tooltip extends Bounds {
 			}
 		}
 		
-	}
-	
-	
-	
-	private final boolean canBeVisible() {
-		return additionalCondition && event.inside(SECONDS_FOR_SHOWING) && (!text.isEmpty() || container != null);
 	}
 	
 	public final Container getContainer() {

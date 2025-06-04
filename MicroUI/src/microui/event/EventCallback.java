@@ -101,8 +101,13 @@ public final class EventCallback extends MicroUI {
 	}
 	
 	public final void addListener(EventType type, Listener listener) {
-		if(eventList.get(type) == null) { eventList.put(type, new ArrayList<Listener>()); }
+		eventList.putIfAbsent(type, new ArrayList<Listener>());
 		eventList.get(type).add(listener);
+		
+	}
+	
+	public final void resetInsideTimer() {
+		insideTimer = 0;
 	}
 	
 	private final boolean isClicked() {
@@ -129,7 +134,7 @@ public final class EventCallback extends MicroUI {
 					break;
 					
 					case OUTSIDE :
-						if(isOutside(bounds)) { list.forEach(listener -> listener.action()); }
+						if(isOutside()) { list.forEach(listener -> listener.action()); }
 					break;
 					
 					case PRESSED :
@@ -169,16 +174,19 @@ public final class EventCallback extends MicroUI {
 		
 	}
 
-	// TODO: Replace it to method inside in Event
 	private static final boolean isInside(Bounds bounds) {
-		return app.mouseX > bounds.getX()
-			&& app.mouseX < bounds.getX() + bounds.getWidth()
-			&& app.mouseY > bounds.getY()
-			&& app.mouseY < bounds.getY() + bounds.getHeight();
+		  if(bounds.getWidth() < 0 && bounds.getHeight() < 0) { return app.mouseX > bounds.getX()+bounds.getWidth() && app.mouseX < bounds.getX() && app.mouseY > bounds.getY()+bounds.getHeight() && app.mouseY < bounds.getY(); }
+		  if(bounds.getWidth() < 0) { return app.mouseX > bounds.getX()+bounds.getWidth() && app.mouseX < bounds.getX() && app.mouseY > bounds.getY() && app.mouseY < bounds.getY()+bounds.getHeight(); }
+		  if(bounds.getHeight() < 0) { return app.mouseX > bounds.getX() && app.mouseX < bounds.getX()+bounds.getWidth() && app.mouseY > bounds.getY()+bounds.getHeight() && app.mouseY < bounds.getY(); }
+		  return app.mouseX > bounds.getX() && app.mouseX < bounds.getX()+bounds.getWidth() && app.mouseY > bounds.getY() && app.mouseY < bounds.getY()+bounds.getHeight(); 
+	}
+	
+	public final boolean isInside() {
+		return isInside(bounds);
 	}
 
-	private static final boolean isOutside(Bounds bounds) {
-		return !isInside(bounds);
+	public final boolean isOutside() {
+		return !isInside();
 	}
 
 	private static final boolean isPressed(Bounds bounds) {

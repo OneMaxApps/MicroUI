@@ -22,6 +22,7 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
+		
 		component = new Button();
 		component.eventCallback.addListener(CLICKED, () -> background(random(255)));
 		component.eventCallback.addListener(LONG_PRESSED, () -> component.fill.set(random(255)));
@@ -31,11 +32,12 @@ public final class LaunchTest extends PApplet {
 			}
 		});
 		
+		component.tooltip.text.set(component.toString());
 	}
 	
 	@Override
 	public void draw() {
-		//background(128);
+		background(128);
 		
 		component.draw();
 		

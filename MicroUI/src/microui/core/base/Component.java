@@ -18,7 +18,7 @@ public abstract class Component extends Bounds {
         event = new Event();
         eventCallback = new EventCallback(this);
         
-        tooltip = new Tooltip(event);
+        tooltip = new Tooltip(eventCallback);
       }
     
     public Component() {
