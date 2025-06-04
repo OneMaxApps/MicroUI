@@ -19,7 +19,7 @@ public final class LaunchTest extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		button = new Button();
-		button.eventCallBack.addOnShakeListener(() -> button.fill.set(random(255)));
+		button.eventCallback.addOnInsideLongListener(() -> button.fill.set(random(255)));
 	}
 	
 	@Override
