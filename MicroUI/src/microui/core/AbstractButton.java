@@ -4,6 +4,7 @@ import microui.core.base.Component;
 import microui.core.effect.Hover;
 import microui.core.effect.Ripples;
 import microui.core.style.Stroke;
+import microui.event.EventType;
 
 public abstract class AbstractButton extends Component {
 	public final Ripples ripples;
@@ -17,7 +18,7 @@ public abstract class AbstractButton extends Component {
 		hover = new Hover(this);
 		stroke = new Stroke();
 		
-		eventCallback.addOnClickListener(() -> ripples.initAnim());
+		eventCallback.addListener(EventType.CLICKED,() -> ripples.initAnim());
 	}
 
 	@Override

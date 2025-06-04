@@ -1,14 +1,16 @@
 package microuitest;
 
+import static microui.event.EventType.CLICKED;
+import static microui.event.EventType.HOLDING;
+import static microui.event.EventType.LONG_PRESSED;
+
 import microui.MicroUI;
-import microui.component.MenuButton;
-import microui.event.EventType;
+import microui.component.Button;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
-import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
-	MenuButton component;
+	Button component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
@@ -20,24 +22,24 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new MenuButton();
-		component.eventCallback.addOnClickListener(() -> component.fill.set(random(255)));
-		component.eventCallback.remove(EventType.CLICKED,2);
+		component = new Button();
+		component.eventCallback.addListener(CLICKED, () -> background(random(255)));
+		component.eventCallback.addListener(LONG_PRESSED, () -> component.fill.set(random(255)));
+		component.eventCallback.addListener(HOLDING, () -> {
+			if(mouseButton == RIGHT) {
+				component.setSize(mouseX,mouseY);
+			}
+		});
+		
 	}
 	
 	@Override
 	public void draw() {
-		background(128);
+		//background(128);
 		
 		component.draw();
 		
 		GlobalTooltip.draw();
 	}
-
-	@Override
-	public void mouseWheel(MouseEvent event) {
-		component.mouseWheel(event);
-	}
-	
 	
 }

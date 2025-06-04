@@ -29,6 +29,8 @@ public class TextView extends Component {
 	    shadow = new Shadow();
 	    visible = true;
 	    fill.set(255);
+	    
+	    eventCallback.setEnable(false);
 	  }
 	  
 	  public TextView(float x, float y, float w, float h) {
