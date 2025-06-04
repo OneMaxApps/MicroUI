@@ -7,7 +7,7 @@ import microui.core.TextController;
 import microui.core.base.Bounds;
 import microui.core.base.Container;
 import microui.core.style.Color;
-import microui.event.EventCallback;
+import microui.event.Callback;
 import microui.event.EventType;
 import microui.service.GlobalTooltip;
 
@@ -22,7 +22,7 @@ public final class Tooltip extends Bounds {
 	private boolean canBeVisible;
 	private Boolean additionalCondition;
 	
-	public Tooltip(EventCallback event) {
+	public Tooltip(Callback event) {
 		fill = GlobalTooltip.DEFAULT_COLOR;
 		
 		text = new Text();

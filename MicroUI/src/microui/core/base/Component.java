@@ -1,14 +1,16 @@
 package microui.core.base;
 
 import microui.core.style.Color;
+import microui.event.Callback;
 import microui.event.Event;
-import microui.event.EventCallback;
+import microui.event.EventType;
+import microui.event.Listener;
 import microui.feedback.Tooltip;
 
 public abstract class Component extends Bounds {
     public final Color fill;
     public final Event event;
-    public final EventCallback eventCallback;
+    public final Callback callback;
     public final Tooltip tooltip;
     
     public Component(float x, float y, float w, float h) {
@@ -16,9 +18,9 @@ public abstract class Component extends Bounds {
         
         fill = new Color(44);
         event = new Event();
-        eventCallback = new EventCallback(this);
+        callback = new Callback(this);
         
-        tooltip = new Tooltip(eventCallback);
+        tooltip = new Tooltip(callback);
       }
     
     public Component() {
@@ -28,7 +30,7 @@ public abstract class Component extends Bounds {
     @Override
 	public void draw() {
 		super.draw();
-		eventCallback.listen();
+		callback.listen();
 		tooltip.init();
 	}
 
@@ -36,5 +38,8 @@ public abstract class Component extends Bounds {
 		if(otherComponent == null) { return; }
     	fill.set(otherComponent.fill);
 	}
-     
+    
+	public final void on(EventType type, Listener listener) {
+		callback.addListener(type, listener);
+	}
 }

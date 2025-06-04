@@ -7,10 +7,10 @@ import java.util.Objects;
 import microui.MicroUI;
 import microui.core.base.Bounds;
 
-public final class EventCallback extends MicroUI {
+public final class Callback extends MicroUI {
 	private final Bounds bounds;
 	
-	private EnumMap<EventType, ArrayList<Listener>> eventList = new EnumMap<>(EventType.class);
+	private final EnumMap<EventType, ArrayList<Listener>> eventList = new EnumMap<>(EventType.class);
 	
 	private boolean hasClickedStateTriggered, isHolding, isEnable, isClicked, isDragged;
 
@@ -21,7 +21,7 @@ public final class EventCallback extends MicroUI {
 				 longPressThreshold,doubleClickThreshold,
 				 insideTimerStart,insideTimer,insideThreshold;
 
-	public EventCallback(Bounds otherBounds) {
+	public Callback(Bounds otherBounds) {
 		bounds = otherBounds;
 		isEnable = true;
 		final int ONE_SECOND = 1000, TWO_SECONDS = 2000, THREE_SECONDS = 3000, THREE_PIXELS = 3;

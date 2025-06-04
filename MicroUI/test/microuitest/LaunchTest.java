@@ -24,9 +24,9 @@ public final class LaunchTest extends PApplet {
 		MicroUI.setContext(this);
 		
 		component = new Button();
-		component.eventCallback.addListener(CLICKED, () -> background(random(255)));
-		component.eventCallback.addListener(LONG_PRESSED, () -> component.fill.set(random(255)));
-		component.eventCallback.addListener(HOLDING, () -> {
+		component.on(CLICKED, () -> background(random(255)));
+		component.on(LONG_PRESSED, () -> component.fill.set(random(255)));
+		component.on(HOLDING, () -> {
 			if(mouseButton == RIGHT) {
 				component.setSize(mouseX,mouseY);
 			}

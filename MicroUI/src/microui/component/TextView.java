@@ -30,7 +30,7 @@ public class TextView extends Component {
 	    visible = true;
 	    fill.set(255);
 	    
-	    eventCallback.setEnable(false);
+	    callback.setEnable(false);
 	  }
 	  
 	  public TextView(float x, float y, float w, float h) {

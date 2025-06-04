@@ -18,7 +18,7 @@ public abstract class AbstractButton extends Component {
 		hover = new Hover(this);
 		stroke = new Stroke();
 		
-		eventCallback.addListener(EventType.CLICKED,() -> ripples.initAnim());
+		callback.addListener(EventType.CLICKED,() -> ripples.initAnim());
 	}
 
 	@Override

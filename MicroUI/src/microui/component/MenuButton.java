@@ -34,7 +34,7 @@ public class MenuButton extends Button implements Scrollable {
 		calculateMarkBounds();
 		scrolling = new Scrolling();
 		
-		eventCallback.addListener(EventType.CLICKED, () -> {
+		callback.addListener(EventType.CLICKED, () -> {
 			isOpen = !isOpen;
 			if(!isOpen) { closeAllSubMenus(); } else { selectedId = -1; }
 		});
