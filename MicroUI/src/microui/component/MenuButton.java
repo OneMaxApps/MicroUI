@@ -17,7 +17,6 @@ public class MenuButton extends Button implements Scrollable {
 	private float markX,markY,markW,markH;
 	
 	private final ArrayList<Button> itemList;
-	private final Event innerEvent;
 	private final Scrolling scrolling;
 	
 	private MenuButton root;
@@ -28,12 +27,16 @@ public class MenuButton extends Button implements Scrollable {
 		isAutoClose = true;
 		itemList = new ArrayList<Button>();
 		selectedId = -1;
-		innerEvent = new Event();
 		isRoot = true;
 		isMarkVisible = true;
 		root = this;
 		calculateMarkBounds();
 		scrolling = new Scrolling();
+		
+		eventCallback.addOnClickListener(() -> {
+			isOpen = !isOpen;
+			if(!isOpen) { closeAllSubMenus(); } else { selectedId = -1; }
+		});
 	}
 	
 	public MenuButton(String title) {
@@ -53,13 +56,6 @@ public class MenuButton extends Button implements Scrollable {
 	public final void update() {
 			super.update();
 			scrolling.update();
-			innerEvent.listen(this);
-			
-			
-			if(innerEvent.clicked()) {
-				isOpen = !isOpen;
-				if(!isOpen) { closeAllSubMenus(); } else { selectedId = -1; }
-			}
 			
 			itemsOnDraw();
 			markOnDraw();

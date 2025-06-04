@@ -19,7 +19,6 @@ public class TextView extends Component {
 	  private int textSize,autoResizeMode;
 	  private boolean center,upperCaseStyle,lowerCaseStyle,autoResize;
 	  
-	   
 	  public TextView(String text, float x, float y, float w, float h) {
 	    super(x,y,w,h);
 	    

@@ -6,20 +6,20 @@ import java.util.List;
 import microui.MicroUI;
 import microui.core.base.Bounds;
 
-public final class EventCallback {
+public final class EventCallback extends MicroUI {
 	private final Bounds bounds;
 
-	private List<OnClickListener> onClickList;
-	private List<OnInsideListener> onInsideList;
-	private List<OnOutsideListener> onOutsideList;
-	private List<OnPressedListener> onPressedList;
-	private List<OnLongPressedListener> onLongPressedList;
-	private List<OnHoldingListener> onHoldingList;
-	private List<OnDoubleClickListener> onDoubleClickList;
-	private List<OnDraggedListener> onDraggedList;
-	private List<OnDraggingListener> onDraggingList;
-	private List<OnShakeListener> onShakeList;
-	private List<OnInsideLongListener> onInsideLongList;
+	private ArrayList<OnClickListener> onClickList;
+	private ArrayList<OnInsideListener> onInsideList;
+	private ArrayList<OnOutsideListener> onOutsideList;
+	private ArrayList<OnPressedListener> onPressedList;
+	private ArrayList<OnLongPressedListener> onLongPressedList;
+	private ArrayList<OnHoldingListener> onHoldingList;
+	private ArrayList<OnDoubleClickListener> onDoubleClickList;
+	private ArrayList<OnDraggedListener> onDraggedList;
+	private ArrayList<OnDraggingListener> onDraggingList;
+	private ArrayList<OnShakeListener> onShakeList;
+	private ArrayList<OnInsideLongListener> onInsideLongList;
 	
 	private boolean hasClickedStateTriggered, isHolding, isEnable, isClicked, isDragged;
 
@@ -123,86 +123,92 @@ public final class EventCallback {
 		}
 	}
 	
-	public final void addOnClickListener(OnClickListener onClick) {
-		if (onClickList == null) {
-			onClickList = new ArrayList<OnClickListener>();
+	public final void remove(EventType type, int index) {
+		switch(type) {
+			case CLICKED : safeRemove(onClickList, index); break;
+			case DOUBLE_CLICKED : safeRemove(onDoubleClickList, index); break; 
+			case DRAGGED : safeRemove(onDraggedList, index); break; 
+			case DRAGGING : safeRemove(onDraggingList, index); break; 
+			case HOLDING : safeRemove(onHoldingList, index); break; 
+			case INSIDE : safeRemove(onInsideList, index); break; 
+			case OUTSIDE : safeRemove(onOutsideList, index); break; 
+			case LONG_PRESSED : safeRemove(onLongPressedList, index); break; 
+			case PRESSED : safeRemove(onPressedList, index); break;
+			case SHAKE : safeRemove(onShakeList, index); break;
+			case INSIDE_LONG : safeRemove(onInsideLongList, index); break;
 		}
-		onClickList.add(onClick);
 		
+	}
+	
+	private static final <T> void safeRemove(ArrayList<T> list, int index) {
+		if(list == null) { return; }
+		if(list.isEmpty()) { return; }
+		if(index < 0 || index > list.size()-1) { return; }
+		list.remove(index);
+	}
+
+	public final void addOnClickListener(OnClickListener onClick) {
+		onClickList = createIfAbsent(onClickList);
+		onClickList.add(onClick);
 	}
 
 	public final void addOnInsideListener(OnInsideListener onInside) {
-		if (onInsideList == null) {
-			onInsideList = new ArrayList<OnInsideListener>();
-		}
+		onInsideList = createIfAbsent(onInsideList);
 		onInsideList.add(onInside);
 	}
 
 	public final void addOnOutsideListener(OnOutsideListener onOutside) {
-		if (onOutsideList == null) {
-			onOutsideList = new ArrayList<OnOutsideListener>();
-		}
+		onOutsideList = createIfAbsent(onOutsideList);
 		onOutsideList.add(onOutside);
 	}
 
 	public final void addOnPressedListener(OnPressedListener onPressed) {
-		if (onPressedList == null) {
-			onPressedList = new ArrayList<OnPressedListener>();
-		}
+		onPressedList = createIfAbsent(onPressedList);
 		onPressedList.add(onPressed);
 	}
 
 	public final void addOnLongPressedListener(OnLongPressedListener onLongPressed) {
-		if (onLongPressedList == null) {
-			onLongPressedList = new ArrayList<OnLongPressedListener>();
-		}
+		onLongPressedList = createIfAbsent(onLongPressedList);
 		onLongPressedList.add(onLongPressed);
 	}
 
 	public final void addOnHoldingListener(OnHoldingListener onHolding) {
-		if (onHoldingList == null) {
-			onHoldingList = new ArrayList<OnHoldingListener>();
-		}
+		onHoldingList = createIfAbsent(onHoldingList);
 		onHoldingList.add(onHolding);
 	}
 
 	public final void addOnDoubleClickListener(OnDoubleClickListener onDoubleClickListener) {
-		if (onDoubleClickList == null) {
-			onDoubleClickList = new ArrayList<OnDoubleClickListener>();
-		}
+		onDoubleClickList = createIfAbsent(onDoubleClickList);
 		onDoubleClickList.add(onDoubleClickListener);
 	}
 	
 	public final void addOnDraggedListener(OnDraggedListener onDraggedListener) {
-		if(onDraggedList == null) {
-			onDraggedList = new ArrayList<OnDraggedListener>();
-		}
+		onDraggedList = createIfAbsent(onDraggedList);
 		onDraggedList.add(onDraggedListener);
 	}
 	
 	public final void addOnDraggingListener(OnDraggingListener onDraggingListener) {
-		if(onDraggingList == null) {
-			onDraggingList = new ArrayList<OnDraggingListener>();
-		}
+		onDraggingList = createIfAbsent(onDraggingList);
 		onDraggingList.add(onDraggingListener);
 	}
 	
 	public final void addOnShakeListener(OnShakeListener onShakeListener) {
-		if(onShakeList == null) {
-			onShakeList = new ArrayList<OnShakeListener>();
-		}
+		onShakeList = createIfAbsent(onShakeList);
 		onShakeList.add(onShakeListener);
 	}
 	
 	public final void addOnInsideLongListener(OnInsideLongListener onInsideLongListener) {
-		if(onInsideLongList == null) {
-			onInsideLongList = new ArrayList<OnInsideLongListener>();
-		}
+		onInsideLongList = createIfAbsent(onInsideLongList);
 		onInsideLongList.add(onInsideLongListener);
 	}
 	
+	private static final <T> ArrayList<T> createIfAbsent(ArrayList<T> list) {
+		if(list == null) { list = new ArrayList<T>(); }
+		return list;
+	}
+	
 	private final boolean isClicked() {
-		if (!MicroUI.getContext().mousePressed && isInside(bounds) && hasClickedStateTriggered) {
+		if (!app.mousePressed && isInside(bounds) && hasClickedStateTriggered) {
 			hasClickedStateTriggered = false;
 			updateDeltaTimeBetweenClicks();
 			if(delta < doubleClickThreshold) { clickCount++; } else { clickCount = 0; }
@@ -259,10 +265,10 @@ public final class EventCallback {
 	}
 
 	private static final boolean isInside(Bounds bounds) {
-		return MicroUI.getContext().mouseX > bounds.getX()
-			&& MicroUI.getContext().mouseX < bounds.getX() + bounds.getWidth()
-			&& MicroUI.getContext().mouseY > bounds.getY()
-			&& MicroUI.getContext().mouseY < bounds.getY() + bounds.getHeight();
+		return app.mouseX > bounds.getX()
+			&& app.mouseX < bounds.getX() + bounds.getWidth()
+			&& app.mouseY > bounds.getY()
+			&& app.mouseY < bounds.getY() + bounds.getHeight();
 	}
 
 	private static final boolean isOutside(Bounds bounds) {
@@ -270,7 +276,7 @@ public final class EventCallback {
 	}
 
 	private static final boolean isPressed(Bounds bounds) {
-		return isInside(bounds) && MicroUI.getContext().mousePressed;
+		return isInside(bounds) && app.mousePressed;
 	}
 
 	private final boolean isLongPressed() {
@@ -293,7 +299,7 @@ public final class EventCallback {
 	
 	private static final boolean isDragging(Bounds bounds) {
 		if(isPressed(bounds)) {
-			if(MicroUI.getContext().mouseX != MicroUI.getContext().pmouseX || MicroUI.getContext().mouseY != MicroUI.getContext().pmouseY) {
+			if(app.mouseX != app.pmouseX || app.mouseY != app.pmouseY) {
 				return true;
 			}
 		}
@@ -301,7 +307,7 @@ public final class EventCallback {
 	}
 	
 	private static final boolean isShaking(int distForShake) {
-		if(Math.abs(MicroUI.getContext().mouseX - MicroUI.getContext().pmouseX) > distForShake || Math.abs(MicroUI.getContext().mouseY - MicroUI.getContext().pmouseY) > distForShake) {
+		if(Math.abs(app.mouseX - app.pmouseX) > distForShake || Math.abs(app.mouseY - app.pmouseY) > distForShake) {
 			return true;
 		}
 		return false;
@@ -336,7 +342,7 @@ public final class EventCallback {
 			pressStartTime = currentPressDuration = 0;
 		}
 		
-		if(!MicroUI.getContext().mousePressed) {
+		if(!app.mousePressed) {
 			isHolding = false;
 			isDragged = false;
 		}

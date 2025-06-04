@@ -1,10 +1,8 @@
 package microui.component;
 
 import microui.core.AbstractButton;
-import microui.event.Event;
 
 public class CheckBox extends AbstractButton {
-	private final Event eventInside;
 	private boolean included;
 	
 	public CheckBox(float x, float y, float w, float h) {
@@ -13,8 +11,7 @@ public class CheckBox extends AbstractButton {
 		fill.set(0,200,0);
 		hover.fill.set(0,10);
 		
-		eventInside = new Event();
-		
+		eventCallback.addOnClickListener(() -> included = !included);
 	}
 	
 	public CheckBox(boolean include) {
@@ -29,9 +26,7 @@ public class CheckBox extends AbstractButton {
 	@Override
 	public void update() {
 		super.update();
-		eventInside.listen(this);
-		if(eventInside.clicked()) { included = !included; }
-		
+
 		if(!included) {
 			app.pushStyle();
 			app.fill(0,128);
