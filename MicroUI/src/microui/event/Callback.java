@@ -8,6 +8,8 @@ import microui.MicroUI;
 import microui.core.base.Bounds;
 
 public final class Callback extends MicroUI {
+	private static final int ONE_SECOND = 1000, TWO_SECONDS = 2000, THREE_SECONDS = 3000, THREE_PIXELS = 3;
+	
 	private final Bounds bounds;
 	
 	private final EnumMap<EventType, ArrayList<Listener>> eventList = new EnumMap<>(EventType.class);
@@ -24,7 +26,7 @@ public final class Callback extends MicroUI {
 	public Callback(Bounds otherBounds) {
 		bounds = otherBounds;
 		isEnable = true;
-		final int ONE_SECOND = 1000, TWO_SECONDS = 2000, THREE_SECONDS = 3000, THREE_PIXELS = 3;
+		
 		longPressThreshold = THREE_SECONDS;
 		doubleClickThreshold = ONE_SECOND;
 		
@@ -101,6 +103,17 @@ public final class Callback extends MicroUI {
 		safeRemove(eventList.get(type), index);
 	}
 	
+	public final void remove(EventType type, Listener listener) {
+		safeRemove(eventList.get(type), listener);
+	}
+	
+	public final void remove(Listener listener) {
+		for(EventType type : eventList.keySet()) {
+			safeRemove(eventList.get(type), listener);
+		}
+		
+	}
+	
 	public final void addListener(EventType type, Listener listener) {
 		eventList.putIfAbsent(type, new ArrayList<Listener>());
 		eventList.get(type).add(listener);
@@ -117,8 +130,7 @@ public final class Callback extends MicroUI {
 			updateDeltaTimeBetweenClicks();
 			if(delta < doubleClickThreshold) { clickCount++; }
 			else {
-				clickCount = 0;
-				clickCount++;
+				clickCount = 1;
 			}
 			return true;
 		}
@@ -253,6 +265,7 @@ public final class Callback extends MicroUI {
 		} else {
 			hasClickedStateTriggered = false;
 			insideTimer = 0;
+			clickCount = 0;
 		}
 		
 		if (isPressed(bounds)) {
@@ -275,5 +288,14 @@ public final class Callback extends MicroUI {
 		if(list.isEmpty()) { return; }
 		if(index < 0 || index > list.size()-1) { return; }
 		list.remove(index);
+	}
+	
+	private static final <T> void safeRemove(ArrayList<T> list, Listener listener) {
+		if(list == null) { return; }
+		if(list.isEmpty()) { return; }
+		if(listener == null) { return; }
+		if(!list.contains(listener)) { return; }
+		
+		list.remove(listener);
 	}
 }
