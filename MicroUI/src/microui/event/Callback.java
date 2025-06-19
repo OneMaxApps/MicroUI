@@ -35,9 +35,10 @@ public final class Callback extends MicroUI {
 
 	public final void listen() {
 		if (!isEnable) { return; }
+	
 		inputUpdate();
 		listeners();
-		
+
 	}
 
 	public final boolean isEnable() {
@@ -114,10 +115,13 @@ public final class Callback extends MicroUI {
 		if (!app.mousePressed && isInside(bounds) && hasClickedStateTriggered) {
 			hasClickedStateTriggered = false;
 			updateDeltaTimeBetweenClicks();
-			if(delta < doubleClickThreshold) { clickCount++; } else { clickCount = 0; }
+			if(delta < doubleClickThreshold) { clickCount++; }
+			else {
+				clickCount = 0;
+				clickCount++;
+			}
 			return true;
 		}
-
 		return false;
 	}
 	
@@ -174,7 +178,7 @@ public final class Callback extends MicroUI {
 		
 	}
 
-	private static final boolean isInside(Bounds bounds) {
+	private static final boolean isInside(final Bounds bounds) {
 		  if(bounds.getWidth() < 0 && bounds.getHeight() < 0) { return app.mouseX > bounds.getX()+bounds.getWidth() && app.mouseX < bounds.getX() && app.mouseY > bounds.getY()+bounds.getHeight() && app.mouseY < bounds.getY(); }
 		  if(bounds.getWidth() < 0) { return app.mouseX > bounds.getX()+bounds.getWidth() && app.mouseX < bounds.getX() && app.mouseY > bounds.getY() && app.mouseY < bounds.getY()+bounds.getHeight(); }
 		  if(bounds.getHeight() < 0) { return app.mouseX > bounds.getX() && app.mouseX < bounds.getX()+bounds.getWidth() && app.mouseY > bounds.getY()+bounds.getHeight() && app.mouseY < bounds.getY(); }
@@ -228,9 +232,11 @@ public final class Callback extends MicroUI {
 	}
 	
 	private final void updateDeltaTimeBetweenClicks() {
+		if(clickedTimeNow == 0) { clickedTimePrev = System.currentTimeMillis(); }
 		clickedTimePrev = clickedTimeNow;
 		clickedTimeNow = System.currentTimeMillis();
 		delta = clickedTimeNow-clickedTimePrev;
+		if(delta >= doubleClickThreshold) { clickCount = 0; }
 	}
 	
 	private final void clearList(EventType type) {

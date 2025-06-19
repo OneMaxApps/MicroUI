@@ -1,11 +1,8 @@
 package microuitest;
 
-import static microui.event.EventType.CLICKED;
-import static microui.event.EventType.HOLDING;
-import static microui.event.EventType.LONG_PRESSED;
-
 import microui.MicroUI;
 import microui.component.Button;
+import microui.event.EventType;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
@@ -24,20 +21,26 @@ public final class LaunchTest extends PApplet {
 		MicroUI.setContext(this);
 		
 		component = new Button();
-		component.on(CLICKED, () -> background(random(255)));
-		component.on(LONG_PRESSED, () -> component.fill.set(random(255)));
-		component.on(HOLDING, () -> {
-			if(mouseButton == RIGHT) {
-				component.setSize(mouseX,mouseY);
-			}
-		});
 		
-		component.tooltip.text.set(component.toString());
+		// [1] CLICKED
+		// [1] DOUBLE_CLICKED
+		// [1] DRAGGED
+		// [1] DRAGGING
+		// [1] HOLDING
+		// [1] INSIDE
+		// [1] INSIDE_LONG
+		// [1] OUTSIDE
+		// [1] LONG_PRESSED
+		// [1] PRESSED
+		// [1] SHAKE
+		
+		component.callback.addListener(EventType.SHAKE, () -> background(random(255)));
+		
 	}
 	
 	@Override
 	public void draw() {
-		background(128);
+		// background(128);
 		
 		component.draw();
 		

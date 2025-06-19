@@ -19,28 +19,34 @@ public final class Tooltip extends Bounds {
 	
 	private Color fill;
 	private Container container;
-	private boolean canBeVisible;
-	private Boolean additionalCondition;
+	private boolean canBeVisible,additionalCondition;
 	
-	public Tooltip(Callback event) {
+	public Tooltip(Callback callback) {
 		fill = GlobalTooltip.DEFAULT_COLOR;
 		
 		text = new Text();
 		
-		event.addListener(EventType.INSIDE_LONG, () -> {
+		callback.addListener(EventType.INSIDE_LONG, () -> {
 			canBeVisible = additionalCondition && (!text.isEmpty() || container != null);
 		});
 		
-		event.addListener(EventType.OUTSIDE, () -> {
+		callback.addListener(EventType.OUTSIDE, () -> {
 			if(canBeVisible) {
-				event.resetInsideTimer();
+				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
 		
-		event.addListener(EventType.SHAKE, () -> {
+		callback.addListener(EventType.SHAKE, () -> {
 			if(canBeVisible) {
-				event.resetInsideTimer();
+				callback.resetInsideTimer();
+				canBeVisible = false;
+			}
+		});
+		
+		callback.addListener(EventType.PRESSED, () -> {
+			if(canBeVisible) {
+				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
