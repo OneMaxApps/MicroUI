@@ -6,7 +6,7 @@ import static processing.core.PApplet.map;
 import microui.core.RangeControl;
 import microui.util.Constants;
 
-public final class Scroll extends RangeControl {
+public class Scroll extends RangeControl {
 	public final Button thumb;
 	private float distToThumb;
 	private boolean needRecalculateDistToThumb;
@@ -47,6 +47,10 @@ public final class Scroll extends RangeControl {
 					value.setWithoutActions(map(thumb.getY(),getY()+getHeight()-thumb.getHeight(),getY(),value.getMin(),value.getMax()));
 				break;
 			}
+			
+			onChangeValue();
+			onStartChangeValue();
+			
 			
 		} else {
 			needRecalculateDistToThumb = true;

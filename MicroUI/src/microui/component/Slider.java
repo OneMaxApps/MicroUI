@@ -8,7 +8,7 @@ import microui.core.style.Stroke;
 import microui.util.Constants;
 import microui.util.UnsafeBounds;
 
-public final class Slider extends RangeControl {
+public class Slider extends RangeControl {
 	
 	public final Rect level;
 	
@@ -40,6 +40,10 @@ public final class Slider extends RangeControl {
 			case Constants.VERTICAL: value.set(map(app.mouseY,getY(),getY()+getHeight(),value.getMin(),value.getMax())); break;
 			}
 			onChangeBounds();
+			
+			onStartChangeValue();
+			onChangeValue();
+			
 		}
 		
 		
