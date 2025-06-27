@@ -14,7 +14,7 @@ import microui.service.GlobalTooltip;
 
 public final class Tooltip extends Bounds {
 	private static final int PADDING_X = 10;
-	
+
 	public final Text text;
 	
 	private Color fill;
@@ -22,6 +22,7 @@ public final class Tooltip extends Bounds {
 	private boolean canBeVisible,additionalCondition;
 	
 	public Tooltip(Callback callback) {
+
 		fill = GlobalTooltip.DEFAULT_COLOR;
 		
 		text = new Text();
@@ -116,7 +117,19 @@ public final class Tooltip extends Bounds {
 			super();
 			fill = new Color();
 		}
+		
+		public final void setColor(final Color color) {
+			if(color == null) { return; }
+			this.fill = color;
+		}
+		
 
+		@Override
+		protected void inInserting() {
+			calculateWidth();
+			calculateHeight();
+		}
+		
 		private final void draw() {
 			app.pushStyle();
 			fill.use();
@@ -168,15 +181,8 @@ public final class Tooltip extends Bounds {
 			app.popStyle();
 		}
 
-		@Override
-		protected void inInserting() {
-			calculateWidth();
-			calculateHeight();
-		}
 		
-		public final void setColor(final Color color) {
-			if(color == null) { return; }
-			this.fill = color;
-		}
+		
+		
 	}
 }

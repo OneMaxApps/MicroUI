@@ -1,15 +1,13 @@
 package microuitest;
 
 import microui.MicroUI;
-import microui.component.Button;
-import microui.event.EventType;
-import microui.event.Listener;
+import microui.component.Scroll;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
-	Button component;
-	
+	Scroll rangeController;
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
 	}
@@ -21,24 +19,33 @@ public final class LaunchTest extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		
-		component = new Button();
+		rangeController = new Scroll();
 		
-	
-		Listener listener = () -> {
-			background(random(255));
-		};
+		rangeController.setOnStartChangeValueListener(() -> {
+			System.out.println("range control start");
+		});
 		
-		component.callback.addListener(EventType.CLICKED , listener);
+		rangeController.setOnChangeValueListener(() -> {
+			System.out.println("range control in change");
+		});
 		
-		component.callback.remove(listener);
+		rangeController.setOnEndChangeValueListener(() -> {
+			System.out.println("range control end");
+		});
 	}
 	
 	@Override
 	public void draw() {
-		
-		component.draw();
-		
+		background(128);
+		rangeController.draw();
 		GlobalTooltip.draw();
 	}
+
+	@Override
+	public void mouseWheel(MouseEvent event) {
+		rangeController.mouseWheel(event);
+	}
+	
+	
 	
 }

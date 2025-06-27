@@ -20,17 +20,13 @@ public abstract class TextController {
 		this("");
 	}
 	
-	public final void set(final String text) {
+	public void set(final String text) {
 		if(text == null) { return; }
 		
 		inSetting();
 		
-		if(isEmpty()) {
-			insert(0,text);
-		} else {
-			clear();
-			insert(0,text);
-		}
+		if(!isEmpty()) { clear(); }
+		insert(0,text);
 		
 	}
 	

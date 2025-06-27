@@ -266,6 +266,7 @@ public final class Callback extends MicroUI {
 			hasClickedStateTriggered = false;
 			insideTimer = 0;
 			clickCount = 0;
+			isClicked = false;
 		}
 		
 		if (isPressed(bounds)) {

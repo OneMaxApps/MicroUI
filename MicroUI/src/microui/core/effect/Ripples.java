@@ -58,7 +58,7 @@ public final class Ripples extends View {
 	}
 	
 	private final void createGraphics() {
-		pg = app.createGraphics((int) max(1,form.getWidth()),(int) max(1,form.getHeight()));
+		pg = app.createGraphics((int) max(1,form.getWidth()),(int) max(1,form.getHeight()),app.sketchRenderer());
 		Metrics.register(pg);
 	}
 

@@ -65,6 +65,7 @@ public class ColumnLayout extends Layout {
 	
 	@Override
 	protected final void recalcListState() {
+		if(elementList == null) { return; }
 		for(int i = 0; i < elementList.size(); i++) {
 	  		Bounds bounds = elementList.get(i);
 			if(i == 0) {
