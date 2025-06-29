@@ -26,13 +26,11 @@ public class RowLayout extends Layout {
 	@Override
 	public void draw() {
 		super.draw();
-		if(!elementList.isEmpty()) {
-			elementList.forEach(element -> element.draw());
-		};
+		drawElements();
 	}
 	
-	public RowLayout add(Bounds baseRectanle, float weight) {
-		elementList.add(baseRectanle);
+	public RowLayout add(Bounds bounds, float weight) {
+		elementList.add(bounds);
 		
 		if(weightList.isEmpty()) {
 			weightList.add(constrain(weight,0,1f));

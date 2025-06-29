@@ -25,9 +25,7 @@ public class ColumnLayout extends Layout {
 	@Override
 	public void draw() {
 		super.draw();
-		if(!elementList.isEmpty()) {	
-			elementList.forEach(element -> element.draw());
-		}
+		drawElements();
 	}
 	
 	public ColumnLayout add(Bounds form, float weight) {

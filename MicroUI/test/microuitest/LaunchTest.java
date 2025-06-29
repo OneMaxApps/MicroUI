@@ -1,13 +1,17 @@
 package microuitest;
 
 import microui.MicroUI;
-import microui.component.Scroll;
+import microui.component.Button;
+import microui.component.MenuButton;
+import microui.container.layout.ColumnLayout;
+import microui.container.layout.LinearLayout;
+import microui.container.layout.RowLayout;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
-import processing.event.MouseEvent;
 
 public final class LaunchTest extends PApplet {
-	Scroll rangeController;
+	ColumnLayout columnLayout;
+	
 	public static void main(String[] args) {
 		PApplet.main("microuitest.LaunchTest");
 	}
@@ -18,34 +22,19 @@ public final class LaunchTest extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		
-		rangeController = new Scroll();
-		
-		rangeController.setOnStartChangeValueListener(() -> {
-			System.out.println("range control start");
-		});
-		
-		rangeController.setOnChangeValueListener(() -> {
-			System.out.println("range control in change");
-		});
-		
-		rangeController.setOnEndChangeValueListener(() -> {
-			System.out.println("range control end");
-		});
+		columnLayout = new ColumnLayout();
+		RowLayout rowLayout = new RowLayout().add(new MenuButton().add("NEW","OPEN","SAVE","SAVE AS"),.1f);
+		LinearLayout linearLayout = new LinearLayout().add(new Button(), DEFAULT_HEIGHT);
+		columnLayout.add(rowLayout,.1f);
+		columnLayout.add(linearLayout, .9f);
+		columnLayout.setPriority(rowLayout, 1);
 	}
 	
 	@Override
 	public void draw() {
 		background(128);
-		rangeController.draw();
+		columnLayout.draw();
 		GlobalTooltip.draw();
 	}
-
-	@Override
-	public void mouseWheel(MouseEvent event) {
-		rangeController.mouseWheel(event);
-	}
-	
-	
 	
 }

@@ -46,7 +46,7 @@ public class GridLayout extends Layout {
 	  @Override
 		public void draw() {
 			super.draw();
-			elementsDraw();
+			drawElements();
 	  }
 	  
 	  @Override
@@ -62,13 +62,6 @@ public class GridLayout extends Layout {
 	  
 	  public final boolean isFull() {
 		  return max(1,cols)*max(1,rows) == elementList.size();
-	  }
-	  
-	  private void elementsDraw() {
-		  	if(elementList.isEmpty()) { return; }
-		  	app.pushStyle();
-		  	elementList.forEach(elements -> elements.draw());
-		  	app.popStyle();
 	  }
 	  
 	  private void gridDraw() {

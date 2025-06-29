@@ -8,6 +8,7 @@ import microui.util.Metrics;
 // Last Reviewed: 01.06.2025
 public abstract class View extends MicroUI implements Visible {
 	protected boolean visible;
+	private int priority;
 	
 	public View() {
 		Metrics.register(this);
@@ -38,5 +39,13 @@ public abstract class View extends MicroUI implements Visible {
 	}
 	
 	public abstract void update();
+
+	public final int getPriority() {
+		return priority;
+	}
+
+	public final void setPriority(int priority) {
+		this.priority = priority;
+	}
 	
 }

@@ -27,10 +27,7 @@ public class LinearLayout extends Layout {
 	@Override
 	public void draw() {
 		super.draw();
-		
-		if(!elementList.isEmpty()) {
-			elementList.forEach(element -> element.draw());
-		};
+		drawElements();
 	}
 	
 	public final void setMode(int mode) {
