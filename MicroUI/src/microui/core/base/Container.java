@@ -1,5 +1,7 @@
 package microui.core.base;
 
+import static processing.core.PApplet.max;
+
 import microui.core.Texture;
 import microui.core.effect.Shadow;
 import microui.core.interfaces.Focusable;
@@ -177,11 +179,13 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		public final Color fill;
 		private final Dots dots;
 		private boolean enable;
+		private int minWidth,minHeight;
 		
 		private ResizeHandle() {
 			visible();
 			fill = new Color(255);
 			dots = new Dots();
+			minWidth = minHeight = 100;
 		}
 		
 		@Override
@@ -204,6 +208,33 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		public final void setEnable(boolean enable) {
 			this.enable = enable;
 		}
+		
+		public final int getMinWidth() {
+			return minWidth;
+		}
+
+		public final void setMinWidth(int minWidth) {
+			if(minWidth <= 0) { return; }
+			this.minWidth = minWidth;
+		}
+
+		public final int getMinHeight() {
+			return minHeight;
+		}
+
+		public final void setMinHeight(int minHeight) {
+			if(minHeight <= 0) { return; }
+			this.minHeight = minHeight;
+		}
+
+		public final Dots.Dot[] getDots() {
+			return dots.dots;
+		}
+		
+		public final Dots.Dot getDot(int index) {
+			if(index < 0 || index > Dots.DOTS_COUNT) { return null; }
+			return dots.dots[index];
+		}
 
 		private final class Dots {
 			private static final int LEFT = 0,
@@ -225,9 +256,12 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			}
 
 			private final void draw() {
+				app.pushStyle();
+				app.noStroke();
 				for(Dot dot : dots) {
 					dot.draw();
 				}
+				app.popStyle();
 			}
 			
 			private final void inTransforms() {
@@ -236,7 +270,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				}
 			}
 			
-			private final class Dot extends Bounds {
+			public final class Dot extends Bounds {
 				private final int mode;
 				private final Event event;
 				private float tmpX,tmpY,difX,difY;
@@ -249,7 +283,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				}
 
 				@Override
-				public void update() {
+				public final void update() {
 					event.listen(this);
 					app.rect(x, y, w, h);
 					if(event.holding()) {
@@ -292,6 +326,8 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 							
 							case DOWN_RIGHT : context.setSize(app.mouseX-getRealX(),app.mouseY-getRealY()); break;
 						}
+						
+						context.setSize(max(minWidth,context.w),max(minHeight,context.h));
 					}
 				}
 

@@ -12,11 +12,11 @@ public abstract class Layout extends Container {
 	
 	public Layout(float x, float y, float w, float h) {
 		super(x, y, w, h);
-
 		elementList = new ArrayList<Bounds>();
+		
 	}
 	
-	public ArrayList<Bounds> getElements() {
+	public final ArrayList<Bounds> getElements() {
 		return elementList;
 	}
 	
@@ -37,7 +37,7 @@ public abstract class Layout extends Container {
 	}
 	
 	@Override
-	public void mouseWheel(MouseEvent e) {
+	public final void mouseWheel(MouseEvent e) {
 		elementList.forEach(element -> {
 			if(element instanceof Scrollable sc) {
 				sc.mouseWheel(e);
@@ -46,7 +46,7 @@ public abstract class Layout extends Container {
 	}
 
 	@Override
-	public void keyPressed() {
+	public final void keyPressed() {
 		elementList.forEach(element -> {
 			if(element instanceof KeyPressable kp) {
 				kp.keyPressed();
@@ -98,8 +98,7 @@ public abstract class Layout extends Container {
 	}
 	
 	public final void setPriority(View view, int priority) {
-		if(view == null) { return; }
-		if(priority < 0) { return; }
+		if(view == null || priority < 0) { return; }
 		
 		elementList.forEach(element -> {
 			if(element == view) {

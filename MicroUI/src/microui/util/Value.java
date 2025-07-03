@@ -28,6 +28,7 @@ public float getMin() {
 
 public void setMin(float min) {
 	if(min > max) { return; }
+	if(min > value) { value = min; }
 	this.min = min;
 	action();
 }
@@ -38,6 +39,7 @@ public float getMax() {
 
 public void setMax(float max) {
 	if(max < min) { return; }
+	if(max < value) { value = max; }
 	this.max = max;
 	action();
 }

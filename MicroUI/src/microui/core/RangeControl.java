@@ -86,6 +86,10 @@ public abstract class RangeControl extends Component implements Scrollable {
 		onChangeBounds();
 	}
 	
+	public void swapOrientation() {
+		if(orientation == 0) { orientation = 1; } else { orientation = 0; }
+	}
+	
 	public final void autoScroll() {
 		value.append(scrolling.get());
 		onChangeValue();

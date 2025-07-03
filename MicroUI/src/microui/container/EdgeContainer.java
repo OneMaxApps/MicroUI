@@ -47,6 +47,12 @@ public class EdgeContainer extends Container {
 		updateState();
 		return this;
 	}
+	
+	public final void updateElementDefaultBounds() {
+		if(bounds == null) { return; }
+		defaultElementWidth = bounds.getWidth();
+		defaultElementHeight = bounds.getHeight();
+	}
 
 	public boolean isLeft() {
 		return left;

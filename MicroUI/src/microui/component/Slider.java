@@ -37,7 +37,7 @@ public class Slider extends RangeControl {
 		if(event.holding()) {
 			switch(orientation) {
 			case Constants.HORIZONTAL: value.set(map(app.mouseX,getX(),getX()+getWidth(),value.getMin(),value.getMax())); break;
-			case Constants.VERTICAL: value.set(map(app.mouseY,getY(),getY()+getHeight(),value.getMin(),value.getMax())); break;
+			case Constants.VERTICAL: value.set(map(app.mouseY,getY(),getY()+getHeight(),value.getMax(),value.getMin())); break;
 			}
 			onChangeBounds();
 			
@@ -73,7 +73,15 @@ public class Slider extends RangeControl {
 		
 	}
 	
-	
+	@Override
+	public void swapOrientation() {
+		super.swapOrientation();
+		onChangeBounds();
+	}
+
+
+
+
 	public final class Rect extends UnsafeBounds {
 	    public final Stroke stroke;
 	    public final Color fill;

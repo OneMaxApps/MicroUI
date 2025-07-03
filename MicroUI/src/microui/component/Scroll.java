@@ -84,6 +84,12 @@ public class Scroll extends RangeControl {
 		
 	}
 	
+	@Override
+	public void swapOrientation() {
+		super.swapOrientation();
+		onChangeBounds();
+	}
+
 	private final void updateThumbTransforms() {
 		thumb.setBounds(this);
 		

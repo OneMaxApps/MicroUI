@@ -46,6 +46,7 @@ public class Color {
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
+		alpha = 255;
 	}
 	
 	public void set(float gray, float alpha) {
@@ -53,7 +54,7 @@ public class Color {
 	}
 	
 	public void set(float gray) {
-		red = green = blue = gray;
+		set(gray,255);
 	}
 	
 	public void set(Color otherColor) {
