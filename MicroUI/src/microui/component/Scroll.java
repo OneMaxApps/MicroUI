@@ -27,7 +27,7 @@ public class Scroll extends RangeControl {
 	}
 
 	@Override
-	public void update() {
+	protected void update() {
 		super.update();
 		thumb.draw();
 		

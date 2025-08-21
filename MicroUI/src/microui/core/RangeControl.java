@@ -39,7 +39,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 	}
 
 	@Override
-	public void update() {
+	protected void update() {
 		event.listen(this);
 		
 		app.pushStyle();

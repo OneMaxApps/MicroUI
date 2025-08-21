@@ -1,4 +1,4 @@
-package microui.container.Panel;
+package microui.container.panel;
 
 import static microui.event.EventType.CLICKED;
 
@@ -78,11 +78,11 @@ public class Panel extends Container {
 		return titleBar.title.get();
 	}
 	
-	public final void open() {
+	public void open() {
 		open = true;
 	}
 	
-	public final void close() {
+	public void close() {
 		open = false;
 	}
 	
@@ -90,18 +90,22 @@ public class Panel extends Container {
 		return open;
 	}
 
-	public final void setOpen(boolean open) {
+	public void setOpen(boolean open) {
 		this.open = open;
 	}
 
 	@Override
 	public void mouseWheel(MouseEvent e) {
-
+		if(container != null) {
+			container.mouseWheel(e);
+		}
 	}
 
 	@Override
 	public void keyPressed() {
-	
+		if(container != null) {
+			container.keyPressed();
+		}
 	}
 
 	
@@ -117,7 +121,7 @@ public class Panel extends Container {
 			setSize(Panel.this.getWidth(),HEIGHT);
 			
 			buttonClose = new Button("");
-			buttonClose.fill.set(255,0,0,128);
+			buttonClose.fill.set(154,0,0,128);
 			buttonClose.ripples.invisible();
 			buttonClose.stroke.setWeight(1);
 			buttonClose.setPosition(getX()+getWidth()-buttonClose.getWidth(),getY());

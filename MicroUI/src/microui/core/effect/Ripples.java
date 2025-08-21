@@ -11,23 +11,25 @@ import microui.util.Metrics;
 import processing.core.PGraphics;
 
 public final class Ripples extends View {
-	public final Circle circle;
-	private final Bounds form;
+	public final Color fill;
+	private final Circle circle;
+	private final Bounds bounds;
 	private PGraphics pg;
 	
-	public Ripples(Bounds form) {
+	public Ripples(Bounds bounds) {
 		super();
+		fill = new Color(0);
+		
 		circle = new Circle();
-
+		
 		visible = true;
-		this.form = form;
+		this.bounds = bounds;
 		createGraphics();
 		
 	}
 
 	@Override
 	public void update() {
-
 		checkResizing();
 		
 		if(pg.width != 0 && pg.height != 0) {
@@ -35,12 +37,18 @@ public final class Ripples extends View {
 		pg.clear();
 		circle.draw(pg);
 		pg.endDraw();
-		app.image(pg, form.getX(),form.getY(),form.getWidth(),form.getHeight());
+		app.image(pg, bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
 		}
 		
 	}
 
-	public final void checkResizing() {
+	public final void initAnim() {
+		circle.resetSize();
+		circle.resetPosition();
+		circle.start = true;
+	}
+	
+	private final void checkResizing() {
 		if(!visible || app.mousePressed) { return; }
 		
 		if(isResized()) { createGraphics(); }
@@ -48,28 +56,17 @@ public final class Ripples extends View {
 	}
 	
 	private final boolean isResized() {
-		return pg.width != (int) form.getWidth() || pg.height != (int) form.getHeight();
-	}
-	
-	public final void initAnim() {
-		circle.resetSize();
-		circle.resetPosition();
-		circle.start = true;
+		return pg.width != (int) bounds.getWidth() || pg.height != (int) bounds.getHeight();
 	}
 	
 	private final void createGraphics() {
-		pg = app.createGraphics((int) max(1,form.getWidth()),(int) max(1,form.getHeight()),app.sketchRenderer());
+		pg = app.createGraphics((int) max(1,bounds.getWidth()),(int) max(1,bounds.getHeight()),app.sketchRenderer());
 		Metrics.register(pg);
 	}
 
-	public final class Circle {
-		public Color fill;
+	private final class Circle {
 		private float x,y,radius;
 		private boolean start;
-		
-		public Circle() {
-			fill = new Color(0);
-		}
 
 		private final void draw(PGraphics pg) {
 			pg.noStroke();
@@ -82,12 +79,12 @@ public final class Ripples extends View {
 		}
 		
 		private final void incSize() {
-			radius += constrain(min(form.getWidth()*.2f,form.getHeight()*.2f),1,20);
+			radius += constrain(min(bounds.getWidth()*.2f,bounds.getHeight()*.2f),1,20);
 		}
 		
 		private final void playAnim() {
 			incSize();
-			if(radius > max(form.getWidth()*2,form.getHeight()*2)) {
+			if(radius > max(bounds.getWidth()*2,bounds.getHeight()*2)) {
 				radius = 0;
 				start = false;
 			}
@@ -98,8 +95,8 @@ public final class Ripples extends View {
 		}
 		
 		private final void resetPosition() {
-			x = app.mouseX-form.getX();
-			y = app.mouseY-form.getY();
+			x = app.mouseX-bounds.getX();
+			y = app.mouseY-bounds.getY();
 		}
 	}
 }

@@ -54,7 +54,7 @@ public class MenuButton extends Button implements Scrollable {
 	}
 
 	@Override
-	public final void update() {
+	protected final void update() {
 			super.update();
 			scrolling.update();
 			

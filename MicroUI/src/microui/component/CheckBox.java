@@ -25,7 +25,7 @@ public class CheckBox extends AbstractButton {
 	}
 	
 	@Override
-	public void update() {
+	protected void update() {
 		super.update();
 
 		if(!included) {

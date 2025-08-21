@@ -22,7 +22,7 @@ public abstract class AbstractButton extends Component {
 	}
 
 	@Override
-	public void update() {
+	protected void update() {
 		event.listen(this);
 		
 		app.pushStyle();

@@ -5,7 +5,7 @@ import microui.core.interfaces.Visible;
 import microui.util.Metrics;
 
 // Status: STABLE - Do not modify
-// Last Reviewed: 01.06.2025
+// Last Reviewed: 29.06.2025
 public abstract class View extends MicroUI implements Visible {
 	protected boolean visible;
 	private int priority;
@@ -38,7 +38,7 @@ public abstract class View extends MicroUI implements Visible {
 		}
 	}
 	
-	public abstract void update();
+	protected abstract void update();
 
 	public final int getPriority() {
 		return priority;

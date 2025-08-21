@@ -52,7 +52,7 @@ public final class Dial extends Component implements Scrollable {
 	}
 
 	@Override
-	public void update() {
+	protected void update() {
 		event.listen(this);
 		
 		app.pushStyle();
@@ -166,7 +166,7 @@ public final class Dial extends Component implements Scrollable {
 		}
 
 		@Override
-		public void update() {
+		protected void update() {
 			app.push();
 			app.translate(x,y);
 			app.image(image, 0,0,w,h);

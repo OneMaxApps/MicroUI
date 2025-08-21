@@ -46,7 +46,7 @@ public class TextView extends Component {
 	  }
 	  
 	  @Override
-	  public void update() {
+	  protected void update() {
 		  shadow.draw();
 		  
 		  app.pushStyle();

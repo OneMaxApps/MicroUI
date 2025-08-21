@@ -60,7 +60,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 
 	@Override
-	public final void update() {
+	protected final void update() {
 		event.listen(this);
 		tooltip.setAdditionalCondition(!focused);
 		

@@ -30,7 +30,7 @@ public class Slider extends RangeControl {
 	}
 
 	@Override
-	public void update() {
+	protected void update() {
 		super.update();
 		level.draw();
 		

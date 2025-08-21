@@ -22,7 +22,7 @@ public class Texture extends Bounds {
 	
 	
 	@Override
-	public void update() {
+	protected void update() {
 		if(isLoaded()) {
 			  app.pushStyle();
 			  app.tint(tint.get());
