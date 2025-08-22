@@ -1,14 +1,15 @@
 package microui;
 
-import microui.component.TextField;
+import microui.component.EditText;
 import microui.event.Event;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
+import processing.event.MouseEvent;
 
 // TODO Check what's methods and objects must be a part of API 
 public class Launcher extends PApplet {
-	TextField component;
+	EditText component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -23,8 +24,16 @@ public class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		
-		component = new TextField();
+		component = new EditText();
 		
+		/*
+		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("file.ser"))) {
+			out.writeObject(component);
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			System.out.println("serialized");
+		}*/
 	}
 
 	@Override
@@ -33,6 +42,10 @@ public class Launcher extends PApplet {
 		component.draw();
 		
 		GlobalTooltip.draw();
+		
+		if(mouseButton == RIGHT) {
+			component.setSize(mouseX,mouseY);
+		}
 	}
 
 	@Override
@@ -46,5 +59,11 @@ public class Launcher extends PApplet {
 	public void keyReleased() {
 		Event.keyReleased();
 	}
+
+	@Override
+	public void mouseWheel(MouseEvent event) {
+		component.mouseWheel(event);
+	}
+	
 	
 }

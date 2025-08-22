@@ -40,16 +40,13 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-public class EditText extends Component implements Scrollable, KeyPressable {
-	protected final float LEFT_OFFSET = 10, SCROLLS_WEIGHT;
+public class EditText extends Component implements Scrollable, KeyPressable  {
+	private final float LEFT_OFFSET = 10, SCROLLS_WEIGHT;
 	private static final String ALLOWED_CHARS = " ,.<>[]{}()+-*/\\\'\";:?!@#$%^&|_`~=";
-	
-	public final Scroll scrollV,scrollH;
-	
-	protected PGraphics pg;
-	protected PFont font;
-	protected boolean isFocused;
-	
+	private final Scroll scrollV,scrollH;
+	private PGraphics pg;
+	private PFont font;
+	private boolean isFocused;
 	private final Items items;
 	private final Selection selection;
 	private final Cursor cursor;
@@ -103,6 +100,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		
 		events();
 		selection.update();
+		
 	}
 	
 	@Override
@@ -111,9 +109,6 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		if(scrollH == null || scrollV == null) { return; }
 		
 		scrollsTransformsUpdate();
-		
-		scrollH.onChangeBounds();
-		scrollV.onChangeBounds();
 		
 	}
 	
@@ -262,7 +257,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		return selection.getText();
 	}
 	
-	public final Color getItemsColor() {
+	public final Color getItemsTextColor() {
 		return items.color;
 	}
 	
@@ -290,6 +285,18 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		return cursor.getRows();
 	}
 	
+	public final Scroll getScrollV() {
+		return scrollV;
+	}
+
+	public final Scroll getScrollH() {
+		return scrollH;
+	}
+	
+	public final Color getSelectColor() {
+		return items.selectColor;
+	}
+
 	private final Items.Item getCurrentItem() {
 		if(getCurrentRow() < 0) { cursor.setCurrentRow(0); }
 		if(getCurrentRow() > items.list.size()-1) { cursor.setCurrentRow(items.list.size()-1); }
@@ -360,18 +367,24 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	private final void scrollsValuesUpdate() {
 		if(scrollV == null || scrollH == null || items == null) { return; }
 			
-			if(!items.isEmpty()) {
-				scrollH.value.setMax(getCurrentItem().getTextWidth());
-				
-			} else {
-				scrollH.value.set(scrollH.value.getMin());
-			}
-			
-			if(items.getTotalHeight() > EditText.this.getHeight()) {
-				scrollV.value.setMin(h-items.getTotalHeight());
-			} else {
-				scrollV.value.setMin(0);
-			}
+		updateValueForScrollH();
+		updateValueForScrollV();
+	}
+	
+	private final void updateValueForScrollH() {
+		if(!items.isEmpty()) {
+			scrollH.value.setMax(getCurrentItem().getTextWidth());
+		} else {
+			scrollH.value.set(scrollH.value.getMin());
+		}
+	}
+	
+	private final void updateValueForScrollV() {
+		if(items.getTotalHeight() > EditText.this.getHeight()) {
+			scrollV.value.setMin(h-items.getTotalHeight());
+		} else {
+			scrollV.value.setMin(0);
+		}
 	}
 	
 	private final void CTRLV() {
@@ -558,13 +571,14 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 	
 	private final class Items {
-		private final Color color;
+		private final Color color,selectColor;
 		private int textSize;
 		private final List<Item> list;
 		private float totalHeight;
 		
 		protected Items() {
 			color = new Color(0);
+			selectColor = new Color(0,0,255,64);
 			textSize = 32;
 			list = new ArrayList<Item>();
 			for(int i = 0; i < getHeight()/textSize; i++) {
@@ -763,16 +777,17 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 					
 					textWidth = pg.textWidth(sb.toString());
 					
+					/*
 					if(isFocused && isEditing) {
 						pg.pushStyle();
 						pg.fill(0,12);
 						pg.rect(0,getInsideY(),w,textSize);
 						pg.popStyle();
-					}
+					}*/
 					
 						if(firstSelectedRow != lastSelectedRow) {
 							pg.pushStyle();
-							pg.fill(0,0,255,64);
+							pg.fill(selectColor.get());
 							if(isFullSelected) {
 								pg.rect(-scrollH.value.get(),getInsideY(),getTextWidth(),textSize);
 							}
@@ -1101,15 +1116,14 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 					if(cursor.getPosY() > getHeight()*.8f) {
 						scrollV.value.append(-getHeight()*.02f);
 					}
-					
-					if(cursor.getPosX() < getWidth()*.2f) {
-						scrollH.value.append(-getWidth()*.02f);
-					}
-					
-					if(cursor.getPosX() > getWidth()*.8f) {
-						scrollH.value.append(getWidth()*.02f);
-					}
+				}
 				
+				if(cursor.getPosX() < getWidth()*.2f) {
+					scrollH.value.append(-getWidth()*.02f);
+				}
+				
+				if(cursor.getPosX() > getWidth()*.8f) {
+					scrollH.value.append(getWidth()*.02f);
 				}
 				
 				
@@ -1176,7 +1190,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		}
 		
 		private final boolean isAllowedStateToStartSelecting() {
-			return event.holding() &&
+			return // event.holding() &&
 				   !scrollV.thumb.getEvent().holding() &&
 				   !scrollH.thumb.getEvent().holding() &&
 				   event.dragged();
