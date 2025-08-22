@@ -9,8 +9,8 @@ public class CheckBox extends AbstractButton {
 	public CheckBox(float x, float y, float w, float h) {
 		super(x,y,w,h);
 		
-		fill.set(0,200,0);
-		hover.fill.set(0,10);
+		color.set(0,200,0);
+		hover.color.set(0,10);
 		
 		callback.addListener(EventType.CLICKED, () -> included = !included);
 	}

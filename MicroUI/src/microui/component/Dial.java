@@ -1,18 +1,18 @@
 package microui.component;
 
+import static java.lang.Math.max;
 import static processing.core.PApplet.map;
-import static processing.core.PApplet.max;
 import static processing.core.PApplet.min;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 import static processing.core.PConstants.HALF_PI;
 import static processing.core.PConstants.TWO_PI;
 
+import microui.constants.AutoResizeMode;
 import microui.core.Texture;
 import microui.core.base.Component;
 import microui.core.interfaces.Scrollable;
 import microui.core.style.Stroke;
-import microui.util.Constants;
 import microui.util.Value;
 import processing.event.MouseEvent;
 
@@ -32,13 +32,13 @@ public final class Dial extends Component implements Scrollable {
 		super(x, y, w, h);
 		
 		visible();
-		fill.set(32);
+		color.set(32);
 		
 		stroke = new Stroke();
 		value = new Value();
 		hint = new TextView(x,y,min(w,h),min(w,h));
-		hint.setAutoResize(true);
-		hint.setAutoResizeMode(Constants.AUTO_RESIZE_MODE_TINY);
+		hint.setAutoResizeState(true);
+		hint.setAutoResizeMode(AutoResizeMode.TINY);
 		
 		image = new Image();
 		arrow = new Arrow();
@@ -58,7 +58,7 @@ public final class Dial extends Component implements Scrollable {
 		app.pushStyle();
 		
 		stroke.get();
-		fill.use();
+		color.use();
 		app.ellipseMode(CORNER);
 		app.circle(x, y, min(w,h));
 		
@@ -82,11 +82,11 @@ public final class Dial extends Component implements Scrollable {
 	
 	private final void valueOnDraw() {
 		app.pushStyle();
-		app.fill(hint.fill.get());
+		app.fill(hint.getColor().get());
 		if(hint.getFont() != null) { app.textFont(hint.getFont()); }
 		
 		if(hint.isAutoResize()) {
-		app.textSize(max(1,min(w,h)/hint.getAutoResizeMode()));
+		app.textSize(max(1,min(w,h)/hint.getResizeModeValue()));
 		} else {
 		app.textSize(hint.getTextSize());
 		}

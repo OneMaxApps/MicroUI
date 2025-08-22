@@ -4,7 +4,6 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
 import microui.core.RangeControl;
-import microui.util.Constants;
 
 public class Scroll extends RangeControl {
 	public final Button thumb;
@@ -14,7 +13,7 @@ public class Scroll extends RangeControl {
 	public Scroll(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		
-		fill.set(0,32);
+		color.set(0,32);
 		thumb = new Button("");
 		thumb.text.invisible();
 		updateThumbTransforms();
@@ -33,16 +32,16 @@ public class Scroll extends RangeControl {
 		
 		
 		
-		if(thumb.event.holding()) {
+		if(thumb.getEvent().holding()) {
 			calcDistFromMouseToThumb();
 			
 			switch(orientation) {
-				case Constants.HORIZONTAL :
+				case HORIZONTAL :
 					thumb.setX(constrain(app.mouseX+distToThumb,getX(),getX()+getWidth()-thumb.getWidth()));
 					value.setWithoutActions(map(thumb.getX(),getX(),getX()+getWidth()-thumb.getWidth(),value.getMin(),value.getMax()));
 				break;
 				
-				case Constants.VERTICAL :
+				case VERTICAL :
 					thumb.setY(constrain(app.mouseY+distToThumb,getY(),getY()+getHeight()-thumb.getHeight()));
 					value.setWithoutActions(map(thumb.getY(),getY()+getHeight()-thumb.getHeight(),getY(),value.getMin(),value.getMax()));
 				break;
@@ -62,11 +61,11 @@ public class Scroll extends RangeControl {
 		if(!needRecalculateDistToThumb) { return; }
 		
 		switch(orientation) {
-			case Constants.HORIZONTAL :
+			case HORIZONTAL :
 				 distToThumb = thumb.getX()-app.mouseX;
 			break;
 			
-			case Constants.VERTICAL :
+			case VERTICAL :
 				distToThumb = thumb.getY()-app.mouseY;
 			break;
 		}
@@ -95,13 +94,13 @@ public class Scroll extends RangeControl {
 		
 		switch(orientation) {
 		
-		case Constants.HORIZONTAL :
+		case HORIZONTAL :
 			thumb.setWidth(getWidth()/10);
 			if(value.hasEqualMinMax()) { return; }
 			final float NEW_POS_X = map(value.get(),value.getMin(),value.getMax(),getX(),getX()+getWidth()-thumb.getWidth());
 			thumb.setX(constrain(NEW_POS_X,getX(),getX()+getWidth()-thumb.getWidth()));
 			break;
-		case Constants.VERTICAL :
+		case VERTICAL :
 			thumb.setHeight(getHeight()/10);
 			if(value.hasEqualMinMax()) { return; }
 			final float NEW_POS_Y = map(value.get(),value.getMax(),value.getMin(),getY(),getY()+getHeight()-thumb.getHeight());

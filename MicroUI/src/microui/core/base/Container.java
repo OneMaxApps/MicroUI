@@ -12,7 +12,7 @@ import microui.event.Event;
 
 
 public abstract class Container extends Bounds implements Scrollable, KeyPressable, Focusable {
-	public final Color fill;
+	public final Color color;
 	public final Margin margin;
 	public final Texture image;
 	public final Shadow shadow;
@@ -22,7 +22,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	protected Container(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		visible();
-		fill = new Color(0,0,128,32);
+		color = new Color(0,0,128,32);
 		margin = new Margin();
 		image = new Texture();
 		image.setBounds(this);
@@ -48,7 +48,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				app.pushStyle();
 					app.stroke(0);
 					app.strokeWeight(1);
-					app.fill(fill.get());
+					app.fill(color.get());
 					app.rect(getX(), getY(), getWidth(), getHeight());
 				app.popStyle();
 			}
@@ -176,14 +176,14 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	}
 	
 	public final class ResizeHandle extends View {
-		public final Color fill;
+		public final Color colorDots;
 		private final Dots dots;
 		private boolean enable;
 		private int minWidth,minHeight;
 		
 		private ResizeHandle() {
 			visible();
-			fill = new Color(255);
+			colorDots = new Color(255);
 			dots = new Dots();
 			minWidth = minHeight = 100;
 		}
@@ -197,7 +197,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 
 		@Override
 		public void update() {
-			fill.use();
+			colorDots.use();
 			dots.draw();
 		}
 		

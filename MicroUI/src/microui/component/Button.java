@@ -1,7 +1,7 @@
 package microui.component;
 
+import microui.constants.AutoResizeMode;
 import microui.core.AbstractButton;
-import microui.util.Constants;
 
 public class Button extends AbstractButton {
 	public final TextView text;
@@ -11,8 +11,8 @@ public class Button extends AbstractButton {
 		
 		text = new TextView(plainText, x, y, w, h);
 		text.setUpperCaseStyle(true);
-		text.setAutoResize(true);
-		text.setAutoResizeMode(Constants.AUTO_RESIZE_MODE_BIG);
+		text.setAutoResizeState(true);
+		text.setAutoResizeMode(AutoResizeMode.BIG);
 		
 	}
 

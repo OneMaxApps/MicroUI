@@ -6,19 +6,19 @@ import microui.MicroUI;
 import microui.util.Metrics;
 
 public final class Stroke {
-    public final Color fill;
+    public final Color color;
     private int weight;
     
     public Stroke() {
       Metrics.register("Stroke");
       
-      fill = new Color(0);
+      color = new Color(0);
       weight = 2;
     }
     
     public void get() {
       MicroUI.getContext().strokeCap(SQUARE);
-      MicroUI.getContext().stroke(fill.get());
+      MicroUI.getContext().stroke(color.get());
       MicroUI.getContext().strokeWeight(weight);
     }
     
@@ -26,7 +26,7 @@ public final class Stroke {
     public final int getWeight() { return weight; }
     
     public final void set(final Stroke stroke) {
-    	fill.set(stroke.fill);
+    	color.set(stroke.color);
     	weight = stroke.getWeight();
     }
 }

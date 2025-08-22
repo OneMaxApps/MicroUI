@@ -11,14 +11,14 @@ import microui.util.Metrics;
 import processing.core.PGraphics;
 
 public final class Ripples extends View {
-	public final Color fill;
+	public final Color color;
 	private final Circle circle;
 	private final Bounds bounds;
 	private PGraphics pg;
 	
 	public Ripples(Bounds bounds) {
 		super();
-		fill = new Color(0);
+		color = new Color(0);
 		
 		circle = new Circle();
 		
@@ -70,7 +70,7 @@ public final class Ripples extends View {
 
 		private final void draw(PGraphics pg) {
 			pg.noStroke();
-			pg.fill(fill.get(),constrain(255-radius*.5f,0,255));
+			pg.fill(color.get(),constrain(255-radius*.5f,0,255));
 			pg.circle(x, y, radius);
 			
 			if(start) {

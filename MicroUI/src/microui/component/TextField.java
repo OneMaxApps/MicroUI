@@ -43,7 +43,7 @@ public final class TextField extends Component implements KeyPressable {
 	
 	public TextField(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		fill.set(255);
+		color.set(255);
 		visible();
 		
 		text = new Text();
@@ -68,7 +68,7 @@ public final class TextField extends Component implements KeyPressable {
 		checkDimensions();
 		
 		app.pushStyle();
-			fill.use();
+			color.use();
 			app.rect(x,y,w,h);
 			
 			pg.beginDraw();
@@ -99,8 +99,8 @@ public final class TextField extends Component implements KeyPressable {
 		return cursor;
 	}
 
-	public final Color getSelectionFill() {
-		return selection.fill;
+	public final Color getSelectionColor() {
+		return selection.color;
 	}
 
 	private final void events() {
@@ -301,9 +301,9 @@ public final class TextField extends Component implements KeyPressable {
 	
 	public void setStyle(final TextField otherTextField) {
 		super.setStyle(otherTextField);
-		text.fill.set(otherTextField.text.fill);
-		cursor.fill.set(otherTextField.cursor.fill);
-		selection.fill.set(otherTextField.selection.fill);
+		text.color.set(otherTextField.text.color);
+		cursor.color.set(otherTextField.cursor.color);
+		selection.color.set(otherTextField.selection.color);
 		
 		text.font.set(otherTextField.text.font.get());
 		text.size.set(otherTextField.text.size.get());
@@ -311,15 +311,15 @@ public final class TextField extends Component implements KeyPressable {
 	}
 
 	public final class Text extends TextController {
-		public final Color fill;
-		public final Size size;
-		public final Font font;
+		private final Color color;
+		private final Size size;
+		private final Font font;
 		private float x,y;
 		private String hint;
 		
 		private Text() {
 			super();
-			fill = new Color(0);
+			color = new Color(0);
 			size = new Size();
 			font = new Font();
 			
@@ -330,20 +330,32 @@ public final class TextField extends Component implements KeyPressable {
 		private final void draw(final PGraphics pg) {
 			pg.pushStyle();
 			
-			fill.use(pg);
+			color.use(pg);
 			font.use(pg);
 			size.use(pg);
 			pg.textAlign(CORNER,CENTER);
 			if(isEmpty() && hint != null) {
 			pg.text(hint,x,y);
 			} else {
-			pg.text(get(),x,y);
+			pg.text(getAsString(),x,y);
 			}
 			pg.popStyle();
 			
 			updatePositionX();
 		}
 		
+		public final Color getColor() {
+			return color;
+		}
+
+		public final Size getSize() {
+			return size;
+		}
+
+		public final Font getFont() {
+			return font;
+		}
+
 		private final void updatePosition() {
 			updatePositionX();
 			y = TextField.this.getHeight()*.5f;
@@ -383,7 +395,7 @@ public final class TextField extends Component implements KeyPressable {
 		}
 		
 		private final float getWidth() {
-			return pg.textWidth(get());
+			return pg.textWidth(getAsString());
 		}
 
 		public final class Size extends AbstractSize {
@@ -423,14 +435,14 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	public final class Cursor {
-		private final Color fill;
+		private final Color color;
 		private final Size weight;
 		private final Blink blink;
 		private final Column column;
 		private float positionX,positionY,height;
 		
 		private Cursor() {
-			fill = new Color(0);
+			color = new Color(0);
 			weight = new Size(2);
 			column = new Column();
 			blink = new Blink();
@@ -444,7 +456,7 @@ public final class TextField extends Component implements KeyPressable {
 			
 			if(blink.isBlinking()) {
 			pg.pushStyle();
-			pg.stroke(fill.get());
+			pg.stroke(color.get());
 			weight.use(pg);
 			pg.line(positionX+LEFT_OFFSET, positionY, positionX+LEFT_OFFSET, height);
 			pg.popStyle();
@@ -452,8 +464,8 @@ public final class TextField extends Component implements KeyPressable {
 
 		}
 		
-		public final Color getFill() {
-			return fill;
+		public final Color getColor() {
+			return color;
 		}
 
 		public final float getWeight() {
@@ -545,22 +557,22 @@ public final class TextField extends Component implements KeyPressable {
 			private final void updatePositionX() {
 				if(text.isEmpty()) { positionX = 0; return; }
 				
-				positionX = pg.textWidth(text.get().substring(0,column))-scroll.get();
+				positionX = pg.textWidth(text.getAsString().substring(0,column))-scroll.get();
 			}
 			
 			private final float getCurrentCharWidth() {
 				if(text.isEmpty()) { return 0; }
-				return pg.textWidth(text.get().charAt(min(column,text.length()-1)));
+				return pg.textWidth(text.getAsString().charAt(min(column,text.length()-1)));
 			}
 			
 			private final float getNextCharWidth() {
 				if(text.isEmpty()) { return 0; }
-				return pg.textWidth(text.get().charAt(min(column+1,text.length()-1)));
+				return pg.textWidth(text.getAsString().charAt(min(column+1,text.length()-1)));
 			}
 			
 			private final float getBackCharWidth() {
 				if(text.isEmpty()) { return 0; }
-				return pg.textWidth(text.get().charAt(max(0,min(column-1,text.length()-1))));
+				return pg.textWidth(text.getAsString().charAt(max(0,min(column-1,text.length()-1))));
 			}
 		}
 		
@@ -586,13 +598,13 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	private final class Selection {
-		private final Color fill;
+		private final Color color;
 		private float x,y,w,h;
 		private int startColumn,endColumn;
 		private boolean isStarted;
 		
 		private Selection() {
-			fill = new Color(0,164,255,64);
+			color = new Color(0,164,255,64);
 			y = getHeight()*.1f;
 			h = getHeight()*.8f;
 		}
@@ -600,7 +612,7 @@ public final class TextField extends Component implements KeyPressable {
 		private final void draw(final PGraphics pg) {
 			pg.pushStyle();
 			pg.noStroke();
-			fill.use(pg);
+			color.use(pg);
 			pg.rect(x+LEFT_OFFSET-scroll.get(),y,startColumn < endColumn ? w : -w,h);
 			pg.popStyle();
 		}
@@ -613,13 +625,13 @@ public final class TextField extends Component implements KeyPressable {
 			
 			if(pg == null) { return; }
 			if(text.isEmpty()) { x = w = 0; return; }
-			x = pg.textWidth(text.get().substring(0,getStartColumn()));
-			w = pg.textWidth(text.get().substring(getStartColumn(),getEndColumn()));
+			x = pg.textWidth(text.getAsString().substring(0,getStartColumn()));
+			w = pg.textWidth(text.getAsString().substring(getStartColumn(),getEndColumn()));
 		}
 
 		private final String getText() {
 			if(text.isEmpty()) { return ""; }
-			return text.get().substring(getStartColumn(),getEndColumn());
+			return text.getAsString().substring(getStartColumn(),getEndColumn());
 		}
 		
 		private final int getStartColumn() {
@@ -630,7 +642,7 @@ public final class TextField extends Component implements KeyPressable {
 			startColumn = constrain(startColumn,0,text.length());
 			if(pg == null) { return; }
 			
-			x = pg.textWidth(text.get().substring(0,startColumn));
+			x = pg.textWidth(text.getAsString().substring(0,startColumn));
 			
 			this.startColumn = startColumn;
 		}
@@ -643,7 +655,7 @@ public final class TextField extends Component implements KeyPressable {
 			endColumn = constrain(endColumn,0,text.length());
 			if(pg == null) { return; }
 			
-			w = pg.textWidth(text.get().substring(getStartColumn(),getEndColumn()));
+			w = pg.textWidth(text.getAsString().substring(getStartColumn(),getEndColumn()));
 
 			this.endColumn = endColumn;
 		}

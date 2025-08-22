@@ -27,7 +27,7 @@ public abstract class AbstractButton extends Component {
 		
 		app.pushStyle();
 			stroke.get();
-			fill.use();
+			color.use();
 			app.rect(x, y, w, h);
 			hover.draw();
 			ripples.draw();

@@ -9,7 +9,6 @@ import static java.awt.event.KeyEvent.VK_PAGE_UP;
 import static java.awt.event.KeyEvent.VK_V;
 import static java.awt.event.KeyEvent.VK_X;
 import static microui.event.Event.checkKey;
-import static microui.util.Constants.VERTICAL;
 import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
@@ -28,6 +27,7 @@ import static processing.core.PConstants.UP;
 import java.util.ArrayList;
 import java.util.List;
 
+import microui.constants.Orientation;
 import microui.core.base.Component;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
@@ -56,7 +56,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	
  	public EditText(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		fill.set(255);
+		color.set(255);
 		visible();
 		
 		final int defaultMinWeightForScrolls = 10;
@@ -92,7 +92,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		scrollV.setVisible(isFocused);
 		
 		pg.beginDraw();
-			pg.background(fill.get());
+			pg.background(color.get());
 			items.draw(pg);
 			cursor.draw(pg);
 		pg.endDraw();
@@ -125,7 +125,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				return;
 			}
 			
-			if(!scrollH.event.inside()) {
+			if(!scrollH.getEvent().inside()) {
 				scrollV.scrolling.init(e,event.inside());
 				scrollV.autoScroll();
 			}
@@ -262,8 +262,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		return selection.getText();
 	}
 	
-	public final Color getItemsFill() {
-		return items.fill;
+	public final Color getItemsColor() {
+		return items.color;
 	}
 	
 	public final float getTextSize() {
@@ -274,8 +274,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		items.setTextSize(size);
 	}
 	
-	public final Color getCursorFill() {
-		return cursor.fill;
+	public final Color getCursorColor() {
+		return cursor.color;
 	}
 	
 	public final int getCurrentColumn() {
@@ -307,7 +307,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	private final void initDefaultScrollsSettings() {
 		scrollsPositionUpdate();
 		
-		scrollV.setOrientation(VERTICAL);
+		scrollV.setOrientation(Orientation.VERTICAL);
 		
 		scrollsSizeUpdate();
 		
@@ -558,13 +558,13 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 	
 	private final class Items {
-		private final Color fill;
+		private final Color color;
 		private int textSize;
 		private final List<Item> list;
 		private float totalHeight;
 		
 		protected Items() {
-			fill = new Color(0);
+			color = new Color(0);
 			textSize = 32;
 			list = new ArrayList<Item>();
 			for(int i = 0; i < getHeight()/textSize; i++) {
@@ -577,7 +577,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		}
 		
 		private final void draw(final PGraphics pg) {
-			fill.use(pg);
+			color.use(pg);
 			if(font != null) { pg.textFont(font); }
 			pg.textSize(textSize);
 			pg.textAlign(CORNER,CENTER);
@@ -783,7 +783,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 						}
 					}
 				
-				if(event.pressed() && !scrollH.event.holding() && !scrollV.event.holding()) {
+				if(event.pressed() && !scrollH.getEvent().holding() && !scrollV.getEvent().holding()) {
 					isEditing = true;
 					final float LOCAL_MOUSE_X = app.mouseX-x+scrollH.value.get();
 					
@@ -969,14 +969,14 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 	
 	private final class Cursor {
-		private final Color fill;
+		private final Color color;
 		private final int MAX_DURATION = 60;
 		private float posX,posY;
 		private int column,row,
 					duration;
 		
 		private Cursor() {
-			fill = new Color(0);
+			color = new Color(0);
 		}
 		
 		private final void draw(final PGraphics pg) {
@@ -990,7 +990,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			if(duration < MAX_DURATION/2) {
 				float dynamicHeight = abs(map(duration,0,MAX_DURATION,-items.getTextSize()/2,items.getTextSize()/2))/2;
 				pg.pushStyle();
-				pg.stroke(fill.get());
+				pg.stroke(color.get());
 				pg.strokeWeight(2);
 				pg.line(posX, posY+dynamicHeight, posX, posY+items.getTextSize()-dynamicHeight);
 				pg.popStyle();
@@ -1121,7 +1121,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			
 			isSelecting = (startRow != endRow) || (startColumn != endColumn);
 			
-			if(isSelecting && !scrollV.thumb.event.holding() && !scrollH.thumb.event.holding()) {
+			if(isSelecting && !scrollV.thumb.getEvent().holding() && !scrollH.thumb.getEvent().holding()) {
 				
 				for(int i = 0; i < items.count(); i++) {
 					
@@ -1177,8 +1177,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		
 		private final boolean isAllowedStateToStartSelecting() {
 			return event.holding() &&
-				   !scrollV.thumb.event.holding() &&
-				   !scrollH.thumb.event.holding() &&
+				   !scrollV.thumb.getEvent().holding() &&
+				   !scrollH.thumb.getEvent().holding() &&
 				   event.dragged();
 		}
 		

@@ -2,18 +2,20 @@ package microui.core;
 
 import static processing.core.PApplet.constrain;
 
-import microui.util.Constants;
+import microui.constants.Validation;
 
 public abstract class TextController {
 	protected final StringBuilder sb;
 	private boolean validation,constrain;
 	private static final String STANDART_VALIDATION = "!@#$%^&*()_-+=|\\/[]{}<>,. \'\";:№?*";
-	private int validationMode,maxChars;
+	private int maxChars;
+	private Validation validationMode;
 	
 	public TextController(final String text) {
 		sb = new StringBuilder(text);
 		validation = true;
 		maxChars = 10;
+		validationMode = Validation.ALPHANUMERIC;
 	}
 	
 	public TextController() {
@@ -30,8 +32,7 @@ public abstract class TextController {
 		
 	}
 	
-	public final void setValidationMode(int validationMode) {
-		if(validationMode < 0 || validationMode > 3) { return; }
+	public final void setValidationMode(Validation validationMode) {
 		this.validationMode = validationMode;
 	}
 	
@@ -55,10 +56,10 @@ public abstract class TextController {
 	}
 
 	public final void set(final TextController text) {
-		set(text.get());
+		set(text.getAsString());
 	}
 	
-	public final String get() {
+	public final String getAsString() {
 		return sb.toString();
 	}
 	
@@ -131,11 +132,11 @@ public abstract class TextController {
 	public final boolean isValidChar(final char ch) {
 		
 		switch(validationMode) {
-			case Constants.VALIDATION_ALPHANUMERIC :
+			case ALPHANUMERIC :
 				return STANDART_VALIDATION.contains(String.valueOf(ch)) || Character.isLetterOrDigit(ch);
-			case Constants.VALIDATION_ONLY_DIGITS :
+			case ONLY_DIGITS :
 				return Character.isDigit(ch);
-			case Constants.VALIDATION_ONLY_LETTERS :
+			case ONLY_LETTERS :
 				return Character.isLetter(ch);
 						
 			default :

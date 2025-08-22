@@ -16,9 +16,9 @@ public class Panel extends Container {
 	
 	public Panel(String title, float x, float y, float w, float h) {
 		super(x, y, w, h);
-		fill.set(64);
+		color.set(64);
 		resizeHandle.setEnable(true);
-		resizeHandle.fill.set(255,0);
+		resizeHandle.colorDots.set(255,0);
 		resizeHandle.getDot(0).invisible();
 		resizeHandle.getDot(1).invisible();
 		
@@ -121,11 +121,11 @@ public class Panel extends Container {
 			setSize(Panel.this.getWidth(),HEIGHT);
 			
 			buttonClose = new Button("");
-			buttonClose.fill.set(154,0,0,128);
+			buttonClose.getColor().set(154,0,0,128);
 			buttonClose.ripples.invisible();
 			buttonClose.stroke.setWeight(1);
 			buttonClose.setPosition(getX()+getWidth()-buttonClose.getWidth(),getY());
-			buttonClose.callback.addListener(CLICKED, () -> close() );
+			buttonClose.getCallback().addListener(CLICKED, () -> close() );
 			
 			buttonClose.setPosition(Panel.this.getX()+Panel.this.getWidth()-BUTTON_WIDTH,Panel.this.getY()-getHeight());
 			buttonClose.setSize(BUTTON_WIDTH,BUTTON_HEIGHT);

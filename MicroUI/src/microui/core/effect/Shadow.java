@@ -11,7 +11,7 @@ import microui.core.base.View;
 import microui.core.style.Color;
 
 public final class Shadow extends View {
-	  public final Color fill;
+	  public final Color color;
 	  private final Bounds bounds;
 	  private int leftSize,rightSize,upSize,downSize;
 	  private byte absoluteSize;
@@ -19,7 +19,7 @@ public final class Shadow extends View {
 	  public Shadow(Bounds bounds) {
 		super();
 	    this.bounds = bounds;
-	    fill = new Color(34);
+	    color = new Color(34);
 	    leftSize = 10;
 	    upSize = 10;
 	    rightSize = 10;
@@ -37,7 +37,7 @@ public final class Shadow extends View {
 	      for(int i = 0; i < absoluteSize; i++) {
 	    	  app.strokeWeight(2);
 	    	  app.strokeCap(SQUARE);
-	    	  app.stroke(fill.get(),constrain(164-i*20,0,255));
+	    	  app.stroke(color.get(),constrain(164-i*20,0,255));
 	    	  app.noFill();
 	    	  app.rectMode(CORNERS);
 	    	  if(bounds instanceof Layout) {
@@ -60,7 +60,7 @@ public final class Shadow extends View {
 	  }
 	  
 	  public void setStyle(Shadow shadow) {
-		  fill.set(shadow.fill);  
+		  color.set(shadow.color);  
 		  leftSize = shadow.leftSize;
 		  rightSize = shadow.rightSize;
 		  upSize = shadow.upSize;

@@ -31,6 +31,10 @@ public class Color {
 		this(gray,gray,gray,MAX_VALUE);
 	}
 	
+	public Color(final Color color) {
+		this(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+	}
+	
 	public Color() {
 		this(128,MAX_VALUE);
 	}

@@ -201,7 +201,7 @@ public class MenuButton extends Button implements Scrollable {
 	
 	public final void setItemsColor(final Color color) {
 		for(Button item : itemList) {
-			item.fill.set(color);
+			item.getColor().set(color);
 			
 			if(item instanceof MenuButton subMenu) {
 				subMenu.setItemsColor(color);
@@ -382,7 +382,7 @@ public class MenuButton extends Button implements Scrollable {
 					final Button item = itemList.get(i);
 					item.draw();
 					
-					if(item.event.clicked()) {
+					if(item.getEvent().clicked()) {
 						selectedId = i;
 						closeAllSubMenusWithoutSelected();
 						

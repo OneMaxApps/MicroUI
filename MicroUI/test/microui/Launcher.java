@@ -2,6 +2,7 @@ package microui;
 
 import microui.component.TextField;
 import microui.event.Event;
+import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 
@@ -23,7 +24,6 @@ public class Launcher extends PApplet {
 		MicroUI.setContext(this);
 		
 		component = new TextField();
-		//component.cursor.blink.setRate(frameRate);
 		
 	}
 
@@ -31,6 +31,8 @@ public class Launcher extends PApplet {
 	public void draw() {
 		background(200);
 		component.draw();
+		
+		GlobalTooltip.draw();
 	}
 
 	@Override
@@ -38,7 +40,6 @@ public class Launcher extends PApplet {
 		Event.keyPressed();
 		
 		component.keyPressed();
-		
 	}
 
 	@Override

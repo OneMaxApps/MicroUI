@@ -5,19 +5,21 @@ import static processing.core.PApplet.constrain;
 import java.util.ArrayList;
 
 import microui.component.TextView;
+import microui.constants.Orientation;
 import microui.core.base.Bounds;
 import microui.core.base.Layout;
-import microui.util.Constants;
 
 public class LinearLayout extends Layout {
-	private int mode;
+	private Orientation orientation;
 	private final ArrayList<Float> weightList;
 
 	public LinearLayout(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		
 		weightList = new ArrayList<Float>();
-
+		
+		orientation = Orientation.VERTICAL;
+		
 	}
 	
 	public LinearLayout() {
@@ -30,37 +32,32 @@ public class LinearLayout extends Layout {
 		drawElements();
 	}
 	
-	public final void setMode(int mode) {
-		if(mode !=  Constants.HORIZONTAL && mode != Constants.VERTICAL) { throw new IndexOutOfBoundsException("out of types exception"); }
-		this.mode = mode;
+	public final void setOrientation(Orientation orientation) {
+		if(this.orientation == orientation) { return; }
+		this.orientation = orientation;
 		recalcListState();
 	}
 	
-	public final boolean isMode(int mode) {
-		return this.mode == mode;
+	public final boolean isOrientation(Orientation orientation) {
+		return this.orientation == orientation;
 	}
 	
-	public final int getMode() {
-		return mode;
+	public final Orientation getOrientation() {
+		return orientation;
 	}
 	
 	public final void setHorizontalMode() {
-		mode = 0;
+		orientation = Orientation.HORIZONTAL;
 		recalcListState();
 	}
 	
 	public final void setVerticalMode() {
-		mode = 1;
+		orientation = Orientation.VERTICAL;
 		recalcListState();
 	}
 	
 	public final void swapModes() {
-		if(mode == 0) {
-			mode = 1;
-			recalcListState();
-			return;
-		}
-		if(mode == 1) { mode = 0; }
+		if(orientation == Orientation.HORIZONTAL) { orientation = Orientation.VERTICAL; } else { orientation = Orientation.HORIZONTAL; }
 		recalcListState();
 	}
 	
@@ -103,9 +100,9 @@ public class LinearLayout extends Layout {
 		for(int i = 0; i < elementList.size(); i++) {
 	  		Bounds bounds = elementList.get(i);
 
-	  		switch(mode) {
+	  		switch(orientation) {
 	  		
-		  		case Constants.HORIZONTAL :
+		  		case HORIZONTAL :
 					if(i == 0) {
 					bounds.setBounds(getX(),getY(),getWidth()*weightList.get(i),getHeight());
 					} else {
@@ -114,7 +111,7 @@ public class LinearLayout extends Layout {
 		  		break;
 		  		
 		  		
-		  		case Constants.VERTICAL:
+		  		case VERTICAL:
 					if(i == 0) {
 						bounds.setBounds(getX(),getY(),getWidth(),getHeight()*weightList.get(0));
 					} else {

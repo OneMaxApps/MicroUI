@@ -6,6 +6,7 @@ import static processing.core.PApplet.min;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
+import microui.constants.AutoResizeMode;
 import microui.core.base.Component;
 import microui.core.base.View;
 import microui.core.style.Color;
@@ -16,19 +17,20 @@ public class TextView extends Component {
 	  public final Shadow shadow;
 	  private final StringBuilder text;
 	  private PFont font;
-	  private int textSize,autoResizeMode;
+	  private int textSize,resizeModeValue;
 	  private boolean center,upperCaseStyle,lowerCaseStyle,autoResize;
+	  private AutoResizeMode resizeMode;
 	  
 	  public TextView(String text, float x, float y, float w, float h) {
 	    super(x,y,w,h);
 	    
 	    this.text = new StringBuilder(text);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
-	    autoResizeMode = 4;
+	    resizeMode = AutoResizeMode.SMALL;
 	    center = true;
 	    shadow = new Shadow();
 	    visible = true;
-	    fill.set(255);
+	    color.set(255);
 	    
 	    callback.setEnable(false);
 	  }
@@ -50,11 +52,11 @@ public class TextView extends Component {
 		  shadow.draw();
 		  
 		  app.pushStyle();
-		  fill.use();
+		  color.use();
 		  if(font != null) { app.textFont(font,textSize); }
 		  
 		  if(isAutoResize()) {
-			  app.textSize(max(1,min(w,h)/autoResizeMode));
+			  app.textSize(max(1,min(w,h)/resizeModeValue));
 		  } else {
 			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
 		  }
@@ -68,13 +70,13 @@ public class TextView extends Component {
 	  
 	  public void draw(PGraphics pg) {
 		  pg.pushStyle();
-		  pg.fill(fill.get());
+		  pg.fill(color.get());
 		  if(font != null) {
 			  pg.textFont(font,textSize);
 		  }
 		  
 		  if(isAutoResize()) {
-			  app.textSize(max(1,min(w,h)/autoResizeMode));
+			  app.textSize(max(1,min(w,h)/resizeModeValue));
 		  } else {
 			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
 		  }
@@ -203,25 +205,36 @@ public class TextView extends Component {
 		return autoResize;
 	  }
 
-	  public final void setAutoResize(boolean autoResize) {
+	  public final void setAutoResizeState(boolean autoResize) {
 		this.autoResize = autoResize;
 	  }
 
-	  public final int getAutoResizeMode() { return autoResizeMode; }
+	  public final AutoResizeMode getAutoResizeMode() { return resizeMode; }
 	  
-	  public final void setAutoResizeMode(int autoResizeMode) {
-		if(autoResizeMode <= 0 || autoResizeMode > 5) { return; }
-		this.autoResizeMode = autoResizeMode;
+	  public final void setAutoResizeMode(AutoResizeMode resizeMode) {
+		this.resizeMode = resizeMode;
+		
+		switch(resizeMode) {
+			case FULL : resizeModeValue = 1; break;
+			case BIG : resizeModeValue = 2; break;
+			case MIDDLE : resizeModeValue = 3; break;
+			case SMALL : resizeModeValue = 4; break;
+			case TINY : resizeModeValue = 5; break;
+		}
+		
 	  }
 
-
+	  
+	  public final int getResizeModeValue() {
+	   return resizeModeValue;
+	  }
 
 	public final class Shadow extends View {
-		  public Color fill;
+		  public Color color;
 		  private float extraSize,shiftX,shiftY;
 		  
 		  private Shadow() {
-			  fill = new Color(0);
+			  color = new Color(0);
 			  extraSize = h*.01f;
 			  invisible();
 		  }
@@ -229,13 +242,13 @@ public class TextView extends Component {
 		  @Override
 		  public final void update() {
 			  app.pushStyle();
-			  app.fill(fill.get());
+			  app.fill(color.get());
 			  if(font != null) {
 				  app.textFont(font,textSize);
 			  }
 			  
 			  if(isAutoResize()) {
-				  app.textSize(max(1,min(w,h)/autoResizeMode)+extraSize);
+				  app.textSize(max(1,min(w,h)/resizeModeValue)+extraSize);
 			  } else {
 				  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize+extraSize);
 			  }
@@ -272,4 +285,6 @@ public class TextView extends Component {
 		}
 
 	  }
+	
+	  
 	}

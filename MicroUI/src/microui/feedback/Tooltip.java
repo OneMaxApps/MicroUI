@@ -15,15 +15,14 @@ import microui.service.GlobalTooltip;
 public final class Tooltip extends Bounds {
 	private static final int PADDING_X = 10;
 
-	public final Text text;
-	
-	private Color fill;
+	private final Text text;
+	private Color color;
 	private Container container;
 	private boolean canBeVisible,additionalCondition;
 	
 	public Tooltip(Callback callback) {
 
-		fill = GlobalTooltip.DEFAULT_COLOR;
+		color = GlobalTooltip.DEFAULT_COLOR;
 		
 		text = new Text();
 		
@@ -57,7 +56,7 @@ public final class Tooltip extends Bounds {
 
 	@Override
 	public void update() {
-		fill.use();
+		color.use();
 		app.rect(x,y,w,h);
 		
 		if(container != null) {
@@ -98,7 +97,18 @@ public final class Tooltip extends Bounds {
 
 	public final void setColor(final Color color) {
 		if(color == null) { return; }
-		this.fill = color;
+		this.color = color;
+	}
+	
+	public final Color getColor() {
+		if(color == GlobalTooltip.DEFAULT_COLOR) {
+			return color = new Color(GlobalTooltip.DEFAULT_COLOR);
+		}
+		return color;
+	}
+	
+	public final Text getText() {
+		return text;
 	}
 	
 	/** For that cases when default conditions not enough inner.  
@@ -110,17 +120,17 @@ public final class Tooltip extends Bounds {
 	}
 	
 	public final class Text extends TextController {
-		private Color fill;
+		private Color colorText;
 		private int width,height;
 		
 		private Text() {
 			super();
-			fill = new Color();
+			colorText = new Color();
 		}
 		
 		public final void setColor(final Color color) {
 			if(color == null) { return; }
-			this.fill = color;
+			this.colorText = color;
 		}
 		
 
@@ -132,7 +142,7 @@ public final class Tooltip extends Bounds {
 		
 		private final void draw() {
 			app.pushStyle();
-			fill.use();
+			colorText.use();
 			app.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
 			app.textAlign(CENTER,CENTER);
 			app.text(sb.toString(), x, y, w, h);

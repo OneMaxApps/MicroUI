@@ -1,18 +1,18 @@
 package microui.core;
 
+import microui.constants.Orientation;
 import microui.core.base.Component;
 import microui.core.interfaces.Scrollable;
 import microui.event.EventType;
 import microui.event.Listener;
 import microui.event.Scrolling;
-import microui.util.Constants;
 import microui.util.Value;
 import processing.event.MouseEvent;
 
 public abstract class RangeControl extends Component implements Scrollable {
 	public final Value value;
 	public final Scrolling scrolling;
-	protected int orientation;
+	protected Orientation orientation;
 	protected boolean valueChangeStart,valueChangeEnd;
 	private Listener onStartChangeValueListener,onChangeValueListener,onEndChangeValueListener;
 	
@@ -29,7 +29,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		callback.addListener(EventType.PRESSED, () -> { valueChangeEnd = true; });
 		
 		scrolling = new Scrolling(event);
-		orientation = Constants.HORIZONTAL;
+		orientation = Orientation.HORIZONTAL;
 		visible();
 		
 	}
@@ -43,7 +43,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		event.listen(this);
 		
 		app.pushStyle();
-		fill.use();
+		color.use();
 		app.rect(x, y, w, h);
 		app.popStyle();
 		
@@ -76,8 +76,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		onChangeValue();
 	}
 	
-	public final void setOrientation(final int orientation) {
-		if(orientation != Constants.HORIZONTAL && orientation != Constants.VERTICAL) { return; }
+	public final void setOrientation(final Orientation orientation) {
 		if(this.orientation == orientation) { return; }
 		final float w = getWidth(), h = getHeight();
 		this.orientation = orientation;
@@ -87,7 +86,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 	}
 	
 	public void swapOrientation() {
-		if(orientation == 0) { orientation = 1; } else { orientation = 0; }
+		if(orientation == Orientation.HORIZONTAL) { orientation = Orientation.VERTICAL; } else { orientation = Orientation.HORIZONTAL; }
 	}
 	
 	public final void autoScroll() {
