@@ -13,7 +13,7 @@ public class Launcher extends PApplet {
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
-
+	
 	@Override
 	public void settings() {
 		size(640,480);
@@ -24,6 +24,7 @@ public class Launcher extends PApplet {
 		MicroUI.setContext(this);
 		
 		component = new EditText();
+		
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class Launcher extends PApplet {
 		Event.keyPressed();
 		
 		component.keyPressed();
-
+		
 	}
 
 	@Override
