@@ -1,14 +1,13 @@
 package microui;
 
-import microui.component.EditText;
+import microui.component.TextField;
 import microui.event.Event;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
-import processing.event.MouseEvent;
 
 // TODO Check what's methods and objects must be a part of API 
 public class Launcher extends PApplet {
-	EditText component;
+	TextField component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -23,7 +22,8 @@ public class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		
-		component = new EditText();
+		component = new TextField();
+		//component.cursor.blink.setRate(frameRate);
 		
 	}
 
@@ -44,11 +44,6 @@ public class Launcher extends PApplet {
 	@Override
 	public void keyReleased() {
 		Event.keyReleased();
-	}
-
-	@Override
-	public void mouseWheel(MouseEvent event) {
-		component.mouseWheel(event);
 	}
 	
 }

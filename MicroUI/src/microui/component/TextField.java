@@ -31,9 +31,9 @@ import processing.core.PGraphics;
 public final class TextField extends Component implements KeyPressable {
 	private static final int LEFT_OFFSET = 10;
 	
-	public final Text text;
-	public final Cursor cursor;
-	public final Selection selection;
+	private final Text text;
+	private final Cursor cursor;
+	private final Selection selection;
 	
 	private final Value scroll;
 	private PGraphics pg;
@@ -53,6 +53,7 @@ public final class TextField extends Component implements KeyPressable {
 		scroll = new Value(0);
 		
 		createPGraphics();
+		
 	}
 	
 	public TextField() {
@@ -90,6 +91,18 @@ public final class TextField extends Component implements KeyPressable {
 		events();
 	}
 	
+	public final Text getText() {
+		return text;
+	}
+
+	public final Cursor getCursor() {
+		return cursor;
+	}
+
+	public final Color getSelectionFill() {
+		return selection.fill;
+	}
+
 	private final void events() {
 		
 		if(event.pressed()) {
@@ -105,22 +118,22 @@ public final class TextField extends Component implements KeyPressable {
 		if(event.holding()) {
 			if(text.isEmpty()) { return; }
 			
-			cursor.row.set((int) map(app.mouseX-getX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
+			cursor.column.set((int) map(app.mouseX-getX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
 			
 			if(app.frameCount%3 == 0) {
-				if(cursor.isCloseToLeftSide()) { scroll.append(-cursor.row.getCurrentCharWidth()); }
-				if(cursor.isCloseToRightSide()) { scroll.append(cursor.row.getCurrentCharWidth()); }
+				if(cursor.isCloseToLeftSide()) { scroll.append(-cursor.column.getCurrentCharWidth()); }
+				if(cursor.isCloseToRightSide()) { scroll.append(cursor.column.getCurrentCharWidth()); }
 			}
 			
 			if(!selection.isStarted()) {
-				selection.setStartRow(cursor.row.get());
+				selection.setStartColumn(cursor.column.get());
 				selection.setStarted(true);
 			} else {
-				selection.setEndRow(cursor.row.get());
+				selection.setEndColumn(cursor.column.get());
 			}
 			
 			updateScrollMax();
-			cursor.row.updatePositionX();
+			cursor.column.updatePositionX();
 			
 		} else {
 			selection.setStarted(false);
@@ -195,9 +208,9 @@ public final class TextField extends Component implements KeyPressable {
 				if(Clipboard.isEmpty()) { return; }
 				
 				for(char ch : Clipboard.get().toCharArray()) {
-					text.insert(cursor.row.get(), ch);
+					text.insert(cursor.column.get(), ch);
 					updateScrollMax();
-					cursor.row.updatePositionX();
+					cursor.column.updatePositionX();
 				}
 			}
 			
@@ -206,7 +219,7 @@ public final class TextField extends Component implements KeyPressable {
 				Clipboard.set(selection.getText());
 				text.clear();
 				scroll.setMax(0);
-				cursor.row.set(0);
+				cursor.column.set(0);
 				selection.reset();
 				}
 				
@@ -222,19 +235,19 @@ public final class TextField extends Component implements KeyPressable {
 		
 		switch(app.keyCode) {
 		case LEFT :
-			cursor.row.back();
+			cursor.column.back();
 			if(cursor.isInStart()) { return; }
 			if(cursor.isCloseToLeftSide()) {
-				scroll.append(-cursor.row.getBackCharWidth());
+				scroll.append(-cursor.column.getBackCharWidth());
 			}
 			
 		break;
 		
 		case RIGHT :
-			cursor.row.next();
+			cursor.column.next();
 			if(cursor.isInEnd()) { return; }
 			if(cursor.isCloseToRightSide()) {
-				scroll.append(cursor.row.getNextCharWidth());
+				scroll.append(cursor.column.getNextCharWidth());
 			}
 		break;
 		
@@ -242,7 +255,7 @@ public final class TextField extends Component implements KeyPressable {
 			if(selection.isSelectedAll()) {
 				text.clear();
 				scroll.setMax(0);
-				cursor.row.set(0);
+				cursor.column.set(0);
 				selection.reset();
 				break;
 			}
@@ -253,17 +266,17 @@ public final class TextField extends Component implements KeyPressable {
 			}
 			
 			if(cursor.isInStart()) { break; }
-			text.removeCharAt(cursor.row.get()-1);
-			scroll.append(-cursor.row.getNextCharWidth());
-			cursor.row.back();
+			text.removeCharAt(cursor.column.get()-1);
+			scroll.append(-cursor.column.getNextCharWidth());
+			cursor.column.back();
 			
 		break;
 		case VK_HOME :
-			cursor.row.goToStart();
+			cursor.column.goToStart();
 			scroll.set(scroll.getMin());
 		break;
 		case VK_END :
-			cursor.row.goToEnd();
+			cursor.column.goToEnd();
 			scroll.set(scroll.getMax());
 		break;
 		
@@ -272,18 +285,18 @@ public final class TextField extends Component implements KeyPressable {
 			if(selection.isSelectedAll()) {
 				text.clear();
 				scroll.setMax(0);
-				cursor.row.set(0);
+				cursor.column.set(0);
 				selection.reset();
 			}
 			
-			text.insert(cursor.row.get(), app.key);
+			text.insert(cursor.column.get(), app.key);
 			
 		break;
 		
 		} 
 
 		updateScrollMax();
-		cursor.row.updatePositionX();
+		cursor.column.updatePositionX();
 	}
 	
 	public void setStyle(final TextField otherTextField) {
@@ -351,22 +364,22 @@ public final class TextField extends Component implements KeyPressable {
 		
 		@Override
 		protected void inInserting() {
-			cursor.row.next();
+			cursor.column.next();
 			updatePositionX();
-			scroll.append(cursor.row.getBackCharWidth());
+			scroll.append(cursor.column.getBackCharWidth());
 		}
 
 		private final float getX() { return x; }
 		
 		private final void deleteSelectedArea() {
-			for(int i = selection.getStartRow(); i < selection.getEndRow(); i++) {
-				scroll.append(-cursor.row.getNextCharWidth());
-				if(selection.getRealStartRow() < selection.getRealEndRow()) {
-					cursor.row.back();
+			for(int i = selection.getStartColumn(); i < selection.getEndColumn(); i++) {
+				scroll.append(-cursor.column.getNextCharWidth());
+				if(selection.getRealStartColumn() < selection.getRealEndColumn()) {
+					cursor.column.back();
 				}
 			}
 			
-			sb.delete(selection.getStartRow(), selection.getEndRow());
+			sb.delete(selection.getStartColumn(), selection.getEndColumn());
 		}
 		
 		private final float getWidth() {
@@ -410,16 +423,16 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	public final class Cursor {
-		public final Color fill;
-		public final Size weight;
-		public final Blink blink;
-		private final Row row;
+		private final Color fill;
+		private final Size weight;
+		private final Blink blink;
+		private final Column column;
 		private float positionX,positionY,height;
 		
 		private Cursor() {
 			fill = new Color(0);
 			weight = new Size(2);
-			row = new Row();
+			column = new Column();
 			blink = new Blink();
 			updateTransforms();
 		}
@@ -439,14 +452,30 @@ public final class TextField extends Component implements KeyPressable {
 
 		}
 		
+		public final Color getFill() {
+			return fill;
+		}
+
+		public final float getWeight() {
+			return weight.get();
+		}
+		
+		public final void setWeight(float weight) {
+			this.weight.set(weight);
+		}
+
+		public final void setBlinkRate(float rate) {
+			blink.setRate(rate);
+		}
+
 		private final void updateTransforms() {
 			positionY = TextField.this.getHeight()*.1f;
 			height = TextField.this.getHeight()*.9f;
 		}
 		
-		private final boolean isInStart() { return row.get() == 0; }
+		private final boolean isInStart() { return column.get() == 0; }
 		
-		private final boolean isInEnd() { return row.get() == text.length(); }
+		private final boolean isInEnd() { return column.get() == text.length(); }
 		
 		private final boolean isCloseToLeftSide() {
 			return positionX < getWidth()*.1f;
@@ -456,7 +485,7 @@ public final class TextField extends Component implements KeyPressable {
 			return positionX > getWidth()*.9f;
 		}
 		
-		public final class Blink {
+		private final class Blink {
 			private int duration,maxDuration;
 			private float rate;
 			
@@ -481,34 +510,34 @@ public final class TextField extends Component implements KeyPressable {
 			}
 		}
 		
-		public final class Row {
-			private int row;
+		private final class Column {
+			private int column;
 			
-			private Row() {}
+			private Column() {}
 			
-			private final void set(final int row) {
-				if(row < 0 || row > text.length()) { return; }
-				this.row = row;
+			private final void set(final int column) {
+				if(column < 0 || column > text.length()) { return; }
+				this.column = column;
 				updatePositionX();
 			}
 			
-			private final int get() { return row; }
+			private final int get() { return column; }
 			
 			private final void goToStart() { set(0); }
 			
 			private final void goToEnd() { set(text.length()); }
 			
 			private final void back() {
-				if(row > 0) {
-					row--;
+				if(column > 0) {
+					column--;
 					updatePositionX();
 				}
 				
 			}
 			
 			private final void next() {
-				if(row < text.length()) {
-					row++;
+				if(column < text.length()) {
+					column++;
 					updatePositionX();
 				}
 			}
@@ -516,22 +545,22 @@ public final class TextField extends Component implements KeyPressable {
 			private final void updatePositionX() {
 				if(text.isEmpty()) { positionX = 0; return; }
 				
-				positionX = pg.textWidth(text.get().substring(0,row))-scroll.get();
+				positionX = pg.textWidth(text.get().substring(0,column))-scroll.get();
 			}
 			
 			private final float getCurrentCharWidth() {
 				if(text.isEmpty()) { return 0; }
-				return pg.textWidth(text.get().charAt(min(row,text.length()-1)));
+				return pg.textWidth(text.get().charAt(min(column,text.length()-1)));
 			}
 			
 			private final float getNextCharWidth() {
 				if(text.isEmpty()) { return 0; }
-				return pg.textWidth(text.get().charAt(min(row+1,text.length()-1)));
+				return pg.textWidth(text.get().charAt(min(column+1,text.length()-1)));
 			}
 			
 			private final float getBackCharWidth() {
 				if(text.isEmpty()) { return 0; }
-				return pg.textWidth(text.get().charAt(max(0,min(row-1,text.length()-1))));
+				return pg.textWidth(text.get().charAt(max(0,min(column-1,text.length()-1))));
 			}
 		}
 		
@@ -556,10 +585,10 @@ public final class TextField extends Component implements KeyPressable {
 		}
 	}
 	
-	public final class Selection {
-		public final Color fill;
+	private final class Selection {
+		private final Color fill;
 		private float x,y,w,h;
-		private int startRow,endRow;
+		private int startColumn,endColumn;
 		private boolean isStarted;
 		
 		private Selection() {
@@ -572,7 +601,7 @@ public final class TextField extends Component implements KeyPressable {
 			pg.pushStyle();
 			pg.noStroke();
 			fill.use(pg);
-			pg.rect(x+LEFT_OFFSET-scroll.get(),y,startRow < endRow ? w : -w,h);
+			pg.rect(x+LEFT_OFFSET-scroll.get(),y,startColumn < endColumn ? w : -w,h);
 			pg.popStyle();
 		}
 		
@@ -584,64 +613,64 @@ public final class TextField extends Component implements KeyPressable {
 			
 			if(pg == null) { return; }
 			if(text.isEmpty()) { x = w = 0; return; }
-			x = pg.textWidth(text.get().substring(0,getStartRow()));
-			w = pg.textWidth(text.get().substring(getStartRow(),getEndRow()));
+			x = pg.textWidth(text.get().substring(0,getStartColumn()));
+			w = pg.textWidth(text.get().substring(getStartColumn(),getEndColumn()));
 		}
 
 		private final String getText() {
 			if(text.isEmpty()) { return ""; }
-			return text.get().substring(getStartRow(),getEndRow());
+			return text.get().substring(getStartColumn(),getEndColumn());
 		}
 		
-		private final int getStartRow() {
-			return min(startRow,endRow);
+		private final int getStartColumn() {
+			return min(startColumn,endColumn);
 		}
 
-		private final void setStartRow(int startRow) {
-			startRow = constrain(startRow,0,text.length());
+		private final void setStartColumn(int startColumn) {
+			startColumn = constrain(startColumn,0,text.length());
 			if(pg == null) { return; }
 			
-			x = pg.textWidth(text.get().substring(0,startRow));
+			x = pg.textWidth(text.get().substring(0,startColumn));
 			
-			this.startRow = startRow;
+			this.startColumn = startColumn;
 		}
 
-		private final int getEndRow() {
-			return max(startRow,endRow);
+		private final int getEndColumn() {
+			return max(startColumn,endColumn);
 		}
 		
-		private final void setEndRow(int endRow) {
-			endRow = constrain(endRow,0,text.length());
+		private final void setEndColumn(int endColumn) {
+			endColumn = constrain(endColumn,0,text.length());
 			if(pg == null) { return; }
 			
-			w = pg.textWidth(text.get().substring(getStartRow(),getEndRow()));
+			w = pg.textWidth(text.get().substring(getStartColumn(),getEndColumn()));
 
-			this.endRow = endRow;
+			this.endColumn = endColumn;
 		}
 		
-		private final int getRealStartRow() { return startRow; }
+		private final int getRealStartColumn() { return startColumn; }
 		
-		private final int getRealEndRow() { return endRow; }
+		private final int getRealEndColumn() { return endColumn; }
 		
 		private final void reset() {
-			startRow = endRow = 0;
+			startColumn = endColumn = 0;
 			isStarted = false;
 			
 			updateTransforms();
 		}
 		
 		private final boolean isSelected() {
-			return startRow != endRow;
+			return startColumn != endColumn;
 		}
 		
 		private final void selectAll() {
-			startRow = 0;
-			endRow = text.length();
+			startColumn = 0;
+			endColumn = text.length();
 			updateTransforms();
 		}
 		
 		private final boolean isSelectedAll() {
-			return getStartRow() == 0 && getEndRow() == text.length();
+			return getStartColumn() == 0 && getEndColumn() == text.length();
 		}
 
 		private final boolean isStarted() {
