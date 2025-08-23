@@ -26,14 +26,6 @@ public class Launcher extends PApplet {
 		
 		component = new EditText();
 		
-		/*
-		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("file.ser"))) {
-			out.writeObject(component);
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			System.out.println("serialized");
-		}*/
 	}
 
 	@Override
@@ -43,9 +35,6 @@ public class Launcher extends PApplet {
 		
 		GlobalTooltip.draw();
 		
-		if(mouseButton == RIGHT) {
-			component.setSize(mouseX,mouseY);
-		}
 	}
 
 	@Override

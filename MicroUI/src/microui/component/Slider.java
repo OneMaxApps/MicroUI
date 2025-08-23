@@ -10,7 +10,7 @@ import microui.util.UnsafeBounds;
 
 public class Slider extends RangeControl {
 	
-	public final Rect level;
+	private final Rect level;
 	
 	public Slider(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -78,8 +78,10 @@ public class Slider extends RangeControl {
 		super.swapOrientation();
 		onChangeBounds();
 	}
-
-
+	
+	public final Rect getLevel() {
+		return level;
+	}
 
 
 	public final class Rect extends UnsafeBounds {

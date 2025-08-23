@@ -6,7 +6,7 @@ import static processing.core.PApplet.map;
 import microui.core.RangeControl;
 
 public class Scroll extends RangeControl {
-	public final Button thumb;
+	private final Button thumb;
 	private float distToThumb;
 	private boolean needRecalculateDistToThumb;
 	
@@ -87,6 +87,10 @@ public class Scroll extends RangeControl {
 	public void swapOrientation() {
 		super.swapOrientation();
 		onChangeBounds();
+	}
+
+	public final Button getThumb() {
+		return thumb;
 	}
 
 	private final void updateThumbTransforms() {

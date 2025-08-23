@@ -5,7 +5,7 @@ import microui.core.base.View;
 import microui.core.style.Color;
 
 public final class Hover extends View {
-	public final Color color;
+	private final Color color;
 	private final Component component;
 	
     public Hover(Component component) {
@@ -29,6 +29,10 @@ public final class Hover extends View {
 			}
 		
 		}
+	}
+
+	public final Color getColor() {
+		return color;
 	}
 	
 }

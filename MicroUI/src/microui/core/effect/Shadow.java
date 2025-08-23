@@ -11,7 +11,7 @@ import microui.core.base.View;
 import microui.core.style.Color;
 
 public final class Shadow extends View {
-	  public final Color color;
+	  private final Color color;
 	  private final Bounds bounds;
 	  private int leftSize,rightSize,upSize,downSize;
 	  private byte absoluteSize;
@@ -59,6 +59,10 @@ public final class Shadow extends View {
 	    }
 	  }
 	  
+      public final Color getColor() {
+	  	return color;
+	  }
+
 	  public void setStyle(Shadow shadow) {
 		  color.set(shadow.color);  
 		  leftSize = shadow.leftSize;

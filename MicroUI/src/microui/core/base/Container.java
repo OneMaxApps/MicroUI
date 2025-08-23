@@ -12,13 +12,13 @@ import microui.event.Event;
 
 
 public abstract class Container extends Bounds implements Scrollable, KeyPressable, Focusable {
-	public final Color color;
-	public final Margin margin;
-	public final Texture image;
-	public final Shadow shadow;
-	public final ResizeHandle resizeHandle;
+	protected final Color color;
+	protected final ResizeHandle resizeHandle;
+	private final Margin margin;
+	private final Texture image;
+	private final Shadow shadow;
 	private final Container context;
-	
+
 	protected Container(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		visible();
@@ -173,6 +173,26 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			this.autoCenterMode = autoCenterMode;
 		}
 		
+	}
+	
+	public final Color getColor() {
+		return color;
+	}
+
+	public final Margin getMargin() {
+		return margin;
+	}
+
+	public final Texture getImage() {
+		return image;
+	}
+
+	public final Shadow getShadow() {
+		return shadow;
+	}
+
+	public final ResizeHandle getResizeHandle() {
+		return resizeHandle;
 	}
 	
 	public final class ResizeHandle extends View {

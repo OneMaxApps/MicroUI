@@ -10,8 +10,8 @@ import microui.util.Value;
 import processing.event.MouseEvent;
 
 public abstract class RangeControl extends Component implements Scrollable {
-	public final Value value;
-	public final Scrolling scrolling;
+	protected final Value value;
+	protected final Scrolling scrolling;
 	protected Orientation orientation;
 	protected boolean valueChangeStart,valueChangeEnd;
 	private Listener onStartChangeValueListener,onChangeValueListener,onEndChangeValueListener;
@@ -138,6 +138,13 @@ public abstract class RangeControl extends Component implements Scrollable {
 	public final void setOnEndChangeValueListener(Listener onEndChangeValueListener) {
 		this.onEndChangeValueListener = onEndChangeValueListener;
 	}
-	
+
+	public final Value getValue() {
+		return value;
+	}
+
+	public final Scrolling getScrolling() {
+		return scrolling;
+	}
 	
 }

@@ -14,19 +14,19 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 
 public class TextView extends Component {
-	  public final Shadow shadow;
+	  private final Shadow shadow;
 	  private final StringBuilder text;
 	  private PFont font;
-	  private int textSize,resizeModeValue;
+	  private int textSize;
 	  private boolean center,upperCaseStyle,lowerCaseStyle,autoResize;
-	  private AutoResizeMode resizeMode;
+	  private AutoResizeMode autoResizeMode;
 	  
 	  public TextView(String text, float x, float y, float w, float h) {
 	    super(x,y,w,h);
 	    
 	    this.text = new StringBuilder(text);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
-	    resizeMode = AutoResizeMode.SMALL;
+	    autoResizeMode = AutoResizeMode.SMALL;
 	    center = true;
 	    shadow = new Shadow();
 	    visible = true;
@@ -56,7 +56,7 @@ public class TextView extends Component {
 		  if(font != null) { app.textFont(font,textSize); }
 		  
 		  if(isAutoResize()) {
-			  app.textSize(max(1,min(w,h)/resizeModeValue));
+			  app.textSize(max(1,min(w,h)/autoResizeMode.getScale()));
 		  } else {
 			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
 		  }
@@ -76,7 +76,7 @@ public class TextView extends Component {
 		  }
 		  
 		  if(isAutoResize()) {
-			  app.textSize(max(1,min(w,h)/resizeModeValue));
+			  app.textSize(max(1,min(w,h)/autoResizeMode.getScale()));
 		  } else {
 			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
 		  }
@@ -209,25 +209,15 @@ public class TextView extends Component {
 		this.autoResize = autoResize;
 	  }
 
-	  public final AutoResizeMode getAutoResizeMode() { return resizeMode; }
+	  public final AutoResizeMode getAutoResizeMode() { return autoResizeMode; }
 	  
 	  public final void setAutoResizeMode(AutoResizeMode resizeMode) {
-		this.resizeMode = resizeMode;
-		
-		switch(resizeMode) {
-			case FULL : resizeModeValue = 1; break;
-			case BIG : resizeModeValue = 2; break;
-			case MIDDLE : resizeModeValue = 3; break;
-			case SMALL : resizeModeValue = 4; break;
-			case TINY : resizeModeValue = 5; break;
-		}
-		
+		this.autoResizeMode = resizeMode;
 	  }
-
 	  
-	  public final int getResizeModeValue() {
-	   return resizeModeValue;
-	  }
+	public final Shadow getShadow() {
+		return shadow;
+	}
 
 	public final class Shadow extends View {
 		  public Color color;
@@ -248,7 +238,7 @@ public class TextView extends Component {
 			  }
 			  
 			  if(isAutoResize()) {
-				  app.textSize(max(1,min(w,h)/resizeModeValue)+extraSize);
+				  app.textSize(max(1,min(w,h)/autoResizeMode.getScale())+extraSize);
 			  } else {
 				  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize+extraSize);
 			  }

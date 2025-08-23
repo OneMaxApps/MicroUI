@@ -7,7 +7,7 @@ import processing.core.PImage;
 // Status: Stable - Do not modify
 // Last Reviewed: 01.06.2025
 public class Texture extends Bounds {
-	public final Color tint;
+	protected final Color tint;
 	protected PImage image;
 	
 	public Texture() {
@@ -48,4 +48,9 @@ public class Texture extends Bounds {
 	public final PImage get() {
 		return image;
 	}
+
+	public final Color getTint() {
+		return tint;
+	}
+	
 }

@@ -19,11 +19,11 @@ import processing.event.MouseEvent;
 public final class Dial extends Component implements Scrollable {
 	private final static float RADIUS_START = HALF_PI*1.2f,
 							   RADIUS_END = TWO_PI+HALF_PI*.8f;
-	public final Stroke stroke;
-	public final Value value;
-	public final TextView hint;
-	public final Image image;
-	public final Arrow arrow;
+	private final Stroke stroke;
+	private final Value value;
+	private final TextView hint;
+	private final Image image;
+	private final Arrow arrow;
 	
 	private float centerX,centerY;
 	private boolean valueVisible;
@@ -86,7 +86,7 @@ public final class Dial extends Component implements Scrollable {
 		if(hint.getFont() != null) { app.textFont(hint.getFont()); }
 		
 		if(hint.isAutoResize()) {
-		app.textSize(max(1,min(w,h)/hint.getResizeModeValue()));
+		app.textSize(max(1,min(w,h)/hint.getAutoResizeMode().getScale()));
 		} else {
 		app.textSize(hint.getTextSize());
 		}
@@ -180,5 +180,25 @@ public final class Dial extends Component implements Scrollable {
 			x = min(Dial.this.getWidth(),Dial.this.getHeight())/2-w;
 		}
 		
+	}
+	
+	public final Stroke getStroke() {
+		return stroke;
+	}
+
+	public final Value getValue() {
+		return value;
+	}
+
+	public final TextView getHint() {
+		return hint;
+	}
+
+	public final Image getImage() {
+		return image;
+	}
+
+	public final Arrow getArrow() {
+		return arrow;
 	}
 }

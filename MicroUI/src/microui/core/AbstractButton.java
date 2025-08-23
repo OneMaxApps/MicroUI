@@ -7,9 +7,9 @@ import microui.core.style.Stroke;
 import microui.event.EventType;
 
 public abstract class AbstractButton extends Component {
-	public final Ripples ripples;
-	public final Hover hover;
-	public final Stroke stroke;
+	protected final Ripples ripples;
+	protected final Hover hover;
+	protected final Stroke stroke;
 	
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -33,5 +33,17 @@ public abstract class AbstractButton extends Component {
 			ripples.draw();
 		app.popStyle();
 	}
-	
+
+	public final Ripples getRipples() {
+		return ripples;
+	}
+
+	public final Hover getHover() {
+		return hover;
+	}
+
+	public final Stroke getStroke() {
+		return stroke;
+	}
+
 }

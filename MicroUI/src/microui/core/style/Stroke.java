@@ -6,7 +6,7 @@ import microui.MicroUI;
 import microui.util.Metrics;
 
 public final class Stroke {
-    public final Color color;
+	private final Color color;
     private int weight;
     
     public Stroke() {
@@ -29,4 +29,8 @@ public final class Stroke {
     	color.set(stroke.color);
     	weight = stroke.getWeight();
     }
+
+	public final Color getColor() {
+		return color;
+	}
 }

@@ -4,7 +4,7 @@ import microui.constants.AutoResizeMode;
 import microui.core.AbstractButton;
 
 public class Button extends AbstractButton {
-	public final TextView text;
+	protected final TextView text;
 
 	public Button(String plainText, float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -45,4 +45,8 @@ public class Button extends AbstractButton {
 		if (text != null) { text.setBounds(this); }
 	}
 
+	public final TextView getText() {
+		return text;
+	}
+	
 }

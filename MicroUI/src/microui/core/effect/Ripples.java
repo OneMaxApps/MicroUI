@@ -11,7 +11,7 @@ import microui.util.Metrics;
 import processing.core.PGraphics;
 
 public final class Ripples extends View {
-	public final Color color;
+	private final Color color;
 	private final Circle circle;
 	private final Bounds bounds;
 	private PGraphics pg;
@@ -41,13 +41,17 @@ public final class Ripples extends View {
 		}
 		
 	}
-
+	
 	public final void initAnim() {
 		circle.resetSize();
 		circle.resetPosition();
 		circle.start = true;
 	}
 	
+	public final Color getColor() {
+		return color;
+	}
+
 	private final void checkResizing() {
 		if(!visible || app.mousePressed) { return; }
 		
