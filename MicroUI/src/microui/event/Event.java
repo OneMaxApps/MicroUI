@@ -65,7 +65,7 @@ public class Event extends MicroUI {
 		  
 		  if(h < 0) { return app.mouseX > x && app.mouseX < x+w && app.mouseY > y+h && app.mouseY < y; }
 		  
-		  return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h; 
+		  return app.mouseX > x && app.mouseX < x+w && app.mouseY > y && app.mouseY < y+h;
 	  }
 	  
 	  public boolean inside(final int targetOfSeconds) {
