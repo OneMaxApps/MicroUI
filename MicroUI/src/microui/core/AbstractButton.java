@@ -48,7 +48,7 @@ public abstract class AbstractButton extends Component {
 		return ripples.isEnabled();
 	}
 	
-	public final void setEnableRipples(boolean enable) {
+	public final void setRipplesEnabled(boolean enable) {
 		ripples.setEnable(enable);
 	}
 	
@@ -56,12 +56,12 @@ public abstract class AbstractButton extends Component {
 		return hover.isEnabled();
 	}
 	
-	public final void setEnableHover(boolean enable) {
+	public final void setHoverEnabled(boolean enable) {
 		hover.setEnable(enable);
 	}
 	
-	public final void getStrokeWeight() {
-		stroke.getWeight();
+	public final int getStrokeWeight() {
+		return stroke.getWeight();
 	}
 	
 	public final void setStrokeWeight(int weight) {
