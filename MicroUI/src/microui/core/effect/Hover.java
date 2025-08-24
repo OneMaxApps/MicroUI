@@ -1,10 +1,5 @@
 package microui.core.effect;
 
-import static microui.event.EventType.MOUSE_ENTER;
-import static microui.event.EventType.MOUSE_EXIT;
-import static microui.event.EventType.PRESSED;
-import static microui.event.EventType.RELEASE;
-
 import microui.core.base.Component;
 import microui.core.base.View;
 import microui.core.style.Color;
@@ -12,22 +7,22 @@ import microui.core.style.Color;
 public final class Hover extends View {
 	private final Color color;
 	private final Component component;
-	private boolean isInside,isPressed,isEnable;
+	private boolean isInside,isPressed,isEnabled;
 	
     public Hover(Component component) {
     	setVisible(true);
     	color = new Color(0,100);
 		this.component = component;
-		component.addListener(MOUSE_ENTER, () -> isInside = true);
-		component.addListener(MOUSE_EXIT, () -> isInside = false);
-		component.addListener(PRESSED, () -> isPressed = true);
-		component.addListener(RELEASE, () -> isPressed = false);
-		isEnable = true;
+		component.onMouseInside(() -> isInside = true);
+		component.onMouseOutside(() -> isInside = false);
+		component.onPress(() -> isPressed = true);
+		component.onRelease(() -> isPressed = false);
+		isEnabled = true;
 	}
 
 	@Override
 	public void update() {
-		if(!isEnable) { return; }
+		if(!isEnabled) { return; }
 		
 		if(isInside) {
 			app.pushStyle();
@@ -49,16 +44,15 @@ public final class Hover extends View {
 	}
 	
 	public final void setColor(Color color) {
-		System.out.println("created a new Color object");
 		color.set(color);
 	}
 
 	public final boolean isEnabled() {
-		return isEnable;
+		return isEnabled;
 	}
 
-	public final void setEnable(boolean isEnable) {
-		this.isEnable = isEnable;
+	public final void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 	
 }

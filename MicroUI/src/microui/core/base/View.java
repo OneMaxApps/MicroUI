@@ -3,10 +3,13 @@ package microui.core.base;
 import microui.MicroUI;
 import microui.core.interfaces.Visible;
 import microui.util.Metrics;
+import processing.core.PApplet;
 
 // Status: STABLE - Do not modify
 // Last Reviewed: 29.06.2025
-public abstract class View extends MicroUI implements Visible {
+public abstract class View implements Visible {
+	protected static final PApplet app = MicroUI.getContext();
+	
 	protected boolean visible;
 	private int priority;
 	

@@ -34,7 +34,7 @@ public class MenuButton extends Button implements Scrollable {
 		calculateMarkBounds();
 		scrolling = new Scrolling();
 		
-		callback.addListener(EventType.CLICKED, () -> {
+		callback.addListener(EventType.CLICK, () -> {
 			isOpen = !isOpen;
 			if(!isOpen) { closeAllSubMenus(); } else { selectedId = -1; }
 		});
@@ -382,7 +382,7 @@ public class MenuButton extends Button implements Scrollable {
 					final Button item = itemList.get(i);
 					item.draw();
 					
-					if(item.getEvent().clicked()) {
+					if(item.isClicked()) {
 						selectedId = i;
 						closeAllSubMenusWithoutSelected();
 						

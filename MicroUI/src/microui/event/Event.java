@@ -2,8 +2,10 @@ package microui.event;
 
 import microui.MicroUI;
 import microui.core.base.Bounds;
+import processing.core.PApplet;
 
-public class Event extends MicroUI {
+public class Event {
+	  private static PApplet app = MicroUI.getContext();
 	  private static final int MIN_SHAKE_DIST = 3;
 	  
 	  private float x,y,w,h;

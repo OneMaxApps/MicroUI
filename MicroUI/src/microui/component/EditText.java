@@ -10,10 +10,8 @@ import static java.awt.event.KeyEvent.VK_PAGE_UP;
 import static java.awt.event.KeyEvent.VK_V;
 import static java.awt.event.KeyEvent.VK_X;
 import static microui.event.Event.checkKey;
-import static microui.event.EventType.CLICKED;
-import static microui.event.EventType.DOUBLE_CLICKED;
-import static microui.event.EventType.MOUSE_ENTER;
-import static microui.event.EventType.MOUSE_EXIT;
+import static microui.event.EventType.CLICK;
+import static microui.event.EventType.DOUBLE_CLICK;
 import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
@@ -77,7 +75,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 
 		scrollsValuesUpdate();
 
-		callback.addListener(DOUBLE_CLICKED, () -> {
+		callback.addListener(DOUBLE_CLICK, () -> {
 			if (selection.isSelectedAllText()) {
 				selection.unselect();
 			} else {
@@ -85,11 +83,10 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				items.selectAllText();
 			}
 		});
-		callback.addListener(CLICKED, () -> setFocus(true));
+		callback.addListener(CLICK, () -> setFocus(true));
 		
-
-		scrollV.addListener(MOUSE_ENTER, () -> isMouseOutsideFromScrollV = false);
-		scrollV.addListener(MOUSE_EXIT, () -> isMouseOutsideFromScrollV = true);
+		scrollV.onMouseInside(() -> isMouseOutsideFromScrollV = false);
+		scrollV.onMouseOutside(() -> isMouseOutsideFromScrollV = true);
 	}
 
 	public EditText() {
@@ -855,7 +852,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			}
 			
 			private boolean isCursorDraggable() {
-				return event.pressed() && !scrollH.getEvent().holding() && !scrollV.getEvent().holding();
+				return event.pressed() && !scrollH.isHolding() && !scrollV.isHolding();
 			}
 			
 			private void cursorStateUpdate() {
@@ -1249,7 +1246,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 
 			isSelecting = (startRow != endRow) || (startColumn != endColumn);
 
-			if (isSelecting && !scrollV.getThumb().getEvent().holding() && !scrollH.getThumb().getEvent().holding()) {
+			if (isSelecting && !scrollV.getThumb().isHolding() && !scrollH.getThumb().isHolding()) {
 
 				for (int i = 0; i < items.count(); i++) {
 
@@ -1305,8 +1302,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		}
 
 		private boolean isAllowedStateToStartSelecting() {
-			return event.holding() && !scrollV.getThumb().getEvent().holding()
-					&& !scrollH.getThumb().getEvent().holding() && event.dragged();
+			return event.holding() && !scrollV.getThumb().isHolding()
+					&& !scrollH.getThumb().isHolding() && event.dragged();
 		}
 
 		private boolean isSelecting() {

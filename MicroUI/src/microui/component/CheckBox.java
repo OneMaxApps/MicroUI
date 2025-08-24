@@ -12,7 +12,7 @@ public class CheckBox extends AbstractButton {
 		
 		color.set(0,200,0);
 		hover.setColor(new Color(0,10));
-		callback.addListener(EventType.CLICKED, () -> included = !included);
+		callback.addListener(EventType.CLICK, () -> included = !included);
 	}
 	
 	public CheckBox(boolean include) {

@@ -26,27 +26,27 @@ public final class Tooltip extends Bounds {
 		
 		text = new Text();
 		
-		callback.addListener(EventType.MOUSE_ENTER_LONG, () -> {
+		callback.addListener(EventType.MOUSE_INSIDE_LONG, () -> {
 			canBeVisible = additionalCondition && (!text.isEmpty() || container != null);
 		});
 		
-		callback.addListener(EventType.MOUSE_EXIT, () -> {
+		callback.addListener(EventType.MOUSE_OUTSIDE, () -> {
 			if(canBeVisible) {
-				callback.resetMouseEnterTimer();
+				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
 		
 		callback.addListener(EventType.SHAKE, () -> {
 			if(canBeVisible) {
-				callback.resetMouseEnterTimer();
+				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
 		
-		callback.addListener(EventType.PRESSED, () -> {
+		callback.addListener(EventType.PRESS, () -> {
 			if(canBeVisible) {
-				callback.resetMouseEnterTimer();
+				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});

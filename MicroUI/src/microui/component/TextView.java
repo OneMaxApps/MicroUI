@@ -32,7 +32,7 @@ public class TextView extends Component {
 	    visible = true;
 	    color.set(255);
 	    
-	    callback.setEnable(false);
+	    callback.setEnabled(false);
 	  }
 	  
 	  public TextView(float x, float y, float w, float h) {

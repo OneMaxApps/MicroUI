@@ -1,7 +1,5 @@
 package microui.container.panel;
 
-import static microui.event.EventType.CLICKED;
-
 import microui.component.Button;
 import microui.component.TextView;
 import microui.core.base.Bounds;
@@ -126,7 +124,7 @@ public class Panel extends Container {
 			buttonClose.setRipplesEnabled(false);
 			buttonClose.setStrokeWeight(1);
 			buttonClose.setPosition(getX()+getWidth()-buttonClose.getWidth(),getY());
-			buttonClose.addListener(CLICKED, () -> close() );
+			buttonClose.onClick(() -> close() );
 			
 			buttonClose.setPosition(Panel.this.getX()+Panel.this.getWidth()-BUTTON_WIDTH,Panel.this.getY()-getHeight());
 			buttonClose.setSize(BUTTON_WIDTH,BUTTON_HEIGHT);

@@ -1,6 +1,6 @@
 package microui.core;
 
-import static microui.event.EventType.CLICKED;
+import static microui.event.EventType.CLICK;
 
 import microui.core.base.Component;
 import microui.core.effect.Hover;
@@ -21,7 +21,7 @@ public abstract class AbstractButton extends Component {
 		hover = new Hover(this);
 		stroke = new Stroke();
 		
-		callback.addListener(CLICKED,() -> ripples.initAnim());
+		callback.addListener(CLICK,() -> ripples.initAnim());
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public abstract class AbstractButton extends Component {
 	}
 	
 	public final void setHoverEnabled(boolean enabled) {
-		hover.setEnable(enabled);
+		hover.setEnabled(enabled);
 	}
 	
 	public final int getStrokeWeight() {

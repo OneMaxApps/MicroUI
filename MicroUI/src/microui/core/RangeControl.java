@@ -1,6 +1,6 @@
 package microui.core;
 
-import static microui.event.EventType.PRESSED;
+import static microui.event.EventType.PRESS;
 
 import microui.constants.Orientation;
 import microui.core.base.Component;
@@ -19,6 +19,8 @@ public abstract class RangeControl extends Component implements Scrollable {
 	
 	public RangeControl(float x, float y, float w, float h) {
 		super(x, y, w, h);
+		setVisible(true);
+		
 		value = new Value(0,100,0) {
 			@Override
 			public void action() {
@@ -27,11 +29,11 @@ public abstract class RangeControl extends Component implements Scrollable {
 			}
 		};
 		
-		callback.addListener(PRESSED, () -> { valueChangeEnd = true; });
+		callback.addListener(PRESS, () -> { valueChangeEnd = true; });
 		
 		scrolling = new Scrolling(event);
 		orientation = Orientation.HORIZONTAL;
-		setVisible(true);
+		
 		
 	}
 	

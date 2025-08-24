@@ -4,8 +4,8 @@ import processing.core.PApplet;
 
 // Status: STABLE - Do not modify
 // Last Reviewed: 01.06.2025
-public class MicroUI {
-	protected static PApplet app;
+public final class MicroUI {
+	private static PApplet app;
 	
 	private static final int MAJOR = 2;
 	private static final int MINOR = 0;
@@ -13,7 +13,7 @@ public class MicroUI {
 	
 	private static final String VERSION = MAJOR+"."+MINOR+"."+PATCH;
 	
-	protected MicroUI() {}
+	private MicroUI() {}
 
 	public static final void setContext(PApplet applet) {
 		if(applet != null && MicroUI.app == null) {
