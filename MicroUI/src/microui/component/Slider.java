@@ -90,7 +90,7 @@ public class Slider extends RangeControl {
 	    
 	    private Rect(float x, float y, float w, float h) {
 	        super(x,y,w,h);
-	        visible();
+	        setVisible(true);
 	  
 	        stroke = new Stroke();
 	        color = new Color(44);

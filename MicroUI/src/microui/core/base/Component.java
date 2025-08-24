@@ -1,5 +1,19 @@
 package microui.core.base;
 
+import static microui.event.EventType.CLICKED;
+import static microui.event.EventType.DOUBLE_CLICKED;
+import static microui.event.EventType.DRAGGED;
+import static microui.event.EventType.DRAGGING;
+import static microui.event.EventType.HOLDING;
+import static microui.event.EventType.LONG_PRESSED;
+import static microui.event.EventType.MOUSE_ENTER;
+import static microui.event.EventType.MOUSE_ENTER_LONG;
+import static microui.event.EventType.MOUSE_EXIT;
+import static microui.event.EventType.PRESSED;
+import static microui.event.EventType.RELEASE;
+import static microui.event.EventType.SHAKE;
+import static microui.event.EventType.UNHOLDED;
+
 import microui.core.style.Color;
 import microui.event.Callback;
 import microui.event.Event;
@@ -56,6 +70,59 @@ public abstract class Component extends Bounds {
 	@Deprecated
 	public final Event getEvent() {
 		return event;
+	}
+	
+	
+	public final void onClick(Listener listener) {
+		callback.addListener(CLICKED, listener);
+	}
+	
+	public final void onDoubleClick(Listener listener) {
+		callback.addListener(DOUBLE_CLICKED, listener);
+	}
+	
+	public final void onDragged(Listener listener) {
+		callback.addListener(DRAGGED, listener);
+	}
+	
+	public final void onDragging(Listener listener) {
+		callback.addListener(DRAGGING, listener);
+	}
+	
+	public final void onHold(Listener listener) {
+		callback.addListener(HOLDING, listener);
+	}
+	
+	public final void onMouseEnter(Listener listener) {
+		callback.addListener(MOUSE_ENTER, listener);
+	}
+	
+	public final void onMouseEnterLong(Listener listener) {
+		callback.addListener(MOUSE_ENTER_LONG, listener);
+	}
+	
+	public final void onMouseExit(Listener listener) {
+		callback.addListener(MOUSE_EXIT, listener);
+	}
+	
+	public final void onLongPress(Listener listener) {
+		callback.addListener(LONG_PRESSED, listener);
+	}
+	
+	public final void onPress(Listener listener) {
+		callback.addListener(PRESSED, listener);
+	}
+	
+	public final void onRelease(Listener listener) {
+		callback.addListener(RELEASE, listener);
+	}
+	
+	public final void onUnhold(Listener listener) {
+		callback.addListener(UNHOLDED, listener);
+	}
+	
+	public final void onShake(Listener listener) {
+		callback.addListener(SHAKE, listener);
 	}
 	
 	public final String getTooltipText() {

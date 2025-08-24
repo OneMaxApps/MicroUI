@@ -15,7 +15,8 @@ public abstract class AbstractButton extends Component {
 	
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		visible();
+		setVisible(true);
+		
 		ripples = new Ripples(this);
 		hover = new Hover(this);
 		stroke = new Stroke();
@@ -56,8 +57,8 @@ public abstract class AbstractButton extends Component {
 		return hover.isEnabled();
 	}
 	
-	public final void setHoverEnabled(boolean enable) {
-		hover.setEnable(enable);
+	public final void setHoverEnabled(boolean enabled) {
+		hover.setEnable(enabled);
 	}
 	
 	public final int getStrokeWeight() {

@@ -26,27 +26,27 @@ public final class Tooltip extends Bounds {
 		
 		text = new Text();
 		
-		callback.addListener(EventType.INSIDE_LONG, () -> {
+		callback.addListener(EventType.MOUSE_ENTER_LONG, () -> {
 			canBeVisible = additionalCondition && (!text.isEmpty() || container != null);
 		});
 		
-		callback.addListener(EventType.OUTSIDE, () -> {
+		callback.addListener(EventType.MOUSE_EXIT, () -> {
 			if(canBeVisible) {
-				callback.resetInsideTimer();
+				callback.resetMouseEnterTimer();
 				canBeVisible = false;
 			}
 		});
 		
 		callback.addListener(EventType.SHAKE, () -> {
 			if(canBeVisible) {
-				callback.resetInsideTimer();
+				callback.resetMouseEnterTimer();
 				canBeVisible = false;
 			}
 		});
 		
 		callback.addListener(EventType.PRESSED, () -> {
 			if(canBeVisible) {
-				callback.resetInsideTimer();
+				callback.resetMouseEnterTimer();
 				canBeVisible = false;
 			}
 		});
@@ -82,8 +82,8 @@ public final class Tooltip extends Bounds {
 	public final void init() {
 		if(canBeVisible) {
 			GlobalTooltip.onDraw(this);
-			visible();
-		} else { invisible(); }
+			setVisible(true);
+		} else { setVisible(false); }
 		
 		if(isVisible()) {
 			setPosition(constrain(app.mouseX+PADDING_X,0,app.width-getWidth()),constrain(app.mouseY,0,app.height-getHeight()));

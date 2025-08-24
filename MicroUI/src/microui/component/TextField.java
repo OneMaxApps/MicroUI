@@ -44,7 +44,7 @@ public final class TextField extends Component implements KeyPressable {
 	public TextField(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		color.set(255);
-		visible();
+		setVisible(true);
 		
 		text = new Text();
 		cursor = new Cursor();

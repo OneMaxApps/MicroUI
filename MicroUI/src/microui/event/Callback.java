@@ -21,7 +21,7 @@ public final class Callback extends MicroUI {
 	private long clickedTimePrev,clickedTimeNow,delta,
 				 pressStartTime,currentPressDuration,
 				 longPressThreshold,doubleClickThreshold,
-				 insideTimerStart,insideTimer,insideThreshold;
+				 mouseEnterTimerStart,timerForMouseEnter,mouseEnterTimeThreshold;
 
 	public Callback(Bounds otherBounds) {
 		bounds = otherBounds;
@@ -32,7 +32,7 @@ public final class Callback extends MicroUI {
 		
 		distForShake = THREE_PIXELS;
 		
-		insideThreshold = TWO_SECONDS;
+		mouseEnterTimeThreshold = TWO_SECONDS;
 	}
 
 	public final void listen() {
@@ -78,13 +78,13 @@ public final class Callback extends MicroUI {
 		this.distForShake = distForShake;
 	}
 	
-	public final long getInsideThreshold() {
-		return insideThreshold;
+	public final long getMouseEnterTimeThreshold() {
+		return mouseEnterTimeThreshold;
 	}
 
-	public final void setInsideThreshold(long insideThreshold) {
-		if(insideThreshold <= 0) { return; }
-		this.insideThreshold = insideThreshold;
+	public final void setMouseEnterTimeThreshold(long mouseEnterTimeThreshold) {
+		if(mouseEnterTimeThreshold <= 0) { return; }
+		this.mouseEnterTimeThreshold = mouseEnterTimeThreshold;
 	}
 
 	public final void clearAll() {
@@ -120,12 +120,12 @@ public final class Callback extends MicroUI {
 		
 	}
 	
-	public final void resetInsideTimer() {
-		insideTimer = 0;
+	public final void resetMouseEnterTimer() {
+		timerForMouseEnter = 0;
 	}
 	
 	private final boolean isClicked() {
-		if (!app.mousePressed && isInside(bounds) && hasClickedStateTriggered) {
+		if (!app.mousePressed && isMouseEnter(bounds) && hasClickedStateTriggered) {
 			hasClickedStateTriggered = false;
 			updateDeltaTimeBetweenClicks();
 			if(delta < doubleClickThreshold) { clickCount++; }
@@ -145,12 +145,12 @@ public final class Callback extends MicroUI {
 						if(isClicked) { list.forEach(listener -> listener.action()); }
 					break;
 					
-					case INSIDE :
-						if(isInside(bounds)) { list.forEach(listener -> listener.action()); }
+					case MOUSE_ENTER :
+						if(isMouseEnter(bounds)) { list.forEach(listener -> listener.action()); }
 					break;
 					
-					case OUTSIDE :
-						if(isOutside()) { list.forEach(listener -> listener.action()); }
+					case MOUSE_EXIT :
+						if(isMouseExit()) { list.forEach(listener -> listener.action()); }
 					break;
 					
 					case PRESSED :
@@ -181,12 +181,16 @@ public final class Callback extends MicroUI {
 						if(isShaking(distForShake)) { list.forEach(listener -> listener.action()); }
 					break;
 					
-					case INSIDE_LONG :
-						if(insideTimer > insideThreshold) { list.forEach(listener -> listener.action()); }
+					case MOUSE_ENTER_LONG :
+						if(timerForMouseEnter > mouseEnterTimeThreshold) { list.forEach(listener -> listener.action()); }
 					break;
 					
-					case UNPRESSED :
+					case RELEASE :
 						if(!isPressed(bounds)) { list.forEach(listener -> listener.action()); }
+					break;
+					
+					case UNHOLDED :
+						if(!isHolding) { list.forEach(listener -> listener.action()); }
 					break;
 				}
 			}
@@ -194,23 +198,23 @@ public final class Callback extends MicroUI {
 		
 	}
 
-	private static final boolean isInside(final Bounds bounds) {
+	private static final boolean isMouseEnter(final Bounds bounds) {
 		  if(bounds.getWidth() < 0 && bounds.getHeight() < 0) { return app.mouseX > bounds.getX()+bounds.getWidth() && app.mouseX < bounds.getX() && app.mouseY > bounds.getY()+bounds.getHeight() && app.mouseY < bounds.getY(); }
 		  if(bounds.getWidth() < 0) { return app.mouseX > bounds.getX()+bounds.getWidth() && app.mouseX < bounds.getX() && app.mouseY > bounds.getY() && app.mouseY < bounds.getY()+bounds.getHeight(); }
 		  if(bounds.getHeight() < 0) { return app.mouseX > bounds.getX() && app.mouseX < bounds.getX()+bounds.getWidth() && app.mouseY > bounds.getY()+bounds.getHeight() && app.mouseY < bounds.getY(); }
 		  return app.mouseX > bounds.getX() && app.mouseX < bounds.getX()+bounds.getWidth() && app.mouseY > bounds.getY() && app.mouseY < bounds.getY()+bounds.getHeight(); 
 	}
 	
-	public final boolean isInside() {
-		return isInside(bounds);
+	public final boolean isMouseEnter() {
+		return isMouseEnter(bounds);
 	}
 
-	public final boolean isOutside() {
-		return !isInside();
+	public final boolean isMouseExit() {
+		return !isMouseEnter();
 	}
 
 	private static final boolean isPressed(Bounds bounds) {
-		return isInside(bounds) && app.mousePressed;
+		return isMouseEnter(bounds) && app.mousePressed;
 	}
 
 	private final boolean isLongPressed() {
@@ -262,13 +266,13 @@ public final class Callback extends MicroUI {
 	}
 	
 	private final void inputUpdate() {
-		if(isInside(bounds)) {
+		if(isMouseEnter(bounds)) {
 			isClicked = isClicked();
-			if(insideTimer == 0) { insideTimerStart = System.currentTimeMillis(); }
-			insideTimer = (System.currentTimeMillis()-insideTimerStart)+1;
+			if(timerForMouseEnter == 0) { mouseEnterTimerStart = System.currentTimeMillis(); }
+			timerForMouseEnter = (System.currentTimeMillis()-mouseEnterTimerStart)+1;
 		} else {
 			hasClickedStateTriggered = false;
-			insideTimer = 0;
+			timerForMouseEnter = 0;
 			clickCount = 0;
 			isClicked = false;
 		}

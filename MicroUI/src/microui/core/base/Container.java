@@ -21,13 +21,13 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 
 	protected Container(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		visible();
+		setVisible(true);
 		color = new Color(0,0,128,32);
 		margin = new Margin();
 		image = new Texture();
 		image.setBounds(this);
 		shadow = new Shadow(this);
-		shadow.invisible();
+		shadow.setVisible(false);
 		resizeHandle = new ResizeHandle();
 		context = this;
 	}
@@ -202,7 +202,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		private int minWidth,minHeight;
 		
 		private ResizeHandle() {
-			visible();
+			setVisible(true);
 			colorDots = new Color(255);
 			dots = new Dots();
 			minWidth = minHeight = 100;
@@ -297,7 +297,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				
 				public Dot(final int mode) {
 					this.mode = mode;
-					visible();
+					setVisible(true);
 					setSize(10,10);
 					event = new Event();
 				}

@@ -12,7 +12,7 @@ public final class ContainerManager extends View {
 	
 	public ContainerManager() {
 		containerList = new ArrayList<Focusable>();
-		visible();
+		setVisible(true);
 		
 	}
 

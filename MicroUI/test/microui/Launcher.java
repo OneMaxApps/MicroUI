@@ -6,7 +6,7 @@ import processing.core.PApplet;
 
 // TODO Check what's methods and objects must be a part of API 
 public class Launcher extends PApplet {
-	Button button;
+	Button component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -20,13 +20,14 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		button = new Button();
+		component = new Button();
+		component.onUnhold(() -> background(0));
 	}
 
 	@Override
 	public void draw() {
 		background(200);
-		button.draw();
+		component.draw();
 		
 		GlobalTooltip.draw();
 	}

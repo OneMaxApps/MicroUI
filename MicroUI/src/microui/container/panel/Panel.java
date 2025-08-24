@@ -19,8 +19,8 @@ public class Panel extends Container {
 		color.set(64);
 		resizeHandle.setEnable(true);
 		resizeHandle.colorDots.set(255,0);
-		resizeHandle.getDot(0).invisible();
-		resizeHandle.getDot(1).invisible();
+		resizeHandle.getDot(0).setVisible(false);
+		resizeHandle.getDot(1).setVisible(false);
 		
 		titleBar = new TitleBar();
 		
@@ -117,7 +117,8 @@ public class Panel extends Container {
 		
 		public TitleBar() {
 			super();
-			visible();
+			setVisible(true);
+			
 			setSize(Panel.this.getWidth(),HEIGHT);
 			
 			buttonClose = new Button("");

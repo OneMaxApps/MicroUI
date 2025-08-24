@@ -1,9 +1,9 @@
 package microui.core.effect;
 
-import static microui.event.EventType.INSIDE;
-import static microui.event.EventType.OUTSIDE;
+import static microui.event.EventType.MOUSE_ENTER;
+import static microui.event.EventType.MOUSE_EXIT;
 import static microui.event.EventType.PRESSED;
-import static microui.event.EventType.UNPRESSED;
+import static microui.event.EventType.RELEASE;
 
 import microui.core.base.Component;
 import microui.core.base.View;
@@ -15,13 +15,13 @@ public final class Hover extends View {
 	private boolean isInside,isPressed,isEnable;
 	
     public Hover(Component component) {
-    	visible();
+    	setVisible(true);
     	color = new Color(0,100);
 		this.component = component;
-		component.addListener(INSIDE, () -> isInside = true);
-		component.addListener(OUTSIDE, () -> isInside = false);
+		component.addListener(MOUSE_ENTER, () -> isInside = true);
+		component.addListener(MOUSE_EXIT, () -> isInside = false);
 		component.addListener(PRESSED, () -> isPressed = true);
-		component.addListener(UNPRESSED, () -> isPressed = false);
+		component.addListener(RELEASE, () -> isPressed = false);
 		isEnable = true;
 	}
 

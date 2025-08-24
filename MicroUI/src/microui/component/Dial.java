@@ -29,7 +29,8 @@ public final class Dial extends Component implements Scrollable {
 	public Dial(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		
-		visible();
+		setVisible(true);
+		
 		color.set(32);
 		
 		stroke = new Stroke();
@@ -132,7 +133,7 @@ public final class Dial extends Component implements Scrollable {
 
 		private Image() {
 			super();
-			visible();
+			setVisible(true);
 			setSize(min(Dial.this.w,Dial.this.h));
 		}
 
@@ -150,7 +151,7 @@ public final class Dial extends Component implements Scrollable {
 
 		public Arrow() {
 			super();
-			visible();
+			setVisible(true);
 			onChangeBounds();
 		}
 

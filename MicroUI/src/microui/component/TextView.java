@@ -226,7 +226,7 @@ public class TextView extends Component {
 		  private Shadow() {
 			  color = new Color(0);
 			  extraSize = h*.01f;
-			  invisible();
+			  setVisible(false);
 		  }
 		  
 		  @Override
