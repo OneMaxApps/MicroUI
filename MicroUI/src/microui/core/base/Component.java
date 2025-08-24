@@ -53,7 +53,7 @@ public abstract class Component extends Bounds {
 		this.color.set(color);
 	}
 
-	
+	@Deprecated
 	public final Event getEvent() {
 		return event;
 	}
@@ -66,11 +66,11 @@ public abstract class Component extends Bounds {
 		tooltip.getText().set(text);
 	}
 	
-	public final boolean isTooltipEnable() {
+	public final boolean isTooltipEnabled() {
 		return tooltip.isEnabled();
 	}
 	
-	public final void setEnableTooltip(boolean isEnable) {
+	public final void setTooltipEnabled(boolean isEnable) {
 		tooltip.setEnable(isEnable);
 	}
 	
