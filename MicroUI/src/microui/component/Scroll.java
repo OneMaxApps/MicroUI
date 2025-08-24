@@ -1,9 +1,11 @@
 package microui.component;
 
+import static microui.event.EventType.HOLDING;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
 import microui.core.RangeControl;
+import microui.event.EventType;
 
 public class Scroll extends RangeControl {
 	private final Button thumb;
@@ -16,23 +18,7 @@ public class Scroll extends RangeControl {
 		color.set(0,32);
 		thumb = new Button("");
 		thumb.text.invisible();
-		updateThumbTransforms();
-		value.set(0,100,50);
-	}
-	
-	public Scroll() {
-		this(app.width*.25f,app.height*.45f,app.width*.5f,app.height*.1f);
-
-	}
-
-	@Override
-	protected void update() {
-		super.update();
-		thumb.draw();
-		
-		
-		
-		if(thumb.getEvent().holding()) {
+		thumb.addListener(HOLDING, () -> {
 			calcDistFromMouseToThumb();
 			
 			switch(orientation) {
@@ -49,11 +35,23 @@ public class Scroll extends RangeControl {
 			
 			onChangeValue();
 			onStartChangeValue();
-			
-			
-		} else {
-			needRecalculateDistToThumb = true;
-		}
+		});
+		
+		thumb.addListener(EventType.UNPRESSED, () -> needRecalculateDistToThumb = true);
+		
+		updateThumbTransforms();
+		value.set(0,100,50);
+	}
+	
+	public Scroll() {
+		this(app.width*.25f,app.height*.45f,app.width*.5f,app.height*.1f);
+
+	}
+
+	@Override
+	protected void update() {
+		super.update();
+		thumb.draw();
 		
 	}
 	
