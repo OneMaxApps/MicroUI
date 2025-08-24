@@ -29,8 +29,12 @@ public final class Stroke {
     	color.set(stroke.color);
     	weight = stroke.getWeight();
     }
-
+    
 	public final Color getColor() {
-		return color;
+		return new Color(color);
+	}
+	
+	public final void setColor(Color color) {
+		this.color.set(color);
 	}
 }

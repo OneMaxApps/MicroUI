@@ -39,24 +39,46 @@ public abstract class Component extends Bounds {
     	color.set(otherComponent.getColor());
 	}
     
-	public final void on(EventType type, Listener listener) {
+	public final void addListener(EventType type, Listener listener) {
 		callback.addListener(type, listener);
 	}
-
+	
+	
 	public final Color getColor() {
-		return color;
+		System.out.println("created a new Color object");
+		return new Color(color);
+	}
+	
+	public final void setColor(Color color) {
+		this.color.set(color);
 	}
 
+	
 	public final Event getEvent() {
 		return event;
 	}
-
-	public final Callback getCallback() {
-		return callback;
-	}
-
-	public final Tooltip getTooltip() {
-		return tooltip;
+	
+	public final String getTooltipText() {
+		return tooltip.getText().getAsString();
 	}
 	
+	public final void setTooltipText(String text) {
+		tooltip.getText().set(text);
+	}
+	
+	public final boolean isTooltipEnable() {
+		return tooltip.isEnabled();
+	}
+	
+	public final void setEnableTooltip(boolean isEnable) {
+		tooltip.setEnable(isEnable);
+	}
+	
+	public final Color getTooltipColor() {
+		return tooltip.getColor();
+	}
+	
+	public final void setTooltipColor(Color color) {
+		tooltip.setColor(color);
+	}
 }

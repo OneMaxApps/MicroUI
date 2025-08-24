@@ -1,15 +1,12 @@
 package microui;
 
-import microui.component.EditText;
-import microui.event.Event;
+import microui.component.Button;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
-import processing.event.KeyEvent;
-import processing.event.MouseEvent;
 
 // TODO Check what's methods and objects must be a part of API 
 public class Launcher extends PApplet {
-	EditText component;
+	Button button;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -23,36 +20,15 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		
-		component = new EditText();
-		
+		button = new Button();
 	}
 
 	@Override
 	public void draw() {
 		background(200);
-		component.draw();
+		button.draw();
 		
 		GlobalTooltip.draw();
-		
 	}
-
-	@Override
-	public void keyPressed(KeyEvent event) {
-		Event.keyPressed();
-		
-		component.keyPressed();
-	}
-
-	@Override
-	public void keyReleased() {
-		Event.keyReleased();
-	}
-
-	@Override
-	public void mouseWheel(MouseEvent event) {
-		component.mouseWheel(event);
-	}
-	
 	
 }

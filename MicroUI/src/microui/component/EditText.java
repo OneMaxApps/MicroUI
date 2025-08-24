@@ -12,6 +12,8 @@ import static java.awt.event.KeyEvent.VK_X;
 import static microui.event.Event.checkKey;
 import static microui.event.EventType.CLICKED;
 import static microui.event.EventType.DOUBLE_CLICKED;
+import static microui.event.EventType.INSIDE;
+import static microui.event.EventType.OUTSIDE;
 import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
@@ -48,7 +50,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	private static final String ALLOWED_CHARS = " ,.<>[]{}()+-*/\\\'\";:?!@#$%^&|_`~=";
 	
 	private float scrollsWeight;
-	private boolean isFocused;
+	private boolean isFocused,isMouseOutsideFromScrollV;
 	
 	private final Scroll scrollV, scrollH;
 	private final Items items;
@@ -84,6 +86,10 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			}
 		});
 		callback.addListener(CLICKED, () -> setFocus(true));
+		
+
+		scrollV.addListener(INSIDE, () -> isMouseOutsideFromScrollV = false);
+		scrollV.addListener(OUTSIDE, () -> isMouseOutsideFromScrollV = true);
 	}
 
 	public EditText() {
@@ -133,7 +139,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				return;
 			}
 
-			if (!scrollH.getEvent().inside()) {
+			if (isMouseOutsideFromScrollV) {
 				scrollV.getScrolling().init(e, event.inside());
 				scrollV.autoScroll();
 			}

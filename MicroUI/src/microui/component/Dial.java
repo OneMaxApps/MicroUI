@@ -1,9 +1,7 @@
 package microui.component;
 
-import static java.lang.Math.max;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.min;
-import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 import static processing.core.PConstants.HALF_PI;
 import static processing.core.PConstants.TWO_PI;
@@ -17,7 +15,7 @@ import microui.util.Value;
 import processing.event.MouseEvent;
 
 public final class Dial extends Component implements Scrollable {
-	private final static float RADIUS_START = HALF_PI*1.2f,
+	private static final float RADIUS_START = HALF_PI*1.2f,
 							   RADIUS_END = TWO_PI+HALF_PI*.8f;
 	private final Stroke stroke;
 	private final Value value;
@@ -70,30 +68,21 @@ public final class Dial extends Component implements Scrollable {
 		app.pop();
 		
 		if(event.inside() || event.holding()) {
+			
 			if(event.holding()) { value.append((app.pmouseY-app.mouseY)/2); }
 			
-			if(isValueVisible()) { valueOnDraw(); }
+			valueOnDraw();
 			
-		} else { hint.draw(); }
+		}
 		
 		app.popStyle();
 		
 	}
-	
+
 	private final void valueOnDraw() {
-		app.pushStyle();
-		app.fill(hint.getColor().get());
-		if(hint.getFont() != null) { app.textFont(hint.getFont()); }
-		
-		if(hint.isAutoResize()) {
-		app.textSize(max(1,min(w,h)/hint.getAutoResizeMode().getScale()));
-		} else {
-		app.textSize(hint.getTextSize());
-		}
-		
-		app.textAlign(CENTER,CENTER);
-		app.text((int) value.get(),x+min(w/2,h/2), y+min(w/2,h/2));
-		app.popStyle();
+		if(!isValueVisible()) { return; }
+		hint.draw();
+		hint.set((int) value.get());
 	}
 	
 	private final void calculateCenter() {

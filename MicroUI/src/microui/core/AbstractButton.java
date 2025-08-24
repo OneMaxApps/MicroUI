@@ -1,10 +1,12 @@
 package microui.core;
 
+import static microui.event.EventType.CLICKED;
+
 import microui.core.base.Component;
 import microui.core.effect.Hover;
 import microui.core.effect.Ripples;
+import microui.core.style.Color;
 import microui.core.style.Stroke;
-import microui.event.EventType;
 
 public abstract class AbstractButton extends Component {
 	protected final Ripples ripples;
@@ -18,7 +20,7 @@ public abstract class AbstractButton extends Component {
 		hover = new Hover(this);
 		stroke = new Stroke();
 		
-		callback.addListener(EventType.CLICKED,() -> ripples.initAnim());
+		callback.addListener(CLICKED,() -> ripples.initAnim());
 	}
 
 	@Override
@@ -33,17 +35,45 @@ public abstract class AbstractButton extends Component {
 			ripples.draw();
 		app.popStyle();
 	}
-
-	public final Ripples getRipples() {
-		return ripples;
+	
+	public final Color getRipplesColor() {
+		return ripples.getColor();
 	}
-
-	public final Hover getHover() {
-		return hover;
+	
+	public final void setRipplesColor(Color color) {
+		ripples.setColor(color);
 	}
-
-	public final Stroke getStroke() {
-		return stroke;
+	
+	public final boolean isRipplesEnabled() {
+		return ripples.isEnabled();
 	}
-
+	
+	public final void setEnableRipples(boolean enable) {
+		ripples.setEnable(enable);
+	}
+	
+	public final boolean isHoverEnabled() {
+		return hover.isEnabled();
+	}
+	
+	public final void setEnableHover(boolean enable) {
+		hover.setEnable(enable);
+	}
+	
+	public final void getStrokeWeight() {
+		stroke.getWeight();
+	}
+	
+	public final void setStrokeWeight(int weight) {
+		stroke.setWeight(weight);
+	}
+	
+	public final Color getStrokeColor() {
+		return new Color(stroke.getColor());
+	}
+	
+	public final void setStrokeColor(Color color) {
+		stroke.setColor(color);
+	}
+	
 }

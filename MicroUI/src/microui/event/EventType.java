@@ -11,5 +11,6 @@ public enum EventType {
 	OUTSIDE,
 	LONG_PRESSED,
 	PRESSED,
+	UNPRESSED,
 	SHAKE;
 }

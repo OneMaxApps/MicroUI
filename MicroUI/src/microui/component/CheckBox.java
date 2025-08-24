@@ -1,6 +1,7 @@
 package microui.component;
 
 import microui.core.AbstractButton;
+import microui.core.style.Color;
 import microui.event.EventType;
 
 public class CheckBox extends AbstractButton {
@@ -10,8 +11,7 @@ public class CheckBox extends AbstractButton {
 		super(x,y,w,h);
 		
 		color.set(0,200,0);
-		hover.getColor().set(0,10);
-		
+		hover.setColor(new Color(0,10));
 		callback.addListener(EventType.CLICKED, () -> included = !included);
 	}
 	

@@ -15,6 +15,7 @@ public final class Ripples extends View {
 	private final Circle circle;
 	private final Bounds bounds;
 	private PGraphics pg;
+	private boolean isEnable;
 	
 	public Ripples(Bounds bounds) {
 		super();
@@ -25,11 +26,13 @@ public final class Ripples extends View {
 		visible = true;
 		this.bounds = bounds;
 		createGraphics();
-		
+		isEnable = true;
 	}
 
 	@Override
 	public void update() {
+		if(!isEnable) { return; }
+		
 		checkResizing();
 		
 		if(pg.width != 0 && pg.height != 0) {
@@ -49,7 +52,20 @@ public final class Ripples extends View {
 	}
 	
 	public final Color getColor() {
-		return color;
+		System.out.println("created a new Color object");
+		return new Color(color);
+	}
+	
+	public final void setColor(Color color) {
+		this.color.set(color);
+	}
+	
+	public final boolean isEnabled() {
+		return isEnable;
+	}
+
+	public final void setEnable(boolean isEnable) {
+		this.isEnable = isEnable;
 	}
 
 	private final void checkResizing() {

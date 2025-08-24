@@ -7,6 +7,7 @@ import static processing.core.PApplet.min;
 
 import java.util.ArrayList;
 
+import microui.component.Dial;
 import microui.component.TextView;
 import microui.core.base.Bounds;
 import microui.core.base.Container;
@@ -14,7 +15,7 @@ import microui.core.base.Layout;
 
 public class GridLayout extends Layout {
 	  private boolean fillTheGrid;
-	  private int cols,rows;
+	  private int rows,cols;
 	  private final ArrayList<Integer> columnList,rowList;
 	  private final ArrayList<Float> elementDefaultWidth,elementDefaultHeight;
 	  
@@ -26,16 +27,16 @@ public class GridLayout extends Layout {
 		  this(0,0,app.width,app.height,cells,cells);
 	  }
 	  
-	  public GridLayout(int rows, int columns) {
-		  this(0,0,app.width,app.height,rows,columns);
+	  public GridLayout(int columns, int rows) {
+		  this(0,0,app.width,app.height,columns,rows);
 	  }
 	  
 	  public GridLayout(float x, float y, float w, float h) { this(x,y,w,h,3,3); }
 	  
-	  public GridLayout(float x, float y, float w, float h, int rows, int columns) {
+	  public GridLayout(float x, float y, float w, float h, int columns, int rows) {
 	    super(x,y,w,h);
 	    
-	    setGrid(rows,columns);
+	    setGrid(columns,rows);
 
 	    columnList = new ArrayList<Integer>();
 	    rowList = new ArrayList<Integer>();
@@ -75,7 +76,7 @@ public class GridLayout extends Layout {
 		          }
 		        }
 		      }
-		    app.popStyle();
+		  app.popStyle();
 	  }
 	  
 	  public void setColumns(int cols) { this.cols = cols; }
@@ -100,11 +101,11 @@ public class GridLayout extends Layout {
 		return this;
 	  }
 	  
-	  private final boolean isEmptyCell(final int row, final int column) {
+	  private final boolean isEmptyCell(final int column, final int row) {
 		  boolean empty = true;
 		  
 		  for(int i = 0; i < elementList.size(); i++) {
-			  if(row == columnList.get(i) && column == rowList.get(i)) { empty = false; }
+			  if(column == columnList.get(i) && row == rowList.get(i)) { empty = false; }
 		  }
 		  
 		  return empty;
@@ -114,10 +115,10 @@ public class GridLayout extends Layout {
 		if(isFull()) { return this; }
 		
 		mainLoop :
-		for(int column = 0; column < rows; column++) {
-			for(int row = 0; row < cols; row++) {
-				if(isEmptyCell(row,column)) {
-					add(bounds,row,column);
+		for(int row = 0; row < rows; row++) {
+			for(int column = 0; column < cols; column++) {
+				if(isEmptyCell(column,row)) {
+					add(bounds,column,row);
 					break mainLoop;
 				}
 			}
@@ -136,15 +137,15 @@ public class GridLayout extends Layout {
 		return this; 
 	  }
 	  
-	  private void addIfAbsent(Bounds bounds, int row, int column) {
+	  private void addIfAbsent(Bounds bounds, int column, int row) {
 		    for(int i = 0; i < elementList.size(); i++) {
 		    	if(elementList.get(i) == bounds) {
 		    		return;
 		    	}
 		    }
 		    	elementList.add(bounds);
-		    	columnList.add(row);
-				rowList.add(column);
+		    	columnList.add(column);
+				rowList.add(row);
 				elementDefaultWidth.add(bounds.getWidth());
 				elementDefaultHeight.add(bounds.getHeight());
 				
@@ -199,11 +200,17 @@ public class GridLayout extends Layout {
 				  container.setY(map(rowList.get(i),0,rows,getY(),getY()+getHeight())+((getHeight()/getRows()/2)-container.getRealHeight()/2));
 
 			    } else {
-			    	
-			    	bounds.setPosition(
-				    		map(columnList.get(i),0,GridLayout.this.cols,getX(),getX()+getWidth())+((getWidth()/getColumns())/2)-bounds.getWidth()/2,
-				    		map(rowList.get(i),0,GridLayout.this.rows,getY(),getY()+getHeight())+((getHeight()/getRows())/2)-bounds.getHeight()/2
-				    );
+			    	if(bounds instanceof Dial dial) {
+			    		dial.setPosition(
+					    		map(columnList.get(i),0,GridLayout.this.cols,getX(),getX()+getWidth())+((getWidth()/getColumns())/2)-(Math.min(dial.getWidth(),dial.getHeight()))/2,
+					    		map(rowList.get(i),0,GridLayout.this.rows,getY(),getY()+getHeight())+((getHeight()/getRows())/2)-(Math.min(dial.getWidth(),dial.getHeight()))/2
+					    );
+			    	} else {
+				    	bounds.setPosition(
+					    		map(columnList.get(i),0,GridLayout.this.cols,getX(),getX()+getWidth())+((getWidth()/getColumns())/2)-bounds.getWidth()/2,
+					    		map(rowList.get(i),0,GridLayout.this.rows,getY(),getY()+getHeight())+((getHeight()/getRows())/2)-bounds.getHeight()/2
+					    );
+			    	}
 			    }
 			  
 			  }

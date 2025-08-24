@@ -184,6 +184,10 @@ public final class Callback extends MicroUI {
 					case INSIDE_LONG :
 						if(insideTimer > insideThreshold) { list.forEach(listener -> listener.action()); }
 					break;
+					
+					case UNPRESSED :
+						if(!isPressed(bounds)) { list.forEach(listener -> listener.action()); }
+					break;
 				}
 			}
 		});
