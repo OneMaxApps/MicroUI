@@ -122,7 +122,7 @@ public class Panel extends Container {
 			
 			buttonClose = new Button("");
 			buttonClose.getColor().set(154,0,0,128);
-			buttonClose.setEnableRipples(false);
+			buttonClose.setRipplesEnabled(false);
 			buttonClose.setStrokeWeight(1);
 			buttonClose.setPosition(getX()+getWidth()-buttonClose.getWidth(),getY());
 			buttonClose.addListener(CLICKED, () -> close() );
