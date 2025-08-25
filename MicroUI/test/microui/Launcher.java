@@ -1,7 +1,6 @@
 package microui;
 
-import microui.component.Button;
-import microui.core.style.Color;
+import microui.component.CheckBox;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
@@ -17,7 +16,7 @@ import processing.core.PApplet;
 //[0] TextView
 
 public class Launcher extends PApplet {
-	Button component;
+	CheckBox component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -31,24 +30,17 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new Button();
-		component.setFont(createFont("C:\\Windows\\Fonts\\LetterGothicStd.otf",64));
-		Color color = new Color(128);
-		component.setColor(color);
-		color.set(32,232);
-		component.setTextColor(color);
-		color.set(0,0,200);
-		component.setRipplesColor(color);
-		color.set(255,0,0);
-		component.setStrokeColor(color);
-		component.setStrokeWeight(4);
+		component = new CheckBox();
+		component.onClick(() -> {
+			System.out.println(component.isIncluded());
+		});
 	}
 
 	@Override
 	public void draw() {
-		background(200);
+		background(32);
 		component.draw();
-		
+		System.out.println(component.isIncluded());
 		GlobalTooltip.draw();
 	}
 	

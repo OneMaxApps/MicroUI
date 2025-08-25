@@ -26,7 +26,7 @@ public final class Hover extends View {
 		
 		if(isInside) {
 			app.pushStyle();
-			color.use();
+			app.fill(color.get());
 			app.rect(component.getX(),component.getY(),component.getWidth(),component.getHeight());
 			app.popStyle();
 		
@@ -44,7 +44,7 @@ public final class Hover extends View {
 	}
 	
 	public final void setColor(Color color) {
-		color.set(color);
+		this.color.set(color);
 	}
 
 	public final boolean isEnabled() {
