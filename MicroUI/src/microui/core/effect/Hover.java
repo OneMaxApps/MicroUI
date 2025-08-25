@@ -11,7 +11,7 @@ public final class Hover extends View {
 	
     public Hover(Component component) {
     	setVisible(true);
-    	color = new Color(0,100);
+    	color = new Color(0,100,255,24);
 		this.component = component;
 		component.onMouseInside(() -> isInside = true);
 		component.onMouseOutside(() -> isInside = false);
@@ -28,13 +28,13 @@ public final class Hover extends View {
 			app.pushStyle();
 			app.fill(color.get());
 			app.rect(component.getX(),component.getY(),component.getWidth(),component.getHeight());
-			app.popStyle();
-		
+			
 			if(isPressed) {
 				app.fill(0,64);
 				app.rect(component.getX(),component.getY(),component.getWidth(),component.getHeight());
 			}
-		
+			
+			app.popStyle();
 		}
 	}
 

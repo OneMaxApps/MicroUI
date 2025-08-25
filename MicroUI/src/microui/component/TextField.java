@@ -68,7 +68,7 @@ public final class TextField extends Component implements KeyPressable {
 		checkDimensions();
 		
 		app.pushStyle();
-			color.use();
+			color.apply();
 			app.rect(x,y,w,h);
 			
 			pg.beginDraw();
@@ -330,7 +330,7 @@ public final class TextField extends Component implements KeyPressable {
 		private final void draw(final PGraphics pg) {
 			pg.pushStyle();
 			
-			color.use(pg);
+			color.apply(pg);
 			font.use(pg);
 			size.use(pg);
 			pg.textAlign(CORNER,CENTER);
@@ -612,7 +612,7 @@ public final class TextField extends Component implements KeyPressable {
 		private final void draw(final PGraphics pg) {
 			pg.pushStyle();
 			pg.noStroke();
-			color.use(pg);
+			color.apply(pg);
 			pg.rect(x+LEFT_OFFSET-scroll.get(),y,startColumn < endColumn ? w : -w,h);
 			pg.popStyle();
 		}

@@ -46,7 +46,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		event.listen(this);
 		
 		app.pushStyle();
-		color.use();
+		color.apply();
 		app.rect(x, y, w, h);
 		app.popStyle();
 		

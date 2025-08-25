@@ -19,7 +19,7 @@ public final class Ripples extends View {
 	
 	public Ripples(Bounds bounds) {
 		super();
-		color = new Color(0);
+		color = new Color(0,64);
 		
 		circle = new Circle();
 		

@@ -1,22 +1,23 @@
 package microui.component;
 
+import static microui.constants.AutoResizeMode.TINY;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.min;
 import static processing.core.PConstants.CORNER;
 import static processing.core.PConstants.HALF_PI;
 import static processing.core.PConstants.TWO_PI;
 
-import microui.constants.AutoResizeMode;
 import microui.core.Texture;
 import microui.core.base.Component;
 import microui.core.interfaces.Scrollable;
+import microui.core.style.Color;
 import microui.core.style.Stroke;
 import microui.util.Value;
 import processing.event.MouseEvent;
 
 public final class Dial extends Component implements Scrollable {
-	private static final float RADIUS_START = HALF_PI*1.2f,
-							   RADIUS_END = TWO_PI+HALF_PI*.8f;
+	private static final float RADIUS_START = HALF_PI+HALF_PI/4,
+							   RADIUS_END = TWO_PI+HALF_PI-HALF_PI/4;
 	private final Stroke stroke;
 	private final Value value;
 	private final TextView hint;
@@ -31,13 +32,13 @@ public final class Dial extends Component implements Scrollable {
 		
 		setVisible(true);
 		
-		color.set(32);
-		
 		stroke = new Stroke();
 		value = new Value();
 		hint = new TextView(x,y,min(w,h),min(w,h));
+		hint.setColor(new Color(0));
+		
 		hint.setAutoResizeState(true);
-		hint.setAutoResizeMode(AutoResizeMode.TINY);
+		hint.setAutoResizeMode(TINY);
 		
 		image = new Image();
 		arrow = new Arrow();
@@ -56,8 +57,8 @@ public final class Dial extends Component implements Scrollable {
 		
 		app.pushStyle();
 		
-		stroke.get();
-		color.use();
+		stroke.apply();
+		color.apply();
 		app.ellipseMode(CORNER);
 		app.circle(x, y, min(w,h));
 		
@@ -80,16 +81,7 @@ public final class Dial extends Component implements Scrollable {
 		
 	}
 
-	private final void valueOnDraw() {
-		if(!isValueVisible()) { return; }
-		hint.draw();
-		hint.set((int) value.get());
-	}
 	
-	private final void calculateCenter() {
-		centerX = x+min(w/2,h/2);
-		centerY = y+min(w/2,h/2);
-	}
 
 	public final boolean isValueVisible() {
 		return valueVisible;
@@ -140,7 +132,7 @@ public final class Dial extends Component implements Scrollable {
 		@Override
 		public void update() {
 			app.pushStyle();
-			tint.use();
+			tint.apply();
 			app.image(image,-w/2,-h/2,w,h);
 			app.popStyle();
 		}
@@ -148,18 +140,30 @@ public final class Dial extends Component implements Scrollable {
 	}
 	
 	public final class Arrow extends Texture {
-
+		private final Color color;
+		
 		public Arrow() {
 			super();
 			setVisible(true);
 			onChangeBounds();
+			color = new Color(32);
+		}
+	
+		@Override
+		public void draw() {
+			update();
 		}
 
 		@Override
 		protected void update() {
 			app.push();
 			app.translate(x,y);
-			app.image(image, 0,0,w,h);
+			if(image != null) {
+				app.image(image, 0,0,w,h);
+			} else {
+				color.apply();
+				app.rect(0, 0, w, h);
+			}
 			app.pop();
 		}
 		
@@ -190,5 +194,16 @@ public final class Dial extends Component implements Scrollable {
 
 	public final Arrow getArrow() {
 		return arrow;
+	}
+	
+	private final void valueOnDraw() {
+		if(!isValueVisible()) { return; }
+		hint.draw();
+		hint.set((int) value.get());
+	}
+	
+	private final void calculateCenter() {
+		centerX = x+min(w/2,h/2);
+		centerY = y+min(w/2,h/2);
 	}
 }

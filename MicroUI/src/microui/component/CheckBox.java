@@ -5,12 +5,14 @@ import static java.lang.Math.min;
 import static microui.event.EventType.CLICK;
 import static processing.core.PConstants.CENTER;
 
+import microui.constants.AutoResizeMode;
 import microui.core.AbstractButton;
 import microui.core.style.Color;
 
 public class CheckBox extends AbstractButton {
-	private boolean included;
-	private final Color checkMarkColor;
+	private boolean isSelected;
+	private final Color markColor;
+	private float textIndent;
 	
 	public CheckBox(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -21,51 +23,117 @@ public class CheckBox extends AbstractButton {
 		
 		color.set(200);
 		
-		tmpColor.set(0,100,255,24);
-		hover.setColor(tmpColor);
-		
-		callback.addListener(CLICK, () -> included = !included);
+		callback.addListener(CLICK, () -> isSelected = !isSelected);
 
-		checkMarkColor = new Color(0);
+		markColor = new Color(0);
+		
+		tmpColor.set(200);
+		
+		text.setColor(tmpColor);
+		text.setAutoResizeState(true);
+		text.setAutoResizeMode(AutoResizeMode.BIG);
+		text.setInCenter(false);
+		text.onClick(() -> toggle());
+		
+		setTextIndent(w*.3f);
 	}
 
-	public CheckBox(boolean include) {
-		this();
-		setState(include);
+	public CheckBox(boolean isSelected) {
+		this(0,0,0,0);
+		
+		final int minSize = 20;
+		setSize(max(minSize,app.width+app.height)*.02f);
+		setPosition(app.width/2-getSize()/2,app.height/2-getSize()/2);	
+		
+		setTextIndent(w*.3f);
+	
+		setSelected(isSelected);
 	}
 
 	public CheckBox() {
-		this(app.width * .4f, app.height * .4f, max(app.width * .2f, app.height * .2f),max(app.width * .2f, app.height * .2f));
+		this(false);
 	}
 
 	@Override
 	protected void update() {
 		super.update();
-
-		if (included) {
-			app.pushStyle();
-			app.strokeWeight((min(w,h)/5)+1);
-			app.stroke(checkMarkColor.get());
-			app.noFill();
-			app.rectMode(CENTER);
-			app.rect(x + w / 2, y + h / 2, w / 2, h / 2);
-			app.popStyle();
+		text.draw();
+		if (isSelected) {
+			markOnDraw();
+		}
+	}
+	
+	@Override
+	public void onChangeBounds() {
+		super.onChangeBounds();
+		if(text != null) {
+			recalcTextBounds();
 		}
 	}
 
-	public boolean isIncluded() {
-		return included;
+	public float getFullWidth() {
+		if(text == null) return super.getWidth();
+		return super.getWidth()+text.getWidth();
 	}
 
-	public void setState(boolean state) {
-		included = state;
+	public final boolean isSelected() {
+		return isSelected;
 	}
 
-	public final Color getCheckMarkColor() {
-		return new Color(checkMarkColor);
+	public final void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 	
-	public final void setCheckMarkColor(Color color) {
-		checkMarkColor.set(color);
+	public final void toggle() {
+		isSelected = !isSelected;
 	}
+
+	public final Color getMarkColor() {
+		return new Color(markColor);
+	}
+	
+	public final void setMarkColor(Color color) {
+		markColor.set(color);
+	}
+	
+	@Override
+	public void setText(String text) {
+		super.setText(text);
+		recalcTextBounds();
+	}
+	
+	public final float getTextIndent() {
+		return textIndent;
+	}
+
+	public final void setTextIndent(float textIndent) {
+		this.textIndent = max(0, textIndent);
+		recalcTextBounds();
+	}
+	
+	public final void setTextWidth(float width) {
+		text.setWidth(width);
+	}
+	
+	public final float getTextWidth(){
+		return text.getWidth();
+	}
+
+	private void markOnDraw() {
+		app.pushStyle();
+		app.strokeWeight((min(w,h)/5)+1);
+		app.stroke(markColor.get());
+		app.noFill();
+		app.rectMode(CENTER);
+		app.rect(x + w / 2, y + h / 2, w / 2, h / 2);
+		app.popStyle();
+	}
+	
+	private final void recalcTextBounds() {
+		text.setBounds(this);
+		text.setX(getX()+getWidth()+textIndent);
+		text.setWidth(app.textWidth(text.get()));
+	}
+	
+	
 }

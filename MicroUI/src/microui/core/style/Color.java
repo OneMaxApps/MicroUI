@@ -1,5 +1,7 @@
 package microui.core.style;
 
+import static processing.core.PApplet.constrain;
+
 import microui.MicroUI;
 import microui.util.Metrics;
 import processing.core.PGraphics;
@@ -85,8 +87,7 @@ public class Color {
 	}
 
 	public final void setRed(float red) {
-		if(red < MIN_VALUE || red > MAX_VALUE) { return; }
-		this.red = red;
+		this.red = constrain(red,MIN_VALUE,MAX_VALUE);
 	}
 
 	public final float getGreen() {
@@ -94,8 +95,7 @@ public class Color {
 	}
 
 	public final void setGreen(float green) {
-		if(green < MIN_VALUE || green > MAX_VALUE) { return; }
-		this.green = green;
+		this.green = constrain(green,MIN_VALUE,MAX_VALUE);
 	}
 
 	public final float getBlue() {
@@ -103,8 +103,7 @@ public class Color {
 	}
 
 	public final void setBlue(float blue) {
-		if(blue < MIN_VALUE || blue > MAX_VALUE) { return; }
-		this.blue = blue;
+		this.blue = constrain(blue,MIN_VALUE,MAX_VALUE);
 	}
 
 	public final float getAlpha() {
@@ -112,15 +111,14 @@ public class Color {
 	}
 
 	public final void setAlpha(float alpha) {
-		if(alpha < MIN_VALUE || alpha > MAX_VALUE) { return; }
-		this.alpha = alpha;
+		this.alpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
 	}
 	
-	public void use() {
+	public void apply() {
 		MicroUI.getContext().fill(get());
 	}
 	
-	public void use(PGraphics pg) {
+	public void apply(PGraphics pg) {
 		pg.fill(get());
 	}
 

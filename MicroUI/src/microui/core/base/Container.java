@@ -217,7 +217,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 
 		@Override
 		public void update() {
-			colorDots.use();
+			colorDots.apply();
 			dots.draw();
 		}
 		

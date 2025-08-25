@@ -54,6 +54,9 @@ public abstract class Bounds extends View {
 		onChangeBounds();
 	}
 	
+	public final float getSize() {
+		return (w+h)/2;
+	}
 	
 	public void setSize(float w, float h) {
 		if(this.w == w && this.h == h) { return; }

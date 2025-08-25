@@ -29,7 +29,7 @@ public abstract class Component extends Bounds {
     public Component(float x, float y, float w, float h) {
         super(x, y, w, h);
         
-        color = new Color(44);
+        color = new Color(200);
         event = new Event();
         callback = new Callback(this);
         

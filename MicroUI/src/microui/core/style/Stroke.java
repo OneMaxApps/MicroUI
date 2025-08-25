@@ -16,7 +16,7 @@ public final class Stroke {
       weight = 2;
     }
     
-    public void get() {
+    public void apply() {
       MicroUI.getContext().strokeCap(SQUARE);
       MicroUI.getContext().stroke(color.get());
       MicroUI.getContext().strokeWeight(weight);

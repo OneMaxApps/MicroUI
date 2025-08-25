@@ -80,7 +80,7 @@ public class MenuButton extends Button implements Scrollable {
 	public final boolean isSelected(final String title) {
 		
 		for(Button item : itemList) {
-			if(item.text.get().equals(title)) { return true; }
+			if(item.getText().equals(title)) { return true; }
 		}
 		
 		return false;
@@ -91,7 +91,7 @@ public class MenuButton extends Button implements Scrollable {
 		
 		boolean selected = false;
 		
-			if(itemList.get(selectedId).text.get().equals(title)) { selected = true; }
+			if(itemList.get(selectedId).getText().equals(title)) { selected = true; }
 			
 			if(selected) { return true; }
 			
@@ -213,7 +213,7 @@ public class MenuButton extends Button implements Scrollable {
 		Button ref = null;
 		
 		for(Button item : itemList) {
-			if(item.text.get().equals(title)) {
+			if(item.getText().equals(title)) {
 				return item;
 			}
 		}
@@ -234,7 +234,7 @@ public class MenuButton extends Button implements Scrollable {
 	public final Button getItem(final String title) {
 		
 		for(Button item : itemList) {
-			if(item.text.get().equals(title)) {
+			if(item.getText().equals(title)) {
 				return item;
 			}
 		}

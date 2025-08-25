@@ -642,7 +642,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		}
 
 		private void draw(final PGraphics pg) {
-			color.use(pg);
+			color.apply(pg);
 			if (font != null) {
 				pg.textFont(font);
 			}

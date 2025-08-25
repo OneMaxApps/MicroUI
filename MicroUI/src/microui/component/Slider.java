@@ -104,8 +104,8 @@ public class Slider extends RangeControl {
 	    @Override
 	    public void update() {
 	      app.pushStyle();
-	      stroke.get();
-		  color.use();
+	      stroke.apply();
+		  color.apply();
 		  app.rect(x,y,w,h);
 		  app.popStyle();
 	 

@@ -49,10 +49,11 @@ public class TextView extends Component {
 	  
 	  @Override
 	  protected void update() {
-		  shadow.draw();
+		  if(text.isEmpty()) { return; }
 		  
+		  shadow.draw();
 		  app.pushStyle();
-		  color.use();
+		  color.apply();
 		  if(font != null) { app.textFont(font,textSize); }
 		  
 		  if(isAutoResize()) {
@@ -62,7 +63,7 @@ public class TextView extends Component {
 		  }
 		  
 		  app.textAlign(center ? CENTER : CORNER,CENTER);
-		  app.text(text.toString(),x,y,w,h);
+		  app.text(text.toString(), x, y, w ,h);
 		  app.popStyle();
 		  
 		  
@@ -89,8 +90,30 @@ public class TextView extends Component {
 		  pg.text(text.toString() != null ? text.toString() : "",x,y+h/2);
 		  pg.popStyle();
 	  }
+	  
+	
 	  	  
-	  public final PFont getFont() {
+	@Override
+	public void setWidth(float w) {
+		super.setWidth(w);
+	}
+
+	@Override
+	public void setHeight(float h) {
+		super.setHeight(h);
+	}
+
+	@Override
+	public void setSize(float w, float h) {
+		super.setSize(w, h);
+	}
+
+	@Override
+	public float getWidth() {
+		return super.getWidth();
+	}
+
+	public final PFont getFont() {
 			return font;
 	  }
 	
@@ -112,8 +135,7 @@ public class TextView extends Component {
 	
 	  public void set(String text) {
 	    clear();
-	    append(text); 
-	    
+	    append(text);
 	  }
 	  
 	  public final void set(TextView otherText) {
@@ -142,7 +164,9 @@ public class TextView extends Component {
 		  this.text.append(upperCaseStyle ? text.toUpperCase() : lowerCaseStyle ? text.toLowerCase() : text);
 	  }
 	  
-	  public void append(char ch) { this.text.append(ch); }
+	  public void append(char ch) {
+		  this.text.append(ch);
+	  }
 	  
 	  public void insert(int index, String text) {
 		  if(upperCaseStyle) {
@@ -218,7 +242,7 @@ public class TextView extends Component {
 	public final Shadow getShadow() {
 		return shadow;
 	}
-
+	
 	public final class Shadow extends View {
 		  public Color color;
 		  private float extraSize,shiftX,shiftY;

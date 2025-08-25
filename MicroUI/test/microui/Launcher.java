@@ -31,16 +31,14 @@ public class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		component = new CheckBox();
-		component.onClick(() -> {
-			System.out.println(component.isIncluded());
-		});
+		component.setText("I accept all terms and conditions");
+		component.setTooltipText("you can touch me");
 	}
 
 	@Override
 	public void draw() {
 		background(32);
 		component.draw();
-		System.out.println(component.isIncluded());
 		GlobalTooltip.draw();
 	}
 	

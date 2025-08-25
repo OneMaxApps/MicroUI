@@ -60,7 +60,7 @@ public final class Tooltip extends Bounds {
 	public void update() {
 		if(!isEnable) { return; }
 		
-		color.use();
+		color.apply();
 		app.rect(x,y,w,h);
 		
 		if(container != null) {
@@ -154,7 +154,7 @@ public final class Tooltip extends Bounds {
 		
 		private final void draw() {
 			app.pushStyle();
-			colorText.use();
+			colorText.apply();
 			app.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
 			app.textAlign(CENTER,CENTER);
 			app.text(sb.toString(), x, y, w, h);
