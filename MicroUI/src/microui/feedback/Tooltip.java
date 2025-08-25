@@ -78,9 +78,39 @@ public final class Tooltip extends Bounds {
 	public final void setEnable(boolean isEnable) {
 		this.isEnable = isEnable;
 	}
+	
+	public final void setCallbacksFor(Callback callback) {
+		if(callback == null) { return; }
+		
+		callback.addListener(EventType.MOUSE_INSIDE_LONG, () -> {
+			canBeVisible = additionalCondition && (!text.isEmpty() || container != null);
+		});
+		
+		callback.addListener(EventType.MOUSE_OUTSIDE, () -> {
+			if(canBeVisible) {
+				callback.resetInsideTimer();
+				canBeVisible = false;
+			}
+		});
+		
+		callback.addListener(EventType.SHAKE, () -> {
+			if(canBeVisible) {
+				callback.resetInsideTimer();
+				canBeVisible = false;
+			}
+		});
+		
+		callback.addListener(EventType.PRESS, () -> {
+			if(canBeVisible) {
+				callback.resetInsideTimer();
+				canBeVisible = false;
+			}
+		});
+	}
 
 	public final void init() {
 		if(canBeVisible) {
+			System.out.println(1);
 			GlobalTooltip.onDraw(this);
 			setVisible(true);
 		} else { setVisible(false); }

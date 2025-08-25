@@ -2,19 +2,16 @@ package microui.core;
 
 import static microui.event.EventType.CLICK;
 
-import microui.component.TextView;
 import microui.core.base.Component;
 import microui.core.effect.Hover;
 import microui.core.effect.Ripples;
 import microui.core.style.Color;
 import microui.core.style.Stroke;
-import processing.core.PFont;
 
 public abstract class AbstractButton extends Component {
 	protected final Ripples ripples;
 	protected final Hover hover;
 	protected final Stroke stroke;
-	protected final TextView text;
 	
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -23,7 +20,7 @@ public abstract class AbstractButton extends Component {
 		ripples = new Ripples(this);
 		hover = new Hover(this);
 		stroke = new Stroke();
-		text = new TextView(x, y, w, h);
+		
 		
 		callback.addListener(CLICK,() -> ripples.initAnim());
 	}
@@ -79,39 +76,6 @@ public abstract class AbstractButton extends Component {
 	
 	public final void setStrokeColor(Color color) {
 		stroke.setColor(color);
-	}
-	
-	
-	public final String getText() {
-		return text.get();
-	}
-	
-	public void setText(String text) {
-		this.text.set(text);
-	}
-	
-	public final PFont getFont() {
-		return text.getFont();
-	}
-	
-	public final void setFont(PFont font) {
-		text.setFont(font);
-	}
-	
-	public final Color getTextColor() {
-		return text.getColor();
-	}
-	
-	public final void setTextColor(Color color) {
-		text.setColor(color);
-	}
-	
-	public final boolean isTextVisible() {
-		return text.isVisible();
-	}
-	
-	public final void setTextVisible(boolean isVisible) {
-		text.setVisible(isVisible);
 	}
 	
 }

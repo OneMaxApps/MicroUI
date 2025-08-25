@@ -6,7 +6,7 @@ import microui.core.style.Color;
 
 public final class Hover extends View {
 	private final Color color;
-	private final Component component;
+	private Component component;
 	private boolean isInside,isPressed,isEnabled;
 	
     public Hover(Component component) {
@@ -36,6 +36,21 @@ public final class Hover extends View {
 			
 			app.popStyle();
 		}
+	}
+	
+	public final Component getComponent() {
+		return component;
+	}
+
+	public final void setComponent(Component component) {
+		if(this.component == component) { return; }
+		
+		this.component = component;
+		
+		component.onMouseInside(() -> isInside = true);
+		component.onMouseOutside(() -> isInside = false);
+		component.onPress(() -> isPressed = true);
+		component.onRelease(() -> isPressed = false);
 	}
 
 	public final Color getColor() {

@@ -4,7 +4,7 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.max;
 import static processing.core.PApplet.min;
 
-import microui.core.base.Bounds;
+import microui.core.base.Component;
 import microui.core.base.View;
 import microui.core.style.Color;
 import microui.util.Metrics;
@@ -13,18 +13,18 @@ import processing.core.PGraphics;
 public final class Ripples extends View {
 	private final Color color;
 	private final Circle circle;
-	private final Bounds bounds;
+	private Component component;
 	private PGraphics pg;
 	private boolean isEnable;
 	
-	public Ripples(Bounds bounds) {
+	public Ripples(Component component) {
 		super();
 		color = new Color(0,64);
 		
 		circle = new Circle();
 		
 		visible = true;
-		this.bounds = bounds;
+		this.component = component;
 		createGraphics();
 		isEnable = true;
 	}
@@ -40,11 +40,19 @@ public final class Ripples extends View {
 		pg.clear();
 		circle.draw(pg);
 		pg.endDraw();
-		app.image(pg, bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
+		app.image(pg, component.getX(),component.getY(),component.getWidth(),component.getHeight());
 		}
 		
 	}
 	
+	public final Component getComponent() {
+		return component;
+	}
+
+	public final void setComponent(Component component) {
+		this.component = component;
+	}
+
 	public final void initAnim() {
 		circle.resetSize();
 		circle.resetPosition();
@@ -76,11 +84,11 @@ public final class Ripples extends View {
 	}
 	
 	private final boolean isResized() {
-		return pg.width != (int) bounds.getWidth() || pg.height != (int) bounds.getHeight();
+		return pg.width != (int) component.getWidth() || pg.height != (int) component.getHeight();
 	}
 	
 	private final void createGraphics() {
-		pg = app.createGraphics((int) max(1,bounds.getWidth()),(int) max(1,bounds.getHeight()),app.sketchRenderer());
+		pg = app.createGraphics((int) max(1,component.getWidth()),(int) max(1,component.getHeight()),app.sketchRenderer());
 		Metrics.register(pg);
 	}
 
@@ -99,12 +107,12 @@ public final class Ripples extends View {
 		}
 		
 		private final void incSize() {
-			radius += constrain(min(bounds.getWidth()*.2f,bounds.getHeight()*.2f),1,20);
+			radius += constrain(min(component.getWidth()*.2f,component.getHeight()*.2f),1,20);
 		}
 		
 		private final void playAnim() {
 			incSize();
-			if(radius > max(bounds.getWidth()*2,bounds.getHeight()*2)) {
+			if(radius > max(component.getWidth()*2,component.getHeight()*2)) {
 				radius = 0;
 				start = false;
 			}
@@ -115,8 +123,8 @@ public final class Ripples extends View {
 		}
 		
 		private final void resetPosition() {
-			x = app.mouseX-bounds.getX();
-			y = app.mouseY-bounds.getY();
+			x = app.mouseX-component.getX();
+			y = app.mouseY-component.getY();
 		}
 	}
 }

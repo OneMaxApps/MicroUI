@@ -36,8 +36,8 @@ public abstract class Bounds extends View {
 		onChangeBounds();
 	}
 	
-	
 	public float getWidth() { return w; }
+	
 	
 	public void setWidth(final float w) {
 		if(this.w == w) { return; }
@@ -52,10 +52,6 @@ public abstract class Bounds extends View {
 		if(this.h == h) { return; }	
 		this.h = Math.max(0, h);
 		onChangeBounds();
-	}
-	
-	public final float getSize() {
-		return (w+h)/2;
 	}
 	
 	public void setSize(float w, float h) {
