@@ -15,7 +15,7 @@ public final class Ripples extends View {
 	private final Circle circle;
 	private Component component;
 	private PGraphics pg;
-	private boolean isEnable;
+	private boolean isEnabled;
 	
 	public Ripples(Component component) {
 		super();
@@ -26,12 +26,12 @@ public final class Ripples extends View {
 		visible = true;
 		this.component = component;
 		createGraphics();
-		isEnable = true;
+		isEnabled = true;
 	}
 
 	@Override
 	public void update() {
-		if(!isEnable) { return; }
+		if(!isEnabled) { return; }
 		
 		checkResizing();
 		
@@ -69,11 +69,11 @@ public final class Ripples extends View {
 	}
 	
 	public final boolean isEnabled() {
-		return isEnable;
+		return isEnabled;
 	}
 
-	public final void setEnable(boolean isEnable) {
-		this.isEnable = isEnable;
+	public final void setEnabled(boolean enabled) {
+		this.isEnabled = enabled;
 	}
 
 	private final void checkResizing() {

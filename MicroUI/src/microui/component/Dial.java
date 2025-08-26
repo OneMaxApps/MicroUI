@@ -37,7 +37,7 @@ public final class Dial extends Component implements Scrollable {
 		hint = new TextView(x,y,min(w,h),min(w,h));
 		hint.setColor(new Color(0));
 		
-		hint.setAutoResizeState(true);
+		hint.setAutoResizeEnabled(true);
 		hint.setAutoResizeMode(TINY);
 		
 		image = new Image();

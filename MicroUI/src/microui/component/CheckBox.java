@@ -1,30 +1,32 @@
 package microui.component;
 
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.CORNER;
-
 import microui.container.EdgeContainer;
 import microui.core.AbstractButton;
-import microui.core.base.Component;
 import microui.core.style.Color;
 
 public class CheckBox extends AbstractButton {
-	private static final int DEFAULT_BOX_SIZE = 16;
 	private final EdgeContainer container;
-	private String text;
-	private float textPadding;
 	private boolean isSelected;
+	private final Box box;
 	
 	public CheckBox(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		callback.clearAll();
-		
-		textPadding = DEFAULT_BOX_SIZE/2;
+		stroke.setColor(new Color(255,0));
+		color.set(255,0);
+		hover.setEnabled(false);
+		ripples.setEnabled(false);
 		
 		container = new EdgeContainer(x,y,w,h);
 		container.setLeft(true);
-		
 		container.set(new Box());
+		//container.setVisible(false);
+		
+		box = new Box();
+		
+		container.set(box);
+		
+		text.setAutoResizeEnabled(false);
+		text.setTextSize(box.getHeight());
 	}
 
 	public CheckBox(boolean isSelected) {
@@ -32,24 +34,26 @@ public class CheckBox extends AbstractButton {
 		
 		setSelected(isSelected);
 	}
-
+	
 	public CheckBox() {
 		this(false);
 	}
-
+	
 	@Override
 	protected void update() {
-		event.listen(this);
+		super.update();
 		container.draw();
 	}
-	
+
 	@Override
 	public void onChangeBounds() {
 		super.onChangeBounds();
 		if(container == null) { return; }
+		
 		container.setBounds(this);
+		recalcTextState();
 	}
-
+	
 	public final boolean isSelected() {
 		return isSelected;
 	}
@@ -61,64 +65,44 @@ public class CheckBox extends AbstractButton {
 	public final void toggle() {
 		isSelected = !isSelected;
 	}
-	
-	public final String getText() {
-		return text;
-	}
 
+	@Override
 	public final void setText(String text) {
-		this.text = text;
+		this.text.set(text);
+		recalcTextState();
 	}
 	
-	public final float getTextPadding() {
-		return textPadding;
+	private void recalcTextState() {
+		text.setSize(getWidth()-box.getWidth(),box.getHeight());
+		text.setPosition(box.getX()+box.getWidth(),box.getY()+box.getHeight()/2-text.getHeight()/2);
+		text.setTextSize(box.getHeight());
 	}
 
-	public final void setTextPadding(float textPadding) {
-		if(textPadding <= 0) { return; }
-		this.textPadding = textPadding;
-	}
-
-
-
-	private final class Box extends Component {
+	private final class Box extends AbstractButton {
+		private static final int DEFAULT_BOX_SIZE = 16;
+		private final Color markColor;
 		
 		public Box() {
-			super();
-			setVisible(true);
-			setSize(DEFAULT_BOX_SIZE);
-			
-			color.set(255,32);
-			setStrokeColor(new Color(255,0));
-			
-			hover.setComponent(this);
-			ripples.setComponent(this);
-			CheckBox.this.tooltip.setCallbacksFor(callback);
+			super(0,0,DEFAULT_BOX_SIZE,DEFAULT_BOX_SIZE);
+			markColor = new Color(0,200,255,100);
 			onClick(() -> toggle());
 		}
 
 		@Override
 		protected void update() {
-			app.pushStyle();
-			stroke.apply();
-			color.apply();
-			app.rect(x, y, w, h);
-			hover.draw();
-			ripples.draw();
-			
-			textOnDraw();
-			
-			app.popStyle();
-			
-			System.out.println(isSelected);
+			super.update();
+			if(isSelected) {
+				markOnDraw();
+			}
+			CheckBox.this.text.draw();
 		}
-		
-		private void textOnDraw() {
-			if(text == null) { return; }
-			app.fill(255);
-			app.textSize(h);
-			app.textAlign(CORNER,CENTER);
-			app.text(text,x+w+textPadding,y,CheckBox.this.getWidth()-w-textPadding,h);
+	
+		private void markOnDraw() {
+			app.pushStyle();
+			app.noStroke();
+			markColor.apply();
+			app.rect(x,y,w,h);
+			app.popStyle();
 		}
 	}
 }

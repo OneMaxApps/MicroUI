@@ -18,7 +18,7 @@ public class TextView extends Component {
 	  private final StringBuilder text;
 	  private PFont font;
 	  private int textSize;
-	  private boolean center,upperCaseStyle,lowerCaseStyle,autoResize;
+	  private boolean center,upperCaseStyle,lowerCaseStyle,isAutoResizeEnabled;
 	  private AutoResizeMode autoResizeMode;
 	  
 	  public TextView(String text, float x, float y, float w, float h) {
@@ -56,7 +56,7 @@ public class TextView extends Component {
 		  color.apply();
 		  if(font != null) { app.textFont(font,textSize); }
 		  
-		  if(isAutoResize()) {
+		  if(isAutoResizeEnabled()) {
 			  app.textSize(max(1,min(w,h)/autoResizeMode.getScale()));
 		  } else {
 			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
@@ -76,7 +76,7 @@ public class TextView extends Component {
 			  pg.textFont(font,textSize);
 		  }
 		  
-		  if(isAutoResize()) {
+		  if(isAutoResizeEnabled()) {
 			  app.textSize(max(1,min(w,h)/autoResizeMode.getScale()));
 		  } else {
 			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
@@ -225,12 +225,12 @@ public class TextView extends Component {
 		
       }
 
-	  public final boolean isAutoResize() {
-		return autoResize;
+	  public final boolean isAutoResizeEnabled() {
+		return isAutoResizeEnabled;
 	  }
 
-	  public final void setAutoResizeState(boolean autoResize) {
-		this.autoResize = autoResize;
+	  public final void setAutoResizeEnabled(boolean autoResizeEnabled) {
+		this.isAutoResizeEnabled = autoResizeEnabled;
 	  }
 
 	  public final AutoResizeMode getAutoResizeMode() { return autoResizeMode; }
@@ -261,7 +261,7 @@ public class TextView extends Component {
 				  app.textFont(font,textSize);
 			  }
 			  
-			  if(isAutoResize()) {
+			  if(isAutoResizeEnabled()) {
 				  app.textSize(max(1,min(w,h)/autoResizeMode.getScale())+extraSize);
 			  } else {
 				  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize+extraSize);

@@ -31,7 +31,7 @@ public class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		component = new CheckBox();
-		component.setText("accept all of terms and conditions");
+		component.setText("I accept all of terms and conditions");
 		component.setTooltipText("you can touch me");
 	}
 
