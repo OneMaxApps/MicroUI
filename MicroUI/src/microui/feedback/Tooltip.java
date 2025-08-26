@@ -18,7 +18,7 @@ public final class Tooltip extends Bounds {
 	private final Text text;
 	private Color color;
 	private Container container;
-	private boolean canBeVisible,additionalCondition,isEnable;
+	private boolean canBeVisible,additionalCondition,isEnabled;
 	
 	public Tooltip(Callback callback) {
 
@@ -53,12 +53,12 @@ public final class Tooltip extends Bounds {
 		
 		additionalCondition = true;
 		
-		isEnable = true;
+		isEnabled = true;
 	}
 
 	@Override
 	public void update() {
-		if(!isEnable) { return; }
+		if(!isEnabled) { return; }
 		
 		color.apply();
 		app.rect(x,y,w,h);
@@ -72,11 +72,11 @@ public final class Tooltip extends Bounds {
 	}
 	
 	public final boolean isEnabled() {
-		return isEnable;
+		return isEnabled;
 	}
 
-	public final void setEnable(boolean isEnable) {
-		this.isEnable = isEnable;
+	public final void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 	
 	public final void setCallbacksFor(Callback callback) {
@@ -110,7 +110,6 @@ public final class Tooltip extends Bounds {
 
 	public final void init() {
 		if(canBeVisible) {
-			System.out.println(1);
 			GlobalTooltip.onDraw(this);
 			setVisible(true);
 		} else { setVisible(false); }

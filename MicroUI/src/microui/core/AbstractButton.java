@@ -11,22 +11,20 @@ import microui.core.style.Stroke;
 import processing.core.PFont;
 
 public abstract class AbstractButton extends Component {
-	protected final Ripples ripples;
-	protected final Hover hover;
-	protected final Stroke stroke;
-	protected final TextView text;
+	protected Ripples ripples;
+	protected Hover hover;
+	protected Stroke stroke;
+	protected TextView text;
 	
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setVisible(true);
-		
-		ripples = new Ripples(this);
-		hover = new Hover(this);
-		stroke = new Stroke();
-		
-		text = new TextView(x, y, w, h);
-		
-		callback.addListener(CLICK,() -> ripples.initAnim());
+
+		callback.addListener(CLICK,() -> {
+			if(ripples != null) {
+				ripples.initAnim();
+			}
+		});
 	}
 
 	@Override
@@ -34,51 +32,51 @@ public abstract class AbstractButton extends Component {
 		event.listen(this);
 		
 		app.pushStyle();
-			stroke.apply();
-			color.apply();
-			app.rect(x, y, w, h);
-			hover.draw();
-			ripples.draw();
+		stroke.apply();
+		color.apply();
+		app.rect(x, y, w, h);
+		hover.draw();
+		ripples.draw();
 		app.popStyle();
 	}
 
-	public final Color getRipplesColor() {
+	public Color getRipplesColor() {
 		return ripples.getColor();
 	}
 	
-	public final void setRipplesColor(Color color) {
+	public void setRipplesColor(Color color) {
 		ripples.setColor(color);
 	}
 	
-	public final boolean isRipplesEnabled() {
+	public boolean isRipplesEnabled() {
 		return ripples.isEnabled();
 	}
 	
-	public final void setRipplesEnabled(boolean enable) {
+	public void setRipplesEnabled(boolean enable) {
 		ripples.setEnabled(enable);
 	}
 	
-	public final boolean isHoverEnabled() {
+	public boolean isHoverEnabled() {
 		return hover.isEnabled();
 	}
 	
-	public final void setHoverEnabled(boolean enabled) {
+	public void setHoverEnabled(boolean enabled) {
 		hover.setEnabled(enabled);
 	}
 	
-	public final int getStrokeWeight() {
+	public int getStrokeWeight() {
 		return stroke.getWeight();
 	}
 	
-	public final void setStrokeWeight(int weight) {
+	public void setStrokeWeight(int weight) {
 		stroke.setWeight(weight);
 	}
 	
-	public final Color getStrokeColor() {
+	public Color getStrokeColor() {
 		return new Color(stroke.getColor());
 	}
 	
-	public final void setStrokeColor(Color color) {
+	public void setStrokeColor(Color color) {
 		stroke.setColor(color);
 	}
 	

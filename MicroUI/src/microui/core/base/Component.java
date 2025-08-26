@@ -52,12 +52,12 @@ public abstract class Component extends Bounds {
     	color.set(otherComponent.getColor());
 	}
 	
-	public final Color getColor() {
+	public Color getColor() {
 		System.out.println("created a new Color object");
 		return new Color(color);
 	}
 	
-	public final void setColor(Color color) {
+	public void setColor(Color color) {
 		this.color.set(color);
 	}
 
@@ -141,27 +141,27 @@ public abstract class Component extends Bounds {
 		callback.addListener(SHAKE, listener);
 	}
 	
-	public final String getTooltipText() {
+	public String getTooltipText() {
 		return tooltip.getText().getAsString();
 	}
 	
-	public final void setTooltipText(String text) {
+	public void setTooltipText(String text) {
 		tooltip.getText().set(text);
 	}
 	
-	public final boolean isTooltipEnabled() {
+	public boolean isTooltipEnabled() {
 		return tooltip.isEnabled();
 	}
 	
-	public final void setTooltipEnabled(boolean isEnable) {
-		tooltip.setEnable(isEnable);
+	public void setTooltipEnabled(boolean enabled) {
+		tooltip.setEnabled(enabled);
 	}
 	
-	public final Color getTooltipColor() {
+	public Color getTooltipColor() {
 		return tooltip.getColor();
 	}
 	
-	public final void setTooltipColor(Color color) {
+	public void setTooltipColor(Color color) {
 		tooltip.setColor(color);
 	}
 }

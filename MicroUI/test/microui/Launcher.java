@@ -33,6 +33,8 @@ public class Launcher extends PApplet {
 		component = new CheckBox();
 		component.setText("I accept all of terms and conditions");
 		component.setTooltipText("you can touch me");
+		component.setFont(createFont("C:\\Windows\\Fonts\\OLDENGL.TTF",32));
+		
 	}
 
 	@Override

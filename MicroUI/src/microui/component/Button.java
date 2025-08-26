@@ -3,15 +3,21 @@ package microui.component;
 import static microui.constants.AutoResizeMode.BIG;
 
 import microui.core.AbstractButton;
+import microui.core.effect.Hover;
+import microui.core.effect.Ripples;
 import microui.core.style.Color;
+import microui.core.style.Stroke;
 
 public class Button extends AbstractButton {
-	
 	
 	public Button(String plainText, float x, float y, float w, float h) {
 		super(x, y, w, h);
 		
+		ripples = new Ripples(this);
+		hover = new Hover(this);
+		stroke = new Stroke();
 		
+		text = new TextView(x, y, w, h);
 		text.set(plainText);
 		text.setUpperCaseStyle(true);
 		text.setAutoResizeEnabled(true);
