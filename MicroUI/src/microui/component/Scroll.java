@@ -71,7 +71,7 @@ public class Scroll extends RangeControl {
 	}
 
 	@Override
-	public void onChangeBounds() {
+	protected void onChangeBounds() {
 		super.onChangeBounds();
 		
 		if(thumb == null) { return; }

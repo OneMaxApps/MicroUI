@@ -12,7 +12,7 @@ public final class Callback {
 	private static PApplet app = MicroUI.getContext();
 	private static final int ONE_SECOND = 1000, TWO_SECONDS = 2000, THREE_SECONDS = 3000, THREE_PIXELS = 3;
 	
-	private final Bounds bounds;
+	private Bounds bounds;
 	
 	private final EnumMap<EventType, ArrayList<Listener>> eventList = new EnumMap<>(EventType.class);
 	
@@ -43,6 +43,10 @@ public final class Callback {
 		inputUpdate();
 		listeners();
 
+	}
+	
+	public final void setListener(Bounds bounds) {
+		this.bounds = bounds;
 	}
 
 	public final boolean isEnabled() {

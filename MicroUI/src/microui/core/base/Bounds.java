@@ -110,6 +110,6 @@ public abstract class Bounds extends View {
 	}
 	
 	
-	public void onChangeBounds() {}
+	protected void onChangeBounds() {}
 
 }

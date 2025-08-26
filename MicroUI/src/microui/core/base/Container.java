@@ -104,7 +104,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	}
 	
 	@Override
-	public void onChangeBounds() {
+	protected void onChangeBounds() {
 		if(image != null) { image.setBounds(this); }
 		if(resizeHandle != null) { resizeHandle.dots.inTransforms(); }
 	}
@@ -352,7 +352,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				}
 
 				@Override
-				public void onChangeBounds() {
+				protected void onChangeBounds() {
 					super.onChangeBounds();
 					calcTransforms();
 				}

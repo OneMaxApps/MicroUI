@@ -1,5 +1,6 @@
 package microui.core.effect;
 
+import microui.core.base.Bounds;
 import microui.core.base.Component;
 import microui.core.base.View;
 import microui.core.style.Color;
@@ -7,6 +8,7 @@ import microui.core.style.Color;
 public final class Hover extends View {
 	private final Color color;
 	private Component component;
+	private Bounds alternativeBounds;
 	private boolean isInside,isPressed,isEnabled;
 	
     public Hover(Component component) {
@@ -27,13 +29,11 @@ public final class Hover extends View {
 		if(isInside) {
 			app.pushStyle();
 			app.fill(color.get());
-			app.rect(component.getX(),component.getY(),component.getWidth(),component.getHeight());
-			
+			rectOnDraw();
 			if(isPressed) {
-				app.fill(0,64);
-				app.rect(component.getX(),component.getY(),component.getWidth(),component.getHeight());
+			app.fill(0,64);
+			rectOnDraw();
 			}
-			
 			app.popStyle();
 		}
 	}
@@ -51,6 +51,12 @@ public final class Hover extends View {
 		component.onMouseOutside(() -> isInside = false);
 		component.onPress(() -> isPressed = true);
 		component.onRelease(() -> isPressed = false);
+	}
+	
+	public final void setAlternativeBounds(Bounds alternativeBounds) {
+		if(alternativeBounds != null) {
+			this.alternativeBounds = alternativeBounds;
+		}
 	}
 
 	public final Color getColor() {
@@ -70,4 +76,11 @@ public final class Hover extends View {
 		this.isEnabled = isEnabled;
 	}
 	
+	private void rectOnDraw() {
+		if(alternativeBounds != null) {
+			app.rect(alternativeBounds.getX(),alternativeBounds.getY(),alternativeBounds.getWidth(),alternativeBounds.getHeight());
+			} else {
+				app.rect(component.getX(),component.getY(),component.getWidth(),component.getHeight());
+			}
+	}
 }

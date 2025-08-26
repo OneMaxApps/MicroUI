@@ -55,7 +55,7 @@ public abstract class Layout extends Container {
 	}
 
 	@Override
-	public void onChangeBounds() {
+	protected void onChangeBounds() {
 		super.onChangeBounds();
 		
 		recalcListState();

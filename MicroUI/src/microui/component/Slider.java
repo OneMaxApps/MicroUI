@@ -51,7 +51,7 @@ public class Slider extends RangeControl {
 	}
 
 	@Override
-	public void onChangeBounds() {
+	protected void onChangeBounds() {
 		if(level == null) { return; }
 		
 		level.setBounds(this);

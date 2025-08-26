@@ -135,7 +135,7 @@ public class EdgeContainer extends Container {
 	}
 	
 	@Override
-	public void onChangeBounds() {
+	protected void onChangeBounds() {
 		super.onChangeBounds();
 		updateState();
 	}

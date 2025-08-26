@@ -21,18 +21,17 @@ import microui.event.Listener;
 import microui.feedback.Tooltip;
 
 public abstract class Component extends Bounds {
+	protected final Color color;
     protected final Event event;
     protected final Callback callback;
-    protected Color color;
-    protected Tooltip tooltip;
+    protected final Tooltip tooltip;
     
     public Component(float x, float y, float w, float h) {
         super(x, y, w, h);
         
         color = new Color(200);
         event = new Event();
-        callback = new Callback(this);
-        
+        callback = new Callback(this); 
         tooltip = new Tooltip(callback);
       }
     

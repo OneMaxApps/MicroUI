@@ -5,10 +5,7 @@ import static java.lang.Math.min;
 import microui.container.EdgeContainer;
 import microui.core.AbstractButton;
 import microui.core.base.Bounds;
-import microui.core.effect.Hover;
-import microui.core.effect.Ripples;
 import microui.core.style.Color;
-import microui.core.style.Stroke;
 import microui.event.Listener;
 
 public class CheckBox extends AbstractButton {
@@ -22,7 +19,7 @@ public class CheckBox extends AbstractButton {
 		container = new EdgeContainer(x,y,w,h);
 		container.setLeft(true);
 		container.set(new Content(this));
-		container.setVisible(false);
+		//container.setVisible(false);
 
 	}
 
@@ -42,7 +39,7 @@ public class CheckBox extends AbstractButton {
 	}
 
 	@Override
-	public void onChangeBounds() {
+	protected void onChangeBounds() {
 		super.onChangeBounds();
 		if(container == null) { return; }
 		
@@ -83,14 +80,12 @@ public class CheckBox extends AbstractButton {
 		
 		public Content(Bounds otherBounds) {
 			super(otherBounds);
+			setVisible(true);
 			
 			setHeight(DEFAULT_BOX_SIZE);
 			
-			setVisible(true);
-			
 			box = new Box();
-			
-			text = new TextView(x, y, w, h);
+
 			text.setAutoResizeEnabled(false);
 			text.setTextSize(box.getHeight());
 			
@@ -103,7 +98,7 @@ public class CheckBox extends AbstractButton {
 		}
 
 		@Override
-		public void onChangeBounds() {
+		protected void onChangeBounds() {
 			if(box == null || text == null) { return; }
 			
 			box.setPosition(x,y);
@@ -115,18 +110,18 @@ public class CheckBox extends AbstractButton {
 
 	}
 	
-	private final class Box extends AbstractButton {
+	private final class Box extends Bounds {
 		final Color markColor;
 		
 		public Box() {
 			super(0,0,DEFAULT_BOX_SIZE,DEFAULT_BOX_SIZE);
+			setVisible(true);
 			
-			CheckBox.this.color = color;
-			CheckBox.this.tooltip = tooltip;
-
-			stroke = CheckBox.this.stroke = new Stroke();
-			ripples = CheckBox.this.ripples = new Ripples(this);
-			hover = CheckBox.this.hover = new Hover(this);
+			callback.setListener(this);
+			
+			ripples.setBounds(this);
+			
+			hover.setAlternativeBounds(this);
 			
 			markColor = new Color(0,200,255,100);
 			
@@ -135,12 +130,29 @@ public class CheckBox extends AbstractButton {
 
 		@Override
 		protected void update() {
-			super.update();
+			event.listen(this);
+			
+			app.pushStyle();
+			stroke.apply();
+			color.apply();
+			app.rect(x, y, w, h);
+			hover.draw();
+			ripples.draw();
+			app.popStyle();
+			
 			if(isSelected) {
 				markOnDraw();
 			}
 		}
-	
+		
+		
+		
+		@Override
+		protected void onChangeBounds() {
+			super.onChangeBounds();
+			
+		}
+
 		private void markOnDraw() {
 			app.pushStyle();
 			app.noStroke();

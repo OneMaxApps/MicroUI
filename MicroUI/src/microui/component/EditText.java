@@ -118,7 +118,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 
 	@Override
-	public void onChangeBounds() {
+	protected void onChangeBounds() {
 		super.onChangeBounds();
 		if (scrollH == null || scrollV == null) {
 			return;

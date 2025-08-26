@@ -156,7 +156,7 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	@Override
-	public final void onChangeBounds() {
+	protected final void onChangeBounds() {
 		super.onChangeBounds();
 		if(itemList == null) { return; }
 		

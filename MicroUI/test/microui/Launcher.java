@@ -6,7 +6,7 @@ import processing.core.PApplet;
 
 // TODO Check what's methods and objects must be a part of components API
 //[1] Button
-//[0] CheckBox
+//[1] CheckBox
 //[0] Dial
 //[0] EditText
 //[0] MenuButton
@@ -31,9 +31,6 @@ public class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		component = new CheckBox();
-		component.setText("I accept all of terms and conditions");
-		component.setTooltipText("you can touch me");
-		component.setFont(createFont("C:\\Windows\\Fonts\\OLDENGL.TTF",32));
 		
 	}
 
@@ -41,8 +38,7 @@ public class Launcher extends PApplet {
 	public void draw() {
 		background(32);
 		component.draw();
-		if(mouseButton == RIGHT)
-		component.setPosition(mouseX,mouseY);
+
 		GlobalTooltip.draw();
 	}
 	

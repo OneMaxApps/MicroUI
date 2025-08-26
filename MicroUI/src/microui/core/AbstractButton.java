@@ -11,15 +11,20 @@ import microui.core.style.Stroke;
 import processing.core.PFont;
 
 public abstract class AbstractButton extends Component {
-	protected Ripples ripples;
-	protected Hover hover;
-	protected Stroke stroke;
-	protected TextView text;
+	protected final Ripples ripples;
+	protected final Hover hover;
+	protected final Stroke stroke;
+	protected final TextView text;
 	
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setVisible(true);
-
+		
+		ripples = new Ripples(this);
+		hover = new Hover(this);
+		stroke = new Stroke();
+		text = new TextView(x, y, w, h);
+		
 		callback.addListener(CLICK,() -> {
 			if(ripples != null) {
 				ripples.initAnim();

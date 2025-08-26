@@ -50,7 +50,7 @@ public class Panel extends Container {
 
 
 	@Override
-	public void onChangeBounds() {
+	protected void onChangeBounds() {
 		super.onChangeBounds();
 		if(titleBar != null) { titleBar.onChangeBounds(); }
 		if(container != null) { container.setBounds(this); }
@@ -156,7 +156,7 @@ public class Panel extends Container {
 		}
 
 		@Override
-		public void onChangeBounds() {
+		protected void onChangeBounds() {
 			super.onChangeBounds();
 			setPosition(Panel.this.getX(),Panel.this.getY()-getHeight());
 			setSize(Panel.this.getWidth(),HEIGHT);
