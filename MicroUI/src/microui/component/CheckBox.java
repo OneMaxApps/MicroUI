@@ -24,7 +24,6 @@ public class CheckBox extends AbstractButton {
 		container.set(new Content(this));
 		container.setVisible(false);
 
-		tooltip.setEnabled(false);
 	}
 
 	public CheckBox(boolean isSelected) {
@@ -48,99 +47,6 @@ public class CheckBox extends AbstractButton {
 		if(container == null) { return; }
 		
 		container.setBounds(this);
-		container.onChangeBounds();
-	}
-	
-	@Override
-	public Color getColor() {
-		return getBox().getColor();
-		
-	}
-
-	@Override
-	public void setColor(Color color) {
-		getBox().setColor(color);
-	}
-
-	
-	@Override
-	public String getTooltipText() {
-		return getBox().getTooltipText();
-	}
-
-	@Override
-	public void setTooltipText(String text) {
-		getBox().setTooltipText(text);
-	}
-	
-	@Override
-	public boolean isTooltipEnabled() {
-		return getBox().isTooltipEnabled();
-	}
-
-	@Override
-	public void setTooltipEnabled(boolean enabled) {
-		getBox().setTooltipEnabled(enabled);
-	}
-
-	@Override
-	public Color getTooltipColor() {
-		return getBox().getTooltipColor();
-	}
-
-	@Override
-	public void setTooltipColor(Color color) {
-		getBox().setTooltipColor(color);
-	}
-
-	@Override
-	public Color getRipplesColor() {
-		return getBox().getRipplesColor();
-	}
-
-	@Override
-	public void setRipplesColor(Color color) {
-		getBox().setRipplesColor(color);
-	}
-
-	@Override
-	public boolean isRipplesEnabled() {
-		return getBox().isRipplesEnabled();
-	}
-
-	@Override
-	public void setRipplesEnabled(boolean enable) {
-		getBox().setRipplesEnabled(enable);
-	}
-
-	@Override
-	public boolean isHoverEnabled() {
-		return getBox().isHoverEnabled();
-	}
-
-	@Override
-	public void setHoverEnabled(boolean enabled) {
-		getBox().setHoverEnabled(enabled);
-	}
-
-	@Override
-	public int getStrokeWeight() {
-		return getBox().getStrokeWeight();
-	}
-
-	@Override
-	public void setStrokeWeight(int weight) {
-		getBox().setStrokeWeight(weight);
-	}
-
-	@Override
-	public Color getStrokeColor() {
-		return getBox().getStrokeColor();
-	}
-
-	@Override
-	public void setStrokeColor(Color color) {
-		getBox().setStrokeColor(color);
 	}
 
 	public final boolean isSelected() {
@@ -215,11 +121,15 @@ public class CheckBox extends AbstractButton {
 		public Box() {
 			super(0,0,DEFAULT_BOX_SIZE,DEFAULT_BOX_SIZE);
 			
-			ripples = new Ripples(this);
-			hover = new Hover(this);
-			stroke = new Stroke();
+			CheckBox.this.color = color;
+			CheckBox.this.tooltip = tooltip;
+
+			stroke = CheckBox.this.stroke = new Stroke();
+			ripples = CheckBox.this.ripples = new Ripples(this);
+			hover = CheckBox.this.hover = new Hover(this);
 			
 			markColor = new Color(0,200,255,100);
+			
 			onClick(() -> toggle());
 		}
 

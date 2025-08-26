@@ -21,10 +21,10 @@ import microui.event.Listener;
 import microui.feedback.Tooltip;
 
 public abstract class Component extends Bounds {
-    protected final Color color;
     protected final Event event;
     protected final Callback callback;
-    protected final Tooltip tooltip;
+    protected Color color;
+    protected Tooltip tooltip;
     
     public Component(float x, float y, float w, float h) {
         super(x, y, w, h);
@@ -52,12 +52,12 @@ public abstract class Component extends Bounds {
     	color.set(otherComponent.getColor());
 	}
 	
-	public Color getColor() {
+	public final Color getColor() {
 		System.out.println("created a new Color object");
 		return new Color(color);
 	}
 	
-	public void setColor(Color color) {
+	public final void setColor(Color color) {
 		this.color.set(color);
 	}
 
@@ -141,27 +141,35 @@ public abstract class Component extends Bounds {
 		callback.addListener(SHAKE, listener);
 	}
 	
-	public String getTooltipText() {
+	public final String getTooltipText() {
 		return tooltip.getText().getAsString();
 	}
 	
-	public void setTooltipText(String text) {
+	public final void setTooltipText(String text) {
 		tooltip.getText().set(text);
 	}
 	
-	public boolean isTooltipEnabled() {
+	public final boolean isTooltipEnabled() {
 		return tooltip.isEnabled();
 	}
 	
-	public void setTooltipEnabled(boolean enabled) {
+	public final void setTooltipEnabled(boolean enabled) {
 		tooltip.setEnabled(enabled);
 	}
 	
-	public Color getTooltipColor() {
+	public final Color getTooltipColor() {
 		return tooltip.getColor();
 	}
 	
-	public void setTooltipColor(Color color) {
+	public final void setTooltipColor(Color color) {
 		tooltip.setColor(color);
+	}
+	
+	public final Color getTooltipTextColor() {
+		return tooltip.getText().getColor();
+	}
+	
+	public final void setTooltipTextColor(Color color) {
+		tooltip.getText().setColor(color);
 	}
 }

@@ -169,11 +169,14 @@ public final class Tooltip extends Bounds {
 			colorText = new Color();
 		}
 		
+		public final Color getColor() {
+			return new Color(colorText);
+		}
+		
 		public final void setColor(final Color color) {
 			if(color == null) { return; }
 			this.colorText = color;
 		}
-		
 
 		@Override
 		protected void inInserting() {
