@@ -63,8 +63,8 @@ public class Color {
 		set(gray,255);
 	}
 	
-	public void set(Color otherColor) {
-		setHEX(otherColor.get());
+	public void set(Color color) {
+		setHEX(color.get());
 	}
 	
 	public void setHEX(int hex) {

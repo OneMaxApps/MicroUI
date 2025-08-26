@@ -1,6 +1,8 @@
 package microui.component;
 
+import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static processing.core.PConstants.PROJECT;
 
 import microui.container.EdgeContainer;
 import microui.core.AbstractButton;
@@ -10,17 +12,22 @@ import microui.event.Listener;
 
 public class CheckBox extends AbstractButton {
 	private static final int DEFAULT_BOX_SIZE = 16;
+	private static final int DEFAULT_TEXT_PADDING = 8;
+	
 	private final EdgeContainer container;
+	private float textPadding;
 	private boolean isSelected;
 	
 	public CheckBox(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		
+		setTextPadding(DEFAULT_TEXT_PADDING);
+		
 		container = new EdgeContainer(x,y,w,h);
 		container.setLeft(true);
 		container.set(new Content(this));
-		//container.setVisible(false);
-
+		container.setVisible(false);
+		
 	}
 
 	public CheckBox(boolean isSelected) {
@@ -63,13 +70,28 @@ public class CheckBox extends AbstractButton {
 	}
 	
 	public final void setMarkColor(Color color) {
+		if(color == null) {
+			throw new NullPointerException("the mark color must be not null");
+		}
+		
 		getBox().markColor.set(color);
 	}
 	
 	public final void onStateChangedListener(Listener listener) {
+		if(listener == null) {
+			throw new NullPointerException("on the state changed listener must be not null");
+		}
 		onClick(listener);
 	}
 	
+	public final float getTextPadding() {
+		return textPadding;
+	}
+
+	public final void setTextPadding(float textPadding) {
+		this.textPadding = max(0, textPadding);
+	}
+
 	private Box getBox() {
 		return ((Content) (container.getElement())).box;
 	}
@@ -88,6 +110,7 @@ public class CheckBox extends AbstractButton {
 
 			text.setAutoResizeEnabled(false);
 			text.setTextSize(box.getHeight());
+			text.setInCenter(false);
 			
 		}
 
@@ -103,8 +126,8 @@ public class CheckBox extends AbstractButton {
 			
 			box.setPosition(x,y);
 			box.setSize(min(DEFAULT_BOX_SIZE,w),min(DEFAULT_BOX_SIZE,h));
-			text.setSize(getWidth()-box.getWidth(),box.getHeight());
-			text.setPosition(box.getX()+box.getWidth(),box.getY()+box.getHeight()/2-text.getHeight()/2);
+			text.setSize(getWidth()-(box.getWidth()+textPadding),box.getHeight());
+			text.setPosition(box.getX()+box.getWidth()+textPadding,box.getY()+box.getHeight()/2-text.getHeight()/2);
 			text.setTextSize(box.getHeight());
 		}
 
@@ -144,14 +167,6 @@ public class CheckBox extends AbstractButton {
 				markOnDraw();
 			}
 		}
-		
-		
-		
-		@Override
-		protected void onChangeBounds() {
-			super.onChangeBounds();
-			
-		}
 
 		private void markOnDraw() {
 			app.pushStyle();
@@ -159,7 +174,8 @@ public class CheckBox extends AbstractButton {
 			markColor.apply();
 			app.rect(x,y,w,h);
 			app.stroke(0,128);
-			app.strokeWeight(Math.max(1,DEFAULT_BOX_SIZE/5));
+			app.strokeWeight(max(1,DEFAULT_BOX_SIZE/5));
+			app.strokeCap(PROJECT);
 			app.line(x+w*.3f, y+h*.6f, x+w/2, y+h*.8f);
 			app.line(x+w*.8f, y+h*.2f, x+w/2, y+h*.8f);
 			app.popStyle();

@@ -31,6 +31,7 @@ public class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		component = new CheckBox();
+		component.setText("I'm accept terms and conditions");
 		
 	}
 
@@ -38,7 +39,9 @@ public class Launcher extends PApplet {
 	public void draw() {
 		background(32);
 		component.draw();
-
+		if(mouseButton == RIGHT) {
+			component.setSize(mouseX,mouseY);
+		}
 		GlobalTooltip.draw();
 	}
 	
