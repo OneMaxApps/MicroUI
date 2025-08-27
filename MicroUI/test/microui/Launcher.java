@@ -39,9 +39,7 @@ public class Launcher extends PApplet {
 	public void draw() {
 		background(32);
 		component.draw();
-		if(mouseButton == RIGHT) {
-			component.setSize(mouseX,mouseY);
-		}
+
 		GlobalTooltip.draw();
 	}
 	

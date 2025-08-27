@@ -1,5 +1,7 @@
 package microui.core.effect;
 
+import static java.util.Objects.requireNonNull;
+
 import microui.core.base.Bounds;
 import microui.core.base.Component;
 import microui.core.base.View;
@@ -12,6 +14,7 @@ public final class Hover extends View {
 	private boolean isInside,isPressed,isEnabled;
 	
     public Hover(Component component) {
+    	requireNonNull(component, "component cannot be null");
     	setVisible(true);
     	color = new Color(0,100,255,24);
 		this.component = component;
@@ -43,6 +46,7 @@ public final class Hover extends View {
 	}
 
 	public final void setComponent(Component component) {
+		requireNonNull(component, "component cannot be null");
 		if(this.component == component) { return; }
 		
 		this.component = component;
@@ -54,9 +58,8 @@ public final class Hover extends View {
 	}
 	
 	public final void setAlternativeBounds(Bounds alternativeBounds) {
-		if(alternativeBounds != null) {
-			this.alternativeBounds = alternativeBounds;
-		}
+		requireNonNull(alternativeBounds, "alternativeBounds cannot be null");
+		this.alternativeBounds = alternativeBounds;
 	}
 
 	public final Color getColor() {
@@ -65,6 +68,7 @@ public final class Hover extends View {
 	}
 	
 	public final void setColor(Color color) {
+		requireNonNull(color, "color cannot be null");
 		this.color.set(color);
 	}
 

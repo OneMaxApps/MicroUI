@@ -1,17 +1,19 @@
 package microui.core.base;
 
+import static java.lang.Math.max;
+import static java.util.Objects.requireNonNull;
+
 // Status: STABLE - Do not modify
-// Last Reviewed: 01.06.2025
+// Last Reviewed: 27.08.2025
 public abstract class Bounds extends View {
 	protected float x,y,w,h;
 	
 	public Bounds(float x, float y, float w, float h) {
 		setBounds(x,y,w,h);
-		
 	}
 	
-	public Bounds(Bounds otherBounds) {
-		this(otherBounds.getX(),otherBounds.getY(),otherBounds.getWidth(),otherBounds.getHeight());
+	public Bounds(Bounds bounds) {
+		this(requireNonNull(bounds,"bounds cannot be null").getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
 	}
 	
 	public Bounds() {
@@ -41,7 +43,7 @@ public abstract class Bounds extends View {
 	
 	public void setWidth(final float w) {
 		if(this.w == w) { return; }
-		this.w = Math.max(0, w);
+		this.w = max(0, w);
 		onChangeBounds();
 	}
 	
@@ -50,15 +52,15 @@ public abstract class Bounds extends View {
 	
 	public void setHeight(final float h) {
 		if(this.h == h) { return; }	
-		this.h = Math.max(0, h);
+		this.h = max(0, h);
 		onChangeBounds();
 	}
 	
 	public void setSize(float w, float h) {
 		if(this.w == w && this.h == h) { return; }
 		
-		this.w = Math.max(0, w);
-		this.h = Math.max(0, h);
+		this.w = max(0, w);
+		this.h = max(0, h);
 		
 		onChangeBounds();	
 	}
@@ -69,9 +71,8 @@ public abstract class Bounds extends View {
 		setSize(size,size);
 	}
 	
-	public void setSize(final Bounds otherBounds) {
-		if(otherBounds == null) { return; }
-		setSize(otherBounds.getWidth(),otherBounds.getHeight());
+	public void setSize(final Bounds bounds) {
+		setSize(requireNonNull(bounds,"bounds cannot be null").getWidth(),bounds.getHeight());
 	}
 	
 	public void setBounds(float x, float y, float w, float h) {
@@ -80,16 +81,15 @@ public abstract class Bounds extends View {
 		if(hasChanges) {
 			this.x = x;
 			this.y = y;
-			this.w = Math.max(0, w);
-			this.h = Math.max(0, h);
+			this.w = max(0, w);
+			this.h = max(0, h);
 			onChangeBounds();
 		}
 		
 	}
 	
-	public void setBounds(final Bounds otherBounds) {
-		if(otherBounds == null) { return; }
-		setBounds(otherBounds.getX(),otherBounds.getY(),otherBounds.getWidth(),otherBounds.getHeight());
+	public void setBounds(final Bounds bounds) {
+		setBounds(requireNonNull(bounds,"bounds cannot be null").getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
 	}
 	
 	
@@ -103,10 +103,8 @@ public abstract class Bounds extends View {
 		
 	}
 	
-	public void setPosition(Bounds otherBounds) {
-		if(otherBounds == null) { return; }
-		
-		setPosition(otherBounds.getX(),otherBounds.getY());
+	public void setPosition(Bounds bounds) {
+		setPosition(requireNonNull(bounds,"bounds cannot be null").getX(),bounds.getY());
 	}
 	
 	

@@ -1,5 +1,6 @@
 package microui.core.effect;
 
+import static java.util.Objects.requireNonNull;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PConstants.CORNERS;
@@ -18,7 +19,7 @@ public final class Shadow extends View {
 	  
 	  public Shadow(Bounds bounds) {
 		super();
-	    this.bounds = bounds;
+	    this.bounds = requireNonNull(bounds, "bounds cannot be null");
 	    color = new Color(34);
 	    leftSize = 10;
 	    upSize = 10;
@@ -64,6 +65,7 @@ public final class Shadow extends View {
 	  }
 
 	  public void setStyle(Shadow shadow) {
+		  requireNonNull(shadow, "shadow cannot be null");
 		  color.set(shadow.color);  
 		  leftSize = shadow.leftSize;
 		  rightSize = shadow.rightSize;

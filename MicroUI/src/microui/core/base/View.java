@@ -6,7 +6,7 @@ import microui.util.Metrics;
 import processing.core.PApplet;
 
 // Status: STABLE - Do not modify
-// Last Reviewed: 29.06.2025
+// Last Reviewed: 27.08.2025
 public abstract class View implements Visible {
 	protected static final PApplet app = MicroUI.getContext();
 	
@@ -32,14 +32,17 @@ public abstract class View implements Visible {
 		}
 	}
 	
-	protected abstract void update();
-
 	public final int getPriority() {
 		return priority;
 	}
-
+	
 	public final void setPriority(int priority) {
+		if(priority < 0) {
+			throw new IllegalArgumentException("priority cannot be less than zero");
+		}
 		this.priority = priority;
 	}
-	
+
+	protected abstract void update();
+
 }

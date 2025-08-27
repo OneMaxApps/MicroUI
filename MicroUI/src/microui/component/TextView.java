@@ -244,7 +244,7 @@ public class TextView extends Component {
 	}
 	
 	public final class Shadow extends View {
-		  public Color color;
+		  public final Color color;
 		  private float extraSize,shiftX,shiftY;
 		  
 		  private Shadow() {
@@ -281,7 +281,7 @@ public class TextView extends Component {
 		}
 
 		public final void setShiftX(float shiftX) {
-			if(shiftX < -1 || shiftX > 1) { return; }
+			if(shiftX < -1 || shiftX > 1) { throw new IllegalArgumentException(); }
 			this.shiftX = shiftX;
 		}
 
@@ -290,7 +290,7 @@ public class TextView extends Component {
 		}
 
 		public final void setShiftY(float shiftY) {
-			if(shiftY < -1 || shiftY > 1) { return; }
+			if(shiftY < -1 || shiftY > 1) { throw new IllegalArgumentException(); }
 			this.shiftY = shiftY;
 		}
 		 

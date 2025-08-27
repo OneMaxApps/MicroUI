@@ -1,11 +1,13 @@
 package microui.core;
 
+import static java.util.Objects.requireNonNull;
+
 import microui.core.base.Bounds;
 import microui.core.style.Color;
 import processing.core.PImage;
 
 // Status: Stable - Do not modify
-// Last Reviewed: 01.06.2025
+// Last Reviewed: 27.08.2025
 public class Texture extends Bounds {
 	protected final Color tint;
 	protected PImage image;
@@ -35,14 +37,12 @@ public class Texture extends Bounds {
 		return image != null;
 	}
 	
-	public final void set(final PImage img) {
-		if(img == null) { return; }
-		image = img;
+	public final void set(final PImage image) {
+		this.image = requireNonNull(image, "image cannot be null");
 	}
 	
 	public final void load(final String path) {
-		if(path == null) { return; }
-		image = app.loadImage(path);
+		image = app.loadImage(requireNonNull(path, "path cannot be null"));
 	}
 	
 	public final PImage get() {

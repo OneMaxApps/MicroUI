@@ -234,7 +234,9 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		}
 
 		public final void setMinWidth(int minWidth) {
-			if(minWidth <= 0) { return; }
+			if(minWidth <= 0) {
+				throw new IllegalArgumentException("minWidth cannot be less than 1");
+			}
 			this.minWidth = minWidth;
 		}
 
@@ -243,7 +245,9 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		}
 
 		public final void setMinHeight(int minHeight) {
-			if(minHeight <= 0) { return; }
+			if(minHeight <= 0) {
+				throw new IllegalArgumentException("minHeight cannot be less than 1");
+			}
 			this.minHeight = minHeight;
 		}
 
@@ -252,7 +256,9 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		}
 		
 		public final Dots.Dot getDot(int index) {
-			if(index < 0 || index > Dots.DOTS_COUNT) { return null; }
+			if(index < 0 || index > Dots.DOTS_COUNT) { 
+				throw new IllegalArgumentException("index cannot be less than 0 and greater than "+Dots.DOTS_COUNT);
+			}
 			return dots.dots[index];
 		}
 
@@ -275,7 +281,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				inTransforms();
 			}
 
-			private final void draw() {
+			private void draw() {
 				app.pushStyle();
 				app.noStroke();
 				for(Dot dot : dots) {
@@ -284,7 +290,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				app.popStyle();
 			}
 			
-			private final void inTransforms() {
+			private void inTransforms() {
 				for(Dot dot : dots) {
 					dot.onChangeBounds();
 				}

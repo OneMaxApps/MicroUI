@@ -1,31 +1,35 @@
 package microui.util;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import microui.core.base.View;
 import processing.core.PGraphics;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 27.08.2025
 public final class Metrics {
 	private static final Map<String,Integer> metrics = new LinkedHashMap<String,Integer>();
 	
 	private Metrics() {}
 	
-	public static final void register(PGraphics pg) {
-		final String key = pg.getClass().getSimpleName();
+	public static void register(PGraphics pGraphics) {
+		final String key = requireNonNull(pGraphics,"pGraphics cannot be null").getClass().getSimpleName();
 		metrics.put(key, metrics.getOrDefault(key, 0)+1);
 	}
 	
-	public static final void register(View obj) {
-		final String key = obj.getClass().getSimpleName();
+	public static void register(View view) {
+		final String key = requireNonNull(view,"view cannot be null").getClass().getSimpleName();
 		metrics.put(key, metrics.getOrDefault(key, 0)+1);
 	}
 	
-	public static final void register(String key) {
-		metrics.put(key, metrics.getOrDefault(key, 0)+1);
+	public static void register(String key) {
+		metrics.put(requireNonNull(key,"key cannot be null"), metrics.getOrDefault(key, 0)+1);
 	}
 	
-	public static final void printAll() {
+	public static void printAll() {
 		if(metrics.isEmpty()) { return; }
 		
 		System.out.println("\n////////////////////");
@@ -35,11 +39,12 @@ public final class Metrics {
 		System.out.println("////////////////////\n");
 	}
 	
-	public static final void print(final String className) {
-		System.out.println(className+ " : " +metrics.getOrDefault(className, 0));
+	public static void print(String className) {
+		System.out.println(requireNonNull(className,"className cannot be null")+ " : " +metrics.getOrDefault(className, 0));
 	}
 	
-	public static final void clear() {
+	public static void clear() {
 		metrics.clear();
 	}
+	
 }

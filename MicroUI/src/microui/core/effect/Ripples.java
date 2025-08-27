@@ -1,5 +1,6 @@
 package microui.core.effect;
 
+import static java.util.Objects.requireNonNull;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.max;
 import static processing.core.PApplet.min;
@@ -24,7 +25,7 @@ public final class Ripples extends View {
 		circle = new Circle();
 		
 		visible = true;
-		this.bounds = bounds;
+		this.bounds = requireNonNull(bounds, "bounds cannot be null");
 		createGraphics();
 		isEnabled = true;
 	}
@@ -50,7 +51,7 @@ public final class Ripples extends View {
 	}
 
 	public final void setBounds(Bounds bounds) {
-		this.bounds = bounds;
+		this.bounds = requireNonNull(bounds, "bounds cannot be null");
 	}
 
 	public final void initAnim() {
@@ -65,7 +66,7 @@ public final class Ripples extends View {
 	}
 	
 	public final void setColor(Color color) {
-		this.color.set(color);
+		this.color.set(requireNonNull(color, "color cannot be null"));
 	}
 	
 	public final boolean isEnabled() {
@@ -96,10 +97,12 @@ public final class Ripples extends View {
 		private float x,y,radius;
 		private boolean start;
 
-		private final void draw(PGraphics pg) {
-			pg.noStroke();
-			pg.fill(color.get(),constrain(255-radius*.5f,0,255));
-			pg.circle(x, y, radius);
+		private final void draw(PGraphics pGraphics) {
+			requireNonNull(pGraphics, "pGraphics cannot be null");
+			
+			pGraphics.noStroke();
+			pGraphics.fill(color.get(),constrain(255-radius*.5f,0,255));
+			pGraphics.circle(x, y, radius);
 			
 			if(start) {
 				playAnim();

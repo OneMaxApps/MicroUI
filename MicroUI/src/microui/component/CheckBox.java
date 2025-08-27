@@ -4,6 +4,8 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static processing.core.PConstants.PROJECT;
 
+import java.util.Objects;
+
 import microui.container.EdgeContainer;
 import microui.core.AbstractButton;
 import microui.core.base.Bounds;
@@ -100,8 +102,8 @@ public class CheckBox extends AbstractButton {
 	private final class Content extends Bounds {
 	    final Box box;
 		
-		public Content(Bounds otherBounds) {
-			super(otherBounds);
+		public Content(Bounds bounds) {
+			super(Objects.requireNonNull(bounds, "bounds cannot be null"));
 			setVisible(true);
 			
 			setHeight(DEFAULT_BOX_SIZE);
