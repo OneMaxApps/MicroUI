@@ -1,5 +1,6 @@
 package microui.component;
 
+import static java.util.Objects.requireNonNull;
 import static microui.constants.AutoResizeMode.TINY;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.min;
@@ -115,9 +116,11 @@ public final class Dial extends Component implements Scrollable {
 	}
 
 	@Override
-	public void mouseWheel(MouseEvent e) {
+	public void mouseWheel(MouseEvent mouseEvent) {
+		requireNonNull(mouseEvent,"mouseEvent cannot be null");
+		
 		if(event.inside()) {
-			value.append(-e.getCount());
+			value.append(-mouseEvent.getCount());
 		}
 	}
 	

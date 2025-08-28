@@ -1,6 +1,6 @@
 package microui;
 
-import microui.component.CheckBox;
+import microui.component.Dial;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
@@ -16,7 +16,7 @@ import processing.core.PApplet;
 //[0] TextView
 
 public class Launcher extends PApplet {
-	CheckBox component;
+	Dial component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -30,8 +30,7 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new CheckBox();
-		component.setText("I'm accept terms and conditions");
+		component = new Dial();
 		
 	}
 
