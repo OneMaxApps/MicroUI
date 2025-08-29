@@ -82,6 +82,7 @@ public final class Shadow extends View {
 	  }
 	  
 	  public void set(float angles) {
+		if(angles < 0) { throw new IllegalArgumentException("angles cannot be less than zero"); }
 	    leftSize = upSize = rightSize = downSize = (int) constrain(angles,0,20);
 	  }
 	  

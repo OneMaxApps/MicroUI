@@ -7,7 +7,7 @@ import static processing.core.PApplet.min;
 
 import java.util.ArrayList;
 
-import microui.component.Dial;
+import microui.component.Diall;
 import microui.component.TextView;
 import microui.core.base.Bounds;
 import microui.core.base.Container;
@@ -200,7 +200,7 @@ public class GridLayout extends Layout {
 				  container.setY(map(rowList.get(i),0,rows,getY(),getY()+getHeight())+((getHeight()/getRows()/2)-container.getRealHeight()/2));
 
 			    } else {
-			    	if(bounds instanceof Dial dial) {
+			    	if(bounds instanceof Diall dial) {
 			    		dial.setPosition(
 					    		map(columnList.get(i),0,GridLayout.this.cols,getX(),getX()+getWidth())+((getWidth()/getColumns())/2)-(Math.min(dial.getWidth(),dial.getHeight()))/2,
 					    		map(rowList.get(i),0,GridLayout.this.rows,getY(),getY()+getHeight())+((getHeight()/getRows())/2)-(Math.min(dial.getWidth(),dial.getHeight()))/2

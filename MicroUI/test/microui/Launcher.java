@@ -1,6 +1,7 @@
 package microui;
 
-import microui.component.Dial;
+import microui.container.layout.GridLayout;
+import microui.core.base.Layout;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
@@ -16,7 +17,7 @@ import processing.core.PApplet;
 //[0] TextView
 
 public class Launcher extends PApplet {
-	Dial component;
+	Layout layout;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -30,16 +31,17 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new Dial();
+		layout = new GridLayout();
+		layout.setMargin(100);
+		layout.setShadowVisible(true);
 		
 	}
 
 	@Override
 	public void draw() {
-		background(32);
-		component.draw();
-
+		background(255);
+		layout.draw();
 		GlobalTooltip.draw();
 	}
-	
+
 }

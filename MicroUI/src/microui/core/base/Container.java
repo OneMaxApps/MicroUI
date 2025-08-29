@@ -1,6 +1,9 @@
 package microui.core.base;
 
+import static java.util.Objects.requireNonNull;
 import static processing.core.PApplet.max;
+
+import java.util.Objects;
 
 import microui.core.Texture;
 import microui.core.effect.Shadow;
@@ -9,6 +12,7 @@ import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
 import microui.event.Event;
+import processing.core.PImage;
 
 
 public abstract class Container extends Bounds implements Scrollable, KeyPressable, Focusable {
@@ -31,8 +35,6 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		resizeHandle = new ResizeHandle();
 		context = this;
 	}
-	
-	
 	
 	@Override
 	public void draw() {
@@ -71,7 +73,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 
 	@Override
 	public float getWidth() {
-		if(margin.isAutoCenterMode()) {
+		if(margin.isAutoCenterModeEnabled()) {
 			return super.getWidth()-(margin.getRight()+margin.getLeft());
 		} else {
 			return super.getWidth()-margin.getRight();
@@ -80,7 +82,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 
 	@Override
 	public float getHeight() {
-		if(margin.isAutoCenterMode()) {
+		if(margin.isAutoCenterModeEnabled()) {
 			return super.getHeight()-(margin.getDown()+margin.getUp());
 		} else {
 			return super.getHeight()-margin.getDown();
@@ -103,6 +105,94 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		return h;
 	}
 	
+	public final Color getColor() {
+		return new Color(color);
+	}
+	
+	public final void setColor(Color color) {
+		this.color.set(Objects.requireNonNull(color, "color cannot be null"));
+	}
+	
+	public final boolean isUserResizeEnabled() {
+		return resizeHandle.isEnabled();
+	}
+	
+	public final void setUserResizeEnabled(boolean enabled) {
+		resizeHandle.setEnabled(enabled);
+	}
+	
+	public final void setMargin(float left, float up, float right, float down) {
+		margin.setLeft(left);
+		margin.setUp(up);
+		margin.setRight(right);
+		margin.setDown(down);
+	}
+
+	public final void setMargin(float margin) {
+		this.margin.set(margin);
+	}
+
+	public final void setMarginLeft(float left) {
+		margin.setLeft(left);
+	}
+
+	public final void setMarginUp(float up) {
+		margin.setUp(up);
+	}
+
+	public final void setMarginRight(float right) {
+		margin.setRight(right);
+	}
+
+	public final void setMarginDown(float down) {
+		margin.setDown(down);
+	}
+
+	public final float getMarginLeft() {
+		return margin.getLeft();
+	}
+
+	public final float getMarginUp() {
+		return margin.getUp();
+	}
+
+	public final float getMarginRight() {
+		return margin.getRight();
+	}
+
+	public final float getMarginDown() {
+		return margin.getDown();
+	}
+
+	public final boolean isMarginAutoCenterModeEnabled() {
+		return margin.isAutoCenterModeEnabled();
+	}
+
+	public final void setMarginAutoCenterModeEnabled(boolean setAutoCenterModeEnabled) {
+		margin.setAutoCenterModeEnabled(setAutoCenterModeEnabled);
+	}
+	
+	public final PImage getImage() {
+		return image.get();
+	}
+	
+	public final void setImage(PImage image) {
+		this.image.set(requireNonNull(image,"image cannot be null"));
+	}
+	
+	public final boolean isShadowVisible() {
+		return shadow.isVisible();
+	}
+	
+	public final void setShadowVisible(boolean visible) {
+		shadow.setVisible(visible);
+	}
+	
+	public final void setShadowRadius(float radius) {
+		shadow.set(radius);
+	}
+	
+	
 	@Override
 	protected void onChangeBounds() {
 		if(image != null) { image.setBounds(this); }
@@ -112,10 +202,10 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	
 	public final class Margin {
 		private float left, up, right, down;
-		private boolean autoCenterMode;
+		private boolean isAutoCenterModeEnabled;
 		
 		private Margin() {
-			autoCenterMode = true;
+			isAutoCenterModeEnabled = true;
 			
 		}
 
@@ -165,34 +255,14 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			return down;
 		}
 
-		public final boolean isAutoCenterMode() {
-			return autoCenterMode;
+		public final boolean isAutoCenterModeEnabled() {
+			return isAutoCenterModeEnabled;
 		}
 
-		public final void setAutoCenterMode(boolean autoCenterMode) {
-			this.autoCenterMode = autoCenterMode;
+		public final void setAutoCenterModeEnabled(boolean setAutoCenterModeEnabled) {
+			this.isAutoCenterModeEnabled = setAutoCenterModeEnabled;
 		}
 		
-	}
-	
-	public final Color getColor() {
-		return color;
-	}
-
-	public final Margin getMargin() {
-		return margin;
-	}
-
-	public final Texture getImage() {
-		return image;
-	}
-
-	public final Shadow getShadow() {
-		return shadow;
-	}
-
-	public final ResizeHandle getResizeHandle() {
-		return resizeHandle;
 	}
 	
 	public final class ResizeHandle extends View {
@@ -221,11 +291,11 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			dots.draw();
 		}
 		
-		public final boolean isEnable() {
+		public final boolean isEnabled() {
 			return enable;
 		}
 
-		public final void setEnable(boolean enable) {
+		public final void setEnabled(boolean enable) {
 			this.enable = enable;
 		}
 		
