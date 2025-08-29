@@ -34,7 +34,7 @@ public class Launcher extends PApplet {
 		layout = new GridLayout();
 		layout.setMargin(100);
 		layout.setShadowVisible(true);
-		
+		 
 	}
 
 	@Override
