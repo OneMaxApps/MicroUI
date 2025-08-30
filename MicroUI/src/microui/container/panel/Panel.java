@@ -15,7 +15,7 @@ public class Panel extends Container {
 	public Panel(String title, float x, float y, float w, float h) {
 		super(x, y, w, h);
 		color.set(64);
-		resizeHandle.setEnabled(true);
+		setUserResizeEnabled(true);
 		resizeHandle.colorDots.set(255,0);
 		resizeHandle.getDot(0).setVisible(false);
 		resizeHandle.getDot(1).setVisible(false);

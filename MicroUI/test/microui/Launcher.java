@@ -31,15 +31,15 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		layout = new GridLayout();
-		layout.setMargin(100);
-		layout.setShadowVisible(true);
-		 
+		layout = new GridLayout(100,100,100,100);
+		//layout.setMargin(100);
+		
 	}
 
 	@Override
 	public void draw() {
-		background(255);
+		background(32);
+		layout.setUserResizeEnabled(true);
 		layout.draw();
 		GlobalTooltip.draw();
 	}
