@@ -138,19 +138,19 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	}
 
 	public final void setMarginLeft(float left) {
-		setMargin(left,0,0,0);
+		margin.setLeft(left);
 	}
 
 	public final void setMarginUp(float up) {
-		setMargin(0,up,0,0);
+		margin.setUp(up);
 	}
 
 	public final void setMarginRight(float right) {
-		setMargin(0,0,right,0);
+		margin.setRight(right);
 	}
 
 	public final void setMarginDown(float down) {
-		setMargin(0,0,0,down);
+		margin.setDown(down);
 	}
 
 	public final float getMarginLeft() {
@@ -220,6 +220,22 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			this.left = left;
 			this.up = up;
 			this.right = right;
+			this.down = down;
+		}
+		
+		public final void setLeft(float left) {
+			this.left = left;
+		}
+
+		public final void setUp(float up) {
+			this.up = up;
+		}
+
+		public final void setRight(float right) {
+			this.right = right;
+		}
+
+		public final void setDown(float down) {
 			this.down = down;
 		}
 

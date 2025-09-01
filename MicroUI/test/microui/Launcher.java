@@ -1,7 +1,6 @@
 package microui;
 
-import microui.container.layout.GridLayout;
-import microui.core.base.Layout;
+import microui.container.EdgeContainer;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
@@ -17,7 +16,7 @@ import processing.core.PApplet;
 //[0] TextView
 
 public class Launcher extends PApplet {
-	Layout layout;
+	EdgeContainer edgeContainer;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -31,16 +30,15 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		layout = new GridLayout(100,100,100,100);
-		//layout.setMargin(100);
-		
+		edgeContainer = new EdgeContainer();
+		edgeContainer.setMarginLeft(100);
+		edgeContainer.setMarginRight(100);
 	}
 
 	@Override
 	public void draw() {
 		background(32);
-		layout.setUserResizeEnabled(true);
-		layout.draw();
+		edgeContainer.draw();
 		GlobalTooltip.draw();
 	}
 
