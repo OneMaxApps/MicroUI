@@ -61,7 +61,7 @@ public final class Tooltip extends Bounds {
 		if(!isEnabled) { return; }
 		
 		color.apply();
-		cxt.rect(x,y,w,h);
+		cxt.rect(getX(), getY(), getWidth(), getHeight());
 		
 		if(container != null) {
 			container.draw();
@@ -189,7 +189,7 @@ public final class Tooltip extends Bounds {
 			colorText.apply();
 			cxt.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
 			cxt.textAlign(CENTER,CENTER);
-			cxt.text(sb.toString(), x, y, w, h);
+			cxt.text(sb.toString(), getX(), getY(), getWidth(), getHeight());
 			cxt.popStyle();
 		}
 		

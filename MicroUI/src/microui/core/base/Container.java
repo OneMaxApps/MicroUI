@@ -92,19 +92,19 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	}
 
 	public final float getRealX() {
-		return x;
+		return super.getX();
 	}
 
 	public final float getRealY() {
-		return y;
+		return super.getY();
 	}
 
 	public final float getRealWidth() {
-		return w;
+		return super.getWidth();
 	}
 
 	public final float getRealHeight() {
-		return h;
+		return super.getHeight();
 	}
 
 	public final Color getColor() {
@@ -367,7 +367,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				@Override
 				public final void update() {
 					event.listen(this);
-					cxt.rect(x, y, w, h);
+					cxt.rect(getX(), getY(), getWidth(), getHeight());
 					if (event.holding()) {
 
 						switch (mode) {
@@ -410,7 +410,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 							break;
 						}
 
-						context.setSize(max(minWidth, context.w), max(minHeight, context.h));
+						context.setSize(max(minWidth, context.getWidth()), max(minHeight, context.getHeight()));
 					}
 				}
 
@@ -420,19 +420,20 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 					calcTransforms();
 				}
 
+				//FIXME here something wrong with the real poses
 				private final void calcTransforms() {
 					switch (mode) {
 					case LEFT:
 						setPosition(getRealX(), getRealY());
 						break;
 					case RIGHT:
-						setPosition(getRealX() + getRealWidth() - w, getRealY());
+						setPosition(getRealX() + getRealWidth() - getRealWidth(), getRealY());
 						break;
 					case DOWN_LEFT:
-						setPosition(getRealX(), getRealY() + getRealHeight() - h);
+						setPosition(getRealX(), getRealY() + getRealHeight() - getRealHeight());
 						break;
 					case DOWN_RIGHT:
-						setPosition(getRealX() + getRealWidth() - w, getRealY() + getRealHeight() - h);
+						setPosition(getRealX() + getRealWidth() - getRealWidth(), getRealY() + getRealHeight() - getRealHeight());
 						break;
 					}
 				}

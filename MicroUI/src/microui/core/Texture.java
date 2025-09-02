@@ -28,7 +28,7 @@ public class Texture extends Bounds {
 		if(isLoaded()) {
 			  cxt.pushStyle();
 			  cxt.tint(tint.get());
-			  cxt.image(image,x,y,w,h);
+			  cxt.image(image,getX(), getY(), getWidth(), getHeight());
 			  cxt.popStyle();
 		  }
 	}

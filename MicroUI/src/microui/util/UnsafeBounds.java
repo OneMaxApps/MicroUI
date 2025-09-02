@@ -2,9 +2,10 @@ package microui.util;
 
 import microui.core.base.Bounds;
 
+//FIXME there can be infinity recursion
 public abstract class UnsafeBounds extends Bounds {
 	private boolean allowNegativeDimensions;
-	
+
 	public UnsafeBounds() {
 		super();
 	}
@@ -19,25 +20,35 @@ public abstract class UnsafeBounds extends Bounds {
 
 	@Override
 	public void setWidth(final float w) {
-		if(this.w == w) { return; }
-		if(!isAllowedNegativeDimensions()) {
-		if(w < 0) { this.w = 0; return; }
+		if (this.getWidth() == w) {
+			return;
 		}
-		this.w = w;
+		if (!isAllowedNegativeDimensions()) {
+			if (w < 0) {
+				setWidth(0);
+				return;
+			}
+		}
+		setWidth(w);
 		onChangeBounds();
-		
+
 	}
-	
+
 	@Override
 	public void setHeight(final float h) {
-		if(this.h == h) { return; }
-		if(!isAllowedNegativeDimensions()) {
-		if(h < 0) { this.h = 0; return; }
+		if (this.getHeight() == h) {
+			return;
 		}
-		this.h = h;
+		if (!isAllowedNegativeDimensions()) {
+			if (h < 0) {
+				setHeight(0);
+				return;
+			}
+		}
+		setHeight(h);
 		onChangeBounds();
 	}
-	
+
 	public final boolean isAllowedNegativeDimensions() {
 		return allowNegativeDimensions;
 	}

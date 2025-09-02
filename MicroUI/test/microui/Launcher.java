@@ -1,6 +1,6 @@
 package microui;
 
-import microui.container.EdgeContainer;
+import microui.component.Button;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
@@ -16,8 +16,7 @@ import processing.core.PApplet;
 //[0] TextView
 
 public class Launcher extends PApplet {
-	EdgeContainer edgeContainer;
-	
+	private Button button;
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
@@ -30,15 +29,15 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		edgeContainer = new EdgeContainer();
-		edgeContainer.setMarginLeft(100);
-		edgeContainer.setMarginRight(100);
+		button = new Button();
 	}
 
 	@Override
 	public void draw() {
 		background(32);
-		edgeContainer.draw();
+		
+		button.draw();
+		
 		GlobalTooltip.draw();
 	}
 

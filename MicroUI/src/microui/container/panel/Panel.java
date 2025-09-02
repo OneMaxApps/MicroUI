@@ -143,7 +143,7 @@ public class Panel extends Container {
 			
 			cxt.pushStyle();
 			cxt.fill(0,24);
-			cxt.rect(x, y, w, h);
+			cxt.rect(getX(), getY(), getWidth(), getHeight());
 			cxt.popStyle();
 			
 			buttonClose.draw();

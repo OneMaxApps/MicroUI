@@ -39,7 +39,7 @@ public abstract class AbstractButton extends Component {
 		cxt.pushStyle();
 		stroke.apply();
 		color.apply();
-		cxt.rect(x, y, w, h);
+		cxt.rect(getX(), getY(), getWidth(), getHeight());
 		hover.draw();
 		ripples.draw();
 		cxt.popStyle();

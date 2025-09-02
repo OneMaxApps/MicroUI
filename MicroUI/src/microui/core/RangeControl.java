@@ -47,7 +47,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		
 		cxt.pushStyle();
 		color.apply();
-		cxt.rect(x, y, w, h);
+		cxt.rect(getX(), getY(), getWidth(), getHeight());
 		cxt.popStyle();
 		
 		if(scrolling.isScrolling()) {

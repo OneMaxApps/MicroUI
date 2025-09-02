@@ -49,7 +49,7 @@ public class RowLayout extends Layout {
 	}
 	
 	public RowLayout add(String text, float weight) {
-		add(new TextView(text,x,y,w,weight),weight);
+		add(new TextView(text,getX(),getY(),getWidth(),weight),weight);
 		
 		return this;
 	}

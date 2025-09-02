@@ -4,16 +4,17 @@ import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 
 // Status: STABLE - Do not modify
-// Last Reviewed: 27.08.2025
+// Last Reviewed: 03.09.2025
 public abstract class Bounds extends View {
 	private float x, y, width, height;
 
-	public Bounds(float x, float y, float w, float h) {
-		setBounds(x, y, w, h);
+	public Bounds(float x, float y, float width, float height) {
+		setBounds(x, y, width, height);
 	}
 
 	public Bounds(Bounds bounds) {
-		this(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY(), bounds.getWidth(),bounds.getHeight());
+		this(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY(), bounds.getWidth(),
+				bounds.getHeight());
 	}
 
 	public Bounds() {
@@ -48,11 +49,11 @@ public abstract class Bounds extends View {
 		return width;
 	}
 
-	public void setWidth(final float w) {
-		if (this.width == w) {
+	public void setWidth(final float width) {
+		if (this.width == width) {
 			return;
 		}
-		this.width = max(0, w);
+		this.width = max(0, width);
 		onChangeBounds();
 	}
 
@@ -60,30 +61,26 @@ public abstract class Bounds extends View {
 		return height;
 	}
 
-	public void setHeight(final float h) {
-		if (this.height == h) {
+	public void setHeight(final float height) {
+		if (this.height == height) {
 			return;
 		}
-		this.height = max(0, h);
+		this.height = max(0, height);
 		onChangeBounds();
 	}
 
-	public void setSize(float w, float h) {
-		if (this.width == w && this.height == h) {
+	public void setSize(final float width, final float height) {
+		if (this.width == width && this.height == height) {
 			return;
 		}
 
-		this.width = max(0, w);
-		this.height = max(0, h);
+		this.width = max(0, width);
+		this.height = max(0, height);
 
 		onChangeBounds();
 	}
 
-	public void setSize(float size) {
-		if (width == size && height == size) {
-			return;
-		}
-
+	public void setSize(final float size) {
 		setSize(size, size);
 	}
 
@@ -91,14 +88,14 @@ public abstract class Bounds extends View {
 		setSize(requireNonNull(bounds, "bounds cannot be null").getWidth(), bounds.getHeight());
 	}
 
-	public void setBounds(float x, float y, float w, float h) {
-		boolean hasChanges = this.x != x || this.y != y || this.width != w || this.height != h;
+	public void setBounds(final float x, final float y, final float width, final float height) {
+		final boolean hasChanges = this.x != x || this.y != y || this.width != width || this.height != height;
 
 		if (hasChanges) {
 			this.x = x;
 			this.y = y;
-			this.width = max(0, w);
-			this.height = max(0, h);
+			this.width = max(0, width);
+			this.height = max(0, height);
 			onChangeBounds();
 		}
 
@@ -109,7 +106,7 @@ public abstract class Bounds extends View {
 				bounds.getHeight());
 	}
 
-	public void setPosition(float x, float y) {
+	public void setPosition(final float x, final float y) {
 		if (this.x == x && this.y == y) {
 			return;
 		}
@@ -121,7 +118,7 @@ public abstract class Bounds extends View {
 
 	}
 
-	public void setPosition(Bounds bounds) {
+	public void setPosition(final Bounds bounds) {
 		setPosition(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY());
 	}
 

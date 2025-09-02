@@ -6,7 +6,7 @@ import microui.util.Metrics;
 import processing.core.PApplet;
 
 // Status: STABLE - Do not modify
-// Last Reviewed: 27.08.2025
+// Last Reviewed: 03.09.2025
 public abstract class View implements Visible {
 	protected static final PApplet cxt = MicroUI.getContext();
 	private boolean isVisible;
@@ -22,7 +22,7 @@ public abstract class View implements Visible {
 	}
 
 	@Override
-	public final void setVisible(boolean isVisible) {
+	public final void setVisible(final boolean isVisible) {
 		this.isVisible = isVisible;
 	}
 
