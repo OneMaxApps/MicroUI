@@ -21,12 +21,12 @@ public class Scroll extends RangeControl {
 			
 			switch(orientation) {
 				case HORIZONTAL :
-					thumb.setX(constrain(app.mouseX+distToThumb,getX(),getX()+getWidth()-thumb.getWidth()));
+					thumb.setX(constrain(cxt.mouseX+distToThumb,getX(),getX()+getWidth()-thumb.getWidth()));
 					value.setWithoutActions(map(thumb.getX(),getX(),getX()+getWidth()-thumb.getWidth(),value.getMin(),value.getMax()));
 				break;
 				
 				case VERTICAL :
-					thumb.setY(constrain(app.mouseY+distToThumb,getY(),getY()+getHeight()-thumb.getHeight()));
+					thumb.setY(constrain(cxt.mouseY+distToThumb,getY(),getY()+getHeight()-thumb.getHeight()));
 					value.setWithoutActions(map(thumb.getY(),getY()+getHeight()-thumb.getHeight(),getY(),value.getMin(),value.getMax()));
 				break;
 			}
@@ -42,7 +42,7 @@ public class Scroll extends RangeControl {
 	}
 	
 	public Scroll() {
-		this(app.width*.25f,app.height*.45f,app.width*.5f,app.height*.1f);
+		this(cxt.width*.25f,cxt.height*.45f,cxt.width*.5f,cxt.height*.1f);
 
 	}
 
@@ -58,11 +58,11 @@ public class Scroll extends RangeControl {
 		
 		switch(orientation) {
 			case HORIZONTAL :
-				 distToThumb = thumb.getX()-app.mouseX;
+				 distToThumb = thumb.getX()-cxt.mouseX;
 			break;
 			
 			case VERTICAL :
-				distToThumb = thumb.getY()-app.mouseY;
+				distToThumb = thumb.getY()-cxt.mouseY;
 			break;
 		}
 		

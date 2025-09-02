@@ -38,32 +38,32 @@ public abstract class RangeControl extends Component implements Scrollable {
 	}
 	
 	public RangeControl() {
-		this(app.width*.25f,app.height*.45f,app.width*.5f,app.height*.1f);
+		this(cxt.width*.25f,cxt.height*.45f,cxt.width*.5f,cxt.height*.1f);
 	}
 
 	@Override
 	protected void update() {
 		event.listen(this);
 		
-		app.pushStyle();
+		cxt.pushStyle();
 		color.apply();
-		app.rect(x, y, w, h);
-		app.popStyle();
+		cxt.rect(x, y, w, h);
+		cxt.popStyle();
 		
 		if(scrolling.isScrolling()) {
 			value.append(scrolling.get());
 			onChangeValue();
 			valueChangeEnd = true;
-			if(!app.mousePressed && !valueChangeStart) {
+			if(!cxt.mousePressed && !valueChangeStart) {
 				onStartChangeValue();
 			}
 		} else {
-			if(!app.mousePressed) {
+			if(!cxt.mousePressed) {
 				valueChangeStart = false;
 			}
 		}
 		
-		if(!app.mousePressed && valueChangeEnd && !scrolling.isScrolling()) {
+		if(!cxt.mousePressed && valueChangeEnd && !scrolling.isScrolling()) {
 			onEndChangeValue();
 			valueChangeEnd = false;
 		}

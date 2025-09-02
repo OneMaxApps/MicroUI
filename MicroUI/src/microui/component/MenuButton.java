@@ -41,16 +41,16 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	public MenuButton(String title) {
-		this(title,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
+		this(title,cxt.width*.3f,cxt.height*.45f,cxt.width*.4f,cxt.height*.1f);
 	}
 	
 	public MenuButton(String title, String... items) {
-		this(title,app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
+		this(title,cxt.width*.3f,cxt.height*.45f,cxt.width*.4f,cxt.height*.1f);
 		add(items);
 	}
 	
 	public MenuButton() {
-		this("Menu Button",app.width*.3f,app.height*.45f,app.width*.4f,app.height*.1f);
+		this("Menu Button",cxt.width*.3f,cxt.height*.45f,cxt.width*.4f,cxt.height*.1f);
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	public final void add(final MenuButton... subMenu) {
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < app.width;
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < cxt.width;
 		for(int i = 0; i < subMenu.length; i++) {
 			itemList.add(subMenu[i]);
 			subMenu[i].setRoot(root);
@@ -160,17 +160,17 @@ public class MenuButton extends Button implements Scrollable {
 		super.onChangeBounds();
 		if(itemList == null) { return; }
 		
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < app.width;
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < cxt.width;
 		
 		listHeight = 0;
 		for(int i = 0; i < itemList.size(); i++) {
 			final Button ITEM = itemList.get(i);
-			ITEM.setSize(w, getHeight());
+			ITEM.setSize(getWidth(), getHeight());
 			
 			if(isRoot) {
-				ITEM.setPosition(x,y+getHeight()*(i+1));
+				ITEM.setPosition(getX(),getY()+getHeight()*(i+1));
 			} else {
-				ITEM.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),y+getHeight()*(1+i)-getHeight());
+				ITEM.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),getY()+getHeight()*(1+i)-getHeight());
 			}
 			
 			listHeight += ITEM.getHeight();
@@ -186,13 +186,13 @@ public class MenuButton extends Button implements Scrollable {
 		
 		itemList.remove(index);
 		listHeight -= getHeight();
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < app.width;
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < cxt.width;
 		for(int i = 0; i < itemList.size(); i++) {
 			final Button item = itemList.get(i);
 			if(isRoot) {
 				item.setPosition(getX(),getY()+getHeight()*(i+1));
 			} else {
-				item.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),y+getHeight()*(1+i)-getHeight());
+				item.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),getY()+getHeight()*(1+i)-getHeight());
 			}
 		}
 	}
@@ -281,7 +281,7 @@ public class MenuButton extends Button implements Scrollable {
 		
 		inside = checkInsideToAnyIn();
 		
-		if(app.mousePressed && !event.inside() && !inside) {
+		if(cxt.mousePressed && !event.inside() && !inside) {
 			close();
 		}
 		
@@ -351,7 +351,7 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	private final void childListState(final String... title) {
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < app.width; 
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < cxt.width; 
 		for(int i = 0; i < title.length; i++) {
 			itemList.add(new Button(title[i],CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),getY()+listHeight,getWidth(),getHeight()));
 			listHeight += getHeight();
@@ -366,11 +366,11 @@ public class MenuButton extends Button implements Scrollable {
 	
 	private final void markOnDraw() {
 			if(!isMarkVisible) { return; }
-			app.pushStyle();
-			app.noStroke();
-			if(isOpen) { app.fill(0,255,0,128); } else { app.fill(255,128); }
-			app.rect(markX,markY,markW,markH);
-			app.popStyle();
+			cxt.pushStyle();
+			cxt.noStroke();
+			if(isOpen) { cxt.fill(0,255,0,128); } else { cxt.fill(255,128); }
+			cxt.rect(markX,markY,markW,markH);
+			cxt.popStyle();
 			
 	}
 	
@@ -422,9 +422,9 @@ public class MenuButton extends Button implements Scrollable {
 			if(itemList.isEmpty()) { return; }
 			
 			if(isRoot) {
-				event.listen(itemList.get(0).getX(),y+h,itemList.get(0).getWidth(),listHeight);
+				event.listen(itemList.get(0).getX(),getY()+getHeight(),itemList.get(0).getWidth(),listHeight);
 			} else {
-				event.listen(itemList.get(0).getX(),y,itemList.get(0).getWidth(),listHeight);
+				event.listen(itemList.get(0).getX(),getY(),itemList.get(0).getWidth(),listHeight);
 			}
 		}
 		

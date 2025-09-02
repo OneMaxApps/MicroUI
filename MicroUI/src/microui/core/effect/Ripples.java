@@ -24,7 +24,7 @@ public final class Ripples extends View {
 		
 		circle = new Circle();
 		
-		visible = true;
+		setVisible(true);
 		this.bounds = requireNonNull(bounds, "bounds cannot be null");
 		createGraphics();
 		isEnabled = true;
@@ -41,7 +41,7 @@ public final class Ripples extends View {
 		pg.clear();
 		circle.draw(pg);
 		pg.endDraw();
-		app.image(pg, bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
+		cxt.image(pg, bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
 		}
 		
 	}
@@ -78,7 +78,7 @@ public final class Ripples extends View {
 	}
 
 	private final void checkResizing() {
-		if(!visible || app.mousePressed) { return; }
+		if(!isVisible() || cxt.mousePressed) { return; }
 		
 		if(isResized()) { createGraphics(); }
 		
@@ -89,7 +89,7 @@ public final class Ripples extends View {
 	}
 	
 	private final void createGraphics() {
-		pg = app.createGraphics((int) max(1,bounds.getWidth()),(int) max(1,bounds.getHeight()),app.sketchRenderer());
+		pg = cxt.createGraphics((int) max(1,bounds.getWidth()),(int) max(1,bounds.getHeight()),cxt.sketchRenderer());
 		Metrics.register(pg);
 	}
 
@@ -126,8 +126,8 @@ public final class Ripples extends View {
 		}
 		
 		private final void resetPosition() {
-			x = app.mouseX-bounds.getX();
-			y = app.mouseY-bounds.getY();
+			x = cxt.mouseX-bounds.getX();
+			y = cxt.mouseY-bounds.getY();
 		}
 	}
 }

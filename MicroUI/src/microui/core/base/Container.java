@@ -49,17 +49,17 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		if (image.isLoaded()) {
 			image.draw();
 		} else {
-			app.pushStyle();
-			app.stroke(0);
-			app.strokeWeight(1);
-			app.fill(color.get());
-			app.rect(getX(), getY(), getWidth(), getHeight());
-			app.popStyle();
+			cxt.pushStyle();
+			cxt.stroke(0);
+			cxt.strokeWeight(1);
+			cxt.fill(color.get());
+			cxt.rect(getX(), getY(), getWidth(), getHeight());
+			cxt.popStyle();
 		}
 
-		app.pushStyle();
+		cxt.pushStyle();
 		shadow.draw();
-		app.popStyle();
+		cxt.popStyle();
 
 	}
 
@@ -338,12 +338,12 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			}
 
 			private void draw() {
-				app.pushStyle();
-				app.noStroke();
+				cxt.pushStyle();
+				cxt.noStroke();
 				for (Dot dot : dots) {
 					dot.draw();
 				}
-				app.popStyle();
+				cxt.popStyle();
 			}
 
 			private void inTransforms() {
@@ -367,7 +367,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				@Override
 				public final void update() {
 					event.listen(this);
-					app.rect(x, y, w, h);
+					cxt.rect(x, y, w, h);
 					if (event.holding()) {
 
 						switch (mode) {
@@ -375,7 +375,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 							tmpX = getRealX();
 							tmpY = getRealY();
 
-							context.setPosition(app.mouseX, app.mouseY);
+							context.setPosition(cxt.mouseX, cxt.mouseY);
 
 							difX = tmpX - getRealX();
 							difY = tmpY - getRealY();
@@ -386,8 +386,8 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 						case RIGHT:
 							tmpY = getRealY();
 
-							context.setWidth(app.mouseX - getRealX());
-							context.setY(app.mouseY);
+							context.setWidth(cxt.mouseX - getRealX());
+							context.setY(cxt.mouseY);
 
 							difY = tmpY - getRealY();
 
@@ -397,8 +397,8 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 						case DOWN_LEFT:
 							tmpX = getRealX();
 
-							context.setX(app.mouseX);
-							context.setHeight(app.mouseY - getRealY());
+							context.setX(cxt.mouseX);
+							context.setHeight(cxt.mouseY - getRealY());
 
 							difX = tmpX - getRealX();
 
@@ -406,7 +406,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 							break;
 
 						case DOWN_RIGHT:
-							context.setSize(app.mouseX - getRealX(), app.mouseY - getRealY());
+							context.setSize(cxt.mouseX - getRealX(), cxt.mouseY - getRealY());
 							break;
 						}
 

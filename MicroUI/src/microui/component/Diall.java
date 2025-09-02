@@ -49,36 +49,36 @@ public final class Diall extends Component implements Scrollable {
 	}
 
 	public Diall() {
-		this(app.width*.4f,app.height*.4f,app.width*.2f,app.height*.2f);
+		this(cxt.width*.4f,cxt.height*.4f,cxt.width*.2f,cxt.height*.2f);
 	}
 
 	@Override
 	protected void update() {
 		event.listen(this);
 		
-		app.pushStyle();
+		cxt.pushStyle();
 		
 		stroke.apply();
 		color.apply();
-		app.ellipseMode(CORNER);
-		app.circle(x, y, min(w,h));
+		cxt.ellipseMode(CORNER);
+		cxt.circle(getX(), getY(), min(getWidth(),getHeight()));
 		
-		app.push();
-		app.translate(centerX,centerY);
-		app.rotate(map(value.get(),value.getMin(),value.getMax(),RADIUS_START,RADIUS_END));
+		cxt.push();
+		cxt.translate(centerX,centerY);
+		cxt.rotate(map(value.get(),value.getMin(),value.getMax(),RADIUS_START,RADIUS_END));
 		image.draw();
 		arrow.draw();
-		app.pop();
+		cxt.pop();
 		
 		if(event.inside() || event.holding()) {
 			
-			if(event.holding()) { value.append((app.pmouseY-app.mouseY)/2); }
+			if(event.holding()) { value.append((cxt.pmouseY-cxt.mouseY)/2); }
 			
 			valueOnDraw();
 			
 		}
 		
-		app.popStyle();
+		cxt.popStyle();
 		
 	}
 
@@ -99,12 +99,12 @@ public final class Diall extends Component implements Scrollable {
 		super.onChangeBounds();
 		
 		if(hint != null) {
-			hint.setPosition(x,y);
-			hint.setSize(min(w,h));
+			hint.setPosition(getX(),getY());
+			hint.setSize(min(getWidth(),getHeight()));
 		}
 		
 		if(image != null) {
-			image.setSize(min(w,h));
+			image.setSize(min(getWidth(),getHeight()));
 		}
 		
 		if(arrow != null) {
@@ -129,15 +129,15 @@ public final class Diall extends Component implements Scrollable {
 		private Image() {
 			super();
 			setVisible(true);
-			setSize(min(Diall.this.w,Diall.this.h));
+			setSize(min(Diall.this.getWidth(),Diall.this.getHeight()));
 		}
 
 		@Override
 		public void update() {
-			app.pushStyle();
+			cxt.pushStyle();
 			tint.apply();
-			app.image(image,-w/2,-h/2,w,h);
-			app.popStyle();
+			cxt.image(image,-getWidth()/2,-getHeight()/2,getWidth(),getHeight());
+			cxt.popStyle();
 		}
 		
 	}
@@ -159,22 +159,22 @@ public final class Diall extends Component implements Scrollable {
 
 		@Override
 		protected void update() {
-			app.push();
-			app.translate(x,y);
+			cxt.push();
+			cxt.translate(getX(),getY());
 			if(image != null) {
-				app.image(image, 0,0,w,h);
+				cxt.image(image, 0,0,getWidth(),getHeight());
 			} else {
 				color.apply();
-				app.rect(0, 0, w, h);
+				cxt.rect(0, 0, getWidth(), getHeight());
 			}
-			app.pop();
+			cxt.pop();
 		}
 		
 		@Override
 		protected void onChangeBounds() {
-			w = min(Diall.this.getWidth()*.16f,Diall.this.getHeight()*.16f);
-			h = min(Diall.this.getWidth()*.08f,Diall.this.getHeight()*.08f);
-			x = min(Diall.this.getWidth(),Diall.this.getHeight())/2-w;
+			setWidth(min(Diall.this.getWidth()*.16f,Diall.this.getHeight()*.16f));
+			setHeight(min(Diall.this.getWidth()*.08f,Diall.this.getHeight()*.08f));
+			setX(min(Diall.this.getWidth(),Diall.this.getHeight())/2-getWidth());
 		}
 		
 	}
@@ -206,7 +206,7 @@ public final class Diall extends Component implements Scrollable {
 	}
 	
 	private final void calculateCenter() {
-		centerX = x+min(w/2,h/2);
-		centerY = y+min(w/2,h/2);
+		centerX = getX()+min(getWidth()/2,getHeight()/2);
+		centerY = getY()+min(getWidth()/2,getHeight()/2);
 	}
 }

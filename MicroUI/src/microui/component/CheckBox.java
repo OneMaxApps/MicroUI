@@ -33,7 +33,7 @@ public class CheckBox extends AbstractButton {
 	}
 
 	public CheckBox(boolean isSelected) {
-		this(app.width*.3f,app.height*.4f,app.width*.4f,app.height*.2f);
+		this(cxt.width*.3f,cxt.height*.4f,cxt.width*.4f,cxt.height*.2f);
 		
 		setSelected(isSelected);
 	}
@@ -126,8 +126,8 @@ public class CheckBox extends AbstractButton {
 		protected void onChangeBounds() {
 			if(box == null || text == null) { return; }
 			
-			box.setPosition(x,y);
-			box.setSize(min(DEFAULT_BOX_SIZE,w),min(DEFAULT_BOX_SIZE,h));
+			box.setPosition(getX(),getY());
+			box.setSize(min(DEFAULT_BOX_SIZE,getWidth()),min(DEFAULT_BOX_SIZE,getHeight()));
 			text.setSize(getWidth()-(box.getWidth()+textPadding),box.getHeight());
 			text.setPosition(box.getX()+box.getWidth()+textPadding,box.getY()+box.getHeight()/2-text.getHeight()/2);
 			text.setTextSize(box.getHeight());
@@ -157,13 +157,13 @@ public class CheckBox extends AbstractButton {
 		protected void update() {
 			event.listen(this);
 			
-			app.pushStyle();
+			cxt.pushStyle();
 			stroke.apply();
 			color.apply();
-			app.rect(x, y, w, h);
+			cxt.rect(getX(), getY(), getWidth(), getHeight());
 			hover.draw();
 			ripples.draw();
-			app.popStyle();
+			cxt.popStyle();
 			
 			if(isSelected) {
 				markOnDraw();
@@ -171,16 +171,16 @@ public class CheckBox extends AbstractButton {
 		}
 
 		private void markOnDraw() {
-			app.pushStyle();
-			app.noStroke();
+			cxt.pushStyle();
+			cxt.noStroke();
 			markColor.apply();
-			app.rect(x,y,w,h);
-			app.stroke(0,128);
-			app.strokeWeight(max(1,DEFAULT_BOX_SIZE/5));
-			app.strokeCap(PROJECT);
-			app.line(x+w*.3f, y+h*.6f, x+w/2, y+h*.8f);
-			app.line(x+w*.8f, y+h*.2f, x+w/2, y+h*.8f);
-			app.popStyle();
+			cxt.rect(getX(),getY(),getWidth(),getHeight());
+			cxt.stroke(0,128);
+			cxt.strokeWeight(max(1,DEFAULT_BOX_SIZE/5));
+			cxt.strokeCap(PROJECT);
+			cxt.line(getX()+getWidth()*.3f, getY()+getHeight()*.6f, getX()+getWidth()/2, getY()+getHeight()*.8f);
+			cxt.line(getX()+getWidth()*.8f, getY()+getHeight()*.2f, getX()+getWidth()/2, getY()+getHeight()*.8f);
+			cxt.popStyle();
 		}
 	}
 }

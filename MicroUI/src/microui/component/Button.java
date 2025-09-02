@@ -22,7 +22,7 @@ public class Button extends AbstractButton {
 	}
 
 	public Button(String text) {
-		this(text, app.width * .3f, app.height * .45f, app.width * .4f, app.height * .1f);
+		this(text, cxt.width * .3f, cxt.height * .45f, cxt.width * .4f, cxt.height * .1f);
 	}
 
 	public Button() {

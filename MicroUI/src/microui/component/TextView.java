@@ -29,7 +29,7 @@ public class TextView extends Component {
 	    autoResizeMode = AutoResizeMode.SMALL;
 	    center = true;
 	    shadow = new Shadow();
-	    visible = true;
+	    setVisible(true);
 	    color.set(255);
 	    
 	    //callback.setEnabled(false);
@@ -40,11 +40,11 @@ public class TextView extends Component {
 	  }
 	  
 	  public TextView(String text) {
-			this(text,app.width*.2f,app.height*.4f,app.width*.6f,app.height*.2f);
+			this(text,cxt.width*.2f,cxt.height*.4f,cxt.width*.6f,cxt.height*.2f);
 	  }
 	  
 	  public TextView() {
-			this("",app.width*.2f,app.height*.4f,app.width*.6f,app.height*.2f);
+			this("",cxt.width*.2f,cxt.height*.4f,cxt.width*.6f,cxt.height*.2f);
 	  }
 	  
 	  @Override
@@ -52,19 +52,19 @@ public class TextView extends Component {
 		  if(text.isEmpty()) { return; }
 		  
 		  shadow.draw();
-		  app.pushStyle();
+		  cxt.pushStyle();
 		  color.apply();
-		  if(font != null) { app.textFont(font,textSize); }
+		  if(font != null) { cxt.textFont(font,textSize); }
 		  
 		  if(isAutoResizeEnabled()) {
-			  app.textSize(max(1,min(w,h)/autoResizeMode.getScale()));
+			  cxt.textSize(max(1,min(getWidth(),getHeight())/autoResizeMode.getScale()));
 		  } else {
-			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
+			  cxt.textSize((textSize <= 0) ? ( (getHeight()/3 > 0) ? getHeight()/3 : 1 ) : textSize);
 		  }
 		  
-		  app.textAlign(center ? CENTER : CORNER,CENTER);
-		  app.text(text.toString(), x, y, w ,h);
-		  app.popStyle();
+		  cxt.textAlign(center ? CENTER : CORNER,CENTER);
+		  cxt.text(text.toString(), getX(), getY(), getWidth() ,getHeight());
+		  cxt.popStyle();
 		  
 		  
 	  }
@@ -77,9 +77,9 @@ public class TextView extends Component {
 		  }
 		  
 		  if(isAutoResizeEnabled()) {
-			  app.textSize(max(1,min(w,h)/autoResizeMode.getScale()));
+			  cxt.textSize(max(1,min(getWidth(),getHeight())/autoResizeMode.getScale()));
 		  } else {
-			  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize);
+			  cxt.textSize((textSize <= 0) ? ( (getHeight()/3 > 0) ? getHeight()/3 : 1 ) : textSize);
 		  }
 		  
 		  if(center) {
@@ -87,7 +87,7 @@ public class TextView extends Component {
 		  } else {
 			  pg.textAlign(CORNER,CENTER);
 		  }
-		  pg.text(text.toString() != null ? text.toString() : "",x,y+h/2);
+		  pg.text(text.toString() != null ? text.toString() : "",getX(),getY()+getHeight()/2);
 		  pg.popStyle();
 	  }
 	  
@@ -118,11 +118,11 @@ public class TextView extends Component {
 	  }
 	
 	  public final void loadFont(String path) {
-		font = app.loadFont(path);
+		font = cxt.loadFont(path);
 	  }
 		
 	  public final void createFont(String path, int textSize) {
-		font = app.createFont(path,textSize);
+		font = cxt.createFont(path,textSize);
 	  }
 	
 	  public final void createFont(String path) {
@@ -178,14 +178,14 @@ public class TextView extends Component {
 	  
 	  public void setTextSize(float textSize) {
 		  if(textSize < 1) { return; }
-		  app.textSize(textSize);
-		  float textHeight = app.textAscent()+app.textDescent();
+		  cxt.textSize(textSize);
+		  float textHeight = cxt.textAscent()+cxt.textDescent();
 		  if(textHeight > getHeight()) { return; }
 		  if(textSize >= 1) { this.textSize = (int) textSize; }
 	  }
 	  
 	  public final float getTextHeight() {
-		  return app.textAscent()+app.textDescent(); 
+		  return cxt.textAscent()+cxt.textDescent(); 
 	  }
 	  
 	  public int getTextSize() { return textSize; }
@@ -249,31 +249,31 @@ public class TextView extends Component {
 		  
 		  private Shadow() {
 			  color = new Color(0);
-			  extraSize = h*.01f;
+			  extraSize = getHeight()*.01f;
 			  setVisible(false);
 		  }
 		  
 		  @Override
 		  public final void update() {
-			  app.pushStyle();
-			  app.fill(color.get());
+			  cxt.pushStyle();
+			  cxt.fill(color.get());
 			  if(font != null) {
-				  app.textFont(font,textSize);
+				  cxt.textFont(font,textSize);
 			  }
 			  
 			  if(isAutoResizeEnabled()) {
-				  app.textSize(max(1,min(w,h)/autoResizeMode.getScale())+extraSize);
+				  cxt.textSize(max(1,min(getWidth(),getHeight())/autoResizeMode.getScale())+extraSize);
 			  } else {
-				  app.textSize((textSize <= 0) ? ( (h/3 > 0) ? h/3 : 1 ) : textSize+extraSize);
+				  cxt.textSize((textSize <= 0) ? ( (getHeight()/3 > 0) ? getHeight()/3 : 1 ) : textSize+extraSize);
 			  }
 			  
 			  if(center) {
-			  app.textAlign(CENTER,CENTER);
+			  cxt.textAlign(CENTER,CENTER);
 			  } else {
-				  app.textAlign(CORNER,CENTER);
+				  cxt.textAlign(CORNER,CENTER);
 			  }
-			  app.text(text.toString() != null ? text.toString() : "",x+shiftX*w*.05f,y+shiftY*h*.05f,abs(w <= 0 ? 1 : w),abs(h <= 0 ? 1 : h));
-			  app.popStyle();
+			  cxt.text(text.toString() != null ? text.toString() : "",getX()+shiftX*getWidth()*.05f,getY()+shiftY*getHeight()*.05f,abs(getWidth() <= 0 ? 1 : getWidth()),abs(getHeight() <= 0 ? 1 : getHeight()));
+			  cxt.popStyle();
 		}
 
 		public final float getShiftX() {

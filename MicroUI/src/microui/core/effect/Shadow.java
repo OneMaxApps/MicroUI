@@ -26,29 +26,28 @@ public final class Shadow extends View {
 	    rightSize = 10;
 	    downSize = 20;
 	    absoluteSize = 10;
-	    visible = true;
-	    
+	    setVisible(true);
 	  }
 	  
 	  @Override
 	  public void update() {
 	    if(bounds.isVisible()) {
-	      app.pushStyle();
+	      cxt.pushStyle();
 	      
 	      for(int i = 0; i < absoluteSize; i++) {
-	    	  app.strokeWeight(2);
-	    	  app.strokeCap(SQUARE);
-	    	  app.stroke(color.get(),constrain(164-i*20,0,255));
-	    	  app.noFill();
-	    	  app.rectMode(CORNERS);
+	    	  cxt.strokeWeight(2);
+	    	  cxt.strokeCap(SQUARE);
+	    	  cxt.stroke(color.get(),constrain(164-i*20,0,255));
+	    	  cxt.noFill();
+	    	  cxt.rectMode(CORNERS);
 	    	  if(bounds instanceof Layout) {
-    			  app.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
+    			  cxt.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
 	    		  bounds.getY()-map(i,0f,absoluteSize,0f,upSize),
 	    		  bounds.getX()+bounds.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
 	    		  bounds.getY()+bounds.getHeight()+map(i,0f,absoluteSize,0f,downSize));
     		  } else {
 		    	  if(bounds instanceof Bounds) {
-		    		 app.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
+		    		 cxt.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
 		             bounds.getY()-map(i,0f,absoluteSize,0f,upSize),
 		             bounds.getX()+bounds.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
 		             bounds.getY()+bounds.getHeight()+map(i,0f,absoluteSize,0f,downSize),leftSize,upSize,rightSize,downSize);
@@ -56,7 +55,7 @@ public final class Shadow extends View {
 	    		  
 	    	  }
 	      }
-	      app.popStyle();
+	      cxt.popStyle();
 	    }
 	  }
 	  

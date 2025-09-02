@@ -61,7 +61,7 @@ public final class Tooltip extends Bounds {
 		if(!isEnabled) { return; }
 		
 		color.apply();
-		app.rect(x,y,w,h);
+		cxt.rect(x,y,w,h);
 		
 		if(container != null) {
 			container.draw();
@@ -115,7 +115,7 @@ public final class Tooltip extends Bounds {
 		} else { setVisible(false); }
 		
 		if(isVisible()) {
-			setPosition(constrain(app.mouseX+PADDING_X,0,app.width-getWidth()),constrain(app.mouseY,0,app.height-getHeight()));
+			setPosition(constrain(cxt.mouseX+PADDING_X,0,cxt.width-getWidth()),constrain(cxt.mouseY,0,cxt.height-getHeight()));
 			
 			if(container != null) {
 				container.setPosition(this);
@@ -185,12 +185,12 @@ public final class Tooltip extends Bounds {
 		}
 		
 		private final void draw() {
-			app.pushStyle();
+			cxt.pushStyle();
 			colorText.apply();
-			app.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
-			app.textAlign(CENTER,CENTER);
-			app.text(sb.toString(), x, y, w, h);
-			app.popStyle();
+			cxt.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
+			cxt.textAlign(CENTER,CENTER);
+			cxt.text(sb.toString(), x, y, w, h);
+			cxt.popStyle();
 		}
 		
 		private final int getWidth() {
@@ -210,14 +210,14 @@ public final class Tooltip extends Bounds {
 			
 			float maxWidth = 0;
 		
-			app.pushStyle();
+			cxt.pushStyle();
 			
-			app.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
+			cxt.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
 			for(String line : LINES) {
-				if(app.textWidth(line) > maxWidth) { maxWidth = app.textWidth(line); }
+				if(cxt.textWidth(line) > maxWidth) { maxWidth = cxt.textWidth(line); }
 			}
 			
-			app.popStyle();
+			cxt.popStyle();
 			final float SCALE_WIDTH = 1.1f;
 			width = (int) (maxWidth*SCALE_WIDTH);
 			
@@ -226,13 +226,13 @@ public final class Tooltip extends Bounds {
 		private final void calculateHeight() {
 			final int LINES = sb.toString().split("\n").length;
 			
-			app.pushStyle();
-			app.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
+			cxt.pushStyle();
+			cxt.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
 			
 			final float SCALE_HEIGHT = 1.2f;
-			height = (int) ((app.textAscent()+app.textDescent())*SCALE_HEIGHT)*LINES;
+			height = (int) ((cxt.textAscent()+cxt.textDescent())*SCALE_HEIGHT)*LINES;
 			
-			app.popStyle();
+			cxt.popStyle();
 		}
 
 		

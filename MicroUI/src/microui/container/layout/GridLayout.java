@@ -24,11 +24,11 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  public GridLayout(int cells) {
-		  this(0,0,app.width,app.height,cells,cells);
+		  this(0,0,cxt.width,cxt.height,cells,cells);
 	  }
 	  
 	  public GridLayout(int columns, int rows) {
-		  this(0,0,app.width,app.height,columns,rows);
+		  this(0,0,cxt.width,cxt.height,columns,rows);
 	  }
 	  
 	  public GridLayout(float x, float y, float w, float h) { this(x,y,w,h,3,3); }
@@ -66,17 +66,17 @@ public class GridLayout extends Layout {
 	  }
 	  
 	  private void gridDraw() {
-		  app.pushStyle();
-			  app.noFill();
-			  app.stroke(0);
+		  cxt.pushStyle();
+			  cxt.noFill();
+			  cxt.stroke(0);
 		      for(float x = getX(); x < getX()+getWidth(); x += getWidth()/getColumns()) {
 		        for(float y = getY(); y < getY()+getHeight(); y += getHeight()/getRows()) {
 		          if(ceil(x) < getX()+getWidth() && ceil(y) < getY()+getHeight()) {
-		        	  app.rect(x,y,getWidth()/cols,getHeight()/rows);
+		        	  cxt.rect(x,y,getWidth()/cols,getHeight()/rows);
 		          }
 		        }
 		      }
-		  app.popStyle();
+		  cxt.popStyle();
 	  }
 	  
 	  public void setColumns(int cols) { this.cols = cols; }

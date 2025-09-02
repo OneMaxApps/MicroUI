@@ -20,7 +20,7 @@ public class ColumnLayout extends Layout {
 	}
 	
 	public ColumnLayout() {
-		this(0,0,app.width,app.height);
+		this(0,0,cxt.width,cxt.height);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class ColumnLayout extends Layout {
 	}
 	
 	public ColumnLayout add(String text, float weight) {
-		add(new TextView(text,x,y,w,weight),weight);
+		add(new TextView(text,getX(),getY(),getWidth(),weight),weight);
 		return this;
 	}
 	
