@@ -1,11 +1,13 @@
 package microui.core.base;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 
 // Status: STABLE - Do not modify
 // Last Reviewed: 04.09.2025
 public abstract class Bounds extends View {
+	private static final float EPSILON = .01f;
 	private float x, y, width, height;
 	private boolean isNegativeDimensionsEnabled;
 
@@ -27,7 +29,7 @@ public abstract class Bounds extends View {
 	}
 
 	public void setX(final float x) {
-		if (this.x == x) {
+		if (areEqual(this.x, x)) {
 			return;
 		}
 		this.x = x;
@@ -39,7 +41,7 @@ public abstract class Bounds extends View {
 	}
 
 	public void setY(final float y) {
-		if (this.y == y) {
+		if (areEqual(this.y, y)) {
 			return;
 		}
 		this.y = y;
@@ -51,11 +53,11 @@ public abstract class Bounds extends View {
 	}
 
 	public void setWidth(final float width) {
-		if (this.width == width) {
+		if (areEqual(this.width, width)) {
 			return;
 		}
 
-		this.width = isNegativeDimensionsEnabled ? width : max(0, width);
+		applyWidth(width);
 
 		onChangeBounds();
 	}
@@ -65,22 +67,21 @@ public abstract class Bounds extends View {
 	}
 
 	public void setHeight(final float height) {
-		if (this.height == height) {
+		if (areEqual(this.height, height)) {
 			return;
 		}
 
-		this.height = isNegativeDimensionsEnabled ? height : max(0, height);
-
+		applyHeight(height);
+		
 		onChangeBounds();
 	}
 
 	public void setSize(final float width, final float height) {
-		if (this.width == width && this.height == height) {
+		if (areEqual(this.width, width) && areEqual(this.height, height)) {
 			return;
 		}
 
-		this.width = isNegativeDimensionsEnabled ? width : max(0, width);
-		this.height = isNegativeDimensionsEnabled ? height : max(0, height);
+		applyDimensions(width,height);
 
 		onChangeBounds();
 	}
@@ -94,15 +95,17 @@ public abstract class Bounds extends View {
 	}
 
 	public void setBounds(final float x, final float y, final float width, final float height) {
-		final boolean hasChanges = this.x != x || this.y != y || this.width != width || this.height != height;
+		final boolean hasChanges = !areEqual(this.x, x) || !areEqual(this.y, y) || !areEqual(this.width, width)
+				|| !areEqual(this.height, height);
 
-		if (hasChanges) {
-			this.x = x;
-			this.y = y;
-			this.width = isNegativeDimensionsEnabled ? width : max(0, width);
-			this.height = isNegativeDimensionsEnabled ? height : max(0, height);
-			onChangeBounds();
+		if (!hasChanges) {
+			return;
 		}
+
+		this.x = x;
+		this.y = y;
+		applyDimensions(width,height);
+		onChangeBounds();
 
 	}
 
@@ -112,7 +115,7 @@ public abstract class Bounds extends View {
 	}
 
 	public void setPosition(final float x, final float y) {
-		if (this.x == x && this.y == y) {
+		if (areEqual(this.x, x) && areEqual(this.y, y)) {
 			return;
 		}
 
@@ -131,11 +134,27 @@ public abstract class Bounds extends View {
 		return isNegativeDimensionsEnabled;
 	}
 
-	protected final void setNegativeDimensionsEnabled(boolean isNegativeDimensionsEnabled) {
+	protected final void setNegativeDimensionsEnabled(final boolean isNegativeDimensionsEnabled) {
 		this.isNegativeDimensionsEnabled = isNegativeDimensionsEnabled;
 	}
 
 	protected void onChangeBounds() {
 	}
 
+	private static final boolean areEqual(final float a, final float b) {
+		return abs(a - b) < EPSILON;
+	}
+	
+	private final void applyWidth(final float width) {
+		this.width = isNegativeDimensionsEnabled ? width : max(0, width);
+	}
+	
+	private final void applyHeight(final float height) {
+		this.height = isNegativeDimensionsEnabled ? height : max(0, height);
+	}
+	
+	private final void applyDimensions(final float width, final float height) {
+		applyWidth(width);
+		applyHeight(height);
+	}
 }
