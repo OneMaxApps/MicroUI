@@ -12,17 +12,17 @@ public abstract class Bounds extends View {
 	private static final int DEFAULT_MIN_HEIGHT = 20;
 	private static final int DEFAULT_MAX_WIDTH = 200;
 	private static final int DEFAULT_MAX_HEIGHT = 100;
-	
+
 	private static final float EPSILON = .01f;
 	private float x, y, width, height, minWidth, maxWidth, minHeight, maxHeight;
-	private boolean isNegativeDimensionsEnabled,isConstrainDimensionsEnabled;
+	private boolean isNegativeDimensionsEnabled, isConstrainDimensionsEnabled;
 
 	public Bounds(float x, float y, float width, float height) {
 		minWidth = DEFAULT_MIN_WIDTH;
 		minHeight = DEFAULT_MIN_HEIGHT;
 		maxWidth = DEFAULT_MAX_WIDTH;
 		maxHeight = DEFAULT_MAX_HEIGHT;
-		
+
 		setBounds(x, y, width, height);
 
 	}
@@ -133,6 +133,14 @@ public abstract class Bounds extends View {
 				bounds.getHeight());
 	}
 
+	public final void setBoundsState(final Bounds bounds) {
+		setBounds(requireNonNull(bounds, "bounds cannot be null"));
+		setMinWidth(bounds.getMinWidth());
+		setMaxWidth(bounds.getMaxWidth());
+		setMinHeight(bounds.getMinHeight());
+		setMaxHeight(bounds.getMaxHeight());
+	}
+
 	public final void setPosition(final float x, final float y) {
 		if (areEqual(this.x, x) && areEqual(this.y, y)) {
 			return;
@@ -155,9 +163,11 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMinWidth(float minWidth) {
-		if(minWidth > maxWidth) { throw new IllegalArgumentException("min width cannot be greater than max width"); }
-		
-		this.minWidth = isNegativeDimensionsEnabled ? minWidth : max(0,minWidth);
+		if (minWidth > maxWidth) {
+			throw new IllegalArgumentException("min width cannot be greater than max width");
+		}
+
+		this.minWidth = isNegativeDimensionsEnabled ? minWidth : max(0, minWidth);
 
 		onChangeDimensions();
 		onChangeBounds();
@@ -168,21 +178,25 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMaxWidth(float maxWidth) {
-		if(maxWidth < minWidth) { throw new IllegalArgumentException("max width cannot be lower than min width"); }
-		
-		this.maxWidth = isNegativeDimensionsEnabled ? maxWidth : max(0,maxWidth);
+		if (maxWidth < minWidth) {
+			throw new IllegalArgumentException("max width cannot be lower than min width");
+		}
+
+		this.maxWidth = isNegativeDimensionsEnabled ? maxWidth : max(0, maxWidth);
 
 		onChangeDimensions();
 		onChangeBounds();
 	}
-	
+
 	public final float getMinHeight() {
 		return minHeight;
 	}
 
 	public final void setMinHeight(float minHeight) {
-		if(minHeight > maxHeight) { throw new IllegalArgumentException("min height cannot be greater than max height"); }
-		
+		if (minHeight > maxHeight) {
+			throw new IllegalArgumentException("min height cannot be greater than max height");
+		}
+
 		this.minHeight = isNegativeDimensionsEnabled ? minHeight : max(0, minHeight);
 
 		onChangeDimensions();
@@ -194,9 +208,11 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMaxHeight(float maxHeight) {
-		if(maxHeight < minHeight) { throw new IllegalArgumentException("max height cannot be lower than min height"); }
-		
-		this.maxHeight = max(0, maxHeight);
+		if (maxHeight < minHeight) {
+			throw new IllegalArgumentException("max height cannot be lower than min height");
+		}
+
+		this.maxHeight = isNegativeDimensionsEnabled ? maxHeight : max(0, maxHeight);
 
 		onChangeDimensions();
 		onChangeBounds();
@@ -218,7 +234,7 @@ public abstract class Bounds extends View {
 
 	protected void onChangePositions() {
 	}
-	
+
 	protected final boolean isConstrainDimensionsEnabled() {
 		return isConstrainDimensionsEnabled;
 	}
@@ -245,17 +261,21 @@ public abstract class Bounds extends View {
 	}
 
 	private float getTargetWidth(float rawWidth) {
-		if(!isConstrainDimensionsEnabled) { return rawWidth; }
-		
+		if (!isConstrainDimensionsEnabled) {
+			return rawWidth;
+		}
+
 		if (isNegativeDimensionsEnabled) {
 			return constrain(rawWidth, minWidth, maxWidth);
 		}
 		return constrain(rawWidth, max(0, minWidth), maxWidth);
 	}
-	
+
 	private float getTargetHeight(float rawHeight) {
-		if(!isConstrainDimensionsEnabled) { return rawHeight; }
-		
+		if (!isConstrainDimensionsEnabled) {
+			return rawHeight;
+		}
+
 		if (isNegativeDimensionsEnabled) {
 			return constrain(rawHeight, minHeight, maxHeight);
 		}

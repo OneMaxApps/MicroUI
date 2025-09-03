@@ -1,6 +1,6 @@
 package microui;
 
-import microui.component.MenuButton;
+import microui.component.CheckBox;
 import microui.service.GlobalTooltip;
 import microui.util.Metrics;
 import processing.core.PApplet;
@@ -17,7 +17,7 @@ import processing.core.PApplet;
 //[0] TextView
 
 public class Launcher extends PApplet {
-	private MenuButton component;
+	private CheckBox component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -31,7 +31,7 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new MenuButton();
+		component = new CheckBox();
 	}
 
 	@Override

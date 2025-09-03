@@ -15,6 +15,9 @@ public class Scroll extends RangeControl {
 		
 		getMutableColor().set(0,32);
 		thumb = new Button("");
+		thumb.setMinWidth(10);
+		thumb.setMinHeight(10);
+		
 		thumb.setTextVisible(false);
 		thumb.onHold(() -> {
 			calcDistFromMouseToThumb();

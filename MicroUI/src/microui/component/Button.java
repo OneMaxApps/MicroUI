@@ -2,6 +2,8 @@ package microui.component;
 
 import static microui.constants.AutoResizeMode.BIG;
 
+import java.util.Objects;
+
 import microui.core.AbstractButton;
 import microui.core.style.Color;
 
@@ -22,7 +24,7 @@ public class Button extends AbstractButton {
 	}
 
 	public Button(String text) {
-		this(text, cxt.width * .3f, cxt.height * .45f, cxt.width * .4f, cxt.height * .1f);
+		this(Objects.requireNonNull(text,"text cannot be null"), cxt.width * .3f, cxt.height * .45f, cxt.width * .4f, cxt.height * .1f);
 	}
 
 	public Button() {
@@ -44,10 +46,6 @@ public class Button extends AbstractButton {
 	protected void onChangeBounds() {
 		super.onChangeBounds();
 		if (text == null) { return; }
-		text.setBounds(this);
-		text.setMinWidth(getMinWidth());
-		text.setMaxWidth(getMaxWidth());
-		text.setMinHeight(getMinHeight());
-		text.setMaxHeight(getMaxHeight());
+		text.setBoundsState(this);
 	}
 }
