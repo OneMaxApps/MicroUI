@@ -43,7 +43,7 @@ public final class TextField extends Component implements KeyPressable {
 	
 	public TextField(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		color.set(255);
+		getMutableColor().set(255);
 		setVisible(true);
 		
 		text = new Text();
@@ -68,7 +68,7 @@ public final class TextField extends Component implements KeyPressable {
 		checkDimensions();
 		
 		cxt.pushStyle();
-			color.apply();
+		getMutableColor().apply();
 			cxt.rect(getX(),getY(),getWidth(),getHeight());
 			
 			pg.beginDraw();

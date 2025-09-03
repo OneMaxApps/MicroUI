@@ -13,7 +13,7 @@ public class Scroll extends RangeControl {
 	public Scroll(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		
-		color.set(0,32);
+		getMutableColor().set(0,32);
 		thumb = new Button("");
 		thumb.setTextVisible(false);
 		thumb.onHold(() -> {

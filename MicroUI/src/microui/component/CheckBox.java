@@ -166,7 +166,7 @@ public class CheckBox extends AbstractButton {
 			
 			cxt.pushStyle();
 			stroke.apply();
-			color.apply();
+			getMutableColor().apply();
 			cxt.rect(getX(), getY(), getWidth(), getHeight());
 			hover.draw();
 			ripples.draw();

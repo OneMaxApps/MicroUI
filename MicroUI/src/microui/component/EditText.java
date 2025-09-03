@@ -59,7 +59,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	public EditText(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setVisible(true);
-		color.set(255);
+		getMutableColor().set(255);
 		
 		scrollV = new Scroll();
 		scrollH = new Scroll();
@@ -104,7 +104,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		scrollV.setVisible(isFocused);
 
 		graphics.beginDraw();
-		graphics.background(color.get());
+		graphics.background(getMutableColor().get());
 		items.draw(graphics);
 		cursor.draw(graphics);
 		graphics.endDraw();

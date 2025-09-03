@@ -118,6 +118,7 @@ public class Event {
 	  }
 	  
 	  public boolean clicked(int count) {
+		  if(count <= 0) { throw new IllegalArgumentException("count cannot be less than 1"); }
 		  if(clickCounter == count) {clickCounter = 0;} else {
 			 if(clicked()) { clickCounter++; } else {
 				 if(clickCounter != 0 && app.frameCount%30 == 0) { clickCounter--; }

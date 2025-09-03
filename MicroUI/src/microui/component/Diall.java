@@ -59,7 +59,7 @@ public final class Diall extends Component implements Scrollable {
 		cxt.pushStyle();
 		
 		stroke.apply();
-		color.apply();
+		getMutableColor().apply();
 		cxt.ellipseMode(CORNER);
 		cxt.circle(getX(), getY(), min(getWidth(),getHeight()));
 		

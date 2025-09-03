@@ -30,7 +30,7 @@ public class TextView extends Component {
 	    center = true;
 	    shadow = new Shadow();
 	    setVisible(true);
-	    color.set(255);
+	    getMutableColor().set(255);
 	    
 	    //callback.setEnabled(false);
 	  }
@@ -53,7 +53,7 @@ public class TextView extends Component {
 		  
 		  shadow.draw();
 		  cxt.pushStyle();
-		  color.apply();
+		  getMutableColor().apply();
 		  if(font != null) { cxt.textFont(font,textSize); }
 		  
 		  if(isAutoResizeEnabled()) {
@@ -71,7 +71,7 @@ public class TextView extends Component {
 	  
 	  public void draw(PGraphics pg) {
 		  pg.pushStyle();
-		  pg.fill(color.get());
+		  pg.fill(getMutableColor().get());
 		  if(font != null) {
 			  pg.textFont(font,textSize);
 		  }

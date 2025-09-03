@@ -19,7 +19,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		super(x, y, w, h);
 		setVisible(true);
 		
-		color.set(24);
+		getMutableColor().set(24);
 		
 		value = new Value(0,100,0) {
 			@Override
@@ -31,7 +31,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		
 		onPress(() -> valueChangeEnd = true);
 		
-		scrolling = new Scrolling(getEvent());
+		scrolling = new Scrolling(getMutableEvent());
 		orientation = Orientation.HORIZONTAL;
 		
 		
@@ -46,7 +46,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		setEventListener(this);
 		
 		cxt.pushStyle();
-		color.apply();
+		getMutableColor().apply();
 		cxt.rect(getX(), getY(), getWidth(), getHeight());
 		cxt.popStyle();
 		
