@@ -32,6 +32,7 @@ public class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		component = new Button();
+		//component.setText("I accept all of terms and conditions");
 	}
 
 	@Override

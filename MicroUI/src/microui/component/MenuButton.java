@@ -280,7 +280,7 @@ public class MenuButton extends Button implements Scrollable {
 		
 		inside = checkInsideToAnyIn();
 		
-		if(cxt.mousePressed && isOutside() && !inside) {
+		if(cxt.mousePressed && isMouseOutside() && !inside) {
 			close();
 		}
 		

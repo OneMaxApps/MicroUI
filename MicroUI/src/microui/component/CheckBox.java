@@ -22,7 +22,6 @@ public class CheckBox extends AbstractButton {
 	
 	public CheckBox(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		
 		setTextPadding(DEFAULT_TEXT_PADDING);
 		
 		container = new EdgeContainer(x,y,w,h);

@@ -149,7 +149,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	private final boolean mustNotHaveFocus() {
-		return cxt.mousePressed && isOutside() && !isHolding();
+		return cxt.mousePressed && isMouseOutside() && !isHolding();
 	}
 	
 	private final void updateScrollMax() {

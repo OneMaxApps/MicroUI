@@ -72,7 +72,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 	@Override
 	public void mouseWheel(MouseEvent e) {
 		scrolling.init(e);
-		if(isInside()) {
+		if(isMouseInside()) {
 			value.append(scrolling.get());
 		}
 		

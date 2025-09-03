@@ -70,7 +70,7 @@ public final class Diall extends Component implements Scrollable {
 		arrow.draw();
 		cxt.pop();
 		
-		if(isInside() || isHolding()) {
+		if(isMouseInside() || isHolding()) {
 			
 			if(isHolding()) { value.append((cxt.pmouseY-cxt.mouseY)/2); }
 			
@@ -119,7 +119,7 @@ public final class Diall extends Component implements Scrollable {
 	public void mouseWheel(MouseEvent mouseEvent) {
 		requireNonNull(mouseEvent,"mouseEvent cannot be null");
 		
-		if(isInside()) {
+		if(isMouseInside()) {
 			value.append(-mouseEvent.getCount());
 		}
 	}

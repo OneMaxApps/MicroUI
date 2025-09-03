@@ -138,7 +138,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			}
 
 			if (isMouseOutsideFromScrollV) {
-				scrollV.getScrolling().init(e, isInside());
+				scrollV.getScrolling().init(e, isMouseInside());
 				scrollV.autoScroll();
 			}
 
@@ -343,7 +343,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			checkDimensions();
 		}
 
-		if (cxt.mousePressed && isOutside() && !isHolding()) {
+		if (cxt.mousePressed && isMouseOutside() && !isHolding()) {
 			isFocused = false;
 		}
 	}

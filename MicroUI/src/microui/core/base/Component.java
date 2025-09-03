@@ -21,6 +21,8 @@ import microui.event.Event;
 import microui.event.Listener;
 import microui.feedback.Tooltip;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 04.09.2025
 public abstract class Component extends Bounds {
 	private Color color;
 	private Event event;
@@ -100,16 +102,6 @@ public abstract class Component extends Bounds {
 	public final boolean isHolding() {
 		ensureEvent();
 		return event.holding();
-	}
-
-	public final boolean isInside() {
-		ensureEvent();
-		return event.inside();
-	}
-
-	public final boolean isOutside() {
-		ensureEvent();
-		return event.outside();
 	}
 
 	public final void onClick(Listener listener) {
@@ -242,20 +234,20 @@ public abstract class Component extends Bounds {
 		return color;
 	}
 
-	private final void ensureTooltip() {
+	private void ensureTooltip() {
 		ensureCallback();
 		if (tooltip == null) {
 			tooltip = new Tooltip(callback);
 		}
 	}
 
-	private final void ensureCallback() {
+	private void ensureCallback() {
 		if (callback == null) {
 			callback = new Callback(this);
 		}
 	}
 
-	private final void ensureEvent() {
+	private void ensureEvent() {
 		if (event == null) {
 			event = new Event();
 		}

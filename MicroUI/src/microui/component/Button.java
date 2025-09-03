@@ -43,6 +43,11 @@ public class Button extends AbstractButton {
 	@Override
 	protected void onChangeBounds() {
 		super.onChangeBounds();
-		if (text != null) { text.setBounds(this); }
+		if (text == null) { return; }
+		text.setBounds(this);
+		text.setMinWidth(getMinWidth());
+		text.setMaxWidth(getMaxWidth());
+		text.setMinHeight(getMinHeight());
+		text.setMaxHeight(getMaxHeight());
 	}
 }
