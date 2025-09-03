@@ -21,6 +21,8 @@ public abstract class RangeControl extends Component implements Scrollable {
 		super(x, y, w, h);
 		setVisible(true);
 		
+		color.set(24);
+		
 		value = new Value(0,100,0) {
 			@Override
 			public void action() {

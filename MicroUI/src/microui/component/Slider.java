@@ -4,9 +4,9 @@ import static microui.constants.Orientation.HORIZONTAL;
 import static processing.core.PApplet.map;
 
 import microui.core.RangeControl;
+import microui.core.base.Bounds;
 import microui.core.style.Color;
 import microui.core.style.Stroke;
-import microui.util.UnsafeBounds;
 
 public class Slider extends RangeControl {
 	
@@ -17,7 +17,6 @@ public class Slider extends RangeControl {
 		
 		level = new Rect(x,y,w,h);
 		level.color.set(234);
-		level.allowNegativeDimensions(true);
 		
 		value.set(0,100,0);
 		
@@ -84,14 +83,15 @@ public class Slider extends RangeControl {
 	}
 
 
-	public final class Rect extends UnsafeBounds {
+	public final class Rect extends Bounds {
 	    public final Stroke stroke;
 	    public final Color color;
 	    
 	    private Rect(float x, float y, float w, float h) {
 	        super(x,y,w,h);
 	        setVisible(true);
-	  
+	        setNegativeDimensionsEnabled(true);
+	        
 	        stroke = new Stroke();
 	        color = new Color(44);
 	      }

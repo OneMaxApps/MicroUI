@@ -1,6 +1,6 @@
 package microui;
 
-import microui.component.Button;
+import microui.component.Slider;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
@@ -16,7 +16,8 @@ import processing.core.PApplet;
 //[0] TextView
 
 public class Launcher extends PApplet {
-	private Button button;
+	private Slider component;
+	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
@@ -29,14 +30,18 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		button = new Button();
+		component = new Slider();
 	}
 
 	@Override
 	public void draw() {
-		background(32);
+		background(200);
 		
-		button.draw();
+		component.draw();
+		
+		if(mouseButton == RIGHT) {
+			component.setSize(mouseX,mouseY);
+		}
 		
 		GlobalTooltip.draw();
 	}

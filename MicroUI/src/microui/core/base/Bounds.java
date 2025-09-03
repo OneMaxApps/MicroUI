@@ -4,9 +4,10 @@ import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 
 // Status: STABLE - Do not modify
-// Last Reviewed: 03.09.2025
+// Last Reviewed: 04.09.2025
 public abstract class Bounds extends View {
 	private float x, y, width, height;
+	private boolean isNegativeDimensionsEnabled;
 
 	public Bounds(float x, float y, float width, float height) {
 		setBounds(x, y, width, height);
@@ -53,7 +54,9 @@ public abstract class Bounds extends View {
 		if (this.width == width) {
 			return;
 		}
-		this.width = max(0, width);
+
+		this.width = isNegativeDimensionsEnabled ? width : max(0, width);
+
 		onChangeBounds();
 	}
 
@@ -65,7 +68,9 @@ public abstract class Bounds extends View {
 		if (this.height == height) {
 			return;
 		}
-		this.height = max(0, height);
+
+		this.height = isNegativeDimensionsEnabled ? height : max(0, height);
+
 		onChangeBounds();
 	}
 
@@ -74,8 +79,8 @@ public abstract class Bounds extends View {
 			return;
 		}
 
-		this.width = max(0, width);
-		this.height = max(0, height);
+		this.width = isNegativeDimensionsEnabled ? width : max(0, width);
+		this.height = isNegativeDimensionsEnabled ? height : max(0, height);
 
 		onChangeBounds();
 	}
@@ -94,8 +99,8 @@ public abstract class Bounds extends View {
 		if (hasChanges) {
 			this.x = x;
 			this.y = y;
-			this.width = max(0, width);
-			this.height = max(0, height);
+			this.width = isNegativeDimensionsEnabled ? width : max(0, width);
+			this.height = isNegativeDimensionsEnabled ? height : max(0, height);
 			onChangeBounds();
 		}
 
@@ -120,6 +125,14 @@ public abstract class Bounds extends View {
 
 	public void setPosition(final Bounds bounds) {
 		setPosition(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY());
+	}
+
+	protected final boolean isNegativeDimensionsEnabled() {
+		return isNegativeDimensionsEnabled;
+	}
+
+	protected final void setNegativeDimensionsEnabled(boolean isNegativeDimensionsEnabled) {
+		this.isNegativeDimensionsEnabled = isNegativeDimensionsEnabled;
 	}
 
 	protected void onChangeBounds() {
