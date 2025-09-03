@@ -2,6 +2,7 @@ package microui.event;
 
 import microui.MicroUI;
 import microui.core.base.Bounds;
+import microui.util.Metrics;
 import processing.core.PApplet;
 
 public class Event {
@@ -17,6 +18,7 @@ public class Event {
 
 	  public Event() {
 		  enable = true;
+		  Metrics.register(this);
 	  }
 	  
 	  public void listen(Bounds form) {

@@ -54,7 +54,7 @@ public final class Diall extends Component implements Scrollable {
 
 	@Override
 	protected void update() {
-		event.listen(this);
+		setEventListener(this);
 		
 		cxt.pushStyle();
 		
@@ -70,9 +70,9 @@ public final class Diall extends Component implements Scrollable {
 		arrow.draw();
 		cxt.pop();
 		
-		if(event.inside() || event.holding()) {
+		if(isInside() || isHolding()) {
 			
-			if(event.holding()) { value.append((cxt.pmouseY-cxt.mouseY)/2); }
+			if(isHolding()) { value.append((cxt.pmouseY-cxt.mouseY)/2); }
 			
 			valueOnDraw();
 			
@@ -119,7 +119,7 @@ public final class Diall extends Component implements Scrollable {
 	public void mouseWheel(MouseEvent mouseEvent) {
 		requireNonNull(mouseEvent,"mouseEvent cannot be null");
 		
-		if(event.inside()) {
+		if(isInside()) {
 			value.append(-mouseEvent.getCount());
 		}
 	}

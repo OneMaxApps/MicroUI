@@ -10,8 +10,6 @@ import static java.awt.event.KeyEvent.VK_PAGE_UP;
 import static java.awt.event.KeyEvent.VK_V;
 import static java.awt.event.KeyEvent.VK_X;
 import static microui.event.Event.checkKey;
-import static microui.event.EventType.CLICK;
-import static microui.event.EventType.DOUBLE_CLICK;
 import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
@@ -74,8 +72,10 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		createGraphics();
 
 		scrollsValuesUpdate();
-
-		callback.addListener(DOUBLE_CLICK, () -> {
+		
+		onClick(() -> setFocus(true));
+		
+		onDoubleClick(() -> {
 			if (selection.isSelectedAllText()) {
 				selection.unselect();
 			} else {
@@ -83,7 +83,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				items.selectAllText();
 			}
 		});
-		callback.addListener(CLICK, () -> setFocus(true));
+
+		
 		
 		scrollV.onMouseInside(() -> isMouseOutsideFromScrollV = false);
 		scrollV.onMouseOutside(() -> isMouseOutsideFromScrollV = true);
@@ -95,10 +96,10 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 
 	@Override
 	protected void update() {
-		event.listen(this);
+		setEventListener(this);
 
-		tooltip.setAdditionalCondition(!isFocused);
-
+		setTooltipAdditionalCondition(!isFocused);
+		
 		scrollH.setVisible(isFocused);
 		scrollV.setVisible(isFocused);
 
@@ -137,7 +138,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			}
 
 			if (isMouseOutsideFromScrollV) {
-				scrollV.getScrolling().init(e, event.inside());
+				scrollV.getScrolling().init(e, isInside());
 				scrollV.autoScroll();
 			}
 
@@ -342,7 +343,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			checkDimensions();
 		}
 
-		if (cxt.mousePressed && event.outside() && !event.holding()) {
+		if (cxt.mousePressed && isOutside() && !isHolding()) {
 			isFocused = false;
 		}
 	}
@@ -1302,8 +1303,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		}
 
 		private boolean isAllowedStateToStartSelecting() {
-			return event.holding() && !scrollV.getThumb().isHolding()
-					&& !scrollH.getThumb().isHolding() && event.dragged();
+			return isHolding() && !scrollV.getThumb().isHolding()
+					&& !scrollH.getThumb().isHolding() && isDragged();
 		}
 
 		private boolean isSelecting() {

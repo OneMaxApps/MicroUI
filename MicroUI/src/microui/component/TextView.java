@@ -90,28 +90,6 @@ public class TextView extends Component {
 		  pg.text(text.toString() != null ? text.toString() : "",getX(),getY()+getHeight()/2);
 		  pg.popStyle();
 	  }
-	  
-	
-	  	  
-	@Override
-	public void setWidth(float w) {
-		super.setWidth(w);
-	}
-
-	@Override
-	public void setHeight(float h) {
-		super.setHeight(h);
-	}
-
-	@Override
-	public void setSize(float w, float h) {
-		super.setSize(w, h);
-	}
-
-	@Override
-	public float getWidth() {
-		return super.getWidth();
-	}
 
 	public final PFont getFont() {
 			return font;

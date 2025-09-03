@@ -1,7 +1,5 @@
 package microui.core;
 
-import static microui.event.EventType.CLICK;
-
 import microui.component.TextView;
 import microui.core.base.Component;
 import microui.core.effect.Hover;
@@ -25,7 +23,7 @@ public abstract class AbstractButton extends Component {
 		stroke = new Stroke();
 		text = new TextView(x, y, w, h);
 		
-		callback.addListener(CLICK,() -> {
+		onClick(() -> {
 			if(ripples != null) {
 				ripples.initAnim();
 			}
@@ -34,8 +32,7 @@ public abstract class AbstractButton extends Component {
 
 	@Override
 	protected void update() {
-		event.listen(this);
-		
+		setEventListener(this);
 		cxt.pushStyle();
 		stroke.apply();
 		color.apply();

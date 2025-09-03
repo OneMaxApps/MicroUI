@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import microui.core.base.View;
+import microui.event.Event;
 import processing.core.PGraphics;
 
 //Status: STABLE - Do not modify
@@ -14,6 +15,11 @@ public final class Metrics {
 	private static final Map<String,Integer> metrics = new LinkedHashMap<String,Integer>();
 	
 	private Metrics() {}
+	
+	public static void register(Event event) {
+		final String key = requireNonNull(event,"event cannot be null").getClass().getSimpleName();
+		metrics.put(key, metrics.getOrDefault(key, 0)+1);
+	}
 	
 	public static void register(PGraphics pGraphics) {
 		final String key = requireNonNull(pGraphics,"pGraphics cannot be null").getClass().getSimpleName();

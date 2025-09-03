@@ -28,11 +28,12 @@ public abstract class Bounds extends View {
 		return x;
 	}
 
-	public void setX(final float x) {
+	public final void setX(final float x) {
 		if (areEqual(this.x, x)) {
 			return;
 		}
 		this.x = x;
+		onChangePositions();
 		onChangeBounds();
 	}
 
@@ -40,11 +41,12 @@ public abstract class Bounds extends View {
 		return y;
 	}
 
-	public void setY(final float y) {
+	public final void setY(final float y) {
 		if (areEqual(this.y, y)) {
 			return;
 		}
 		this.y = y;
+		onChangePositions();
 		onChangeBounds();
 	}
 
@@ -52,13 +54,13 @@ public abstract class Bounds extends View {
 		return width;
 	}
 
-	public void setWidth(final float width) {
+	public final void setWidth(final float width) {
 		if (areEqual(this.width, width)) {
 			return;
 		}
 
 		applyWidth(width);
-
+		onChangeDimensions();
 		onChangeBounds();
 	}
 
@@ -66,35 +68,37 @@ public abstract class Bounds extends View {
 		return height;
 	}
 
-	public void setHeight(final float height) {
+	public final void setHeight(final float height) {
 		if (areEqual(this.height, height)) {
 			return;
 		}
 
 		applyHeight(height);
-		
+
+		onChangeDimensions();
 		onChangeBounds();
 	}
 
-	public void setSize(final float width, final float height) {
+	public final void setSize(final float width, final float height) {
 		if (areEqual(this.width, width) && areEqual(this.height, height)) {
 			return;
 		}
 
-		applyDimensions(width,height);
+		applyDimensions(width, height);
 
+		onChangeDimensions();
 		onChangeBounds();
 	}
 
-	public void setSize(final float size) {
+	public final void setSize(float size) {
 		setSize(size, size);
 	}
 
-	public void setSize(final Bounds bounds) {
+	public final void setSize(final Bounds bounds) {
 		setSize(requireNonNull(bounds, "bounds cannot be null").getWidth(), bounds.getHeight());
 	}
 
-	public void setBounds(final float x, final float y, final float width, final float height) {
+	public final void setBounds(final float x, final float y, final float width, final float height) {
 		final boolean hasChanges = !areEqual(this.x, x) || !areEqual(this.y, y) || !areEqual(this.width, width)
 				|| !areEqual(this.height, height);
 
@@ -104,17 +108,20 @@ public abstract class Bounds extends View {
 
 		this.x = x;
 		this.y = y;
-		applyDimensions(width,height);
+		applyDimensions(width, height);
+
+		onChangePositions();
+		onChangeDimensions();
 		onChangeBounds();
 
 	}
 
-	public void setBounds(final Bounds bounds) {
+	public final void setBounds(final Bounds bounds) {
 		setBounds(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY(), bounds.getWidth(),
 				bounds.getHeight());
 	}
 
-	public void setPosition(final float x, final float y) {
+	public final void setPosition(final float x, final float y) {
 		if (areEqual(this.x, x) && areEqual(this.y, y)) {
 			return;
 		}
@@ -122,11 +129,12 @@ public abstract class Bounds extends View {
 		this.x = x;
 		this.y = y;
 
+		onChangePositions();
 		onChangeBounds();
 
 	}
 
-	public void setPosition(final Bounds bounds) {
+	public final void setPosition(final Bounds bounds) {
 		setPosition(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY());
 	}
 
@@ -134,26 +142,32 @@ public abstract class Bounds extends View {
 		return isNegativeDimensionsEnabled;
 	}
 
-	protected final void setNegativeDimensionsEnabled(final boolean isNegativeDimensionsEnabled) {
+	protected final void setNegativeDimensionsEnabled(boolean isNegativeDimensionsEnabled) {
 		this.isNegativeDimensionsEnabled = isNegativeDimensionsEnabled;
 	}
 
 	protected void onChangeBounds() {
 	}
 
-	private static final boolean areEqual(final float a, final float b) {
-		return abs(a - b) < EPSILON;
+	protected void onChangeDimensions() {
 	}
-	
-	private final void applyWidth(final float width) {
+
+	protected void onChangePositions() {
+	}
+
+	private static final boolean areEqual(float firstValue, float secondValue) {
+		return abs(firstValue - secondValue) < EPSILON;
+	}
+
+	private final void applyWidth(float width) {
 		this.width = isNegativeDimensionsEnabled ? width : max(0, width);
 	}
-	
-	private final void applyHeight(final float height) {
+
+	private final void applyHeight(float height) {
 		this.height = isNegativeDimensionsEnabled ? height : max(0, height);
 	}
-	
-	private final void applyDimensions(final float width, final float height) {
+
+	private final void applyDimensions(float width,float height) {
 		applyWidth(width);
 		applyHeight(height);
 	}

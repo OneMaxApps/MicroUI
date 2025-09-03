@@ -6,7 +6,6 @@ import java.util.Arrays;
 import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
 import microui.event.Event;
-import microui.event.EventType;
 import processing.event.MouseEvent;
 
 public class MenuButton extends Button implements Scrollable {
@@ -34,7 +33,7 @@ public class MenuButton extends Button implements Scrollable {
 		calculateMarkBounds();
 		scrolling = new Scrolling();
 		
-		callback.addListener(EventType.CLICK, () -> {
+		onClick(() -> {
 			isOpen = !isOpen;
 			if(!isOpen) { closeAllSubMenus(); } else { selectedId = -1; }
 		});
@@ -281,7 +280,7 @@ public class MenuButton extends Button implements Scrollable {
 		
 		inside = checkInsideToAnyIn();
 		
-		if(cxt.mousePressed && !event.inside() && !inside) {
+		if(cxt.mousePressed && isOutside() && !inside) {
 			close();
 		}
 		

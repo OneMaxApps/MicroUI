@@ -18,7 +18,7 @@ public class CheckBox extends AbstractButton {
 	
 	private final EdgeContainer container;
 	private float textPadding;
-	private boolean isSelected;
+	private boolean isChecked;
 	
 	public CheckBox(float x, float y, float w, float h) {
 		super(x, y, w, h);
@@ -32,10 +32,16 @@ public class CheckBox extends AbstractButton {
 		
 	}
 
-	public CheckBox(boolean isSelected) {
+	public CheckBox(boolean isChecked) {
 		this(cxt.width*.3f,cxt.height*.4f,cxt.width*.4f,cxt.height*.2f);
 		
-		setSelected(isSelected);
+		setChecked(isChecked);
+	}
+	
+	public CheckBox(final String text) {
+		this(cxt.width*.3f,cxt.height*.4f,cxt.width*.4f,cxt.height*.2f);
+		
+		setText(text);
 	}
 	
 	public CheckBox() {
@@ -55,16 +61,16 @@ public class CheckBox extends AbstractButton {
 		container.setBounds(this);
 	}
 
-	public final boolean isSelected() {
-		return isSelected;
+	public final boolean isChecked() {
+		return isChecked;
 	}
 
-	public final void setSelected(boolean isSelected) {
-		this.isSelected = isSelected;
+	public final void setChecked(boolean isChecked) {
+		this.isChecked = isChecked;
 	}
 	
 	public final void toggle() {
-		isSelected = !isSelected;
+		isChecked = !isChecked;
 	}
 	
 	public final Color getMarkColor() {
@@ -110,6 +116,7 @@ public class CheckBox extends AbstractButton {
 			
 			box = new Box();
 
+			text.setColor(new Color(32));
 			text.setAutoResizeEnabled(false);
 			text.setTextSize(box.getHeight());
 			text.setInCenter(false);
@@ -142,7 +149,7 @@ public class CheckBox extends AbstractButton {
 			super(0,0,DEFAULT_BOX_SIZE,DEFAULT_BOX_SIZE);
 			setVisible(true);
 			
-			callback.setListener(this);
+			setCallbackListener(this);
 			
 			ripples.setBounds(this);
 			
@@ -155,7 +162,7 @@ public class CheckBox extends AbstractButton {
 
 		@Override
 		protected void update() {
-			event.listen(this);
+			setEventListener(this);
 			
 			cxt.pushStyle();
 			stroke.apply();
@@ -165,7 +172,7 @@ public class CheckBox extends AbstractButton {
 			ripples.draw();
 			cxt.popStyle();
 			
-			if(isSelected) {
+			if(isChecked) {
 				markOnDraw();
 			}
 		}

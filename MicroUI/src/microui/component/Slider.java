@@ -33,7 +33,7 @@ public class Slider extends RangeControl {
 		super.update();
 		level.draw();
 		
-		if(event.holding()) {
+		if(isHolding()) {
 			switch(orientation) {
 			case HORIZONTAL: value.set(map(cxt.mouseX,getX(),getX()+getWidth(),value.getMin(),value.getMax())); break;
 			case VERTICAL: value.set(map(cxt.mouseY,getY(),getY()+getHeight(),value.getMax(),value.getMin())); break;

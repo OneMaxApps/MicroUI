@@ -38,7 +38,7 @@ public final class TextField extends Component implements KeyPressable {
 	private final Value scroll;
 	private PGraphics pg;
 	
-	private boolean focused,componentSizeChanged;
+	private boolean isFocused,componentSizeChanged;
 	
 	
 	public TextField(float x, float y, float w, float h) {
@@ -62,8 +62,8 @@ public final class TextField extends Component implements KeyPressable {
 
 	@Override
 	protected final void update() {
-		event.listen(this);
-		tooltip.setAdditionalCondition(!focused);
+		setEventListener(this);
+		setTooltipAdditionalCondition(!isFocused);
 		
 		checkDimensions();
 		
@@ -74,7 +74,7 @@ public final class TextField extends Component implements KeyPressable {
 			pg.beginDraw();
 				pg.clear();
 				text.draw(pg);
-				if(focused) {
+				if(isFocused) {
 					cursor.draw(pg);
 					selection.draw(pg);
 				}
@@ -82,7 +82,7 @@ public final class TextField extends Component implements KeyPressable {
 			
 			cxt.image(pg, getX(), getY(), getWidth(), getHeight());
 			
-			if(!focused) {
+			if(!isFocused) {
 				cxt.fill(0,32);
 				cxt.rect(getX(), getY(), getWidth(), getHeight());
 			}
@@ -105,17 +105,17 @@ public final class TextField extends Component implements KeyPressable {
 
 	private final void events() {
 		
-		if(event.pressed()) {
-			if(!focused) { focused = true; }
+		if(isPressed()) {
+			if(!isFocused) { isFocused = true; }
 			cursor.blink.reset();
 		}
 		
 		if(mustNotHaveFocus()) {
-			if(focused) { focused = false; }
+			if(isFocused) { isFocused = false; }
 			selection.reset();
 		}
 		
-		if(event.holding()) {
+		if(isHolding()) {
 			if(text.isEmpty()) { return; }
 			
 			cursor.column.set((int) map(cxt.mouseX-getX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
@@ -139,7 +139,7 @@ public final class TextField extends Component implements KeyPressable {
 			selection.setStarted(false);
 		}
 		
-		if(event.clicked(2)) {
+		if(isClicked(2)) {
 			if(selection.isSelected()) {
 				selection.reset();
 			} else {
@@ -149,7 +149,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	private final boolean mustNotHaveFocus() {
-		return cxt.mousePressed && event.outside() && !event.holding();
+		return cxt.mousePressed && isOutside() && !isHolding();
 	}
 	
 	private final void updateScrollMax() {
@@ -189,16 +189,16 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	public final boolean isFocused() {
-		return focused;
+		return isFocused;
 	}
 
 	public final void setFocused(boolean focused) {
-		this.focused = focused;
+		this.isFocused = focused;
 	}
 
 	@Override
 	public final void keyPressed() {
-		if(!focused) { return; }
+		if(!isFocused) { return; }
 		
 		cursor.blink.reset();
 		
