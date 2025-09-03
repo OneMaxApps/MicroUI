@@ -2,22 +2,26 @@ package microui.core.base;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
-import static java.lang.Math.min;
 import static java.util.Objects.requireNonNull;
 import static processing.core.PApplet.constrain;
 
 // Status: STABLE - Do not modify
 // Last Reviewed: 04.09.2025
 public abstract class Bounds extends View {
+	private static final int DEFAULT_MIN_WIDTH = 40;
+	private static final int DEFAULT_MIN_HEIGHT = 20;
+	private static final int DEFAULT_MAX_WIDTH = 200;
+	private static final int DEFAULT_MAX_HEIGHT = 100;
+	
 	private static final float EPSILON = .01f;
 	private float x, y, width, height, minWidth, maxWidth, minHeight, maxHeight;
 	private boolean isNegativeDimensionsEnabled,isConstrainDimensionsEnabled;
 
 	public Bounds(float x, float y, float width, float height) {
-		setMinWidth(100);
-		setMaxWidth(400);
-		setMinHeight(50);
-		setMaxHeight(200);
+		minWidth = DEFAULT_MIN_WIDTH;
+		minHeight = DEFAULT_MIN_HEIGHT;
+		maxWidth = DEFAULT_MAX_WIDTH;
+		maxHeight = DEFAULT_MAX_HEIGHT;
 		
 		setBounds(x, y, width, height);
 
@@ -151,7 +155,9 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMinWidth(float minWidth) {
-		this.minWidth = isNegativeDimensionsEnabled ? minWidth : min(max(0, minWidth), minWidth);
+		if(minWidth > maxWidth) { throw new IllegalArgumentException("min width cannot be greater than max width"); }
+		
+		this.minWidth = isNegativeDimensionsEnabled ? minWidth : max(0,minWidth);
 
 		onChangeDimensions();
 		onChangeBounds();
@@ -162,7 +168,9 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMaxWidth(float maxWidth) {
-		this.maxWidth = max(minWidth, maxWidth);
+		if(maxWidth < minWidth) { throw new IllegalArgumentException("max width cannot be lower than min width"); }
+		
+		this.maxWidth = isNegativeDimensionsEnabled ? maxWidth : max(0,maxWidth);
 
 		onChangeDimensions();
 		onChangeBounds();
@@ -173,7 +181,9 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMinHeight(float minHeight) {
-		this.minHeight = isNegativeDimensionsEnabled ? minHeight : min(max(0, minHeight), minHeight);
+		if(minHeight > maxHeight) { throw new IllegalArgumentException("min height cannot be greater than max height"); }
+		
+		this.minHeight = isNegativeDimensionsEnabled ? minHeight : max(0, minHeight);
 
 		onChangeDimensions();
 		onChangeBounds();
@@ -184,7 +194,9 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMaxHeight(float maxHeight) {
-		this.maxHeight = max(minHeight, maxHeight);
+		if(maxHeight < minHeight) { throw new IllegalArgumentException("max height cannot be lower than min height"); }
+		
+		this.maxHeight = max(0, maxHeight);
 
 		onChangeDimensions();
 		onChangeBounds();
