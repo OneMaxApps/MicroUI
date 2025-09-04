@@ -15,7 +15,7 @@ public abstract class Bounds extends View {
 
 	private static final float EPSILON = .01f;
 	private float x, y, width, height, minWidth, maxWidth, minHeight, maxHeight;
-	private boolean isNegativeDimensionsEnabled, isConstrainDimensionsEnabled;
+	private boolean isNegativeDimensionsEnabled, isConstrainDimensionsEnabled, isDirty;
 
 	public Bounds(float x, float y, float width, float height) {
 		minWidth = DEFAULT_MIN_WIDTH;
@@ -36,6 +36,12 @@ public abstract class Bounds extends View {
 		this(0, 0, 0, 0);
 	}
 
+	@Override
+	public void draw() {
+		super.draw();
+		updateHooks();
+	}
+
 	public float getX() {
 		return x;
 	}
@@ -45,8 +51,7 @@ public abstract class Bounds extends View {
 			return;
 		}
 		this.x = x;
-		onChangePositions();
-		onChangeBounds();
+		isDirty = true;
 	}
 
 	public float getY() {
@@ -58,8 +63,8 @@ public abstract class Bounds extends View {
 			return;
 		}
 		this.y = y;
-		onChangePositions();
-		onChangeBounds();
+
+		isDirty = true;
 	}
 
 	public float getWidth() {
@@ -72,8 +77,9 @@ public abstract class Bounds extends View {
 		}
 
 		applyWidth(width);
-		onChangeDimensions();
-		onChangeBounds();
+
+		isDirty = true;
+
 	}
 
 	public float getHeight() {
@@ -87,8 +93,8 @@ public abstract class Bounds extends View {
 
 		applyHeight(height);
 
-		onChangeDimensions();
-		onChangeBounds();
+		isDirty = true;
+
 	}
 
 	public final void setSize(final float width, final float height) {
@@ -98,8 +104,8 @@ public abstract class Bounds extends View {
 
 		applyDimensions(getTargetWidth(width), getTargetHeight(height));
 
-		onChangeDimensions();
-		onChangeBounds();
+		isDirty = true;
+
 	}
 
 	public final void setSize(float size) {
@@ -122,9 +128,7 @@ public abstract class Bounds extends View {
 		this.y = y;
 		applyDimensions(getTargetWidth(width), getTargetHeight(height));
 
-		onChangePositions();
-		onChangeDimensions();
-		onChangeBounds();
+		isDirty = true;
 
 	}
 
@@ -149,8 +153,7 @@ public abstract class Bounds extends View {
 		this.x = x;
 		this.y = y;
 
-		onChangePositions();
-		onChangeBounds();
+		isDirty = true;
 
 	}
 
@@ -169,8 +172,7 @@ public abstract class Bounds extends View {
 
 		this.minWidth = isNegativeDimensionsEnabled ? minWidth : max(0, minWidth);
 
-		onChangeDimensions();
-		onChangeBounds();
+		isDirty = true;
 	}
 
 	public final float getMaxWidth() {
@@ -184,8 +186,7 @@ public abstract class Bounds extends View {
 
 		this.maxWidth = isNegativeDimensionsEnabled ? maxWidth : max(0, maxWidth);
 
-		onChangeDimensions();
-		onChangeBounds();
+		isDirty = true;
 	}
 
 	public final float getMinHeight() {
@@ -199,8 +200,8 @@ public abstract class Bounds extends View {
 
 		this.minHeight = isNegativeDimensionsEnabled ? minHeight : max(0, minHeight);
 
-		onChangeDimensions();
-		onChangeBounds();
+		isDirty = true;
+
 	}
 
 	public final float getMaxHeight() {
@@ -214,8 +215,18 @@ public abstract class Bounds extends View {
 
 		this.maxHeight = isNegativeDimensionsEnabled ? maxHeight : max(0, maxHeight);
 
-		onChangeDimensions();
-		onChangeBounds();
+		isDirty = true;
+
+	}
+	
+	public final void setMinSize(float width, float height) {
+		setMinWidth(width);
+		setMinHeight(height);
+	}
+	
+	public final void setMaxSize(float width, float height) {
+		setMaxWidth(width);
+		setMaxHeight(height);
 	}
 
 	protected final boolean isNegativeDimensionsEnabled() {
@@ -241,6 +252,16 @@ public abstract class Bounds extends View {
 
 	protected final void setConstrainDimensionsEnabled(boolean isConstrainDimensionsEnabled) {
 		this.isConstrainDimensionsEnabled = isConstrainDimensionsEnabled;
+	}
+
+	protected final void updateHooks() {
+		if (isDirty) {
+			System.out.println("called");
+			onChangeBounds();
+			onChangePositions();
+			onChangeDimensions();
+			isDirty = false;
+		}
 	}
 
 	private static final boolean areEqual(float firstValue, float secondValue) {
