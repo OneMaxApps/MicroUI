@@ -12,7 +12,6 @@ public class Button extends AbstractButton {
 		super(x, y, w, h);
 		
 		this.text.set(requireNonNull(text,"text cannot be null"));
-		//text.setUpperCaseStyle(true);
 		this.text.setAutoResizeEnabled(true);
 		this.text.setAutoResizeMode(BIG);
 		this.text.setColor(new Color(0));

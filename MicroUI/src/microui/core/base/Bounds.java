@@ -5,8 +5,6 @@ import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 import static processing.core.PApplet.constrain;
 
-// Status: STABLE - Do not modify
-// Last Reviewed: 04.09.2025
 public abstract class Bounds extends View {
 	private static final int DEFAULT_MIN_WIDTH = 40;
 	private static final int DEFAULT_MIN_HEIGHT = 20;
@@ -14,22 +12,20 @@ public abstract class Bounds extends View {
 	private static final int DEFAULT_MAX_HEIGHT = 100;
 
 	private static final float EPSILON = .01f;
-	private float x, y, width, height, minWidth, maxWidth, minHeight, maxHeight;
-	private boolean isNegativeDimensionsEnabled, isConstrainDimensionsEnabled, isDirty;
+	private float x, y, width, height, minWidth, minHeight, maxWidth, maxHeight;
+	private boolean isPosDirty, isDimDirty, isNegativeDimensionsEnabled, isConstrainDimensionsEnabled;
 
 	public Bounds(float x, float y, float width, float height) {
-		minWidth = DEFAULT_MIN_WIDTH;
-		minHeight = DEFAULT_MIN_HEIGHT;
-		maxWidth = DEFAULT_MAX_WIDTH;
-		maxHeight = DEFAULT_MAX_HEIGHT;
-
 		setBounds(x, y, width, height);
+		setMaxWidth(DEFAULT_MAX_WIDTH);
+		setMaxHeight(DEFAULT_MAX_HEIGHT);
+		setMinHeight(DEFAULT_MIN_HEIGHT);
+		setMinWidth(DEFAULT_MIN_WIDTH);
 
 	}
 
 	public Bounds(Bounds bounds) {
-		this(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY(), bounds.getWidth(),
-				bounds.getHeight());
+		this(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 	}
 
 	public Bounds() {
@@ -46,119 +42,149 @@ public abstract class Bounds extends View {
 		return x;
 	}
 
-	public final void setX(final float x) {
+	public final void setX(float x) {
 		if (areEqual(this.x, x)) {
 			return;
 		}
+
 		this.x = x;
-		isDirty = true;
+		isPosDirty = true;
+	}
+
+	public final void setX(Bounds bounds) {
+		setX(requireNonNull(bounds, "bounds cannot be null").getX());
 	}
 
 	public float getY() {
 		return y;
 	}
 
-	public final void setY(final float y) {
+	public final void setY(float y) {
 		if (areEqual(this.y, y)) {
 			return;
 		}
 		this.y = y;
+		isPosDirty = true;
+	}
 
-		isDirty = true;
+	public final void setY(Bounds bounds) {
+		setY(requireNonNull(bounds, "bounds cannot be null").getY());
 	}
 
 	public float getWidth() {
 		return width;
 	}
 
-	public final void setWidth(final float width) {
-		if (areEqual(this.width, getTargetWidth(width))) {
-			return;
+	public final void setWidth(float width) {
+		if (isConstrainDimensionsEnabled) {
+			if (isNegativeDimensionsEnabled) {
+				if (!areEqual(this.width, constrain(width, minWidth, maxWidth))) {
+					this.width = constrain(width, minWidth, maxWidth);
+					isDimDirty = true;
+					return;
+				}
+			} else {
+				if (!areEqual(this.width, max(0, constrain(width, minWidth, maxWidth)))) {
+					this.width = max(0, constrain(width, minWidth, maxWidth));
+					isDimDirty = true;
+					return;
+				}
+			}
+		} else {
+			if (isNegativeDimensionsEnabled) {
+				if (!areEqual(this.width, width)) {
+					this.width = width;
+					isDimDirty = true;
+					return;
+				}
+			} else {
+				if (!areEqual(this.width, max(0, width))) {
+					this.width = max(0, width);
+					isDimDirty = true;
+					return;
+				}
+			}
 		}
 
-		applyWidth(width);
+	}
 
-		isDirty = true;
-
+	public final void setWidth(Bounds bounds) {
+		setWidth(requireNonNull(bounds, "bounds cannot be null").getWidth());
 	}
 
 	public float getHeight() {
 		return height;
 	}
 
-	public final void setHeight(final float height) {
-		if (areEqual(this.height, getTargetHeight(height))) {
-			return;
+	public final void setHeight(float height) {
+
+		if (isConstrainDimensionsEnabled) {
+			if (isNegativeDimensionsEnabled) {
+				if (!areEqual(this.height, constrain(height, minHeight, maxHeight))) {
+					this.height = constrain(height, minHeight, maxHeight);
+					isDimDirty = true;
+					return;
+				}
+			} else {
+				if (!areEqual(this.height, max(0, constrain(height, minHeight, maxHeight)))) {
+					this.height = max(0, constrain(height, minHeight, maxHeight));
+					isDimDirty = true;
+					return;
+				}
+			}
+		} else {
+			if (isNegativeDimensionsEnabled) {
+				if (!areEqual(this.height, height)) {
+					this.height = height;
+					isDimDirty = true;
+					return;
+				}
+			} else {
+				if (!areEqual(this.height, max(0, height))) {
+					this.height = max(0, height);
+					isDimDirty = true;
+					return;
+				}
+			}
 		}
-
-		applyHeight(height);
-
-		isDirty = true;
 
 	}
 
-	public final void setSize(final float width, final float height) {
-		if (areEqual(this.width, getTargetWidth(width)) && areEqual(this.height, getTargetHeight(height))) {
-			return;
-		}
+	public final void setHeight(Bounds bounds) {
+		setHeight(requireNonNull(bounds, "bounds cannot be null").getHeight());
+	}
 
-		applyDimensions(getTargetWidth(width), getTargetHeight(height));
+	public final void setPosition(float x, float y) {
+		setX(x);
+		setY(y);
+	}
 
-		isDirty = true;
+	public final void setPosition(Bounds bounds) {
+		setPosition(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY());
+	}
 
+	public final void setSize(float width, float height) {
+		setWidth(width);
+		setHeight(height);
 	}
 
 	public final void setSize(float size) {
-		setSize(size, size);
+		setWidth(size);
+		setHeight(size);
 	}
 
-	public final void setSize(final Bounds bounds) {
+	public final void setSize(Bounds bounds) {
 		setSize(requireNonNull(bounds, "bounds cannot be null").getWidth(), bounds.getHeight());
 	}
 
-	public final void setBounds(final float x, final float y, final float width, final float height) {
-		final boolean hasChanges = !areEqual(this.x, x) || !areEqual(this.y, y)
-				|| !areEqual(this.width, getTargetWidth(width)) || !areEqual(this.height, getTargetHeight(height));
-
-		if (!hasChanges) {
-			return;
-		}
-
-		this.x = x;
-		this.y = y;
-		applyDimensions(getTargetWidth(width), getTargetHeight(height));
-
-		isDirty = true;
-
+	public final void setBounds(float x, float y, float width, float height) {
+		setPosition(x, y);
+		setSize(width, height);
 	}
 
-	public final void setBounds(final Bounds bounds) {
+	public final void setBounds(Bounds bounds) {
 		setBounds(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY(), bounds.getWidth(),
 				bounds.getHeight());
-	}
-
-	public final void setBoundsState(final Bounds bounds) {
-		setBounds(requireNonNull(bounds, "bounds cannot be null"));
-		setMinWidth(bounds.getMinWidth());
-		setMaxWidth(bounds.getMaxWidth());
-		setMinHeight(bounds.getMinHeight());
-		setMaxHeight(bounds.getMaxHeight());
-	}
-
-	public final void setPosition(final float x, final float y) {
-		if (areEqual(this.x, x) && areEqual(this.y, y)) {
-			return;
-		}
-
-		this.x = x;
-		this.y = y;
-
-		isDirty = true;
-
-	}
-
-	public final void setPosition(final Bounds bounds) {
-		setPosition(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY());
 	}
 
 	public final float getMinWidth() {
@@ -166,27 +192,17 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMinWidth(float minWidth) {
+		if (isNegativeDimensionsEnabled) {
+			this.minWidth = minWidth;
+		} else {
+			this.minWidth = max(0, minWidth);
+		}
+
+		setWidth(width);
+
 		if (minWidth > maxWidth) {
 			throw new IllegalArgumentException("min width cannot be greater than max width");
 		}
-
-		this.minWidth = isNegativeDimensionsEnabled ? minWidth : max(0, minWidth);
-
-		isDirty = true;
-	}
-
-	public final float getMaxWidth() {
-		return maxWidth;
-	}
-
-	public final void setMaxWidth(float maxWidth) {
-		if (maxWidth < minWidth) {
-			throw new IllegalArgumentException("max width cannot be lower than min width");
-		}
-
-		this.maxWidth = isNegativeDimensionsEnabled ? maxWidth : max(0, maxWidth);
-
-		isDirty = true;
 	}
 
 	public final float getMinHeight() {
@@ -194,13 +210,36 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMinHeight(float minHeight) {
+		if (isNegativeDimensionsEnabled) {
+			this.minHeight = minHeight;
+		} else {
+			this.minHeight = max(0, minHeight);
+		}
+
+		setHeight(height);
+
 		if (minHeight > maxHeight) {
 			throw new IllegalArgumentException("min height cannot be greater than max height");
 		}
 
-		this.minHeight = isNegativeDimensionsEnabled ? minHeight : max(0, minHeight);
+	}
 
-		isDirty = true;
+	public final float getMaxWidth() {
+		return maxWidth;
+	}
+
+	public final void setMaxWidth(float maxWidth) {
+		if (isNegativeDimensionsEnabled) {
+			this.maxWidth = maxWidth;
+		} else {
+			this.maxWidth = max(0, maxWidth);
+		}
+		
+		setWidth(width);
+
+		if (maxWidth < minWidth) {
+			throw new IllegalArgumentException("max width cannot be lower than min width");
+		}
 
 	}
 
@@ -209,97 +248,91 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMaxHeight(float maxHeight) {
+		if (isNegativeDimensionsEnabled) {
+			this.maxHeight = maxHeight;
+		} else {
+			this.maxHeight = max(0, maxHeight);
+		}
+
+		setHeight(height);
+
 		if (maxHeight < minHeight) {
 			throw new IllegalArgumentException("max height cannot be lower than min height");
 		}
-
-		this.maxHeight = isNegativeDimensionsEnabled ? maxHeight : max(0, maxHeight);
-
-		isDirty = true;
-
-	}
-	
-	public final void setMinSize(float width, float height) {
-		setMinWidth(width);
-		setMinHeight(height);
-	}
-	
-	public final void setMaxSize(float width, float height) {
-		setMaxWidth(width);
-		setMaxHeight(height);
 	}
 
-	protected final boolean isNegativeDimensionsEnabled() {
-		return isNegativeDimensionsEnabled;
+	public final void setMinSize(float minWidth, float minHeight) {
+		setMinWidth(minWidth);
+		setMinHeight(minHeight);
 	}
 
-	protected final void setNegativeDimensionsEnabled(boolean isNegativeDimensionsEnabled) {
-		this.isNegativeDimensionsEnabled = isNegativeDimensionsEnabled;
+	public final void setMaxSize(float maxWidth, float maxHeight) {
+		setMaxWidth(maxWidth);
+		setMaxHeight(maxHeight);
 	}
 
-	protected void onChangeBounds() {
-	}
-
-	protected void onChangeDimensions() {
+	public void setBoundsState(Bounds bounds) {
+		setBounds(bounds);
+		setMinWidth(bounds.getMinWidth());
+		setMinHeight(bounds.getMinHeight());
+		setMaxWidth(bounds.getMaxWidth());
+		setMaxHeight(bounds.getMaxHeight());
 	}
 
 	protected void onChangePositions() {
 	}
 
-	protected final boolean isConstrainDimensionsEnabled() {
+	protected void onChangeDimensions() {
+	}
+
+	protected void onChangeBounds() {
+	}
+
+	protected boolean isNegativeDimensionsEnabled() {
+		return isNegativeDimensionsEnabled;
+	}
+
+	protected void setNegativeDimensionsEnabled(boolean isNegativeDimensionsEnabled) {
+		this.isNegativeDimensionsEnabled = isNegativeDimensionsEnabled;
+	}
+
+	protected boolean isConstrainDimensionsEnabled() {
 		return isConstrainDimensionsEnabled;
 	}
 
-	protected final void setConstrainDimensionsEnabled(boolean isConstrainDimensionsEnabled) {
-		this.isConstrainDimensionsEnabled = isConstrainDimensionsEnabled;
-	}
-
-	protected final void updateHooks() {
-		if (isDirty) {
-			System.out.println("called");
-			onChangeBounds();
-			onChangePositions();
-			onChangeDimensions();
-			isDirty = false;
+	protected void setConstrainDimensionsEnabled(boolean isConstrainDimensionsEnabled) {
+		if (this.isConstrainDimensionsEnabled != isConstrainDimensionsEnabled) {
+			this.isConstrainDimensionsEnabled = isConstrainDimensionsEnabled;
+			isDimDirty = true;
 		}
 	}
 
-	private static final boolean areEqual(float firstValue, float secondValue) {
+	private static boolean areEqual(float firstValue, float secondValue) {
 		return abs(firstValue - secondValue) < EPSILON;
 	}
 
-	private void applyWidth(float width) {
-		this.width = isNegativeDimensionsEnabled ? width : max(0, width);
-	}
-
-	private void applyHeight(float height) {
-		this.height = isNegativeDimensionsEnabled ? height : max(0, height);
-	}
-
-	private void applyDimensions(float width, float height) {
-		applyWidth(width);
-		applyHeight(height);
-	}
-
-	private float getTargetWidth(float rawWidth) {
-		if (!isConstrainDimensionsEnabled) {
-			return rawWidth;
+	private void updateHooks() {
+		if (isPosDirty && isDimDirty) {
+			onChangePositions();
+			onChangeDimensions();
+			onChangeBounds();
+			isPosDirty = isDimDirty = false;
+			return;
 		}
 
-		if (isNegativeDimensionsEnabled) {
-			return constrain(rawWidth, minWidth, maxWidth);
-		}
-		return constrain(rawWidth, max(0, minWidth), maxWidth);
-	}
-
-	private float getTargetHeight(float rawHeight) {
-		if (!isConstrainDimensionsEnabled) {
-			return rawHeight;
+		if (isPosDirty || isDimDirty) {
+			onChangeBounds();
 		}
 
-		if (isNegativeDimensionsEnabled) {
-			return constrain(rawHeight, minHeight, maxHeight);
+		if (isPosDirty) {
+			onChangePositions();
+			isPosDirty = false;
 		}
-		return constrain(rawHeight, max(0, minHeight), maxHeight);
+
+		if (isDimDirty) {
+			onChangeDimensions();
+			isDimDirty = false;
+		}
 	}
+	
 }

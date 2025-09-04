@@ -1,7 +1,6 @@
 package microui;
 
-import microui.component.MenuButton;
-import microui.container.BorderContainer;
+import microui.component.Button;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 
@@ -17,7 +16,7 @@ import processing.core.PApplet;
 //[0] TextView
 
 public class Launcher extends PApplet {
-	BorderContainer borderContainer;
+	Button component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -31,17 +30,17 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		borderContainer = new BorderContainer();
-		borderContainer.set(new MenuButton());
-		borderContainer.setRight(true);
+		component = new Button("c",200,200,400,200);
+		component.setMinSize(10,10);
+		component.setMaxSize(100,100);
 	}
 
 	@Override
 	public void draw() {
 		background(200);
-		borderContainer.draw();
+		component.draw();
 		if(mouseButton == RIGHT) {
-			borderContainer.setSize(mouseX,mouseY);
+			component.setSize(mouseX,mouseY);
 		}
 		GlobalTooltip.draw();
 	}

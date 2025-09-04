@@ -28,8 +28,8 @@ public class RowLayout extends Layout {
 		drawElements();
 	}
 	
-	public RowLayout add(Bounds form, float weight) {
-		elementList.add(form);
+	public RowLayout add(Bounds bounds, float weight) {
+		elementList.add(bounds);
 		
 		if(weightList.isEmpty()) {
 			weightList.add(constrain(weight,0,1f));

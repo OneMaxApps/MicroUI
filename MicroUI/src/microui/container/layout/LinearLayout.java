@@ -61,8 +61,8 @@ public class LinearLayout extends Layout {
 		recalcListState();
 	}
 	
-	public LinearLayout add(Bounds baseRectangle, float weight) {
-		elementList.add(baseRectangle);
+	public LinearLayout add(Bounds bounds, float weight) {
+		elementList.add(bounds);
 		
 		if(weightList.isEmpty()) {
 			weightList.add(constrain(weight,0,1f));
