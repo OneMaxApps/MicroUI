@@ -18,6 +18,7 @@ public abstract class AbstractButton extends Component {
 		super(x, y, w, h);
 		setVisible(true);
 		setConstrainDimensionsEnabled(true);
+		setMaxSize(100,30);
 		
 		ripples = new Ripples(this);
 		hover = new Hover(this);
@@ -32,13 +33,13 @@ public abstract class AbstractButton extends Component {
 	@Override
 	protected void update() {
 		setEventListener(this);
-		cxt.pushStyle();
+		ctx.pushStyle();
 		stroke.apply();
 		getMutableColor().apply();
-		cxt.rect(getX(), getY(), getWidth(), getHeight());
+		ctx.rect(getX(), getY(), getWidth(), getHeight());
 		hover.draw();
 		ripples.draw();
-		cxt.popStyle();
+		ctx.popStyle();
 	}
 
 	public Color getRipplesColor() {

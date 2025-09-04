@@ -19,7 +19,7 @@ public class RowLayout extends Layout {
 	}
 	
 	public RowLayout() {
-		this(0,0, cxt.width, cxt.height);
+		this(0,0, ctx.width, ctx.height);
 	}
 	
 	@Override

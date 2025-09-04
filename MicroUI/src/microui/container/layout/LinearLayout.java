@@ -23,7 +23,7 @@ public class LinearLayout extends Layout {
 	}
 	
 	public LinearLayout() {
-		this(0,0,cxt.width,cxt.height);
+		this(0,0,ctx.width,ctx.height);
 	}
 
 	@Override

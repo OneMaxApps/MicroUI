@@ -13,12 +13,12 @@ public class Dial extends Component implements Scrollable {
 	}
 	
 	public Dial() {
-		this(cxt.width*.4f,cxt.height*.4f,cxt.width*.2f,cxt.height*.2f);
+		this(ctx.width*.4f,ctx.height*.4f,ctx.width*.2f,ctx.height*.2f);
 	}
 
 	@Override
 	protected void update() {
-		cxt.rect(getX(), getY(), getWidth(), getHeight());
+		ctx.rect(getX(), getY(), getWidth(), getHeight());
 	}
 	
 	@Override

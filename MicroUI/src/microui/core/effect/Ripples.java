@@ -41,7 +41,7 @@ public final class Ripples extends View {
 		pg.clear();
 		circle.draw(pg);
 		pg.endDraw();
-		cxt.image(pg, bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
+		ctx.image(pg, bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
 		}
 		
 	}
@@ -78,7 +78,7 @@ public final class Ripples extends View {
 	}
 
 	private final void checkResizing() {
-		if(!isVisible() || cxt.mousePressed) { return; }
+		if(!isVisible() || ctx.mousePressed) { return; }
 		
 		if(isResized()) { createGraphics(); }
 		
@@ -89,7 +89,7 @@ public final class Ripples extends View {
 	}
 	
 	private final void createGraphics() {
-		pg = cxt.createGraphics((int) max(1,bounds.getWidth()),(int) max(1,bounds.getHeight()),cxt.sketchRenderer());
+		pg = ctx.createGraphics((int) max(1,bounds.getWidth()),(int) max(1,bounds.getHeight()),ctx.sketchRenderer());
 		Metrics.register(pg);
 	}
 
@@ -126,8 +126,8 @@ public final class Ripples extends View {
 		}
 		
 		private final void resetPosition() {
-			x = cxt.mouseX-bounds.getX();
-			y = cxt.mouseY-bounds.getY();
+			x = ctx.mouseX-bounds.getX();
+			y = ctx.mouseY-bounds.getY();
 		}
 	}
 }

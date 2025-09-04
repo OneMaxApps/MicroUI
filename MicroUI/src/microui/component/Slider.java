@@ -25,7 +25,7 @@ public class Slider extends RangeControl {
 	}
 	
 	public Slider() {
-		this(cxt.width*.25f,cxt.height*.45f,cxt.width*.5f,cxt.height*.1f);
+		this(ctx.width*.25f,ctx.height*.45f,ctx.width*.5f,ctx.height*.1f);
 	}
 
 	@Override
@@ -35,8 +35,8 @@ public class Slider extends RangeControl {
 		
 		if(isHolding()) {
 			switch(orientation) {
-			case HORIZONTAL: value.set(map(cxt.mouseX,getX(),getX()+getWidth(),value.getMin(),value.getMax())); break;
-			case VERTICAL: value.set(map(cxt.mouseY,getY(),getY()+getHeight(),value.getMax(),value.getMin())); break;
+			case HORIZONTAL: value.set(map(ctx.mouseX,getX(),getX()+getWidth(),value.getMin(),value.getMax())); break;
+			case VERTICAL: value.set(map(ctx.mouseY,getY(),getY()+getHeight(),value.getMax(),value.getMin())); break;
 			}
 			onChangeBounds();
 			
@@ -98,16 +98,16 @@ public class Slider extends RangeControl {
 	    
 	    
 	    public Rect() {
-	      this(cxt.width*.3f,cxt.height*.45f,cxt.width*.4f,cxt.height*.1f);
+	      this(ctx.width*.3f,ctx.height*.45f,ctx.width*.4f,ctx.height*.1f);
 	    }
 	    
 	    @Override
 	    public void update() {
-	      cxt.pushStyle();
+	      ctx.pushStyle();
 	      stroke.apply();
 		  color.apply();
-		  cxt.rect(getX(),getY(),getWidth(),getHeight());
-		  cxt.popStyle();
+		  ctx.rect(getX(),getY(),getWidth(),getHeight());
+		  ctx.popStyle();
 	 
 	    }
 	    

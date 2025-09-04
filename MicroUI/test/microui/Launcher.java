@@ -1,13 +1,13 @@
 package microui;
 
-import microui.component.CheckBox;
+import microui.component.MenuButton;
+import microui.container.BorderContainer;
 import microui.service.GlobalTooltip;
-import microui.util.Metrics;
 import processing.core.PApplet;
 
 // TODO Check what's methods and objects must be a part of components API
 //[1] Button
-//[1] CheckBox
+//[0] CheckBox
 //[0] Dial
 //[0] EditText
 //[0] MenuButton
@@ -17,7 +17,7 @@ import processing.core.PApplet;
 //[0] TextView
 
 public class Launcher extends PApplet {
-	private CheckBox component;
+	BorderContainer borderContainer;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -31,21 +31,18 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new CheckBox();
+		borderContainer = new BorderContainer();
+		borderContainer.set(new MenuButton());
+		borderContainer.setRight(true);
 	}
 
 	@Override
 	public void draw() {
 		background(200);
-		
-		component.draw();
-		
+		borderContainer.draw();
 		if(mouseButton == RIGHT) {
-			component.setSize(mouseX,mouseY);
+			borderContainer.setSize(mouseX,mouseY);
 		}
-		
-		Metrics.printAll();
-		
 		GlobalTooltip.draw();
 	}
 

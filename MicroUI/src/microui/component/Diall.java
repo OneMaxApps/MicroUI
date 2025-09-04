@@ -49,36 +49,36 @@ public final class Diall extends Component implements Scrollable {
 	}
 
 	public Diall() {
-		this(cxt.width*.4f,cxt.height*.4f,cxt.width*.2f,cxt.height*.2f);
+		this(ctx.width*.4f,ctx.height*.4f,ctx.width*.2f,ctx.height*.2f);
 	}
 
 	@Override
 	protected void update() {
 		setEventListener(this);
 		
-		cxt.pushStyle();
+		ctx.pushStyle();
 		
 		stroke.apply();
 		getMutableColor().apply();
-		cxt.ellipseMode(CORNER);
-		cxt.circle(getX(), getY(), min(getWidth(),getHeight()));
+		ctx.ellipseMode(CORNER);
+		ctx.circle(getX(), getY(), min(getWidth(),getHeight()));
 		
-		cxt.push();
-		cxt.translate(centerX,centerY);
-		cxt.rotate(map(value.get(),value.getMin(),value.getMax(),RADIUS_START,RADIUS_END));
+		ctx.push();
+		ctx.translate(centerX,centerY);
+		ctx.rotate(map(value.get(),value.getMin(),value.getMax(),RADIUS_START,RADIUS_END));
 		image.draw();
 		arrow.draw();
-		cxt.pop();
+		ctx.pop();
 		
 		if(isMouseInside() || isHolding()) {
 			
-			if(isHolding()) { value.append((cxt.pmouseY-cxt.mouseY)/2); }
+			if(isHolding()) { value.append((ctx.pmouseY-ctx.mouseY)/2); }
 			
 			valueOnDraw();
 			
 		}
 		
-		cxt.popStyle();
+		ctx.popStyle();
 		
 	}
 
@@ -134,10 +134,10 @@ public final class Diall extends Component implements Scrollable {
 
 		@Override
 		public void update() {
-			cxt.pushStyle();
+			ctx.pushStyle();
 			tint.apply();
-			cxt.image(image,-getWidth()/2,-getHeight()/2,getWidth(),getHeight());
-			cxt.popStyle();
+			ctx.image(image,-getWidth()/2,-getHeight()/2,getWidth(),getHeight());
+			ctx.popStyle();
 		}
 		
 	}
@@ -159,15 +159,15 @@ public final class Diall extends Component implements Scrollable {
 
 		@Override
 		protected void update() {
-			cxt.push();
-			cxt.translate(getX(),getY());
+			ctx.push();
+			ctx.translate(getX(),getY());
 			if(image != null) {
-				cxt.image(image, 0,0,getWidth(),getHeight());
+				ctx.image(image, 0,0,getWidth(),getHeight());
 			} else {
 				color.apply();
-				cxt.rect(0, 0, getWidth(), getHeight());
+				ctx.rect(0, 0, getWidth(), getHeight());
 			}
-			cxt.pop();
+			ctx.pop();
 		}
 		
 		@Override

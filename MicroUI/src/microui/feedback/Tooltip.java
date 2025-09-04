@@ -61,7 +61,7 @@ public final class Tooltip extends Bounds {
 		if(!isEnabled) { return; }
 		
 		color.apply();
-		cxt.rect(getX(), getY(), getWidth(), getHeight());
+		ctx.rect(getX(), getY(), getWidth(), getHeight());
 		
 		if(container != null) {
 			container.draw();
@@ -115,7 +115,7 @@ public final class Tooltip extends Bounds {
 		} else { setVisible(false); }
 		
 		if(isVisible()) {
-			setPosition(constrain(cxt.mouseX+PADDING_X,0,cxt.width-getWidth()),constrain(cxt.mouseY,0,cxt.height-getHeight()));
+			setPosition(constrain(ctx.mouseX+PADDING_X,0,ctx.width-getWidth()),constrain(ctx.mouseY,0,ctx.height-getHeight()));
 			
 			if(container != null) {
 				container.setPosition(this);
@@ -185,12 +185,12 @@ public final class Tooltip extends Bounds {
 		}
 		
 		private final void draw() {
-			cxt.pushStyle();
+			ctx.pushStyle();
 			colorText.apply();
-			cxt.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
-			cxt.textAlign(CENTER,CENTER);
-			cxt.text(sb.toString(), getX(), getY(), getWidth(), getHeight());
-			cxt.popStyle();
+			ctx.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
+			ctx.textAlign(CENTER,CENTER);
+			ctx.text(sb.toString(), getX(), getY(), getWidth(), getHeight());
+			ctx.popStyle();
 		}
 		
 		private final int getWidth() {
@@ -210,14 +210,14 @@ public final class Tooltip extends Bounds {
 			
 			float maxWidth = 0;
 		
-			cxt.pushStyle();
+			ctx.pushStyle();
 			
-			cxt.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
+			ctx.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
 			for(String line : LINES) {
-				if(cxt.textWidth(line) > maxWidth) { maxWidth = cxt.textWidth(line); }
+				if(ctx.textWidth(line) > maxWidth) { maxWidth = ctx.textWidth(line); }
 			}
 			
-			cxt.popStyle();
+			ctx.popStyle();
 			final float SCALE_WIDTH = 1.1f;
 			width = (int) (maxWidth*SCALE_WIDTH);
 			
@@ -226,13 +226,13 @@ public final class Tooltip extends Bounds {
 		private final void calculateHeight() {
 			final int LINES = sb.toString().split("\n").length;
 			
-			cxt.pushStyle();
-			cxt.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
+			ctx.pushStyle();
+			ctx.textSize(GlobalTooltip.DEFAULT_TEXT_SIZE);
 			
 			final float SCALE_HEIGHT = 1.2f;
-			height = (int) ((cxt.textAscent()+cxt.textDescent())*SCALE_HEIGHT)*LINES;
+			height = (int) ((ctx.textAscent()+ctx.textDescent())*SCALE_HEIGHT)*LINES;
 			
-			cxt.popStyle();
+			ctx.popStyle();
 		}
 
 		

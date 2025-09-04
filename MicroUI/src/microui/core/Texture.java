@@ -26,10 +26,10 @@ public class Texture extends Bounds {
 	@Override
 	protected void update() {
 		if(isLoaded()) {
-			  cxt.pushStyle();
-			  cxt.tint(tint.get());
-			  cxt.image(image,getX(), getY(), getWidth(), getHeight());
-			  cxt.popStyle();
+			  ctx.pushStyle();
+			  ctx.tint(tint.get());
+			  ctx.image(image,getX(), getY(), getWidth(), getHeight());
+			  ctx.popStyle();
 		  }
 	}
 
@@ -42,7 +42,7 @@ public class Texture extends Bounds {
 	}
 	
 	public final void load(final String path) {
-		image = cxt.loadImage(requireNonNull(path, "path cannot be null"));
+		image = ctx.loadImage(requireNonNull(path, "path cannot be null"));
 	}
 	
 	public final PImage get() {

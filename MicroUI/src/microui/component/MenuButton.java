@@ -40,16 +40,16 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	public MenuButton(String title) {
-		this(title,cxt.width*.3f,cxt.height*.45f,cxt.width*.4f,cxt.height*.1f);
+		this(title,ctx.width*.3f,ctx.height*.45f,ctx.width*.4f,ctx.height*.1f);
 	}
 	
 	public MenuButton(String title, String... items) {
-		this(title,cxt.width*.3f,cxt.height*.45f,cxt.width*.4f,cxt.height*.1f);
+		this(title,ctx.width*.3f,ctx.height*.45f,ctx.width*.4f,ctx.height*.1f);
 		add(items);
 	}
 	
 	public MenuButton() {
-		this("Menu Button",cxt.width*.3f,cxt.height*.45f,cxt.width*.4f,cxt.height*.1f);
+		this("Menu Button",ctx.width*.3f,ctx.height*.45f,ctx.width*.4f,ctx.height*.1f);
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	public final void add(final MenuButton... subMenu) {
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < cxt.width;
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < ctx.width;
 		for(int i = 0; i < subMenu.length; i++) {
 			itemList.add(subMenu[i]);
 			subMenu[i].setRoot(root);
@@ -159,7 +159,7 @@ public class MenuButton extends Button implements Scrollable {
 		super.onChangeBounds();
 		if(itemList == null) { return; }
 		
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < cxt.width;
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < ctx.width;
 		
 		listHeight = 0;
 		for(int i = 0; i < itemList.size(); i++) {
@@ -185,7 +185,7 @@ public class MenuButton extends Button implements Scrollable {
 		
 		itemList.remove(index);
 		listHeight -= getHeight();
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < cxt.width;
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < ctx.width;
 		for(int i = 0; i < itemList.size(); i++) {
 			final Button item = itemList.get(i);
 			if(isRoot) {
@@ -280,7 +280,7 @@ public class MenuButton extends Button implements Scrollable {
 		
 		inside = checkInsideToAnyIn();
 		
-		if(cxt.mousePressed && isMouseOutside() && !inside) {
+		if(ctx.mousePressed && isMouseOutside() && !inside) {
 			close();
 		}
 		
@@ -350,7 +350,7 @@ public class MenuButton extends Button implements Scrollable {
 	}
 	
 	private final void childListState(final String... title) {
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < cxt.width; 
+		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < ctx.width; 
 		for(int i = 0; i < title.length; i++) {
 			itemList.add(new Button(title[i],CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),getY()+listHeight,getWidth(),getHeight()));
 			listHeight += getHeight();
@@ -365,11 +365,11 @@ public class MenuButton extends Button implements Scrollable {
 	
 	private final void markOnDraw() {
 			if(!isMarkVisible) { return; }
-			cxt.pushStyle();
-			cxt.noStroke();
-			if(isOpen) { cxt.fill(0,255,0,128); } else { cxt.fill(255,128); }
-			cxt.rect(markX,markY,markW,markH);
-			cxt.popStyle();
+			ctx.pushStyle();
+			ctx.noStroke();
+			if(isOpen) { ctx.fill(0,255,0,128); } else { ctx.fill(255,128); }
+			ctx.rect(markX,markY,markW,markH);
+			ctx.popStyle();
 			
 	}
 	

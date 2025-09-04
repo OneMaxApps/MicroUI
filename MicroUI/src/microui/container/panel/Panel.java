@@ -28,11 +28,11 @@ public class Panel extends Container {
 	}
 	
 	public Panel(String title) {
-		this(title,cxt.width*.4f,cxt.height*.4f,cxt.width*.2f,cxt.height*.2f);
+		this(title,ctx.width*.4f,ctx.height*.4f,ctx.width*.2f,ctx.height*.2f);
 	}
 	
 	public Panel() {
-		this("",cxt.width*.4f,cxt.height*.4f,cxt.width*.2f,cxt.height*.2f);
+		this("",ctx.width*.4f,ctx.height*.4f,ctx.width*.2f,ctx.height*.2f);
 	}
 
 	@Override
@@ -141,17 +141,17 @@ public class Panel extends Container {
 		public void update() {
 			event.listen(this);
 			
-			cxt.pushStyle();
-			cxt.fill(0,24);
-			cxt.rect(getX(), getY(), getWidth(), getHeight());
-			cxt.popStyle();
+			ctx.pushStyle();
+			ctx.fill(0,24);
+			ctx.rect(getX(), getY(), getWidth(), getHeight());
+			ctx.popStyle();
 			
 			buttonClose.draw();
 			
 			title.draw();
 			
 			if(event.holding()) {
-				Panel.this.setPosition(Panel.this.getX()+(cxt.mouseX-cxt.pmouseX),Panel.this.getY()+(cxt.mouseY-cxt.pmouseY));
+				Panel.this.setPosition(Panel.this.getX()+(ctx.mouseX-ctx.pmouseX),Panel.this.getY()+(ctx.mouseY-ctx.pmouseY));
 			}
 		}
 

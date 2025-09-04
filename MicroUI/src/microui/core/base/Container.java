@@ -20,11 +20,17 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 	private final Margin margin;
 	private final Texture image;
 	private final Shadow shadow;
-	private final Container context;
 
 	protected Container(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setVisible(true);
+		setConstrainDimensionsEnabled(true);
+		
+		setMinWidth(100);
+		setMinHeight(100);
+		setMaxWidth(ctx.width);
+		setMaxHeight(ctx.height);
+		
 		color = new Color(0, 0, 128, 32);
 		margin = new Margin();
 		image = new Texture();
@@ -32,7 +38,6 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		shadow = new Shadow(this);
 		shadow.setVisible(false);
 
-		context = this;
 	}
 
 	@Override
@@ -49,17 +54,17 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 		if (image.isLoaded()) {
 			image.draw();
 		} else {
-			cxt.pushStyle();
-			cxt.stroke(0);
-			cxt.strokeWeight(1);
-			cxt.fill(color.get());
-			cxt.rect(getX(), getY(), getWidth(), getHeight());
-			cxt.popStyle();
+			ctx.pushStyle();
+			ctx.stroke(0);
+			ctx.strokeWeight(1);
+			ctx.fill(color.get());
+			ctx.rect(getX(), getY(), getWidth(), getHeight());
+			ctx.popStyle();
 		}
 
-		cxt.pushStyle();
+		ctx.pushStyle();
 		shadow.draw();
-		cxt.popStyle();
+		ctx.popStyle();
 
 	}
 
@@ -338,12 +343,12 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 			}
 
 			private void draw() {
-				cxt.pushStyle();
-				cxt.noStroke();
+				ctx.pushStyle();
+				ctx.noStroke();
 				for (Dot dot : dots) {
 					dot.draw();
 				}
-				cxt.popStyle();
+				ctx.popStyle();
 			}
 
 			private void inTransforms() {
@@ -367,7 +372,7 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 				@Override
 				public final void update() {
 					event.listen(this);
-					cxt.rect(getX(), getY(), getWidth(), getHeight());
+					ctx.rect(getX(), getY(), getWidth(), getHeight());
 					if (event.holding()) {
 
 						switch (mode) {
@@ -375,42 +380,42 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 							tmpX = getRealX();
 							tmpY = getRealY();
 
-							context.setPosition(cxt.mouseX, cxt.mouseY);
+							Container.this.setPosition(ctx.mouseX, ctx.mouseY);
 
 							difX = tmpX - getRealX();
 							difY = tmpY - getRealY();
 
-							context.setSize(getRealWidth() + difX, getRealHeight() + difY);
+							Container.this.setSize(getRealWidth() + difX, getRealHeight() + difY);
 							break;
 
 						case RIGHT:
 							tmpY = getRealY();
 
-							context.setWidth(cxt.mouseX - getRealX());
-							context.setY(cxt.mouseY);
+							Container.this.setWidth(ctx.mouseX - getRealX());
+							Container.this.setY(ctx.mouseY);
 
 							difY = tmpY - getRealY();
 
-							context.setHeight(getRealHeight() + difY);
+							Container.this.setHeight(getRealHeight() + difY);
 							break;
 
 						case DOWN_LEFT:
 							tmpX = getRealX();
 
-							context.setX(cxt.mouseX);
-							context.setHeight(cxt.mouseY - getRealY());
+							Container.this.setX(ctx.mouseX);
+							Container.this.setHeight(ctx.mouseY - getRealY());
 
 							difX = tmpX - getRealX();
 
-							context.setWidth(getRealWidth() + difX);
+							Container.this.setWidth(getRealWidth() + difX);
 							break;
 
 						case DOWN_RIGHT:
-							context.setSize(cxt.mouseX - getRealX(), cxt.mouseY - getRealY());
+							Container.this.setSize(ctx.mouseX - getRealX(), ctx.mouseY - getRealY());
 							break;
 						}
 
-						context.setSize(max(minWidth, context.getWidth()), max(minHeight, context.getHeight()));
+						Container.this.setSize(max(minWidth, Container.this.getWidth()), max(minHeight, Container.this.getHeight()));
 					}
 				}
 

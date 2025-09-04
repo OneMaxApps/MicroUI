@@ -8,7 +8,7 @@ import processing.core.PApplet;
 // Status: STABLE - Do not modify
 // Last Reviewed: 03.09.2025
 public abstract class View implements Visible {
-	protected static final PApplet cxt = MicroUI.getContext();
+	protected static final PApplet ctx = MicroUI.getContext();
 	private boolean isVisible;
 	private int priority;
 
@@ -28,9 +28,9 @@ public abstract class View implements Visible {
 
 	public void draw() {
 		if (isVisible()) {
-			cxt.pushStyle();
+			ctx.pushStyle();
 			update();
-			cxt.popStyle();
+			ctx.popStyle();
 		}
 	}
 

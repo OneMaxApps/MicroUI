@@ -63,7 +63,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	public TextField() {
-		this(cxt.width*.25f,cxt.height*.45f,cxt.width*.5f,cxt.height*.1f);
+		this(ctx.width*.25f,ctx.height*.45f,ctx.width*.5f,ctx.height*.1f);
 	}
 
 	@Override
@@ -73,9 +73,9 @@ public final class TextField extends Component implements KeyPressable {
 		
 		checkDimensions();
 		
-		cxt.pushStyle();
+		ctx.pushStyle();
 		getMutableColor().apply();
-			cxt.rect(getX(),getY(),getWidth(),getHeight());
+			ctx.rect(getX(),getY(),getWidth(),getHeight());
 			
 			pg.beginDraw();
 				pg.clear();
@@ -86,13 +86,13 @@ public final class TextField extends Component implements KeyPressable {
 				}
 			pg.endDraw();
 			
-			cxt.image(pg, getX(), getY(), getWidth(), getHeight());
+			ctx.image(pg, getX(), getY(), getWidth(), getHeight());
 			
 			if(!isFocused) {
-				cxt.fill(0,32);
-				cxt.rect(getX(), getY(), getWidth(), getHeight());
+				ctx.fill(0,32);
+				ctx.rect(getX(), getY(), getWidth(), getHeight());
 			}
-		cxt.popStyle();
+		ctx.popStyle();
 		
 		events();
 	}
@@ -124,9 +124,9 @@ public final class TextField extends Component implements KeyPressable {
 		if(isHolding()) {
 			if(text.isEmpty()) { return; }
 			
-			cursor.column.set((int) map(cxt.mouseX-getX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
+			cursor.column.set((int) map(ctx.mouseX-getX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
 			
-			if(cxt.frameCount%3 == 0) {
+			if(ctx.frameCount%3 == 0) {
 				if(cursor.isCloseToLeftSide()) { scroll.append(-cursor.column.getCurrentCharWidth()); }
 				if(cursor.isCloseToRightSide()) { scroll.append(cursor.column.getCurrentCharWidth()); }
 			}
@@ -155,7 +155,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	private final boolean mustNotHaveFocus() {
-		return cxt.mousePressed && isMouseOutside() && !isHolding();
+		return ctx.mousePressed && isMouseOutside() && !isHolding();
 	}
 	
 	private final void updateScrollMax() {
@@ -168,12 +168,12 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	private final void checkDimensions() {
-		if(cxt.mousePressed) { return; }
+		if(ctx.mousePressed) { return; }
 		if(componentSizeChanged) { createPGraphics(); }
 	}
 	
 	private final void createPGraphics() {
-		pg = cxt.createGraphics((int) max(1,getWidth()), (int) max(1,getHeight()), cxt.sketchRenderer());
+		pg = ctx.createGraphics((int) max(1,getWidth()), (int) max(1,getHeight()), ctx.sketchRenderer());
 		componentSizeChanged = false;
 		Metrics.register(pg);
 	}
@@ -239,7 +239,7 @@ public final class TextField extends Component implements KeyPressable {
 			return;
 		}
 		
-		switch(cxt.keyCode) {
+		switch(ctx.keyCode) {
 		case LEFT :
 			cursor.column.back();
 			if(cursor.isInStart()) { return; }
@@ -295,7 +295,7 @@ public final class TextField extends Component implements KeyPressable {
 				selection.reset();
 			}
 			
-			text.insert(cursor.column.get(), cxt.key);
+			text.insert(cursor.column.get(), ctx.key);
 			
 		break;
 		

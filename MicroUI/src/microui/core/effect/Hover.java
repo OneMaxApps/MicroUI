@@ -30,14 +30,14 @@ public final class Hover extends View {
 		if(!isEnabled) { return; }
 		
 		if(isInside) {
-			cxt.pushStyle();
-			cxt.fill(color.get());
+			ctx.pushStyle();
+			ctx.fill(color.get());
 			rectOnDraw();
 			if(isPressed) {
-			cxt.fill(0,64);
+			ctx.fill(0,64);
 			rectOnDraw();
 			}
-			cxt.popStyle();
+			ctx.popStyle();
 		}
 	}
 	
@@ -82,9 +82,9 @@ public final class Hover extends View {
 	
 	private void rectOnDraw() {
 		if(alternativeBounds != null) {
-			cxt.rect(alternativeBounds.getX(),alternativeBounds.getY(),alternativeBounds.getWidth(),alternativeBounds.getHeight());
+			ctx.rect(alternativeBounds.getX(),alternativeBounds.getY(),alternativeBounds.getWidth(),alternativeBounds.getHeight());
 			} else {
-				cxt.rect(component.getX(),component.getY(),component.getWidth(),component.getHeight());
+				ctx.rect(component.getX(),component.getY(),component.getWidth(),component.getHeight());
 			}
 	}
 }

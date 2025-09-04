@@ -91,7 +91,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 
 	public EditText() {
-		this(cxt.width * .1f, cxt.height * .1f, cxt.width * .8f, cxt.height * .8f);
+		this(ctx.width * .1f, ctx.height * .1f, ctx.width * .8f, ctx.height * .8f);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		cursor.draw(graphics);
 		graphics.endDraw();
 
-		cxt.image(graphics, getX(), getY(), getWidth(), getHeight());
+		ctx.image(graphics, getX(), getY(), getWidth(), getHeight());
 		scrollV.draw();
 		scrollH.draw();
 
@@ -176,7 +176,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			return;
 		}
 
-		switch (cxt.keyCode) {
+		switch (ctx.keyCode) {
 		case UP:
 			items.goUpToEditing();
 			selection.unselect();
@@ -236,8 +236,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			items.deleteAllSelectedText();
 			selection.unselect();
 
-			if (isAllowedChar(cxt.key)) {
-				getCurrentItem().insert(String.valueOf(cxt.key));
+			if (isAllowedChar(ctx.key)) {
+				getCurrentItem().insert(String.valueOf(ctx.key));
 				cursor.next();
 				scrollH.getValue().setMax(items.getMaxTextWidthFromItems());
 			}
@@ -256,7 +256,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 
 	public final void loadText(String path) {
 		items.clear();
-		String[] lines = cxt.loadStrings(path);
+		String[] lines = ctx.loadStrings(path);
 		for (int i = 0; i < lines.length; i++) {
 			items.add(lines[i]);
 		}
@@ -273,15 +273,15 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 
 	public final void createFont(String path) {
-		this.font = cxt.createFont(path, items.textSize);
+		this.font = ctx.createFont(path, items.textSize);
 	}
 
 	public final void createFont(String path, int textSize) {
-		this.font = cxt.createFont(path, textSize);
+		this.font = ctx.createFont(path, textSize);
 	}
 
 	public final void loadFont(String path) {
-		this.font = cxt.loadFont(path);
+		this.font = ctx.loadFont(path);
 	}
 
 	public final String getSelectedText() {
@@ -339,11 +339,11 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 
 	private void mouseEvents() {
-		if (!cxt.mousePressed) {
+		if (!ctx.mousePressed) {
 			checkDimensions();
 		}
 
-		if (cxt.mousePressed && isMouseOutside() && !isHolding()) {
+		if (ctx.mousePressed && isMouseOutside() && !isHolding()) {
 			isFocused = false;
 		}
 	}
@@ -367,7 +367,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 
 	private void createGraphics() {
-		graphics = cxt.createGraphics((int) getWidth(), (int) getHeight(), cxt.sketchRenderer());
+		graphics = ctx.createGraphics((int) getWidth(), (int) getHeight(), ctx.sketchRenderer());
 		Metrics.register(graphics);
 	}
 
@@ -846,7 +846,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 					cursorStateUpdate();
 				}
 
-				if (cxt.mousePressed && event.outside()) {
+				if (ctx.mousePressed && event.outside()) {
 					isEditing = false;
 				}
 				
@@ -857,7 +857,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			}
 			
 			private void cursorStateUpdate() {
-				final float localMouseX = cxt.mouseX - getX() + scrollH.getValue().get();
+				final float localMouseX = ctx.mouseX - getX() + scrollH.getValue().get();
 
 				for (int i = 0; i < sb.length(); i++) {
 					if (localMouseX > getTextWidth(cursor.getCurrentColumn())

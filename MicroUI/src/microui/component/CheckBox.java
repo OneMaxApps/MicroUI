@@ -2,11 +2,10 @@ package microui.component;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.util.Objects.requireNonNull;
 import static processing.core.PConstants.PROJECT;
 
-import java.util.Objects;
-
-import microui.container.EdgeContainer;
+import microui.container.BorderContainer;
 import microui.core.AbstractButton;
 import microui.core.base.Bounds;
 import microui.core.style.Color;
@@ -16,7 +15,7 @@ public class CheckBox extends AbstractButton {
 	private static final int DEFAULT_BOX_SIZE = 16;
 	private static final int DEFAULT_TEXT_PADDING = 8;
 	
-	private final EdgeContainer container;
+	private final BorderContainer container;
 	private float textPadding;
 	private boolean isChecked;
 	
@@ -24,21 +23,21 @@ public class CheckBox extends AbstractButton {
 		super(x, y, w, h);
 		setTextPadding(DEFAULT_TEXT_PADDING);
 		
-		container = new EdgeContainer(x,y,w,h);
+		container = new BorderContainer(x,y,w,h);
 		container.setLeft(true);
 		container.set(new Content(this));
-		container.setVisible(false);
+		//container.setVisible(false);
 		
 	}
 
 	public CheckBox(boolean isChecked) {
-		this(cxt.width*.3f,cxt.height*.4f,cxt.width*.4f,cxt.height*.2f);
+		this(ctx.width*.3f,ctx.height*.4f,ctx.width*.4f,ctx.height*.2f);
 		
 		setChecked(isChecked);
 	}
 	
 	public CheckBox(final String text) {
-		this(cxt.width*.3f,cxt.height*.4f,cxt.width*.4f,cxt.height*.2f);
+		this(ctx.width*.3f,ctx.height*.4f,ctx.width*.4f,ctx.height*.2f);
 		
 		setText(text);
 	}
@@ -108,7 +107,7 @@ public class CheckBox extends AbstractButton {
 	    final Box box;
 		
 		public Content(Bounds bounds) {
-			super(Objects.requireNonNull(bounds, "bounds cannot be null"));
+			super(requireNonNull(bounds, "bounds cannot be null"));
 			setVisible(true);
 			
 			setHeight(DEFAULT_BOX_SIZE);
@@ -163,13 +162,13 @@ public class CheckBox extends AbstractButton {
 		protected void update() {
 			setEventListener(this);
 			
-			cxt.pushStyle();
+			ctx.pushStyle();
 			stroke.apply();
 			getMutableColor().apply();
-			cxt.rect(getX(), getY(), getWidth(), getHeight());
+			ctx.rect(getX(), getY(), getWidth(), getHeight());
 			hover.draw();
 			ripples.draw();
-			cxt.popStyle();
+			ctx.popStyle();
 			
 			if(isChecked) {
 				markOnDraw();
@@ -177,16 +176,16 @@ public class CheckBox extends AbstractButton {
 		}
 
 		private void markOnDraw() {
-			cxt.pushStyle();
-			cxt.noStroke();
+			ctx.pushStyle();
+			ctx.noStroke();
 			markColor.apply();
-			cxt.rect(getX(),getY(),getWidth(),getHeight());
-			cxt.stroke(0,128);
-			cxt.strokeWeight(max(1,DEFAULT_BOX_SIZE/5));
-			cxt.strokeCap(PROJECT);
-			cxt.line(getX()+getWidth()*.3f, getY()+getHeight()*.6f, getX()+getWidth()/2, getY()+getHeight()*.8f);
-			cxt.line(getX()+getWidth()*.8f, getY()+getHeight()*.2f, getX()+getWidth()/2, getY()+getHeight()*.8f);
-			cxt.popStyle();
+			ctx.rect(getX(),getY(),getWidth(),getHeight());
+			ctx.stroke(0,128);
+			ctx.strokeWeight(max(1,DEFAULT_BOX_SIZE/5));
+			ctx.strokeCap(PROJECT);
+			ctx.line(getX()+getWidth()*.3f, getY()+getHeight()*.6f, getX()+getWidth()/2, getY()+getHeight()*.8f);
+			ctx.line(getX()+getWidth()*.8f, getY()+getHeight()*.2f, getX()+getWidth()/2, getY()+getHeight()*.8f);
+			ctx.popStyle();
 		}
 	}
 }
