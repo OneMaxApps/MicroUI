@@ -1,5 +1,7 @@
 package microui.core.base;
 
+import static java.util.Objects.requireNonNull;
+
 import microui.MicroUI;
 import microui.core.interfaces.Visible;
 import microui.util.Metrics;
@@ -8,7 +10,7 @@ import processing.core.PApplet;
 // Status: STABLE - Do not modify
 // Last Reviewed: 03.09.2025
 public abstract class View implements Visible {
-	protected static final PApplet ctx = MicroUI.getContext();
+	protected static final PApplet ctx = requireNonNull(MicroUI.getContext(),"context for MicroUI was not sended");
 	private boolean isVisible;
 	private int priority;
 

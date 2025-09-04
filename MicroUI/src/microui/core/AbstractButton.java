@@ -1,5 +1,7 @@
 package microui.core;
 
+import static java.util.Objects.requireNonNull;
+
 import microui.component.TextView;
 import microui.core.base.Component;
 import microui.core.effect.Hover;
@@ -18,8 +20,10 @@ public abstract class AbstractButton extends Component {
 		super(x, y, w, h);
 		setVisible(true);
 		setConstrainDimensionsEnabled(true);
-		setMaxSize(100,30);
-		
+		setMinSize(30, 10);
+
+		setEventListener(this);
+
 		ripples = new Ripples(this);
 		hover = new Hover(this);
 		stroke = new Stroke();
@@ -28,11 +32,11 @@ public abstract class AbstractButton extends Component {
 		onClick(() -> {
 			ripples.initAnim();
 		});
+
 	}
 
 	@Override
 	protected void update() {
-		setEventListener(this);
 		ctx.pushStyle();
 		stroke.apply();
 		getMutableColor().apply();
@@ -47,7 +51,7 @@ public abstract class AbstractButton extends Component {
 	}
 
 	public void setRipplesColor(Color color) {
-		ripples.setColor(color);
+		ripples.setColor(requireNonNull(color,"color cannot be null"));
 	}
 
 	public boolean isRipplesEnabled() {
@@ -79,7 +83,7 @@ public abstract class AbstractButton extends Component {
 	}
 
 	public void setStrokeColor(Color color) {
-		stroke.setColor(color);
+		stroke.setColor(requireNonNull(color,"color cannot be null"));
 	}
 
 	public final String getText() {
@@ -87,7 +91,7 @@ public abstract class AbstractButton extends Component {
 	}
 
 	public void setText(String text) {
-		this.text.set(text);
+		this.text.set(requireNonNull(text,"text cannot be null"));
 	}
 
 	public final PFont getFont() {
@@ -95,7 +99,7 @@ public abstract class AbstractButton extends Component {
 	}
 
 	public final void setFont(PFont font) {
-		text.setFont(font);
+		text.setFont(requireNonNull(font,"font cannot be null"));
 	}
 
 	public final Color getTextColor() {
@@ -103,7 +107,7 @@ public abstract class AbstractButton extends Component {
 	}
 
 	public final void setTextColor(Color color) {
-		text.setColor(color);
+		text.setColor(requireNonNull(color,"color cannot be null"));
 	}
 
 	public final boolean isTextVisible() {
@@ -113,6 +117,5 @@ public abstract class AbstractButton extends Component {
 	public final void setTextVisible(boolean isVisible) {
 		text.setVisible(isVisible);
 	}
-	
-	
+
 }

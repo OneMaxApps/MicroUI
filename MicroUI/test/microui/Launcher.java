@@ -2,6 +2,7 @@ package microui;
 
 import microui.component.Button;
 import microui.service.GlobalTooltip;
+import microui.util.Metrics;
 import processing.core.PApplet;
 
 // TODO Check what's methods and objects must be a part of components API
@@ -30,18 +31,17 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new Button("c",200,200,400,200);
-		component.setMinSize(10,10);
-		component.setMaxSize(100,100);
+		component = new Button();
+		//component.setConstrainDimensionsEnabled(false);
 	}
 
 	@Override
 	public void draw() {
 		background(200);
+		
 		component.draw();
-		if(mouseButton == RIGHT) {
-			component.setSize(mouseX,mouseY);
-		}
+		
+		Metrics.printAll();
 		GlobalTooltip.draw();
 	}
 

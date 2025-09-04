@@ -1,15 +1,25 @@
 package microui.component;
 
+import static java.lang.Math.min;
+
+import microui.container.BorderContainer;
+import microui.core.base.Bounds;
 import microui.core.base.Component;
 import microui.core.interfaces.Scrollable;
 import processing.event.MouseEvent;
 
 public class Dial extends Component implements Scrollable {
-
-	public Dial(float x, float y, float w, float h) {
-		super(x, y, w, h);
+	private final BorderContainer container;
+	
+	public Dial(float x, float y, float width, float height) {
+		super(x, y, width, height);
 		setVisible(true);
+		setConstrainDimensionsEnabled(true);
+		setMaxSize(200);
+		setMinSize(20);
 		
+		container = new BorderContainer(x,y,width,height);
+		container.set(new Content());
 	}
 	
 	public Dial() {
@@ -18,11 +28,41 @@ public class Dial extends Component implements Scrollable {
 
 	@Override
 	protected void update() {
-		ctx.rect(getX(), getY(), getWidth(), getHeight());
+		container.draw();
 	}
 	
 	@Override
 	public void mouseWheel(MouseEvent e) {
 
+	}
+
+	@Override
+	protected void onChangeBounds() {
+		super.onChangeBounds();
+		if(container != null) {
+			container.setBoundsState(this);
+			container.getElement().setMaxSize(min(getWidth(),getHeight()),min(getWidth(),getHeight()));
+			container.getElement().setMinSize(this);
+		}
+		
+	}
+	
+	private final class Content extends Bounds {
+
+		public Content() {
+			super();
+			setVisible(true);
+			setConstrainDimensionsEnabled(true);
+			
+		}
+
+		@Override
+		protected void update() {
+			setEventListener(this);
+			
+			getMutableColor().apply();
+			ctx.ellipse(getX()+getWidth()/2,getY()+getHeight()/2,getWidth(),getHeight());
+		}
+	
 	}
 }

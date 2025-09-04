@@ -1,5 +1,7 @@
 package microui.event;
 
+import static java.util.Objects.requireNonNull;
+
 import microui.MicroUI;
 import microui.core.base.Bounds;
 import microui.util.Metrics;
@@ -8,21 +10,25 @@ import processing.core.PApplet;
 public class Event {
 	  private static PApplet app = MicroUI.getContext();
 	  private static final int MIN_SHAKE_DIST = 3;
-	  
+	  private static final boolean[] keys = new boolean[Character.MAX_VALUE+1];
+
 	  private float x,y,w,h;
 	  private byte wasPressed,longPressed,clickCounter;
 	  private int secondsSinceMouseInside;
 	  private boolean holding,dragged,enable;
+	  private Bounds bounds;
 	  
-	  private static final boolean[] keys = new boolean[Character.MAX_VALUE+1];
-
 	  public Event() {
 		  enable = true;
 		  Metrics.register(this);
 	  }
 	  
-	  public void listen(Bounds form) {
-		  listener(form.getX(),form.getY(),form.getWidth(),form.getHeight());
+	  public final void setListener(Bounds bounds) {
+		  this.bounds = requireNonNull(bounds,"bounds cannot be null");		  
+	  }
+	  
+	  public void listen() {
+		  listener(bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
 	  }
 	  
 	  public void listen(float x, float y, float w, float h) {

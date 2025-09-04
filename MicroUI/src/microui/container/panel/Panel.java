@@ -135,11 +135,12 @@ public class Panel extends Container {
 			title.setTextSize(HEIGHT*.8f);
 			
 			event = new Event();
+			event.setListener(this);
 		}
 
 		@Override
 		public void update() {
-			event.listen(this);
+			event.listen();
 			
 			ctx.pushStyle();
 			ctx.fill(0,24);

@@ -22,7 +22,7 @@ import microui.event.Listener;
 import microui.feedback.Tooltip;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 04.09.2025
+//Last Reviewed: 05.09.2025
 public abstract class Component extends Bounds {
 	private Color color;
 	private Event event;
@@ -40,6 +40,10 @@ public abstract class Component extends Bounds {
 	@Override
 	public void draw() {
 		super.draw();
+		if(event != null) {
+			event.listen();
+		}
+		
 		if (callback != null) {
 			callback.listen();
 		}
@@ -216,7 +220,7 @@ public abstract class Component extends Bounds {
 
 	protected final void setEventListener(Bounds bounds) {
 		ensureEvent();
-		event.listen(requireNonNull(bounds, "bounds cannot be null"));
+		event.setListener(requireNonNull(bounds, "bounds cannot be null"));
 	}
 
 	protected final Event getMutableEvent() {

@@ -36,8 +36,8 @@ public class Button extends AbstractButton {
 	}
 
 	public void setStyle(Button otherButton) {
-		super.setStyle(otherButton);
-		text.set(otherButton.text);
+		super.setStyle(requireNonNull(otherButton,"other button cannot be null"));
+		text.set(requireNonNull(otherButton.text,"text from other button cannot be null"));
 	}
 
 	@Override

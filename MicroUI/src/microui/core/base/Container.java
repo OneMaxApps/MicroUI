@@ -367,11 +367,12 @@ public abstract class Container extends Bounds implements Scrollable, KeyPressab
 					setVisible(true);
 					setSize(10, 10);
 					event = new Event();
+					event.setListener(this);
 				}
 
 				@Override
 				public final void update() {
-					event.listen(this);
+					event.listen();
 					ctx.rect(getX(), getY(), getWidth(), getHeight());
 					if (event.holding()) {
 

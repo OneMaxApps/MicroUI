@@ -34,6 +34,8 @@ public abstract class RangeControl extends Component implements Scrollable {
 		scrolling = new Scrolling(getMutableEvent());
 		orientation = Orientation.HORIZONTAL;
 		
+		setEventListener(this);
+		
 		
 	}
 	
@@ -43,7 +45,6 @@ public abstract class RangeControl extends Component implements Scrollable {
 
 	@Override
 	protected void update() {
-		setEventListener(this);
 		
 		ctx.pushStyle();
 		getMutableColor().apply();

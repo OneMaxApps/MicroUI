@@ -5,13 +5,15 @@ import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 import static processing.core.PApplet.constrain;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 05.09.2025
 public abstract class Bounds extends View {
-	private static final int DEFAULT_MIN_WIDTH = 40;
-	private static final int DEFAULT_MIN_HEIGHT = 20;
-	private static final int DEFAULT_MAX_WIDTH = 200;
-	private static final int DEFAULT_MAX_HEIGHT = 100;
-
+	private static final int DEFAULT_MIN_WIDTH = 1;
+	private static final int DEFAULT_MAX_WIDTH = ctx.width;
+	private static final int DEFAULT_MIN_HEIGHT = 1;
+	private static final int DEFAULT_MAX_HEIGHT = ctx.height;
 	private static final float EPSILON = .01f;
+
 	private float x, y, width, height, minWidth, minHeight, maxWidth, maxHeight;
 	private boolean isPosDirty, isDimDirty, isNegativeDimensionsEnabled, isConstrainDimensionsEnabled;
 
@@ -25,7 +27,8 @@ public abstract class Bounds extends View {
 	}
 
 	public Bounds(Bounds bounds) {
-		this(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+		this(requireNonNull(bounds, "bounds cannot be null").getX(), bounds.getY(), bounds.getWidth(),
+				bounds.getHeight());
 	}
 
 	public Bounds() {
@@ -205,6 +208,10 @@ public abstract class Bounds extends View {
 		}
 	}
 
+	public final void setMinWidth(Bounds bounds) {
+		setMinWidth(requireNonNull(bounds, "bounds cannot be null").getMinWidth());
+	}
+
 	public final float getMinHeight() {
 		return minHeight;
 	}
@@ -224,6 +231,10 @@ public abstract class Bounds extends View {
 
 	}
 
+	public final void setMinHeight(Bounds bounds) {
+		setMinHeight(requireNonNull(bounds, "bounds cannot be null").getMinHeight());
+	}
+
 	public final float getMaxWidth() {
 		return maxWidth;
 	}
@@ -234,13 +245,17 @@ public abstract class Bounds extends View {
 		} else {
 			this.maxWidth = max(0, maxWidth);
 		}
-		
+
 		setWidth(width);
 
 		if (maxWidth < minWidth) {
 			throw new IllegalArgumentException("max width cannot be lower than min width");
 		}
 
+	}
+
+	public final void setMaxWidth(Bounds bounds) {
+		setMaxWidth(requireNonNull(bounds, "bounds cannot be null").getMaxWidth());
 	}
 
 	public final float getMaxHeight() {
@@ -261,9 +276,23 @@ public abstract class Bounds extends View {
 		}
 	}
 
+	public final void setMaxHeight(Bounds bounds) {
+		setMaxHeight(requireNonNull(bounds, "bounds cannot be null").getMaxHeight());
+	}
+
 	public final void setMinSize(float minWidth, float minHeight) {
 		setMinWidth(minWidth);
 		setMinHeight(minHeight);
+	}
+
+	public final void setMinSize(float minSize) {
+		setMinWidth(minSize);
+		setMinHeight(minSize);
+	}
+
+	public final void setMinSize(Bounds bounds) {
+		setMinWidth(bounds);
+		setMinHeight(bounds);
 	}
 
 	public final void setMaxSize(float maxWidth, float maxHeight) {
@@ -271,12 +300,34 @@ public abstract class Bounds extends View {
 		setMaxHeight(maxHeight);
 	}
 
-	public void setBoundsState(Bounds bounds) {
-		setBounds(bounds);
-		setMinWidth(bounds.getMinWidth());
+	public final void setMaxSize(float maxSize) {
+		setMaxWidth(maxSize);
+		setMaxHeight(maxSize);
+	}
+
+	public final void setMaxSize(Bounds bounds) {
+		setMaxWidth(bounds);
+		setMaxHeight(bounds);
+	}
+
+	public final void setBoundsState(Bounds bounds) {
+		setMinWidth(requireNonNull(bounds, "bounds cannot be null").getMinWidth());
 		setMinHeight(bounds.getMinHeight());
 		setMaxWidth(bounds.getMaxWidth());
 		setMaxHeight(bounds.getMaxHeight());
+		setBounds(bounds);
+	}
+
+	public final boolean isConstrainDimensionsEnabled() {
+		return isConstrainDimensionsEnabled;
+	}
+
+	public final void setConstrainDimensionsEnabled(boolean isConstrainDimensionsEnabled) {
+		if (this.isConstrainDimensionsEnabled != isConstrainDimensionsEnabled) {
+			this.isConstrainDimensionsEnabled = isConstrainDimensionsEnabled;
+			setSize(width, height);
+		}
+
 	}
 
 	protected void onChangePositions() {
@@ -294,17 +345,6 @@ public abstract class Bounds extends View {
 
 	protected void setNegativeDimensionsEnabled(boolean isNegativeDimensionsEnabled) {
 		this.isNegativeDimensionsEnabled = isNegativeDimensionsEnabled;
-	}
-
-	protected boolean isConstrainDimensionsEnabled() {
-		return isConstrainDimensionsEnabled;
-	}
-
-	protected void setConstrainDimensionsEnabled(boolean isConstrainDimensionsEnabled) {
-		if (this.isConstrainDimensionsEnabled != isConstrainDimensionsEnabled) {
-			this.isConstrainDimensionsEnabled = isConstrainDimensionsEnabled;
-			isDimDirty = true;
-		}
 	}
 
 	private static boolean areEqual(float firstValue, float secondValue) {
@@ -334,5 +374,5 @@ public abstract class Bounds extends View {
 			isDimDirty = false;
 		}
 	}
-	
+
 }
