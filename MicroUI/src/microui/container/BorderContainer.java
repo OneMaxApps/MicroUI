@@ -34,7 +34,7 @@ public class BorderContainer extends Container {
 		this.bounds = requireNonNull(bounds, "bounds cannot be null");
 		
 		setMinSize(bounds.getMinWidth(),bounds.getMinHeight());
-
+		
 		updateState();
 		return this;
 	}

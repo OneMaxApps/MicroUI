@@ -1,6 +1,6 @@
 package microui;
 
-import microui.component.Button;
+import microui.component.CheckBox;
 import microui.service.GlobalTooltip;
 import microui.util.Metrics;
 import processing.core.PApplet;
@@ -17,7 +17,7 @@ import processing.core.PApplet;
 //[0] TextView
 
 public class Launcher extends PApplet {
-	Button component;
+	CheckBox component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -31,8 +31,9 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new Button();
-		//component.setConstrainDimensionsEnabled(false);
+		component = new CheckBox();
+		component.setText("Hello Baby");
+		component.setTooltipText("i'm - "+component.getClass().getCanonicalName());
 	}
 
 	@Override
@@ -40,6 +41,9 @@ public class Launcher extends PApplet {
 		background(200);
 		
 		component.draw();
+		if(mouseButton == RIGHT) {
+			component.setSize(mouseX,mouseY);
+		}
 		
 		Metrics.printAll();
 		GlobalTooltip.draw();

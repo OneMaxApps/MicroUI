@@ -10,11 +10,10 @@ public class Button extends AbstractButton {
 	
 	public Button(String text, float x, float y, float w, float h) {
 		super(x, y, w, h);
-		
-		this.text.set(requireNonNull(text,"text cannot be null"));
-		this.text.setAutoResizeEnabled(true);
-		this.text.setAutoResizeMode(BIG);
-		this.text.setColor(new Color(0));
+		setText(text);
+		getMutableText().setAutoResizeEnabled(true);
+		getMutableText().setAutoResizeMode(BIG);
+		setTextColor(new Color(0));
 	}
 
 	public Button(float x, float y, float w, float h) {
@@ -32,18 +31,18 @@ public class Button extends AbstractButton {
 	@Override
 	protected void update() {
 		super.update();
-		text.draw();
+		getMutableText().draw();
 	}
 
 	public void setStyle(Button otherButton) {
 		super.setStyle(requireNonNull(otherButton,"other button cannot be null"));
-		text.set(requireNonNull(otherButton.text,"text from other button cannot be null"));
+		getMutableText().set(requireNonNull(otherButton.getMutableText(),"text from other button cannot be null"));
 	}
 
 	@Override
 	protected void onChangeBounds() {
 		super.onChangeBounds();
-		if (text == null) { return; }
-		text.setBoundsState(this);
+		if (getMutableText() == null) { return; }
+		getMutableText().setBoundsState(this);
 	}
 }

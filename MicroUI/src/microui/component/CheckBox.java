@@ -14,38 +14,35 @@ import microui.event.Listener;
 public class CheckBox extends AbstractButton {
 	private static final int DEFAULT_BOX_SIZE = 16;
 	private static final int DEFAULT_TEXT_PADDING = 8;
-	
+
 	private final BorderContainer container;
 	private float textPadding;
 	private boolean isChecked;
-	
-	public CheckBox(float x, float y, float w, float h) {
-		super(x, y, w, h);
+
+	public CheckBox(float x, float y, float width, float height) {
+		super(x, y, width, height);
+		setMinSize(DEFAULT_BOX_SIZE);
 		setTextPadding(DEFAULT_TEXT_PADDING);
-		
-		container = new BorderContainer(x,y,w,h);
-		container.setLeft(true);
+
+		container = new BorderContainer(x, y, width, height);
 		container.set(new Content(this));
-		//container.setVisible(false);
-		
+
 	}
 
 	public CheckBox(boolean isChecked) {
-		this(ctx.width*.3f,ctx.height*.4f,ctx.width*.4f,ctx.height*.2f);
-		
+		this(ctx.width * .3f, ctx.height * .4f, ctx.width * .4f, ctx.height * .2f);
 		setChecked(isChecked);
 	}
-	
-	public CheckBox(final String text) {
-		this(ctx.width*.3f,ctx.height*.4f,ctx.width*.4f,ctx.height*.2f);
-		
+
+	public CheckBox(String text) {
+		this(ctx.width * .3f, ctx.height * .4f, ctx.width * .4f, ctx.height * .2f);
 		setText(text);
 	}
-	
+
 	public CheckBox() {
 		this(false);
 	}
-	
+
 	@Override
 	protected void update() {
 		container.draw();
@@ -54,9 +51,11 @@ public class CheckBox extends AbstractButton {
 	@Override
 	protected void onChangeBounds() {
 		super.onChangeBounds();
-		if(container == null) { return; }
-		
-		container.setBounds(this);
+		if (container == null) {
+			return;
+		}
+
+		container.setBoundsState(this);
 	}
 
 	public final boolean isChecked() {
@@ -66,30 +65,30 @@ public class CheckBox extends AbstractButton {
 	public final void setChecked(boolean isChecked) {
 		this.isChecked = isChecked;
 	}
-	
+
 	public final void toggle() {
 		isChecked = !isChecked;
 	}
-	
+
 	public final Color getMarkColor() {
-		return new Color(getBox().markColor.get());
+		return new Color(getBox().markColor);
 	}
-	
+
 	public final void setMarkColor(Color color) {
-		if(color == null) {
+		if (color == null) {
 			throw new NullPointerException("the mark color must be not null");
 		}
-		
+
 		getBox().markColor.set(color);
 	}
-	
+
 	public final void onStateChangedListener(Listener listener) {
-		if(listener == null) {
+		if (listener == null) {
 			throw new NullPointerException("on the state changed listener must be not null");
 		}
 		onClick(listener);
 	}
-	
+
 	public final float getTextPadding() {
 		return textPadding;
 	}
@@ -101,76 +100,76 @@ public class CheckBox extends AbstractButton {
 	private Box getBox() {
 		return ((Content) (container.getElement())).box;
 	}
-	
 
 	private final class Content extends Bounds {
-	    final Box box;
-		
+		private final Box box;
+
 		public Content(Bounds bounds) {
 			super(requireNonNull(bounds, "bounds cannot be null"));
 			setVisible(true);
-			
-			setHeight(DEFAULT_BOX_SIZE);
-			
+			setMaxHeight(DEFAULT_BOX_SIZE);
+
 			box = new Box();
 
-			text.setColor(new Color(32));
-			text.setAutoResizeEnabled(false);
-			text.setTextSize(box.getHeight());
-			text.setInCenter(false);
-			
+			setTextColor(new Color(32));
+			getMutableText().setAutoResizeEnabled(false);
+			getMutableText().setTextSize(box.getHeight());
+			getMutableText().setInCenter(false);
+
 		}
 
 		@Override
 		protected void update() {
 			box.draw();
-			text.draw();
+			getMutableText().draw();
 		}
 
 		@Override
 		protected void onChangeBounds() {
-			if(box == null || text == null) { return; }
-			
-			box.setPosition(getX(),getY());
-			box.setSize(min(DEFAULT_BOX_SIZE,getWidth()),min(DEFAULT_BOX_SIZE,getHeight()));
-			text.setSize(getWidth()-(box.getWidth()+textPadding),box.getHeight());
-			text.setPosition(box.getX()+box.getWidth()+textPadding,box.getY()+box.getHeight()/2-text.getHeight()/2);
-			text.setTextSize(box.getHeight());
+			if (box == null || getMutableText() == null) {
+				return;
+			}
+			box.setPosition(getX(), getY());
+			box.setSize(min(DEFAULT_BOX_SIZE, getWidth()), min(DEFAULT_BOX_SIZE, getHeight()));
+			getMutableText().setSize(getWidth() - (box.getWidth() + textPadding), box.getHeight());
+			getMutableText().setPosition(box.getX() + box.getWidth() + textPadding,
+					box.getY() + box.getHeight() / 2 - getMutableText().getHeight() / 2);
+			getMutableText().setTextSize(box.getHeight());
 		}
 
 	}
-	
+
 	private final class Box extends Bounds {
-		final Color markColor;
-		
+		private final Color markColor;
+
 		public Box() {
-			super(0,0,DEFAULT_BOX_SIZE,DEFAULT_BOX_SIZE);
+			super(0, 0, DEFAULT_BOX_SIZE, DEFAULT_BOX_SIZE);
 			setVisible(true);
-			
+
 			setCallbackListener(this);
-			
-			ripples.setBounds(this);
-			
-			hover.setAlternativeBounds(this);
-			
-			markColor = new Color(0,200,255,100);
-			
+
+			getMutableRipples().setBounds(this);
+
+			getMutableHover().setAlternativeBounds(this);
+
+			markColor = new Color(0, 200, 255, 100);
+
 			onClick(() -> toggle());
 		}
 
 		@Override
 		protected void update() {
 			setEventListener(this);
-			
+
 			ctx.pushStyle();
-			stroke.apply();
+			getMutableStroke().apply();
 			getMutableColor().apply();
 			ctx.rect(getX(), getY(), getWidth(), getHeight());
-			hover.draw();
-			ripples.draw();
+			getMutableHover().draw();
+			getMutableRipples().draw();
 			ctx.popStyle();
-			
-			if(isChecked) {
+
+			if (isChecked) {
 				markOnDraw();
 			}
 		}
@@ -179,12 +178,14 @@ public class CheckBox extends AbstractButton {
 			ctx.pushStyle();
 			ctx.noStroke();
 			markColor.apply();
-			ctx.rect(getX(),getY(),getWidth(),getHeight());
-			ctx.stroke(0,128);
-			ctx.strokeWeight(max(1,DEFAULT_BOX_SIZE/5));
+			ctx.rect(getX(), getY(), getWidth(), getHeight());
+			ctx.stroke(0, 128);
+			ctx.strokeWeight(max(1, DEFAULT_BOX_SIZE / 5));
 			ctx.strokeCap(PROJECT);
-			ctx.line(getX()+getWidth()*.3f, getY()+getHeight()*.6f, getX()+getWidth()/2, getY()+getHeight()*.8f);
-			ctx.line(getX()+getWidth()*.8f, getY()+getHeight()*.2f, getX()+getWidth()/2, getY()+getHeight()*.8f);
+			ctx.line(getX() + getWidth() * .3f, getY() + getHeight() * .6f, getX() + getWidth() / 2,
+					getY() + getHeight() * .8f);
+			ctx.line(getX() + getWidth() * .8f, getY() + getHeight() * .2f, getX() + getWidth() / 2,
+					getY() + getHeight() * .8f);
 			ctx.popStyle();
 		}
 	}

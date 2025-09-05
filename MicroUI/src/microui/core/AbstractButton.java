@@ -11,17 +11,17 @@ import microui.core.style.Stroke;
 import processing.core.PFont;
 
 public abstract class AbstractButton extends Component {
-	protected final Ripples ripples;
-	protected final Hover hover;
-	protected final Stroke stroke;
-	protected final TextView text;
+	private final Ripples ripples;
+	private final Hover hover;
+	private final Stroke stroke;
+	private final TextView text;
 
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setVisible(true);
 		setConstrainDimensionsEnabled(true);
 		setMinSize(30, 10);
-
+		
 		setEventListener(this);
 
 		ripples = new Ripples(this);
@@ -118,4 +118,19 @@ public abstract class AbstractButton extends Component {
 		text.setVisible(isVisible);
 	}
 
+	protected final Ripples getMutableRipples() {
+		return ripples;
+	}
+	
+	protected final Hover getMutableHover() {
+		return hover;
+	}
+	
+	protected final Stroke getMutableStroke() {
+		return stroke;
+	}
+	
+	protected final TextView getMutableText() {
+		return text;
+	}
 }

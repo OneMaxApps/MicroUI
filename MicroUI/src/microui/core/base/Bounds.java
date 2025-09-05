@@ -315,6 +315,8 @@ public abstract class Bounds extends View {
 		setMinHeight(bounds.getMinHeight());
 		setMaxWidth(bounds.getMaxWidth());
 		setMaxHeight(bounds.getMaxHeight());
+		setConstrainDimensionsEnabled(bounds.isConstrainDimensionsEnabled());
+		setNegativeDimensionsEnabled(bounds.isNegativeDimensionsEnabled());
 		setBounds(bounds);
 	}
 
