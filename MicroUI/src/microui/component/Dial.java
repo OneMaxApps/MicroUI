@@ -40,7 +40,7 @@ public class Dial extends Component implements Scrollable {
 	protected void onChangeBounds() {
 		super.onChangeBounds();
 		if(container != null) {
-			container.setBoundsState(this);
+			container.setBoundsProperty(this);
 			container.getElement().setMaxSize(min(getWidth(),getHeight()),min(getWidth(),getHeight()));
 			container.getElement().setMinSize(this);
 		}

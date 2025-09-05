@@ -2,32 +2,28 @@ package microui.core;
 
 import static java.util.Objects.requireNonNull;
 
-import microui.component.TextView;
 import microui.core.base.Component;
 import microui.core.effect.Hover;
 import microui.core.effect.Ripples;
 import microui.core.style.Color;
 import microui.core.style.Stroke;
-import processing.core.PFont;
 
 public abstract class AbstractButton extends Component {
 	private final Ripples ripples;
 	private final Hover hover;
 	private final Stroke stroke;
-	private final TextView text;
+	
 
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setVisible(true);
 		setConstrainDimensionsEnabled(true);
-		setMinSize(30, 10);
 		
 		setEventListener(this);
 
 		ripples = new Ripples(this);
 		hover = new Hover(this);
 		stroke = new Stroke();
-		text = new TextView(x, y, w, h);
 
 		onClick(() -> {
 			ripples.initAnim();
@@ -86,38 +82,6 @@ public abstract class AbstractButton extends Component {
 		stroke.setColor(requireNonNull(color,"color cannot be null"));
 	}
 
-	public final String getText() {
-		return text.get();
-	}
-
-	public void setText(String text) {
-		this.text.set(requireNonNull(text,"text cannot be null"));
-	}
-
-	public final PFont getFont() {
-		return text.getFont();
-	}
-
-	public final void setFont(PFont font) {
-		text.setFont(requireNonNull(font,"font cannot be null"));
-	}
-
-	public final Color getTextColor() {
-		return text.getColor();
-	}
-
-	public final void setTextColor(Color color) {
-		text.setColor(requireNonNull(color,"color cannot be null"));
-	}
-
-	public final boolean isTextVisible() {
-		return text.isVisible();
-	}
-
-	public final void setTextVisible(boolean isVisible) {
-		text.setVisible(isVisible);
-	}
-
 	protected final Ripples getMutableRipples() {
 		return ripples;
 	}
@@ -128,9 +92,5 @@ public abstract class AbstractButton extends Component {
 	
 	protected final Stroke getMutableStroke() {
 		return stroke;
-	}
-	
-	protected final TextView getMutableText() {
-		return text;
 	}
 }

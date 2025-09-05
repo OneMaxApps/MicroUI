@@ -291,7 +291,7 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMinSize(Bounds bounds) {
-		setMinWidth(bounds);
+		setMinWidth(requireNonNull(bounds, "bounds cannot be null"));
 		setMinHeight(bounds);
 	}
 
@@ -306,18 +306,36 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setMaxSize(Bounds bounds) {
-		setMaxWidth(bounds);
+		setMaxWidth(requireNonNull(bounds, "bounds cannot be null"));
 		setMaxHeight(bounds);
 	}
+	
+	public final void setMinMaxSize(float minSize, float maxSize) {
+		setMinSize(minSize);
+		setMaxSize(maxSize);
+	}
+	
+	public final void setMinMaxSize(float size) {
+		setMinMaxSize(size,size);
+	}
+	
+	public final void setMinMaxSize(Bounds bounds) {
+		setMinSize(requireNonNull(bounds, "bounds cannot be null").getMinWidth(),bounds.getMinHeight());
+		setMaxSize(bounds.getMaxWidth(),bounds.getMaxHeight());
+	}
 
-	public final void setBoundsState(Bounds bounds) {
+	public final void setBoundsProperty(Bounds bounds) {
+		setConstrainProperty(bounds);
+		setBounds(bounds);
+	}
+	
+	public final void setConstrainProperty(Bounds bounds) {
 		setMinWidth(requireNonNull(bounds, "bounds cannot be null").getMinWidth());
 		setMinHeight(bounds.getMinHeight());
 		setMaxWidth(bounds.getMaxWidth());
 		setMaxHeight(bounds.getMaxHeight());
 		setConstrainDimensionsEnabled(bounds.isConstrainDimensionsEnabled());
 		setNegativeDimensionsEnabled(bounds.isNegativeDimensionsEnabled());
-		setBounds(bounds);
 	}
 
 	public final boolean isConstrainDimensionsEnabled() {

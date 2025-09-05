@@ -9,113 +9,126 @@ import microui.core.style.Color;
 import microui.core.style.Stroke;
 
 public class Slider extends RangeControl {
-	
+
 	private final Rect level;
-	
+
 	public Slider(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		
-		level = new Rect(x,y,w,h);
+
+		level = new Rect(x, y, w, h);
 		level.color.set(234);
-		
-		value.set(0,100,0);
-		
+
+		setValue(0, 100, 0);
+
 		setOrientation(HORIZONTAL);
-		
+
 	}
-	
+
 	public Slider() {
-		this(ctx.width*.25f,ctx.height*.45f,ctx.width*.5f,ctx.height*.1f);
+		this(ctx.width * .25f, ctx.height * .45f, ctx.width * .5f, ctx.height * .1f);
 	}
 
 	@Override
 	protected void update() {
 		super.update();
 		level.draw();
-		
-		if(isHolding()) {
-			switch(orientation) {
-			case HORIZONTAL: value.set(map(ctx.mouseX,getX(),getX()+getWidth(),value.getMin(),value.getMax())); break;
-			case VERTICAL: value.set(map(ctx.mouseY,getY(),getY()+getHeight(),value.getMax(),value.getMin())); break;
+
+		if (isHolding()) {
+			switch (orientation) {
+			case HORIZONTAL:
+				setValue(map(ctx.mouseX, getX(), getX() + getWidth(), getMinValue(), getMaxValue()));
+				break;
+			case VERTICAL:
+				setValue(map(ctx.mouseY, getY(), getY() + getHeight(), getMaxValue(), getMinValue()));
+				break;
 			}
 			onChangeBounds();
-			
+
 			onStartChangeValue();
 			onChangeValue();
-			
+
 		}
-		
-		
-		
+
 	}
 
 	@Override
 	protected void onChangeBounds() {
-		if(level == null) { return; }
-		
-		level.setBounds(this);
-		
-		switch(orientation) {
-		
-			case HORIZONTAL:
-				level.setWidth(map(value.get(),value.getMin(),value.getMax(),0,getWidth()));
-				
-			break;
-			
-			case VERTICAL:
-				level.setY(getY()+getHeight());
-				level.setWidth(getWidth());
-				level.setHeight(map(value.get(),value.getMin(),value.getMax(),0,-getHeight()));
-			break;
-			
+		if (level == null) {
+			return;
 		}
-		
+
+		level.setBounds(this);
+
+		switch (orientation) {
+
+		case HORIZONTAL:
+			level.setWidth(map(getValue(), getMinValue(), getMaxValue(), 0, getWidth()));
+
+			break;
+
+		case VERTICAL:
+			level.setY(getY() + getHeight());
+			level.setWidth(getWidth());
+			level.setHeight(map(getValue(), getMinValue(), getMaxValue(), 0, -getHeight()));
+			break;
+
+		}
+
 	}
-	
+
 	@Override
 	public void swapOrientation() {
 		super.swapOrientation();
 		onChangeBounds();
 	}
-	
-	public final Rect getLevel() {
-		return level;
+
+	public final int getLevelStrokeWeight() {
+		return level.stroke.getWeight();
 	}
 
-
-	public final class Rect extends Bounds {
-	    public final Stroke stroke;
-	    public final Color color;
-	    
-	    private Rect(float x, float y, float w, float h) {
-	        super(x,y,w,h);
-	        setVisible(true);
-	        setNegativeDimensionsEnabled(true);
-	        
-	        stroke = new Stroke();
-	        color = new Color(44);
-	      }
-	    
-	    
-	    public Rect() {
-	      this(ctx.width*.3f,ctx.height*.45f,ctx.width*.4f,ctx.height*.1f);
-	    }
-	    
-	    @Override
-	    public void update() {
-	      ctx.pushStyle();
-	      stroke.apply();
-		  color.apply();
-		  ctx.rect(getX(),getY(),getWidth(),getHeight());
-		  ctx.popStyle();
-	 
-	    }
-	    
-	    public void setStyle(final Rect otherRect) {
-	    	stroke.set(otherRect.stroke);
-	    	color.setHEX(otherRect.color.get());
-	    }
-		
+	public final void setLevelStrokeWeight(int weight) {
+		level.stroke.setWeight(weight);
 	}
-	
+
+	public final Color getLevelStrokeColor() {
+		return level.stroke.getColor();
+	}
+
+	public final void setLevelStrokeColor(Color color) {
+		level.stroke.setColor(color);
+	}
+
+	public final Color getLevelColor() {
+		return new Color(level.color);
+	}
+
+	public final void setLevelColor(Color color) {
+		level.color.set(color);
+	}
+
+	private final class Rect extends Bounds {
+		public final Stroke stroke;
+		public final Color color;
+
+		private Rect(float x, float y, float w, float h) {
+			super(x, y, w, h);
+			setVisible(true);
+			setNegativeDimensionsEnabled(true);
+
+			stroke = new Stroke();
+			color = new Color(44);
+		}
+
+		@Override
+		public void update() {
+			ctx.pushStyle();
+			stroke.apply();
+			color.apply();
+			ctx.rect(getX(), getY(), getWidth(), getHeight());
+			ctx.popStyle();
+
+		}
+
+	}
+
 }

@@ -1,24 +1,23 @@
 package microui;
 
-import microui.component.CheckBox;
+import microui.component.Slider;
 import microui.service.GlobalTooltip;
 import microui.util.Metrics;
 import processing.core.PApplet;
 
 // TODO Check what's methods and objects must be a part of components API
 //[1] Button
-//[0] CheckBox
+//[1] CheckBox
 //[0] Dial
 //[0] EditText
 //[0] MenuButton
-//[0] Scroll
-//[0] Slider
+//[1] Scroll
+//[1] Slider
 //[0] TextField
 //[0] TextView
 
 public class Launcher extends PApplet {
-	CheckBox component;
-	
+	Slider component;
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
@@ -31,14 +30,12 @@ public class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		component = new CheckBox();
-		component.setText("Hello Baby");
-		component.setTooltipText("i'm - "+component.getClass().getCanonicalName());
+		component = new Slider();
 	}
 
 	@Override
 	public void draw() {
-		background(200);
+		background(component.getValue());
 		
 		component.draw();
 		if(mouseButton == RIGHT) {
@@ -49,4 +46,5 @@ public class Launcher extends PApplet {
 		GlobalTooltip.draw();
 	}
 
+	
 }
