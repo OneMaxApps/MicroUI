@@ -4,6 +4,7 @@ import microui.component.Slider;
 import microui.service.GlobalTooltip;
 import microui.util.Metrics;
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 
 // TODO Check what's methods and objects must be a part of components API
 //[1] Button
@@ -46,5 +47,8 @@ public class Launcher extends PApplet {
 		GlobalTooltip.draw();
 	}
 
-	
+	@Override
+	public void mouseWheel(MouseEvent event) {
+		component.mouseWheel(event);
+	}
 }

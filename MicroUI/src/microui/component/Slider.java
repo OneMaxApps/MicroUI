@@ -25,7 +25,9 @@ public class Slider extends RangeControl {
 	}
 
 	public Slider() {
-		this(ctx.width * .25f, ctx.height * .45f, ctx.width * .5f, ctx.height * .1f);
+		this(0,0,0,0);
+		setWidth(getMaxWidth());
+		setPosition(ctx.width/2-getWidth()/2,ctx.height/2-getHeight()/2);
 	}
 
 	@Override

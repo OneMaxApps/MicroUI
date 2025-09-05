@@ -79,36 +79,40 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setWidth(float width) {
+		this.width = getCorrectDimension(this.width, width, minWidth, maxWidth);
+	}
+	
+	private float getCorrectDimension(float currentValue, float newValue, float min, float max) {
+		float correctValue = currentValue,
+			  constrainedValue = constrain(newValue, min, max);
+		
 		if (isConstrainDimensionsEnabled) {
 			if (isNegativeDimensionsEnabled) {
-				if (!areEqual(this.width, constrain(width, minWidth, maxWidth))) {
-					this.width = constrain(width, minWidth, maxWidth);
+				if (!areEqual(currentValue, constrainedValue)) {
 					isDimDirty = true;
-					return;
+					correctValue = constrainedValue;
 				}
 			} else {
-				if (!areEqual(this.width, max(0, constrain(width, minWidth, maxWidth)))) {
-					this.width = max(0, constrain(width, minWidth, maxWidth));
+				if (!areEqual(currentValue, max(0, constrainedValue))) {
 					isDimDirty = true;
-					return;
+					correctValue = max(0, constrainedValue);
 				}
 			}
 		} else {
 			if (isNegativeDimensionsEnabled) {
-				if (!areEqual(this.width, width)) {
-					this.width = width;
+				if (!areEqual(currentValue, newValue)) {
 					isDimDirty = true;
-					return;
+					correctValue = newValue;
 				}
 			} else {
-				if (!areEqual(this.width, max(0, width))) {
-					this.width = max(0, width);
+				if (!areEqual(currentValue, max(0, newValue))) {
 					isDimDirty = true;
-					return;
+					correctValue = max(0, newValue);
 				}
 			}
 		}
-
+		
+		return correctValue;
 	}
 
 	public final void setWidth(Bounds bounds) {
@@ -120,37 +124,7 @@ public abstract class Bounds extends View {
 	}
 
 	public final void setHeight(float height) {
-
-		if (isConstrainDimensionsEnabled) {
-			if (isNegativeDimensionsEnabled) {
-				if (!areEqual(this.height, constrain(height, minHeight, maxHeight))) {
-					this.height = constrain(height, minHeight, maxHeight);
-					isDimDirty = true;
-					return;
-				}
-			} else {
-				if (!areEqual(this.height, max(0, constrain(height, minHeight, maxHeight)))) {
-					this.height = max(0, constrain(height, minHeight, maxHeight));
-					isDimDirty = true;
-					return;
-				}
-			}
-		} else {
-			if (isNegativeDimensionsEnabled) {
-				if (!areEqual(this.height, height)) {
-					this.height = height;
-					isDimDirty = true;
-					return;
-				}
-			} else {
-				if (!areEqual(this.height, max(0, height))) {
-					this.height = max(0, height);
-					isDimDirty = true;
-					return;
-				}
-			}
-		}
-
+		this.height = getCorrectDimension(this.height, height, minHeight, maxHeight);
 	}
 
 	public final void setHeight(Bounds bounds) {
