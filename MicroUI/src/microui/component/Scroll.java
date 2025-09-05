@@ -21,7 +21,7 @@ public class Scroll extends RangeControl {
 		thumb.onHold(() -> {
 			calcDistFromMouseToThumb();
 			
-			switch(orientation) {
+			switch(getOrientation()) {
 				case HORIZONTAL :
 					thumb.setX(constrain(ctx.mouseX+distToThumb,getX(),getX()+getWidth()-thumb.getWidth()));
 					setValueWithoutActions(map(thumb.getX(),getX(),getX()+getWidth()-thumb.getWidth(),getMinValue(),getMaxValue()));
@@ -59,7 +59,7 @@ public class Scroll extends RangeControl {
 	private final void calcDistFromMouseToThumb() {
 		if(!needRecalculateDistToThumb) { return; }
 		
-		switch(orientation) {
+		switch(getOrientation()) {
 			case HORIZONTAL :
 				 distToThumb = thumb.getX()-ctx.mouseX;
 			break;
@@ -97,7 +97,7 @@ public class Scroll extends RangeControl {
 	private final void updateThumbTransforms() {
 		thumb.setBoundsProperty(this);
 		
-		switch(orientation) {
+		switch(getOrientation()) {
 		
 		case HORIZONTAL :
 			thumb.setWidth(getWidth()/10);

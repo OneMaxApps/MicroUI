@@ -9,6 +9,7 @@ import static java.awt.event.KeyEvent.VK_PAGE_DOWN;
 import static java.awt.event.KeyEvent.VK_PAGE_UP;
 import static java.awt.event.KeyEvent.VK_V;
 import static java.awt.event.KeyEvent.VK_X;
+import static microui.constants.Orientation.VERTICAL;
 import static microui.event.Event.checkKey;
 import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import microui.constants.Orientation;
 import microui.core.base.Component;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
@@ -139,13 +139,11 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				return;
 			}
 
-			if (isMouseOutsideFromScrollV) {
+			if (!isMouseOutsideFromScrollV) {
 				scrollV.mouseWheel(e,isMouseInside());
-				scrollV.autoScroll();
 			}
 
 			scrollH.mouseWheel(e);
-			scrollH.autoScroll();
 
 		}
 
@@ -355,7 +353,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		
 		scrollsPositionUpdate();
 
-		scrollV.setOrientation(Orientation.VERTICAL);
+		scrollV.setOrientation(VERTICAL);
 
 		scrollsSizeUpdate();
 

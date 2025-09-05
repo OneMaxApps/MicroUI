@@ -82,39 +82,6 @@ public abstract class Bounds extends View {
 		this.width = getCorrectDimension(this.width, width, minWidth, maxWidth);
 	}
 	
-	private float getCorrectDimension(float currentValue, float newValue, float min, float max) {
-		float correctValue = currentValue,
-			  constrainedValue = constrain(newValue, min, max);
-		
-		if (isConstrainDimensionsEnabled) {
-			if (isNegativeDimensionsEnabled) {
-				if (!areEqual(currentValue, constrainedValue)) {
-					isDimDirty = true;
-					correctValue = constrainedValue;
-				}
-			} else {
-				if (!areEqual(currentValue, max(0, constrainedValue))) {
-					isDimDirty = true;
-					correctValue = max(0, constrainedValue);
-				}
-			}
-		} else {
-			if (isNegativeDimensionsEnabled) {
-				if (!areEqual(currentValue, newValue)) {
-					isDimDirty = true;
-					correctValue = newValue;
-				}
-			} else {
-				if (!areEqual(currentValue, max(0, newValue))) {
-					isDimDirty = true;
-					correctValue = max(0, newValue);
-				}
-			}
-		}
-		
-		return correctValue;
-	}
-
 	public final void setWidth(Bounds bounds) {
 		setWidth(requireNonNull(bounds, "bounds cannot be null").getWidth());
 	}
@@ -323,7 +290,31 @@ public abstract class Bounds extends View {
 		}
 
 	}
+	
+	public final void appendX(float delta) {
+		setX(getX()+delta);
+	}
+	
+	public final void appendY(float delta) {
+		setY(getY()+delta);
+	}
+	
+	public final void appendWidth(float delta) {
+		setWidth(getWidth()+delta);
+	}
+	
+	public final void appendHeight(float delta) {
+		setHeight(getHeight()+delta);
+	}
 
+	public final void appendSize(float delta) {
+		setSize(getWidth()+delta,getHeight()+delta);
+	}
+	
+	public final void appendSize(float deltaWidth, float deltaHeight) {
+		setSize(getWidth()+deltaWidth,getHeight()+deltaHeight);
+	}
+	
 	protected void onChangePositions() {
 	}
 
@@ -333,11 +324,11 @@ public abstract class Bounds extends View {
 	protected void onChangeBounds() {
 	}
 
-	protected boolean isNegativeDimensionsEnabled() {
+	protected final boolean isNegativeDimensionsEnabled() {
 		return isNegativeDimensionsEnabled;
 	}
 
-	protected void setNegativeDimensionsEnabled(boolean isNegativeDimensionsEnabled) {
+	protected final void setNegativeDimensionsEnabled(boolean isNegativeDimensionsEnabled) {
 		this.isNegativeDimensionsEnabled = isNegativeDimensionsEnabled;
 	}
 
@@ -367,6 +358,39 @@ public abstract class Bounds extends View {
 			onChangeDimensions();
 			isDimDirty = false;
 		}
+	}
+	
+	private float getCorrectDimension(float currentValue, float newValue, float min, float max) {
+		float correctValue = currentValue,
+			  constrainedValue = constrain(newValue, min, max);
+		
+		if (isConstrainDimensionsEnabled) {
+			if (isNegativeDimensionsEnabled) {
+				if (!areEqual(currentValue, constrainedValue)) {
+					isDimDirty = true;
+					correctValue = constrainedValue;
+				}
+			} else {
+				if (!areEqual(currentValue, max(0, constrainedValue))) {
+					isDimDirty = true;
+					correctValue = max(0, constrainedValue);
+				}
+			}
+		} else {
+			if (isNegativeDimensionsEnabled) {
+				if (!areEqual(currentValue, newValue)) {
+					isDimDirty = true;
+					correctValue = newValue;
+				}
+			} else {
+				if (!areEqual(currentValue, max(0, newValue))) {
+					isDimDirty = true;
+					correctValue = max(0, newValue);
+				}
+			}
+		}
+		
+		return correctValue;
 	}
 
 }

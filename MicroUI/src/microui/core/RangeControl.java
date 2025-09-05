@@ -11,16 +11,15 @@ import processing.event.MouseEvent;
 public abstract class RangeControl extends Component implements Scrollable {
 	private final Value value;
 	private final Scrolling scrolling;
-	protected Orientation orientation;
-	protected boolean valueChangeStart,valueChangeEnd;
+	private Orientation orientation;
+	private boolean valueChangeStart,valueChangeEnd;
 	private Listener onStartChangeValueListener,onChangeValueListener,onEndChangeValueListener;
 	
-	public RangeControl(float x, float y, float w, float h) {
-		super(x, y, w, h);
+	public RangeControl(float x, float y, float width, float height) {
+		super(x, y, width, height);
 		setVisible(true);
 		setConstrainDimensionsEnabled(true);
 		setMinMaxSize(10,200);
-		
 		getMutableColor().set(24);
 		
 		value = new Value(0,100,0) {
@@ -39,10 +38,6 @@ public abstract class RangeControl extends Component implements Scrollable {
 		setEventListener(this);
 		
 		
-	}
-	
-	public RangeControl() {
-		this(ctx.width*.25f,ctx.height*.45f,ctx.width*.5f,ctx.height*.1f);
 	}
 
 	@Override
@@ -90,6 +85,10 @@ public abstract class RangeControl extends Component implements Scrollable {
 		onChangeValue();
 	}
 	
+	public final Orientation getOrientation() {
+		return orientation;
+	}
+	
 	public final void setOrientation(final Orientation orientation) {
 		if(this.orientation == orientation) { return; }
 		final float w = getWidth(), h = getHeight();
@@ -101,11 +100,6 @@ public abstract class RangeControl extends Component implements Scrollable {
 	
 	public void swapOrientation() {
 		if(orientation == Orientation.HORIZONTAL) { orientation = Orientation.VERTICAL; } else { orientation = Orientation.HORIZONTAL; }
-	}
-	
-	public final void autoScroll() {
-		value.append(scrolling.get());
-		onChangeValue();
 	}
 	
 	public final Listener getOnChangeValueListener() {
@@ -171,7 +165,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 	public final void setScrollingVelocity(float velocity) {
 		scrolling.setVelocity(velocity);
 	}
-	
+
 	protected void onChangeValue() {
 		if(onChangeValueListener != null) {
 			onChangeValueListener.action();
@@ -201,5 +195,8 @@ public abstract class RangeControl extends Component implements Scrollable {
 		this.value.setWithoutActions(value);
 	}
 	
-	
+	protected final void autoScroll() {
+		value.append(scrolling.get());
+		onChangeValue();
+	}
 }
