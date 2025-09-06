@@ -17,7 +17,6 @@ public abstract class AbstractButton extends Component {
 		super(x, y, w, h);
 		setVisible(true);
 		setConstrainDimensionsEnabled(true);
-		
 		setEventListener(this);
 
 		ripples = new Ripples(this);

@@ -1,5 +1,6 @@
 package microui.core.base;
 
+import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 import static microui.event.EventType.CLICK;
 import static microui.event.EventType.DOUBLE_CLICK;
@@ -27,12 +28,11 @@ public abstract class Component extends Bounds {
 	private Event event;
 	private Callback callback;
 	// private Tooltip tooltip;
-	private final Padding padding;
+	private Padding padding;
 
 	public Component(float x, float y, float width, float height) {
 		super(x, y, width, height);
-		padding = new Padding();
-		
+		setPaddingEnabled(true);
 	}
 
 	public Component() {
@@ -176,63 +176,87 @@ public abstract class Component extends Bounds {
 	}
 
 	public final void setPadding(float left, float right, float up, float down) {
+		ensurePadding();
 		padding.setLeft(left);
 		padding.setRight(right);
-		padding.setUp(up);
-		padding.setDown(down);
+		padding.setTop(up);
+		padding.setBottom(down);
 	}
 	
 	public final void setPadding(float paddingHorizontal, float paddingVertical) {
+		ensurePadding();
 		padding.setLeft(paddingHorizontal);
 		padding.setRight(paddingHorizontal);
-		padding.setUp(paddingVertical);
-		padding.setDown(paddingVertical);
+		padding.setTop(paddingVertical);
+		padding.setBottom(paddingVertical);
 	}
 	
 	public final void setPadding(float padding) {
+		ensurePadding();
 		this.padding.setLeft(padding);
 		this.padding.setRight(padding);
-		this.padding.setUp(padding);
-		this.padding.setDown(padding);
+		this.padding.setTop(padding);
+		this.padding.setBottom(padding);
 	}
 	
 	public final void setPadding(Component padding) {
+		ensurePadding();
 		this.padding.setLeft(requireNonNull(padding, "padding object cannot be null").getPaddingLeft());
 		this.padding.setRight(padding.getPaddingRight());
-		this.padding.setUp(padding.getPaddingUp());
-		this.padding.setDown(padding.getPaddingDown());
+		this.padding.setTop(padding.getPaddingTop());
+		this.padding.setBottom(padding.getPaddingBottom());
 	}
 
 	public final float getPaddingLeft() {
+		ensurePadding();
 		return padding.getLeft();
 	}
 
 	public final float getPaddingRight() {
+		ensurePadding();
 		return padding.getRight();
 	}
 
-	public final float getPaddingUp() {
-		return padding.getUp();
+	public final float getPaddingTop() {
+		ensurePadding();
+		return padding.getTop();
 	}
 
-	public final float getPaddingDown() {
-		return padding.getDown();
+	public final float getPaddingBottom() {
+		ensurePadding();
+		return padding.getBottom();
 	}
 
 	public final float getContentX() {
-		return getX()+getPaddingLeft();
+		ensurePadding();
+		return isPaddingEnabled() ? getX()+getPaddingLeft() : getX();
 	}
 	
 	public final float getContentY() {
-		return getY()+getPaddingUp();
+		ensurePadding();
+		return isPaddingEnabled() ?  getY()+getPaddingTop() : getY();
 	}
 	
 	public final float getContentWidth() {
-		return getWidth()-getPaddingRight()-getPaddingLeft();
+		return isPaddingEnabled() ?  max(0,getWidth()-(getPaddingRight()+getPaddingLeft())) : getWidth();
 	}
 	
 	public final float getContentHeight() {
-		return getHeight()-getPaddingDown()-getPaddingUp();
+		return isPaddingEnabled() ?  max(0,getHeight()-(getPaddingBottom()+getPaddingTop())) : getHeight();
+	}
+	
+	public final boolean isPaddingEnabled() {
+		ensurePadding();
+		return padding.isEnabled();
+	}
+	
+	public final void setPaddingEnabled(boolean isEnabled) {
+		ensurePadding();
+		padding.setEnabled(isEnabled);
+	}
+	
+	public final void resetPadding() {
+		setPadding(0);
 	}
 	
 	/*
@@ -293,9 +317,6 @@ public abstract class Component extends Bounds {
 		return color;
 	}
 	
-	protected void onChangePadding() {
-		
-	}
 	/*
 	 * private void ensureTooltip() { ensureCallback(); if (tooltip == null) {
 	 * tooltip = new Tooltip(callback); } }
@@ -318,10 +339,25 @@ public abstract class Component extends Bounds {
 			color = new Color(200);
 		}
 	}
-
+	
+	private void ensurePadding() {
+		if(padding == null) {
+			padding = new Padding();
+		}
+	}
+	
 	private final class Padding {
-		float left, right, up, down;
+		float left, right, top, bottom;
+		boolean isEnabled;
 		
+		boolean isEnabled() {
+			return isEnabled;
+		}
+
+		void setEnabled(boolean isEnabled) {
+			this.isEnabled = isEnabled;
+		}
+
 		float getLeft() {
 			return left;
 		}
@@ -329,8 +365,10 @@ public abstract class Component extends Bounds {
 		void setLeft(float left) {
 			if(!isValidValue(this.left,left)) { return; }
 			this.left = left;
-			onChangePadding();
 			checkCorrectState();
+			onChangePositions();
+			onChangeDimensions();
+			onChangeBounds();
 		}
 
 		float getRight() {
@@ -340,30 +378,36 @@ public abstract class Component extends Bounds {
 		void setRight(float right) {
 			if(!isValidValue(this.right,right)) { return; }
 			this.right = right;
-			onChangePadding();
 			checkCorrectState();
+			onChangePositions();
+			onChangeDimensions();
+			onChangeBounds();
 		}
 
-		float getUp() {
-			return up;
+		float getTop() {
+			return top;
 		}
 
-		void setUp(float up) {
-			if(!isValidValue(this.up,up)) { return; }
-			this.up = up;
-			onChangePadding();
+		void setTop(float top) {
+			if(!isValidValue(this.top,top)) { return; }
+			this.top = top;
 			checkCorrectState();
+			onChangePositions();
+			onChangeDimensions();
+			onChangeBounds();
 		}
 
-		float getDown() {
-			return down;
+		float getBottom() {
+			return bottom;
 		}
 
-		void setDown(float down) {
-			if(!isValidValue(this.down,down)) { return; }
-			this.down = down;
-			onChangePadding();
+		void setBottom(float bottom) {
+			if(!isValidValue(this.bottom,bottom)) { return; }
+			this.bottom = bottom;
 			checkCorrectState();
+			onChangePositions();
+			onChangeDimensions();
+			onChangeBounds();
 		}
 		
 		private boolean isValidValue(float currentValue, float newValue) {
@@ -379,7 +423,9 @@ public abstract class Component extends Bounds {
 		}
 		
 		private void checkCorrectState() {
-			if(left+right > getWidth() || up+down > getHeight()) {
+			if(getWidth() <= 0 || getHeight() <= 0) { return; }
+			
+			if(left+right > getWidth() || top+bottom > getHeight()) {
 				throw new IllegalArgumentException("padding cannot be greater than size of component");
 			}
 		}

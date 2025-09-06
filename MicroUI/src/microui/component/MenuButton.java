@@ -8,6 +8,7 @@ import microui.core.style.Color;
 import microui.event.Event;
 import processing.event.MouseEvent;
 
+// TODO make setting padding, color etc for items
 public class MenuButton extends Button implements Scrollable {
 	private boolean isOpen,isAutoClose,isRoot,isMarkVisible;
 	
@@ -400,10 +401,10 @@ public class MenuButton extends Button implements Scrollable {
 	}
 
 	private final void calculateMarkBounds() {
-		markX = getX()+getWidth()*.2f;
-		markY = getY()+getHeight()*.8f;
-		markW = getWidth()*.6f;
-		markH = getHeight()*.05f;
+		markX = getContentX()+getContentWidth()*.2f;
+		markY = getContentY()+getContentHeight()*.8f;
+		markW = getContentWidth()*.6f;
+		markH = getContentHeight()*.05f;
 		
 	}
 	

@@ -23,7 +23,7 @@ public class TextView extends Component {
 	  
 	  public TextView(String text, float x, float y, float w, float h) {
 	    super(x,y,w,h);
-	    
+	    setConstrainDimensionsEnabled(false);
 	    this.text = new StringBuilder(text);
 	    textSize = (int) (h/3 > 0 ? h/3 : h/2);
 	    autoResizeMode = AutoResizeMode.SMALL;
@@ -49,6 +49,7 @@ public class TextView extends Component {
 	  
 	  @Override
 	  protected void update() {
+		  
 		  if(text.isEmpty()) { return; }
 		  
 		  shadow.draw();
@@ -91,7 +92,7 @@ public class TextView extends Component {
 		  pg.popStyle();
 	  }
 
-	public final PFont getFont() {
+	  public final PFont getFont() {
 			return font;
 	  }
 	

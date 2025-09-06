@@ -85,11 +85,11 @@ public final class Ripples extends View {
 	}
 	
 	private final boolean isResized() {
-		return pg.width != (int) component.getWidth() || pg.height != (int) component.getHeight();
+		return pg.width != (int) component.getContentWidth() || pg.height != (int) component.getContentHeight();
 	}
 	
 	private final void createGraphics() {
-		pg = ctx.createGraphics((int) max(1,component.getWidth()),(int) max(1,component.getHeight()),ctx.sketchRenderer());
+		pg = ctx.createGraphics((int) max(1,component.getContentWidth()),(int) max(1,component.getContentHeight()),ctx.sketchRenderer());
 		Metrics.register(pg);
 	}
 
@@ -110,12 +110,12 @@ public final class Ripples extends View {
 		}
 		
 		private final void incSize() {
-			radius += constrain(min(component.getWidth()*.2f,component.getHeight()*.2f),1,20);
+			radius += constrain(min(component.getContentWidth()*.2f,component.getContentHeight()*.2f),1,20);
 		}
 		
 		private final void playAnim() {
 			incSize();
-			if(radius > max(component.getWidth()*2,component.getHeight()*2)) {
+			if(radius > max(component.getContentWidth()*2,component.getContentHeight()*2)) {
 				radius = 0;
 				start = false;
 			}
@@ -126,8 +126,8 @@ public final class Ripples extends View {
 		}
 		
 		private final void resetPosition() {
-			x = ctx.mouseX-component.getX();
-			y = ctx.mouseY-component.getY();
+			x = ctx.mouseX-component.getContentX();
+			y = ctx.mouseY-component.getContentY();
 		}
 	}
 }

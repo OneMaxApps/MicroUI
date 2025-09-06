@@ -19,10 +19,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		super(x, y, width, height);
 		setVisible(true);
 		setConstrainDimensionsEnabled(true);
-		setMinWidth(50);
-		setMaxWidth(200);
-		setMinHeight(10);
-		setMaxHeight(10);
+		setMinMaxSize(10,200);
 		getMutableColor().set(24);
 
 		value = new Value(0, 100, 0) {
@@ -98,24 +95,6 @@ public abstract class RangeControl extends Component implements Scrollable {
 		final float w = getWidth(), h = getHeight();
 		this.orientation = orientation;
 
-		switch (this.orientation) {
-		
-		case VERTICAL:
-			setMinWidth(10);
-			setMaxWidth(10);
-			setMinHeight(50);
-			setMaxHeight(200);
-			
-			break;
-		case HORIZONTAL:
-			setMinWidth(50);
-			setMaxWidth(200);
-			setMinHeight(10);
-			setMaxHeight(10);
-			break;
-
-		}
-
 		setWidth(h);
 		setHeight(w);
 		onChangeBounds();
@@ -127,6 +106,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		} else {
 			orientation = Orientation.HORIZONTAL;
 		}
+		
 	}
 
 	public final Listener getOnChangeValueListener() {

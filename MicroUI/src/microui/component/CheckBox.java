@@ -12,15 +12,16 @@ public class CheckBox extends AbstractButton {
 	private final Color markColor;
 	private boolean isChecked;
 
-	public CheckBox(float x, float y, float width, float height) {
-		super(x, y, width, height);
+	public CheckBox(float x, float y) {
+		super(x, y, DEFAULT_SIZE, DEFAULT_SIZE);
+		setPaddingEnabled(false);
 		setMinMaxSize(DEFAULT_SIZE);
 		onClick(() -> toggle());
 		markColor = new Color(200,200,255);
 	}
 
 	public CheckBox(boolean isChecked) {
-		this(ctx.width/2-DEFAULT_SIZE/2, ctx.height/2-DEFAULT_SIZE/2,DEFAULT_SIZE,DEFAULT_SIZE);
+		this(ctx.width/2-DEFAULT_SIZE/2, ctx.height/2-DEFAULT_SIZE/2);
 		setChecked(isChecked);
 	}
 

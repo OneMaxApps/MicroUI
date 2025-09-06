@@ -57,11 +57,6 @@ public class Slider extends RangeControl {
 	protected void onChangeBounds() {
 		updateLevelBounds();
 	}
-	
-	@Override
-	protected void onChangePadding() {
-		updateLevelBounds();
-	}
 
 	@Override
 	public void swapOrientation() {

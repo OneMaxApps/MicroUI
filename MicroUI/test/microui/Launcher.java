@@ -1,12 +1,25 @@
 package microui;
 
-import microui.component.Scroll;
+import microui.component.EditText;
 import microui.event.Event;
 import processing.core.PApplet;
+import processing.event.MouseEvent;
+
+// TODO check full work life cycle of components
+// [1] Button;
+// [1] CheckBox;
+// [0] Dial; (need full refactor)
+// [0] EditText; (need full refactor)
+// [1] MenuButton;
+// [1] Scroll;
+// [1] Slider;
+// [0] TextField;
+// [0] TextView; (need full refactor)
+
 
 public final class Launcher extends PApplet {
 
-	Scroll component;
+	EditText component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -21,29 +34,32 @@ public final class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		
-		component = new Scroll();
-		
+		component = new EditText();
 	}
 
 	@Override
 	public void draw() {
 		background(200);
-		
 		component.draw();
-		
 		if(mouseButton == RIGHT) {
 			component.setSize(mouseX,mouseY);
 		}
 	}
 
 	@Override
-	public void mousePressed() {
+	public void mouseWheel(MouseEvent event) {
+		component.mouseWheel(event);
+	}
 
+	@Override
+	public void mousePressed() {
+		
 	}
 
 	@Override
 	public void keyPressed() {
 		Event.keyPressed();
+		component.keyPressed();
 	}
 
 	@Override

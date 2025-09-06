@@ -121,12 +121,6 @@ public class Scroll extends RangeControl {
 		updateThumbTransforms();
 		
 	}
-	
-	@Override
-	protected void onChangePadding() {
-		if(thumb == null) { return; }
-		updateThumbTransforms();
-	}
 
 	private final void updateThumbTransforms() {
 		//thumb.setBoundsProperty(this);
