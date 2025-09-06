@@ -1,10 +1,12 @@
 package microui;
 
-import microui.component.Button;
+import microui.component.Scroll;
+import microui.event.Event;
 import processing.core.PApplet;
 
 public final class Launcher extends PApplet {
-	Button button;
+
+	Scroll component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -12,25 +14,41 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-		size(400,400);
+		size(640, 480);
 	}
 
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		button = new Button();
+		
+		component = new Scroll();
+		
 	}
 
 	@Override
 	public void draw() {
 		background(200);
-		button.draw();
+		
+		component.draw();
 		
 		if(mouseButton == RIGHT) {
-			button.setPosition(mouseX,mouseY);
+			component.setSize(mouseX,mouseY);
 		}
-		
-		//Metrics.printAll();
 	}
-	
+
+	@Override
+	public void mousePressed() {
+
+	}
+
+	@Override
+	public void keyPressed() {
+		Event.keyPressed();
+	}
+
+	@Override
+	public void keyReleased() {
+		Event.keyReleased();
+	}
+
 }

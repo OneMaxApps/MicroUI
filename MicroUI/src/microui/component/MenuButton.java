@@ -159,20 +159,19 @@ public class MenuButton extends Button implements Scrollable {
 		super.onChangeBounds();
 		if(itemList == null) { return; }
 		
-		final boolean CAN_BE_IN_RIGHT_SIDE = getX()+getWidth()*2 < ctx.width;
+		final boolean canBeInRightSide = getX()+getWidth()*2 < ctx.width;
 		
 		listHeight = 0;
 		for(int i = 0; i < itemList.size(); i++) {
-			final Button ITEM = itemList.get(i);
-			ITEM.setSize(getWidth(), getHeight());
-			
+			final Button item = itemList.get(i);
+			item.setSize(getWidth(), getHeight());
 			if(isRoot) {
-				ITEM.setPosition(getX(),getY()+getHeight()*(i+1));
+				item.setPosition(getX(),getY()+getHeight()*(i+1));
 			} else {
-				ITEM.setPosition(CAN_BE_IN_RIGHT_SIDE ? getX()+getWidth() : getX()-getWidth(),getY()+getHeight()*(1+i)-getHeight());
+				item.setPosition(canBeInRightSide ? getX()+getWidth() : getX()-getWidth(),getY()+getHeight()*(1+i)-getHeight());
 			}
 			
-			listHeight += ITEM.getHeight();
+			listHeight += item.getHeight();
 		}
 		
 		calculateMarkBounds();

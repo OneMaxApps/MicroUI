@@ -82,5 +82,6 @@ public class Button extends AbstractButton {
 		super.onChangeBounds();
 		if(text == null) { return; }
 		text.setBoundsProperty(this);
+		text.setPadding(this);
 	}
 }

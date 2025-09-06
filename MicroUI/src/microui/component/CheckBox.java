@@ -72,14 +72,14 @@ public class CheckBox extends AbstractButton {
 		ctx.pushStyle();
 		ctx.noStroke();
 		markColor.apply();
-		ctx.rect(getX(), getY(), getWidth(), getHeight());
+		ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
 		ctx.stroke(0, 128);
-		ctx.strokeWeight(max(1, getWidth() / 5));
+		ctx.strokeWeight(max(1, getContentWidth() / 5));
 		ctx.strokeCap(PROJECT);
-		ctx.line(getX() + getWidth() * .3f, getY() + getHeight() * .6f, getX() + getWidth() / 2,
-				getY() + getHeight() * .8f);
-		ctx.line(getX() + getWidth() * .8f, getY() + getHeight() * .2f, getX() + getWidth() / 2,
-				getY() + getHeight() * .8f);
+		ctx.line(getContentX() + getContentWidth() * .3f, getContentY() + getContentHeight() * .6f, getContentX() + getContentWidth() / 2,
+				getContentY() + getContentHeight() * .8f);
+		ctx.line(getContentX() + getContentWidth() * .8f, getContentY() + getContentHeight() * .2f, getContentX() + getContentWidth() / 2,
+				getContentY() + getContentHeight() * .8f);
 		ctx.popStyle();
 	}
 	

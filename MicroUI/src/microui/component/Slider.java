@@ -15,7 +15,7 @@ public class Slider extends RangeControl {
 	public Slider(float x, float y, float w, float h) {
 		super(x, y, w, h);
 
-		level = new Rect(x, y, w, h);
+		level = new Rect(x,y,w,h);
 		level.color.set(234);
 
 		setValue(0, 100, 0);
@@ -44,7 +44,7 @@ public class Slider extends RangeControl {
 				setValue(map(ctx.mouseY, getY(), getY() + getHeight(), getMaxValue(), getMinValue()));
 				break;
 			}
-			onChangeBounds();
+			updateLevelBounds();
 
 			onStartChangeValue();
 			onChangeValue();
@@ -55,27 +55,12 @@ public class Slider extends RangeControl {
 
 	@Override
 	protected void onChangeBounds() {
-		if (level == null) {
-			return;
-		}
-
-		level.setBounds(this);
-
-		switch (getOrientation()) {
-
-		case HORIZONTAL:
-			level.setWidth(map(getValue(), getMinValue(), getMaxValue(), 0, getWidth()));
-
-			break;
-
-		case VERTICAL:
-			level.setY(getY() + getHeight());
-			level.setWidth(getWidth());
-			level.setHeight(map(getValue(), getMinValue(), getMaxValue(), 0, -getHeight()));
-			break;
-
-		}
-
+		updateLevelBounds();
+	}
+	
+	@Override
+	protected void onChangePadding() {
+		updateLevelBounds();
 	}
 
 	@Override
@@ -131,6 +116,29 @@ public class Slider extends RangeControl {
 
 		}
 
+	}
+	
+	private void updateLevelBounds() {
+		if (level == null) {
+			return;
+		}
+
+		level.setBounds(getContentX(),getContentY(),getContentWidth(),getContentHeight());
+
+		switch (getOrientation()) {
+
+		case HORIZONTAL:
+			level.setWidth(map(getValue(), getMinValue(), getMaxValue(), 0, getContentWidth()));
+
+			break;
+
+		case VERTICAL:
+			level.setY(getY() + getContentHeight());
+			level.setWidth(getContentWidth());
+			level.setHeight(map(getValue(), getMinValue(), getMaxValue(), 0, -getContentHeight()));
+			break;
+
+		}
 	}
 
 }

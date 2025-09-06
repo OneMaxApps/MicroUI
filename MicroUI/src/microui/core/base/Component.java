@@ -26,10 +26,13 @@ public abstract class Component extends Bounds {
 	private Color color;
 	private Event event;
 	private Callback callback;
-	//private Tooltip tooltip;
+	// private Tooltip tooltip;
+	private final Padding padding;
 
 	public Component(float x, float y, float width, float height) {
 		super(x, y, width, height);
+		padding = new Padding();
+		
 	}
 
 	public Component() {
@@ -39,17 +42,17 @@ public abstract class Component extends Bounds {
 	@Override
 	public void draw() {
 		super.draw();
-		if(event != null) {
+
+		if (event != null) {
 			event.listen();
 		}
-		
+
 		if (callback != null) {
 			callback.listen();
 		}
-/*
-		if (tooltip != null) {
-			tooltip.init();
-		}*/
+		/*
+		 * if (tooltip != null) { tooltip.init(); }
+		 */
 	}
 
 	public void setStyle(Component component) {
@@ -171,51 +174,104 @@ public abstract class Component extends Bounds {
 		ensureCallback();
 		callback.addListener(SHAKE, requireNonNull(listener, "listener cannot be null"));
 	}
-	/*
-	public final String getTooltipText() {
-		return tooltip == null ? "" : tooltip.getText().getAsString();
-	}*/
-/*
-	public final void setTooltipText(String text) {
-		ensureTooltip();
 
-		tooltip.getText().set(requireNonNull(text, "text cannot be null"));
-	}*/
-/*
-	public final boolean isTooltipEnabled() {
-		ensureTooltip();
-		return tooltip.isEnabled();
-	}*/
-/*
-	public final void setTooltipEnabled(boolean enabled) {
-		ensureTooltip();
-		tooltip.setEnabled(enabled);
-	}*/
-/*
-	public final Color getTooltipColor() {
-		ensureTooltip();
-		return tooltip.getColor();
-	}*/
-/*
-	public final void setTooltipColor(Color color) {
-		ensureTooltip();
-		tooltip.setColor(requireNonNull(color, "color cannot be null"));
-	}*/
-/*
-	public final Color getTooltipTextColor() {
-		ensureTooltip();
-		return tooltip.getText().getColor();
-	}*/
-/*
-	public final void setTooltipTextColor(Color color) {
-		ensureTooltip();
-		tooltip.getText().setColor(requireNonNull(color, "color cannot be null"));
-	}*/
-/*
-	protected final void setTooltipAdditionalCondition(boolean condition) {
-		ensureTooltip();
-		tooltip.setAdditionalCondition(condition);
-	}*/
+	public final void setPadding(float left, float right, float up, float down) {
+		padding.setLeft(left);
+		padding.setRight(right);
+		padding.setUp(up);
+		padding.setDown(down);
+	}
+	
+	public final void setPadding(float paddingHorizontal, float paddingVertical) {
+		padding.setLeft(paddingHorizontal);
+		padding.setRight(paddingHorizontal);
+		padding.setUp(paddingVertical);
+		padding.setDown(paddingVertical);
+	}
+	
+	public final void setPadding(float padding) {
+		this.padding.setLeft(padding);
+		this.padding.setRight(padding);
+		this.padding.setUp(padding);
+		this.padding.setDown(padding);
+	}
+	
+	public final void setPadding(Component padding) {
+		this.padding.setLeft(requireNonNull(padding, "padding object cannot be null").getPaddingLeft());
+		this.padding.setRight(padding.getPaddingRight());
+		this.padding.setUp(padding.getPaddingUp());
+		this.padding.setDown(padding.getPaddingDown());
+	}
+
+	public final float getPaddingLeft() {
+		return padding.getLeft();
+	}
+
+	public final float getPaddingRight() {
+		return padding.getRight();
+	}
+
+	public final float getPaddingUp() {
+		return padding.getUp();
+	}
+
+	public final float getPaddingDown() {
+		return padding.getDown();
+	}
+
+	public final float getContentX() {
+		return getX()+getPaddingLeft();
+	}
+	
+	public final float getContentY() {
+		return getY()+getPaddingUp();
+	}
+	
+	public final float getContentWidth() {
+		return getWidth()-getPaddingRight()-getPaddingLeft();
+	}
+	
+	public final float getContentHeight() {
+		return getHeight()-getPaddingDown()-getPaddingUp();
+	}
+	
+	/*
+	 * public final String getTooltipText() { return tooltip == null ? "" :
+	 * tooltip.getText().getAsString(); }
+	 */
+	/*
+	 * public final void setTooltipText(String text) { ensureTooltip();
+	 * 
+	 * tooltip.getText().set(requireNonNull(text, "text cannot be null")); }
+	 */
+	/*
+	 * public final boolean isTooltipEnabled() { ensureTooltip(); return
+	 * tooltip.isEnabled(); }
+	 */
+	/*
+	 * public final void setTooltipEnabled(boolean enabled) { ensureTooltip();
+	 * tooltip.setEnabled(enabled); }
+	 */
+	/*
+	 * public final Color getTooltipColor() { ensureTooltip(); return
+	 * tooltip.getColor(); }
+	 */
+	/*
+	 * public final void setTooltipColor(Color color) { ensureTooltip();
+	 * tooltip.setColor(requireNonNull(color, "color cannot be null")); }
+	 */
+	/*
+	 * public final Color getTooltipTextColor() { ensureTooltip(); return
+	 * tooltip.getText().getColor(); }
+	 */
+	/*
+	 * public final void setTooltipTextColor(Color color) { ensureTooltip();
+	 * tooltip.getText().setColor(requireNonNull(color, "color cannot be null")); }
+	 */
+	/*
+	 * protected final void setTooltipAdditionalCondition(boolean condition) {
+	 * ensureTooltip(); tooltip.setAdditionalCondition(condition); }
+	 */
 
 	protected final void setEventListener(Bounds bounds) {
 		ensureEvent();
@@ -236,13 +292,14 @@ public abstract class Component extends Bounds {
 		ensureColor();
 		return color;
 	}
-/*
-	private void ensureTooltip() {
-		ensureCallback();
-		if (tooltip == null) {
-			tooltip = new Tooltip(callback);
-		}
-	}*/
+	
+	protected void onChangePadding() {
+		
+	}
+	/*
+	 * private void ensureTooltip() { ensureCallback(); if (tooltip == null) {
+	 * tooltip = new Tooltip(callback); } }
+	 */
 
 	private void ensureCallback() {
 		if (callback == null) {
@@ -260,5 +317,72 @@ public abstract class Component extends Bounds {
 		if (color == null) {
 			color = new Color(200);
 		}
+	}
+
+	private final class Padding {
+		float left, right, up, down;
+		
+		float getLeft() {
+			return left;
+		}
+
+		void setLeft(float left) {
+			if(!isValidValue(this.left,left)) { return; }
+			this.left = left;
+			onChangePadding();
+			checkCorrectState();
+		}
+
+		float getRight() {
+			return right;
+		}
+
+		void setRight(float right) {
+			if(!isValidValue(this.right,right)) { return; }
+			this.right = right;
+			onChangePadding();
+			checkCorrectState();
+		}
+
+		float getUp() {
+			return up;
+		}
+
+		void setUp(float up) {
+			if(!isValidValue(this.up,up)) { return; }
+			this.up = up;
+			onChangePadding();
+			checkCorrectState();
+		}
+
+		float getDown() {
+			return down;
+		}
+
+		void setDown(float down) {
+			if(!isValidValue(this.down,down)) { return; }
+			this.down = down;
+			onChangePadding();
+			checkCorrectState();
+		}
+		
+		private boolean isValidValue(float currentValue, float newValue) {
+			if(newValue < 0) {
+				throw new IllegalArgumentException("padding cannot be less than zero");
+			}
+			
+			if(newValue == currentValue) {
+				return false;
+			}
+			
+			return true;
+		}
+		
+		private void checkCorrectState() {
+			if(left+right > getWidth() || up+down > getHeight()) {
+				throw new IllegalArgumentException("padding cannot be greater than size of component");
+			}
+		}
+
 	}
 }

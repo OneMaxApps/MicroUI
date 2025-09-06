@@ -5,7 +5,7 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.max;
 import static processing.core.PApplet.min;
 
-import microui.core.base.Bounds;
+import microui.core.base.Component;
 import microui.core.base.View;
 import microui.core.style.Color;
 import microui.util.Metrics;
@@ -14,18 +14,18 @@ import processing.core.PGraphics;
 public final class Ripples extends View {
 	private final Color color;
 	private final Circle circle;
-	private Bounds bounds;
+	private Component component;
 	private PGraphics pg;
 	private boolean isEnabled;
 	
-	public Ripples(Bounds bounds) {
+	public Ripples(Component component) {
 		super();
 		color = new Color(0,64);
 		
 		circle = new Circle();
 		
 		setVisible(true);
-		this.bounds = requireNonNull(bounds, "bounds cannot be null");
+		this.component = requireNonNull(component, "bounds cannot be null");
 		createGraphics();
 		isEnabled = true;
 	}
@@ -41,17 +41,17 @@ public final class Ripples extends View {
 		pg.clear();
 		circle.draw(pg);
 		pg.endDraw();
-		ctx.image(pg, bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
+		ctx.image(pg, component.getContentX(),component.getContentY(),component.getContentWidth(),component.getContentHeight());
 		}
 		
 	}
 	
-	public final Bounds getBounds() {
-		return bounds;
+	public final Component getComponent() {
+		return component;
 	}
 
-	public final void setBounds(Bounds bounds) {
-		this.bounds = requireNonNull(bounds, "bounds cannot be null");
+	public final void setComponent(Component component) {
+		this.component = requireNonNull(component, "bounds cannot be null");
 	}
 
 	public final void initAnim() {
@@ -85,11 +85,11 @@ public final class Ripples extends View {
 	}
 	
 	private final boolean isResized() {
-		return pg.width != (int) bounds.getWidth() || pg.height != (int) bounds.getHeight();
+		return pg.width != (int) component.getWidth() || pg.height != (int) component.getHeight();
 	}
 	
 	private final void createGraphics() {
-		pg = ctx.createGraphics((int) max(1,bounds.getWidth()),(int) max(1,bounds.getHeight()),ctx.sketchRenderer());
+		pg = ctx.createGraphics((int) max(1,component.getWidth()),(int) max(1,component.getHeight()),ctx.sketchRenderer());
 		Metrics.register(pg);
 	}
 
@@ -110,12 +110,12 @@ public final class Ripples extends View {
 		}
 		
 		private final void incSize() {
-			radius += constrain(min(bounds.getWidth()*.2f,bounds.getHeight()*.2f),1,20);
+			radius += constrain(min(component.getWidth()*.2f,component.getHeight()*.2f),1,20);
 		}
 		
 		private final void playAnim() {
 			incSize();
-			if(radius > max(bounds.getWidth()*2,bounds.getHeight()*2)) {
+			if(radius > max(component.getWidth()*2,component.getHeight()*2)) {
 				radius = 0;
 				start = false;
 			}
@@ -126,8 +126,8 @@ public final class Ripples extends View {
 		}
 		
 		private final void resetPosition() {
-			x = ctx.mouseX-bounds.getX();
-			y = ctx.mouseY-bounds.getY();
+			x = ctx.mouseX-component.getX();
+			y = ctx.mouseY-component.getY();
 		}
 	}
 }

@@ -12,96 +12,123 @@ public abstract class RangeControl extends Component implements Scrollable {
 	private final Value value;
 	private final Scrolling scrolling;
 	private Orientation orientation;
-	private boolean valueChangeStart,valueChangeEnd;
-	private Listener onStartChangeValueListener,onChangeValueListener,onEndChangeValueListener;
-	
+	private boolean valueChangeStart, valueChangeEnd;
+	private Listener onStartChangeValueListener, onChangeValueListener, onEndChangeValueListener;
+
 	public RangeControl(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setVisible(true);
 		setConstrainDimensionsEnabled(true);
-		setMinMaxSize(10,200);
+		setMinWidth(50);
+		setMaxWidth(200);
+		setMinHeight(10);
+		setMaxHeight(10);
 		getMutableColor().set(24);
-		
-		value = new Value(0,100,0) {
+
+		value = new Value(0, 100, 0) {
 			@Override
 			public void action() {
 				onChangeBounds();
-				
+
 			}
 		};
-		
+
 		onPress(() -> valueChangeEnd = true);
-		
+
 		scrolling = new Scrolling(getMutableEvent());
 		orientation = Orientation.HORIZONTAL;
-		
+
 		setEventListener(this);
-		
-		
+
 	}
 
 	@Override
 	protected void update() {
-		
+
 		ctx.pushStyle();
 		getMutableColor().apply();
-		ctx.rect(getX(), getY(), getWidth(), getHeight());
+		ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
 		ctx.popStyle();
-		
-		if(scrolling.isScrolling()) {
+
+		if (scrolling.isScrolling()) {
 			value.append(scrolling.get());
 			onChangeValue();
 			valueChangeEnd = true;
-			if(!ctx.mousePressed && !valueChangeStart) {
+			if (!ctx.mousePressed && !valueChangeStart) {
 				onStartChangeValue();
 			}
 		} else {
-			if(!ctx.mousePressed) {
+			if (!ctx.mousePressed) {
 				valueChangeStart = false;
 			}
 		}
-		
-		if(!ctx.mousePressed && valueChangeEnd && !scrolling.isScrolling()) {
+
+		if (!ctx.mousePressed && valueChangeEnd && !scrolling.isScrolling()) {
 			onEndChangeValue();
 			valueChangeEnd = false;
 		}
 	}
-	
+
 	@Override
 	public void mouseWheel(MouseEvent e) {
 		scrolling.init(e);
-		if(isMouseInside()) {
+		if (isMouseInside()) {
 			value.append(scrolling.get());
 		}
-		
+
 		onChangeValue();
 	}
-	
+
 	public void mouseWheel(MouseEvent e, boolean additionalCondition) {
 		scrolling.init(e, isMouseInside());
-		if(isMouseInside()) {
+		if (isMouseInside()) {
 			value.append(scrolling.get());
 		}
 		onChangeValue();
 	}
-	
+
 	public final Orientation getOrientation() {
 		return orientation;
 	}
-	
+
 	public final void setOrientation(final Orientation orientation) {
-		if(this.orientation == orientation) { return; }
+		if (this.orientation == orientation) {
+			return;
+		}
 		final float w = getWidth(), h = getHeight();
 		this.orientation = orientation;
+
+		switch (this.orientation) {
+		
+		case VERTICAL:
+			setMinWidth(10);
+			setMaxWidth(10);
+			setMinHeight(50);
+			setMaxHeight(200);
+			
+			break;
+		case HORIZONTAL:
+			setMinWidth(50);
+			setMaxWidth(200);
+			setMinHeight(10);
+			setMaxHeight(10);
+			break;
+
+		}
+
 		setWidth(h);
 		setHeight(w);
 		onChangeBounds();
 	}
-	
+
 	public void swapOrientation() {
-		if(orientation == Orientation.HORIZONTAL) { orientation = Orientation.VERTICAL; } else { orientation = Orientation.HORIZONTAL; }
+		if (orientation == Orientation.HORIZONTAL) {
+			orientation = Orientation.VERTICAL;
+		} else {
+			orientation = Orientation.HORIZONTAL;
+		}
 	}
-	
+
 	public final Listener getOnChangeValueListener() {
 		return onChangeValueListener;
 	}
@@ -125,76 +152,76 @@ public abstract class RangeControl extends Component implements Scrollable {
 	public final void setOnEndChangeValueListener(Listener onEndChangeValueListener) {
 		this.onEndChangeValueListener = onEndChangeValueListener;
 	}
-	
+
 	public final void setValue(float value) {
 		this.value.set(value);
 	}
-	
+
 	public final void setValue(float min, float max, float value) {
-		this.value.set(min,max,value);
+		this.value.set(min, max, value);
 	}
-	
+
 	public final float getValue() {
 		return value.get();
 	}
-	
+
 	public final void setMinValue(float min) {
 		this.value.setMin(min);
 	}
-	
+
 	public final float getMinValue() {
 		return value.getMin();
 	}
-		
+
 	public final void setMaxValue(float max) {
 		this.value.setMax(max);
 	}
-	
+
 	public final float getMaxValue() {
 		return value.getMax();
 	}
-	
+
 	public final void setMinMaxValue(float min, float max) {
-		this.value.setMinMax(min,max);
+		this.value.setMinMax(min, max);
 	}
-	
+
 	public final void appendValue(float value) {
 		this.value.append(value);
 	}
-	
+
 	public final void setScrollingVelocity(float velocity) {
 		scrolling.setVelocity(velocity);
 	}
 
 	protected void onChangeValue() {
-		if(onChangeValueListener != null) {
+		if (onChangeValueListener != null) {
 			onChangeValueListener.action();
 		}
 	}
-	
+
 	protected void onStartChangeValue() {
-		if(!valueChangeStart) {
-			if(onStartChangeValueListener != null) {
+		if (!valueChangeStart) {
+			if (onStartChangeValueListener != null) {
 				onStartChangeValueListener.action();
 			}
 			valueChangeStart = true;
 		}
 	}
-	
+
 	protected void onEndChangeValue() {
-		if(onEndChangeValueListener != null) {
+		if (onEndChangeValueListener != null) {
 			onEndChangeValueListener.action();
 		}
 	}
-	
+
 	protected final boolean hasEqualMinMax() {
 		return value.hasEqualMinMax();
 	}
-	
+
 	protected final void setValueWithoutActions(float value) {
 		this.value.setWithoutActions(value);
 	}
-	
+
 	protected final void autoScroll() {
 		value.append(scrolling.get());
 		onChangeValue();

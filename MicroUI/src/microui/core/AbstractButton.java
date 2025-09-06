@@ -13,7 +13,6 @@ public abstract class AbstractButton extends Component {
 	private final Hover hover;
 	private final Stroke stroke;
 	
-
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setVisible(true);
@@ -36,7 +35,7 @@ public abstract class AbstractButton extends Component {
 		ctx.pushStyle();
 		stroke.apply();
 		getMutableColor().apply();
-		ctx.rect(getX(), getY(), getWidth(), getHeight());
+		ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
 		hover.draw();
 		ripples.draw();
 		ctx.popStyle();

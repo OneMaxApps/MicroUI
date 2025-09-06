@@ -57,13 +57,13 @@ public class TextView extends Component {
 		  if(font != null) { ctx.textFont(font,textSize); }
 		  
 		  if(isAutoResizeEnabled()) {
-			  ctx.textSize(max(1,min(getWidth(),getHeight())/autoResizeMode.getScale()));
+			  ctx.textSize(max(1,min(getContentWidth(),getContentHeight())/autoResizeMode.getScale()));
 		  } else {
-			  ctx.textSize((textSize <= 0) ? ( (getHeight()/3 > 0) ? getHeight()/3 : 1 ) : textSize);
+			  ctx.textSize((textSize <= 0) ? ( (getContentHeight()/3 > 0) ? getContentHeight()/3 : 1 ) : textSize);
 		  }
 		  
 		  ctx.textAlign(center ? CENTER : CORNER,CENTER);
-		  ctx.text(text.toString(), getX(), getY(), getWidth() ,getHeight());
+		  ctx.text(text.toString(), getContentX(), getContentY(), getContentWidth() ,getContentHeight());
 		  ctx.popStyle();
 		  
 		  
@@ -77,9 +77,9 @@ public class TextView extends Component {
 		  }
 		  
 		  if(isAutoResizeEnabled()) {
-			  ctx.textSize(max(1,min(getWidth(),getHeight())/autoResizeMode.getScale()));
+			  ctx.textSize(max(1,min(getContentWidth(),getContentHeight())/autoResizeMode.getScale()));
 		  } else {
-			  ctx.textSize((textSize <= 0) ? ( (getHeight()/3 > 0) ? getHeight()/3 : 1 ) : textSize);
+			  ctx.textSize((textSize <= 0) ? ( (getContentHeight()/3 > 0) ? getContentHeight()/3 : 1 ) : textSize);
 		  }
 		  
 		  if(center) {
@@ -87,7 +87,7 @@ public class TextView extends Component {
 		  } else {
 			  pg.textAlign(CORNER,CENTER);
 		  }
-		  pg.text(text.toString() != null ? text.toString() : "",getX(),getY()+getHeight()/2);
+		  pg.text(text.toString() != null ? text.toString() : "",getContentX(),getContentY()+getContentHeight()/2);
 		  pg.popStyle();
 	  }
 
@@ -158,7 +158,7 @@ public class TextView extends Component {
 		  if(textSize < 1) { return; }
 		  ctx.textSize(textSize);
 		  float textHeight = ctx.textAscent()+ctx.textDescent();
-		  if(textHeight > getHeight()) { return; }
+		  if(textHeight > getContentHeight()) { return; }
 		  if(textSize >= 1) { this.textSize = (int) textSize; }
 	  }
 	  
@@ -227,7 +227,7 @@ public class TextView extends Component {
 		  
 		  private Shadow() {
 			  color = new Color(0);
-			  extraSize = getHeight()*.01f;
+			  extraSize = getContentHeight()*.01f;
 			  setVisible(false);
 		  }
 		  
@@ -240,9 +240,9 @@ public class TextView extends Component {
 			  }
 			  
 			  if(isAutoResizeEnabled()) {
-				  ctx.textSize(max(1,min(getWidth(),getHeight())/autoResizeMode.getScale())+extraSize);
+				  ctx.textSize(max(1,min(getContentWidth(),getContentHeight())/autoResizeMode.getScale())+extraSize);
 			  } else {
-				  ctx.textSize((textSize <= 0) ? ( (getHeight()/3 > 0) ? getHeight()/3 : 1 ) : textSize+extraSize);
+				  ctx.textSize((textSize <= 0) ? ( (getContentHeight()/3 > 0) ? getContentHeight()/3 : 1 ) : textSize+extraSize);
 			  }
 			  
 			  if(center) {
@@ -250,7 +250,7 @@ public class TextView extends Component {
 			  } else {
 				  ctx.textAlign(CORNER,CENTER);
 			  }
-			  ctx.text(text.toString() != null ? text.toString() : "",getX()+shiftX*getWidth()*.05f,getY()+shiftY*getHeight()*.05f,abs(getWidth() <= 0 ? 1 : getWidth()),abs(getHeight() <= 0 ? 1 : getHeight()));
+			  ctx.text(text.toString() != null ? text.toString() : "",getContentX()+shiftX*getContentWidth()*.05f,getContentY()+shiftY*getContentHeight()*.05f,abs(getContentWidth() <= 0 ? 1 : getContentWidth()),abs(getContentHeight() <= 0 ? 1 : getContentHeight()));
 			  ctx.popStyle();
 		}
 
