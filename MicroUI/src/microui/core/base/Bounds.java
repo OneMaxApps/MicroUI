@@ -6,7 +6,7 @@ import static java.util.Objects.requireNonNull;
 import static processing.core.PApplet.constrain;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 05.09.2025
+//Last Reviewed: 06.09.2025
 public abstract class Bounds extends View {
 	private static final int DEFAULT_MIN_WIDTH = 1;
 	private static final int DEFAULT_MAX_WIDTH = ctx.width;
@@ -35,13 +35,7 @@ public abstract class Bounds extends View {
 		this(0, 0, 0, 0);
 	}
 
-	@Override
-	public void draw() {
-		super.draw();
-		updateHooks();
-	}
-
-	public float getX() {
+	public final float getX() {
 		return x;
 	}
 
@@ -52,13 +46,14 @@ public abstract class Bounds extends View {
 
 		this.x = x;
 		isPosDirty = true;
+		updateHooks();
 	}
 
 	public final void setX(Bounds bounds) {
 		setX(requireNonNull(bounds, "bounds cannot be null").getX());
 	}
-
-	public float getY() {
+	
+	public final float getY() {
 		return y;
 	}
 
@@ -68,13 +63,14 @@ public abstract class Bounds extends View {
 		}
 		this.y = y;
 		isPosDirty = true;
+		updateHooks();
 	}
 
 	public final void setY(Bounds bounds) {
 		setY(requireNonNull(bounds, "bounds cannot be null").getY());
 	}
-
-	public float getWidth() {
+	
+	public final float getWidth() {
 		return width;
 	}
 
@@ -85,8 +81,8 @@ public abstract class Bounds extends View {
 	public final void setWidth(Bounds bounds) {
 		setWidth(requireNonNull(bounds, "bounds cannot be null").getWidth());
 	}
-
-	public float getHeight() {
+	
+	public final float getHeight() {
 		return height;
 	}
 
@@ -363,34 +359,20 @@ public abstract class Bounds extends View {
 	private float getCorrectDimension(float currentValue, float newValue, float min, float max) {
 		float correctValue = currentValue,
 			  constrainedValue = constrain(newValue, min, max);
-		
-		if (isConstrainDimensionsEnabled) {
-			if (isNegativeDimensionsEnabled) {
-				if (!areEqual(currentValue, constrainedValue)) {
-					isDimDirty = true;
-					correctValue = constrainedValue;
+			
+			isDimDirty = !areEqual(currentValue, constrainedValue) || !areEqual(currentValue, max(0, constrainedValue)) || !areEqual(currentValue, newValue) || !areEqual(currentValue, max(0, newValue));
+			
+			if(isDimDirty) {
+				if (isConstrainDimensionsEnabled) {
+					correctValue = isNegativeDimensionsEnabled ? constrainedValue : max(0, constrainedValue);
+				} else {
+					correctValue = isNegativeDimensionsEnabled ? newValue : max(0, newValue);
 				}
-			} else {
-				if (!areEqual(currentValue, max(0, constrainedValue))) {
-					isDimDirty = true;
-					correctValue = max(0, constrainedValue);
-				}
+				
+				updateHooks();
 			}
-		} else {
-			if (isNegativeDimensionsEnabled) {
-				if (!areEqual(currentValue, newValue)) {
-					isDimDirty = true;
-					correctValue = newValue;
-				}
-			} else {
-				if (!areEqual(currentValue, max(0, newValue))) {
-					isDimDirty = true;
-					correctValue = max(0, newValue);
-				}
-			}
-		}
-		
-		return correctValue;
+
+			return correctValue;
 	}
 
 }

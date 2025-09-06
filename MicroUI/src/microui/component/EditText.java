@@ -100,7 +100,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	protected void update() {
 		setEventListener(this);
 
-		setTooltipAdditionalCondition(!isFocused);
+		// TODO uncomment
+		//setTooltipAdditionalCondition(!isFocused);
 		
 		scrollH.setVisible(isFocused);
 		scrollV.setVisible(isFocused);
@@ -1250,7 +1251,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 
 			isSelecting = (startRow != endRow) || (startColumn != endColumn);
 
-			if (isSelecting && !scrollV.getThumb().isHolding() && !scrollH.getThumb().isHolding()) {
+			if (isSelecting && !scrollV.isThumbHolding() && !scrollH.isThumbHolding()) {
 
 				for (int i = 0; i < items.count(); i++) {
 
@@ -1306,8 +1307,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		}
 
 		private boolean isAllowedStateToStartSelecting() {
-			return isHolding() && !scrollV.getThumb().isHolding()
-					&& !scrollH.getThumb().isHolding() && isDragged();
+			return isHolding() && !scrollV.isThumbHolding()
+					&& !scrollH.isThumbHolding() && isDragged();
 		}
 
 		private boolean isSelecting() {

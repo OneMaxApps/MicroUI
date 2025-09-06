@@ -7,7 +7,6 @@ import static processing.core.PConstants.CORNERS;
 import static processing.core.PConstants.SQUARE;
 
 import microui.core.base.Bounds;
-import microui.core.base.Layout;
 import microui.core.base.View;
 import microui.core.style.Color;
 
@@ -40,12 +39,13 @@ public final class Shadow extends View {
 	    	  ctx.stroke(color.get(),constrain(164-i*20,0,255));
 	    	  ctx.noFill();
 	    	  ctx.rectMode(CORNERS);
+	    	  /*
 	    	  if(bounds instanceof Layout) {
     			  ctx.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
 	    		  bounds.getY()-map(i,0f,absoluteSize,0f,upSize),
 	    		  bounds.getX()+bounds.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
 	    		  bounds.getY()+bounds.getHeight()+map(i,0f,absoluteSize,0f,downSize));
-    		  } else {
+    		  } else {*/
 		    	  if(bounds instanceof Bounds) {
 		    		 ctx.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
 		             bounds.getY()-map(i,0f,absoluteSize,0f,upSize),
@@ -53,7 +53,7 @@ public final class Shadow extends View {
 		             bounds.getY()+bounds.getHeight()+map(i,0f,absoluteSize,0f,downSize),leftSize,upSize,rightSize,downSize);
 		    	  } 
 	    		  
-	    	  }
+	    	  //}
 	      }
 	      ctx.popStyle();
 	    }

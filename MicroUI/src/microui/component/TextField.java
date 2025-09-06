@@ -69,7 +69,8 @@ public final class TextField extends Component implements KeyPressable {
 	@Override
 	protected final void update() {
 		setEventListener(this);
-		setTooltipAdditionalCondition(!isFocused);
+		//TODO uncomment
+		//setTooltipAdditionalCondition(!isFocused);
 		
 		checkDimensions();
 		

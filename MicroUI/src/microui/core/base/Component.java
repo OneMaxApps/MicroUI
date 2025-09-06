@@ -19,7 +19,6 @@ import microui.core.style.Color;
 import microui.event.Callback;
 import microui.event.Event;
 import microui.event.Listener;
-import microui.feedback.Tooltip;
 
 //Status: STABLE - Do not modify
 //Last Reviewed: 05.09.2025
@@ -27,7 +26,7 @@ public abstract class Component extends Bounds {
 	private Color color;
 	private Event event;
 	private Callback callback;
-	private Tooltip tooltip;
+	//private Tooltip tooltip;
 
 	public Component(float x, float y, float width, float height) {
 		super(x, y, width, height);
@@ -47,10 +46,10 @@ public abstract class Component extends Bounds {
 		if (callback != null) {
 			callback.listen();
 		}
-
+/*
 		if (tooltip != null) {
 			tooltip.init();
-		}
+		}*/
 	}
 
 	public void setStyle(Component component) {
@@ -172,51 +171,51 @@ public abstract class Component extends Bounds {
 		ensureCallback();
 		callback.addListener(SHAKE, requireNonNull(listener, "listener cannot be null"));
 	}
-
+	/*
 	public final String getTooltipText() {
 		return tooltip == null ? "" : tooltip.getText().getAsString();
-	}
-
+	}*/
+/*
 	public final void setTooltipText(String text) {
 		ensureTooltip();
 
 		tooltip.getText().set(requireNonNull(text, "text cannot be null"));
-	}
-
+	}*/
+/*
 	public final boolean isTooltipEnabled() {
 		ensureTooltip();
 		return tooltip.isEnabled();
-	}
-
+	}*/
+/*
 	public final void setTooltipEnabled(boolean enabled) {
 		ensureTooltip();
 		tooltip.setEnabled(enabled);
-	}
-
+	}*/
+/*
 	public final Color getTooltipColor() {
 		ensureTooltip();
 		return tooltip.getColor();
-	}
-
+	}*/
+/*
 	public final void setTooltipColor(Color color) {
 		ensureTooltip();
 		tooltip.setColor(requireNonNull(color, "color cannot be null"));
-	}
-
+	}*/
+/*
 	public final Color getTooltipTextColor() {
 		ensureTooltip();
 		return tooltip.getText().getColor();
-	}
-
+	}*/
+/*
 	public final void setTooltipTextColor(Color color) {
 		ensureTooltip();
 		tooltip.getText().setColor(requireNonNull(color, "color cannot be null"));
-	}
-
+	}*/
+/*
 	protected final void setTooltipAdditionalCondition(boolean condition) {
 		ensureTooltip();
 		tooltip.setAdditionalCondition(condition);
-	}
+	}*/
 
 	protected final void setEventListener(Bounds bounds) {
 		ensureEvent();
@@ -237,13 +236,13 @@ public abstract class Component extends Bounds {
 		ensureColor();
 		return color;
 	}
-
+/*
 	private void ensureTooltip() {
 		ensureCallback();
 		if (tooltip == null) {
 			tooltip = new Tooltip(callback);
 		}
-	}
+	}*/
 
 	private void ensureCallback() {
 		if (callback == null) {

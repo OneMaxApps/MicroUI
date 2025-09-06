@@ -80,6 +80,7 @@ public class Button extends AbstractButton {
 	@Override
 	protected void onChangeBounds() {
 		super.onChangeBounds();
+		if(text == null) { return; }
 		text.setBoundsProperty(this);
 	}
 }

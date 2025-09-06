@@ -79,10 +79,37 @@ public class Scroll extends RangeControl {
 		super.swapOrientation();
 		onChangeBounds();
 	}
+	
+	public final boolean isThumbClicked() {
+		return thumb.isClicked();
+	}
 
-	@Deprecated
-	public final Button getThumb() {
-		return thumb;
+	public final boolean isThumbClicked(int count) {
+		return thumb.isClicked(count);
+	}
+
+	public final boolean isThumbDragged() {
+		return thumb.isDragged();
+	}
+
+	public final boolean isThumbDragging() {
+		return thumb.isDragging();
+	}
+
+	public final boolean isThumbPressed() {
+		return thumb.isPressed();
+	}
+
+	public final boolean isMouseInsideThumb() {
+		return thumb.isMouseInside();
+	}
+
+	public final boolean isMouseOutsideFromThumb() {
+		return thumb.isMouseOutside();
+	}
+
+	public final boolean isThumbHolding() {
+		return thumb.isHolding();
 	}
 
 	@Override
