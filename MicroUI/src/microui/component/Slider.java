@@ -14,10 +14,8 @@ public class Slider extends RangeControl {
 
 	public Slider(float x, float y, float w, float h) {
 		super(x, y, w, h);
-
 		level = new Rect(x,y,w,h);
 		level.color.set(234);
-
 		setValue(0, 100, 0);
 
 		setOrientation(HORIZONTAL);
@@ -38,10 +36,10 @@ public class Slider extends RangeControl {
 		if (isHolding()) {
 			switch (getOrientation()) {
 			case HORIZONTAL:
-				setValue(map(ctx.mouseX, getX(), getX() + getWidth(), getMinValue(), getMaxValue()));
+				setValue(map(ctx.mouseX, getContentX(), getContentX() + getContentWidth(), getMinValue(), getMaxValue()));
 				break;
 			case VERTICAL:
-				setValue(map(ctx.mouseY, getY(), getY() + getHeight(), getMaxValue(), getMinValue()));
+				setValue(map(ctx.mouseY, getContentY(), getContentY() + getContentHeight(), getMaxValue(), getMinValue()));
 				break;
 			}
 			updateLevelBounds();

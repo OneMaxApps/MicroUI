@@ -1,6 +1,6 @@
 package microui;
 
-import microui.component.Scroll;
+import microui.component.Button;
 import microui.event.Event;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
@@ -22,7 +22,7 @@ import processing.event.MouseEvent;
 
 public final class Launcher extends PApplet {
 
-	Scroll component;
+	Button component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -37,9 +37,12 @@ public final class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		
-		component = new Scroll();
-		component.setPadding(20,0);
-		component.setMargin(40,20);
+		component = new Button();
+		component.setPaddingEnabled(true);
+		component.setPadding(20,0,0,0);
+		component.setConstrainDimensionsEnabled(false);
+		//component.setMargin(40,20);
+		
 		//component.setText("Hello");
 		//component.setAutoResizeModeEnabled(true);
 		//component.setFont(createFont("C:\\Windows\\Fonts\\Alibi___.ttf",32));
