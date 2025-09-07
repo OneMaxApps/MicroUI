@@ -64,6 +64,9 @@ public class Color {
 	}
 	
 	public void set(Color color) {
+		if(color == null) {
+			throw new NullPointerException("Color cannot be null");
+		}
 		setHEX(color.get());
 	}
 	

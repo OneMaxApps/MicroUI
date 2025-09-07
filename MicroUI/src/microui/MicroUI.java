@@ -13,6 +13,8 @@ public final class MicroUI {
 	
 	private static final String VERSION = MAJOR+"."+MINOR+"."+PATCH;
 	
+	private static boolean isDebugModeEnabled;
+	
 	private MicroUI() {}
 
 	public static final void setContext(PApplet applet) {
@@ -28,4 +30,13 @@ public final class MicroUI {
 	public static final String getVersion() {
 		return VERSION;
 	}
+
+	public static final boolean isDebugModeEnabled() {
+		return isDebugModeEnabled;
+	}
+
+	public static final void setDebugModeEnabled(boolean isDebugModeEnabled) {
+		MicroUI.isDebugModeEnabled = isDebugModeEnabled;
+	}
+	
 }

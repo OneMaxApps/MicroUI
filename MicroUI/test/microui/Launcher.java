@@ -1,6 +1,6 @@
 package microui;
 
-import microui.component.Button;
+import microui.component.EditText;
 import microui.event.Event;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
@@ -16,13 +16,13 @@ import processing.event.MouseEvent;
 // [0] TextField;
 // [1] TextView;
 
-// absoluteX,Y,Width,Height its with margin;
-// contentX,Y,Width,Height its with padding;
-// getX,Y,Width,Height its raw data about bounds without padding and margin;
+// absoluteX,Y,Width,Height its with margin; (FOR CONTAINERS)
+// contentX,Y,Width,Height its with padding; (FOR RENDER, EVENT AND CALLBACK LOGIC)
+// getX,Y,Width,Height its raw data about bounds without padding and margin; (FOR REAL BOUNDS MANIPULATIONS)
 
 public final class Launcher extends PApplet {
 
-	Button component;
+	EditText component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -36,13 +36,10 @@ public final class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		
-		component = new Button();
-		component.setPaddingEnabled(true);
-		component.setPadding(20,0,0,0);
-		component.setConstrainDimensionsEnabled(false);
-		//component.setMargin(40,20);
-		
+		MicroUI.setDebugModeEnabled(true);
+		component = new EditText();
+		component.setPadding(50);
+		component.setMargin(40,20);
 		//component.setText("Hello");
 		//component.setAutoResizeModeEnabled(true);
 		//component.setFont(createFont("C:\\Windows\\Fonts\\Alibi___.ttf",32));
@@ -50,7 +47,7 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void draw() {
-		background(54);
+		background(32);
 		component.draw();
 		if(mouseButton == RIGHT) {
 			component.setSize(mouseX,mouseY);
@@ -60,7 +57,7 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		//component.mouseWheel(event);
+		component.mouseWheel(event);
 	}
 
 	@Override
@@ -71,7 +68,7 @@ public final class Launcher extends PApplet {
 	@Override
 	public void keyPressed() {
 		Event.keyPressed();
-		//component.keyPressed();
+		component.keyPressed();
 	}
 
 	@Override
