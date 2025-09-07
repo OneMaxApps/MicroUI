@@ -46,7 +46,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	private static final String ALLOWED_CHARS = " ,.<>[]{}()+-*/\\\'\";:?!@#$%^&|_`~=";
 	
 	private float scrollsWeight;
-	private boolean isFocused,isMouseOutsideFromScrollV;
+	private boolean isFocused;
 	
 	private final Scroll scrollV, scrollH;
 	private final Items items;
@@ -88,8 +88,6 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 
 		
 		
-		scrollV.onMouseInside(() -> isMouseOutsideFromScrollV = false);
-		scrollV.onMouseOutside(() -> isMouseOutsideFromScrollV = true);
 	}
 
 	public EditText() {
@@ -140,12 +138,12 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				return;
 			}
 
-			if (!isMouseOutsideFromScrollV) {
-				scrollV.mouseWheel(e,isMouseInside());
+			if(scrollH.isMouseInside()) {
+				scrollH.mouseWheel(e);
+				return;
 			}
-
-			scrollH.mouseWheel(e);
-
+			
+			scrollV.mouseWheel(e,isMouseInside());
 		}
 
 	}
@@ -240,7 +238,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			if (isAllowedChar(ctx.key)) {
 				getCurrentItem().insert(String.valueOf(ctx.key));
 				cursor.next();
-				System.out.println(items.getMaxTextWidthFromItems());
+				//System.out.println(items.getMaxTextWidthFromItems());
 				scrollH.setMaxValue(items.getMaxTextWidthFromItems());
 			}
 			break;
@@ -426,6 +424,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 
 	private void updateValueForScrollH() {
+		//System.out.println(getCurrentItem().getTextWidth());
 		if (!items.isEmpty()) {
 			scrollH.setMaxValue(getCurrentItem().getTextWidth());
 		} else {
@@ -886,12 +885,14 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			}
 			
 			private void textOnDraw(PGraphics pg) {
+				if(ctx.keyPressed) {
+					textWidth = pg.textWidth(sb.toString());
+				}
 				pg.text(sb.toString(), -scrollH.getValue(), getInsideY() + textSize / 2);
 			}
 			
 			private void selectedTextAreaOnDraw(PGraphics pg) {
 				if (!isSelecting()) { return; }
-				
 				textWidth = pg.textWidth(sb.toString());
 				
 				pg.pushStyle();

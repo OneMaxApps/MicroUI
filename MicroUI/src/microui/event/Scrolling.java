@@ -12,8 +12,7 @@ public final class Scrolling {
     	velocity = .01f;
     }
     
-    public final void init(final MouseEvent e, final boolean action) {
-      if(!action) { return; }
+    public final void init(final MouseEvent e) {
       	if(reverse) {
 	        if(e.getCount() < 0) {
 	          if(speed > 0) { speed = 0; }
@@ -31,10 +30,6 @@ public final class Scrolling {
   	            speed -= e.getCount()*velocity*10;
   	        }
       	}
-    }
-    
-    public void init(MouseEvent e) {
-    	init(e,event.inside());
     }
     
     public float get() {

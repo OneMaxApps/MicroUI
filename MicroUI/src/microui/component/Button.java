@@ -15,7 +15,7 @@ public class Button extends AbstractButton {
 		setMinSize(80, 30);
 
 		this.text = new TextView(getContentX(), getContentY(), getContentWidth(), getContentHeight());
-		this.text.setAutoResizeEnabled(true);
+		this.text.setAutoResizeModeEnabled(true);
 		this.text.setAutoResizeMode(BIG);
 		setTextColor(new Color(0));
 		setText(text);
@@ -42,15 +42,15 @@ public class Button extends AbstractButton {
 
 	public void setStyle(Button otherButton) {
 		super.setStyle(requireNonNull(otherButton, "other button cannot be null"));
-		text.set(requireNonNull(otherButton.text, "text from other button cannot be null"));
+		text.setText(otherButton.text.getText());
 	}
 
 	public final String getText() {
-		return text.get();
+		return text.getText();
 	}
 
 	public void setText(String text) {
-		this.text.set(requireNonNull(text, "text cannot be null"));
+		this.text.setText(text);
 	}
 
 	public final PFont getFont() {

@@ -7,14 +7,14 @@ public enum AutoResizeMode {
 	SMALL(4),
 	TINY(5);
 	
-	private final int scale;
+	private final int value;
 
-	private AutoResizeMode(int scale) {
-		this.scale = scale;
+	private AutoResizeMode(int value) {
+		this.value = value;
 	}
 	
-	public final int getScale() {
-		return scale;
+	public final int getValue() {
+		return value;
 	}
 	
 }
