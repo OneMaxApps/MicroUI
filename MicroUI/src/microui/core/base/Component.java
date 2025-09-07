@@ -29,10 +29,12 @@ public abstract class Component extends Bounds {
 	private Callback callback;
 	// private Tooltip tooltip;
 	private Padding padding;
-
+	private Margin margin;
+	
 	public Component(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setPaddingEnabled(true);
+		setMarginEnabled(true);
 	}
 
 	public Component() {
@@ -41,8 +43,24 @@ public abstract class Component extends Bounds {
 
 	@Override
 	public void draw() {
+		
+		ctx.push();
+		// for showing margin area
+		if(margin != null) {
+			ctx.noFill();
+			ctx.stroke(0,200,0,100);
+			ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());
+		}
+		// for showing padding area		
+		if(padding != null) {
+			ctx.noFill();
+			ctx.stroke(200,200,0,100);
+			ctx.rect(getX(), getY(), getWidth(), getHeight());
+		}
+		ctx.pop();
+		
 		super.draw();
-
+		
 		if (event != null) {
 			event.listen();
 		}
@@ -175,12 +193,12 @@ public abstract class Component extends Bounds {
 		callback.addListener(SHAKE, requireNonNull(listener, "listener cannot be null"));
 	}
 
-	public final void setPadding(float left, float right, float up, float down) {
+	public final void setPadding(float left, float right, float top, float bottom) {
 		ensurePadding();
 		padding.setLeft(left);
 		padding.setRight(right);
-		padding.setTop(up);
-		padding.setBottom(down);
+		padding.setTop(top);
+		padding.setBottom(bottom);
 	}
 	
 	public final void setPadding(float paddingHorizontal, float paddingVertical) {
@@ -246,7 +264,7 @@ public abstract class Component extends Bounds {
 	}
 	
 	public final boolean isPaddingEnabled() {
-		ensurePadding();
+		if(padding == null) { return false; }
 		return padding.isEnabled();
 	}
 	
@@ -257,6 +275,103 @@ public abstract class Component extends Bounds {
 	
 	public final void resetPadding() {
 		setPadding(0);
+	}
+	
+	public final boolean isHasPadding() {
+		return padding.getLeft() == 0 && padding.getRight() == 0 && padding.getTop() == 0 && padding.getBottom() == 0;
+	}
+	
+	
+	public final float getMarginLeft() {
+		ensureMargin();
+		return margin.getLeft();
+	}
+	
+	public final float getMarginRight() {
+		ensureMargin();
+		return margin.getRight();
+	}
+	
+	public final float getMarginTop() {
+		ensureMargin();
+		return margin.getTop();
+	}
+	
+	public final float getMarginBottom() {
+		ensureMargin();
+		return margin.getBottom();
+	}
+	
+	public final void setMarginLeft(float left) {
+		ensureMargin();
+		margin.setLeft(left);
+	}
+	
+	public final void setMarginRight(float right) {
+		ensureMargin();
+		margin.setRight(right);
+	}
+	
+	public final void setMarginTop(float top) {
+		ensureMargin();
+		margin.setTop(top);
+	}
+	
+	public final void setMarginBottom(float bottom) {
+		ensureMargin();
+		margin.setBottom(bottom);
+	}
+	
+	public final void setMargin(float left, float right, float top, float bottom) {
+		setMarginLeft(left);
+		setMarginRight(right);
+		setMarginTop(top);
+		setMarginBottom(bottom);	
+	}
+	
+	public final void setMargin(float marginHorizontal, float marginVertical) {
+		setMarginLeft(marginHorizontal);
+		setMarginRight(marginHorizontal);
+		setMarginTop(marginVertical);
+		setMarginBottom(marginVertical);	
+	}
+	
+	public final void setMargin(float margin) {
+		setMargin(margin,margin,margin,margin);
+	}
+	
+	public final void resetMargin() {
+		setMargin(0);
+	}
+	
+	public final boolean isMarginEnabled() {
+		if(margin == null) { return false; }
+		return margin.isEnabled();
+	}
+	
+	public final void setMarginEnabled(boolean isEnabled) {
+		ensureMargin();
+		margin.setEnabled(isEnabled);
+	}
+	
+	public final float getAbsoluteX() {
+		if(isMarginEnabled()) { return getX()-getMarginLeft(); }
+		return getX();
+	}
+	
+	public final float getAbsoluteY() {
+		if(isMarginEnabled()) { return getY()-getMarginTop(); }
+		return getY();
+	}
+	
+	public final float getAbsoluteWidth() {
+		if(isMarginEnabled()) { return getWidth()+getMarginLeft()+getMarginRight(); }
+		return getWidth();
+	}
+	
+	public final float getAbsoluteHeight() {
+		if(isMarginEnabled()) { return getHeight()+getMarginTop()+getMarginBottom(); }
+		return getHeight();
 	}
 	
 	/*
@@ -346,6 +461,12 @@ public abstract class Component extends Bounds {
 		}
 	}
 	
+	private void ensureMargin() {
+		if(margin == null) {
+			margin = new Margin();
+		}
+	}
+	
 	private final class Padding {
 		float left, right, top, bottom;
 		boolean isEnabled;
@@ -430,5 +551,60 @@ public abstract class Component extends Bounds {
 			}
 		}
 
+	}
+
+	private final class Margin {
+		private float left,right,top,bottom;
+		private boolean isEnabled;
+		
+		float getLeft() {
+			return left;
+		}
+
+		void setLeft(float left) {
+			checkValue(left);
+			this.left = left;
+		}
+
+		float getRight() {
+			return right;
+		}
+
+		void setRight(float right) {
+			checkValue(right);
+			this.right = right;
+		}
+
+		float getTop() {
+			return top;
+		}
+
+		void setTop(float top) {
+			checkValue(top);
+			this.top = top;
+		}
+
+		float getBottom() {
+			return bottom;
+		}
+
+		void setBottom(float bottom) {
+			checkValue(bottom);
+			this.bottom = bottom;
+		}
+		
+		public final boolean isEnabled() {
+			return isEnabled;
+		}
+
+		public final void setEnabled(boolean isEnabled) {
+			this.isEnabled = isEnabled;
+		}
+
+		private void checkValue(float value) {
+			if(value < 0) {
+				throw new IllegalArgumentException("margin cannot be less than zero");
+			}
+		}
 	}
 }

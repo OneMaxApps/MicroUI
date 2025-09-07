@@ -52,6 +52,8 @@ public final class TextField extends Component implements KeyPressable {
 		
 		getMutableColor().set(255);
 		
+		setEventListener(this);
+
 		text = new Text();
 		cursor = new Cursor();
 		selection = new Selection();
@@ -68,7 +70,6 @@ public final class TextField extends Component implements KeyPressable {
 
 	@Override
 	protected final void update() {
-		setEventListener(this);
 		//TODO uncomment
 		//setTooltipAdditionalCondition(!isFocused);
 		
@@ -76,7 +77,7 @@ public final class TextField extends Component implements KeyPressable {
 		
 		ctx.pushStyle();
 		getMutableColor().apply();
-			ctx.rect(getX(),getY(),getWidth(),getHeight());
+			ctx.rect(getContentX(),getContentY(),getContentWidth(),getContentHeight());
 			
 			pg.beginDraw();
 				pg.clear();
@@ -87,11 +88,11 @@ public final class TextField extends Component implements KeyPressable {
 				}
 			pg.endDraw();
 			
-			ctx.image(pg, getX(), getY(), getWidth(), getHeight());
+			ctx.image(pg, getContentX(), getContentY(), getContentWidth(), getContentHeight());
 			
 			if(!isFocused) {
 				ctx.fill(0,32);
-				ctx.rect(getX(), getY(), getWidth(), getHeight());
+				ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
 			}
 		ctx.popStyle();
 		
@@ -125,7 +126,7 @@ public final class TextField extends Component implements KeyPressable {
 		if(isHolding()) {
 			if(text.isEmpty()) { return; }
 			
-			cursor.column.set((int) map(ctx.mouseX-getX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
+			cursor.column.set((int) map(ctx.mouseX-getContentX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
 			
 			if(ctx.frameCount%3 == 0) {
 				if(cursor.isCloseToLeftSide()) { scroll.append(-cursor.column.getCurrentCharWidth()); }
@@ -160,12 +161,12 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	private final void updateScrollMax() {
-		if(text.isEmpty() || text.getWidth() < getWidth()*.8f) {
+		if(text.isEmpty() || text.getWidth() < getContentWidth()*.8f) {
 			scroll.setMax(0);
 			return;
 		}
 		
-		scroll.setMax((text.getWidth()-getWidth()*.8f));
+		scroll.setMax((text.getWidth()-getContentWidth()*.8f));
 	}
 	
 	private final void checkDimensions() {
@@ -174,7 +175,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	private final void createPGraphics() {
-		pg = ctx.createGraphics((int) max(1,getWidth()), (int) max(1,getHeight()), ctx.sketchRenderer());
+		pg = ctx.createGraphics((int) max(1,getContentWidth()), (int) max(1,getContentHeight()), ctx.sketchRenderer());
 		componentSizeChanged = false;
 		Metrics.register(pg);
 	}
@@ -331,7 +332,7 @@ public final class TextField extends Component implements KeyPressable {
 			font = new Font();
 			
 			updatePosition();
-			size.set(getHeight()/2);
+			size.set(getContentHeight()/2);
 		}
 		
 		private final void draw(final PGraphics pg) {
@@ -365,7 +366,7 @@ public final class TextField extends Component implements KeyPressable {
 
 		private final void updatePosition() {
 			updatePositionX();
-			y = TextField.this.getHeight()*.5f;
+			y = TextField.this.getContentHeight()*.5f;
 		}
 		
 		private final void updatePositionX() {
@@ -411,7 +412,7 @@ public final class TextField extends Component implements KeyPressable {
 			
 			@Override
 			public final void set(final float size) {
-				if(size < 1 || size > TextField.this.getHeight()) { return; }
+				if(size < 1 || size > TextField.this.getContentHeight()) { return; }
 				this.size = size;
 			}
 
@@ -488,8 +489,8 @@ public final class TextField extends Component implements KeyPressable {
 		}
 
 		private final void updateTransforms() {
-			positionY = TextField.this.getHeight()*.1f;
-			height = TextField.this.getHeight()*.9f;
+			positionY = TextField.this.getContentHeight()*.1f;
+			height = TextField.this.getContentHeight()*.9f;
 		}
 		
 		private final boolean isInStart() { return column.get() == 0; }
@@ -497,11 +498,11 @@ public final class TextField extends Component implements KeyPressable {
 		private final boolean isInEnd() { return column.get() == text.length(); }
 		
 		private final boolean isCloseToLeftSide() {
-			return positionX < getWidth()*.1f;
+			return positionX < getContentWidth()*.1f;
 		}
 		
 		private final boolean isCloseToRightSide() {
-			return positionX > getWidth()*.9f;
+			return positionX > getContentWidth()*.9f;
 		}
 		
 		private final class Blink {
@@ -612,8 +613,8 @@ public final class TextField extends Component implements KeyPressable {
 		
 		private Selection() {
 			color = new Color(0,164,255,64);
-			y = getHeight()*.1f;
-			h = getHeight()*.8f;
+			y = getContentHeight()*.1f;
+			h = getContentHeight()*.8f;
 		}
 		
 		private final void draw(final PGraphics pg) {
@@ -627,8 +628,8 @@ public final class TextField extends Component implements KeyPressable {
 		private final void updateTransforms() {
 			
 			
-			y = getHeight()*.1f;
-			h = getHeight()*.8f;
+			y = getContentHeight()*.1f;
+			h = getContentHeight()*.8f;
 			
 			if(pg == null) { return; }
 			if(text.isEmpty()) { x = w = 0; return; }

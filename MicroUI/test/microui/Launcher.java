@@ -1,6 +1,6 @@
 package microui;
 
-import microui.component.TextField;
+import microui.component.Button;
 import microui.event.Event;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
@@ -19,7 +19,7 @@ import processing.event.MouseEvent;
 
 public final class Launcher extends PApplet {
 
-	TextField component;
+	Button component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -34,7 +34,9 @@ public final class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		
-		component = new TextField();
+		component = new Button();
+		component.setPadding(10);
+		component.setMargin(100,0);
 		//component.setText("Hello");
 		//component.setAutoResizeModeEnabled(true);
 		//component.setFont(createFont("C:\\Windows\\Fonts\\Alibi___.ttf",32));
@@ -63,7 +65,7 @@ public final class Launcher extends PApplet {
 	@Override
 	public void keyPressed() {
 		Event.keyPressed();
-		component.keyPressed();
+		//component.keyPressed();
 	}
 
 	@Override
