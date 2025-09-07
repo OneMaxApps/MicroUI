@@ -1,6 +1,6 @@
 package microui;
 
-import microui.component.Button;
+import microui.component.Scroll;
 import microui.event.Event;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
@@ -16,10 +16,13 @@ import processing.event.MouseEvent;
 // [0] TextField;
 // [1] TextView;
 
+// absoluteX,Y,Width,Height its with margin;
+// contentX,Y,Width,Height its with padding;
+// getX,Y,Width,Height its raw data about bounds without padding and margin;
 
 public final class Launcher extends PApplet {
 
-	Button component;
+	Scroll component;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -34,9 +37,9 @@ public final class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		
-		component = new Button();
-		component.setPadding(10);
-		component.setMargin(100,0);
+		component = new Scroll();
+		component.setPadding(20,0);
+		component.setMargin(40,20);
 		//component.setText("Hello");
 		//component.setAutoResizeModeEnabled(true);
 		//component.setFont(createFont("C:\\Windows\\Fonts\\Alibi___.ttf",32));

@@ -21,7 +21,7 @@ public final class TextView extends Component {
 		setVisible(true);
 		setConstrainDimensionsEnabled(false);
 		setNegativeDimensionsEnabled(false);
-		setPaddingEnabled(false);
+		setPaddingEnabled(true);
 		setText(text);
 		setTextSize(max(1, min(width, height)));
 		setAutoResizeMode(AutoResizeMode.SMALL);
@@ -42,6 +42,8 @@ public final class TextView extends Component {
 
 	@Override
 	protected void update() {
+		if(text.isEmpty()) { return; }
+		
 		getMutableColor().apply();
 
 		if (font != null) {

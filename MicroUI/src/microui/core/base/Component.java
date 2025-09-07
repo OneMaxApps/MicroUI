@@ -44,19 +44,20 @@ public abstract class Component extends Bounds {
 	@Override
 	public void draw() {
 		
+		// only for debug
 		ctx.push();
+		ctx.noFill();
 		// for showing margin area
 		if(margin != null) {
-			ctx.noFill();
 			ctx.stroke(0,200,0,100);
 			ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());
 		}
 		// for showing padding area		
 		if(padding != null) {
-			ctx.noFill();
 			ctx.stroke(200,200,0,100);
 			ctx.rect(getX(), getY(), getWidth(), getHeight());
 		}
+		ctx.noStroke();
 		ctx.pop();
 		
 		super.draw();
@@ -278,7 +279,8 @@ public abstract class Component extends Bounds {
 	}
 	
 	public final boolean isHasPadding() {
-		return padding.getLeft() == 0 && padding.getRight() == 0 && padding.getTop() == 0 && padding.getBottom() == 0;
+		if(padding == null) { return false; }
+		return padding.getLeft() > 0 || padding.getRight() > 0 || padding.getTop() > 0 || padding.getBottom() > 0;
 	}
 	
 	
@@ -352,6 +354,11 @@ public abstract class Component extends Bounds {
 	public final void setMarginEnabled(boolean isEnabled) {
 		ensureMargin();
 		margin.setEnabled(isEnabled);
+	}
+	
+	public final boolean isHasMargin() {
+		if(margin == null) { return false; }
+		return margin.getLeft() > 0 || margin.getRight() > 0 || margin.getTop() > 0 || margin.getBottom() > 0;
 	}
 	
 	public final float getAbsoluteX() {

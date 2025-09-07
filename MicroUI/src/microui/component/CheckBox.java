@@ -14,7 +14,7 @@ public class CheckBox extends AbstractButton {
 
 	public CheckBox(float x, float y) {
 		super(x, y, DEFAULT_SIZE, DEFAULT_SIZE);
-		setPaddingEnabled(false);
+		setPaddingEnabled(true);
 		setMinMaxSize(DEFAULT_SIZE);
 		onClick(() -> toggle());
 		markColor = new Color(200,200,255);
