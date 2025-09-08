@@ -1,7 +1,9 @@
 package microui;
 
-import microui.component.Container;
+import microui.component.Button;
+import microui.core.base.Container;
 import microui.event.Event;
+import microui.layout.GridLayout;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -38,8 +40,15 @@ public final class Launcher extends PApplet {
 		MicroUI.setContext(this);
 		MicroUI.setDebugModeEnabled(true);
 		container = new Container();
-		container.setPadding(20);
-		container.setMargin(20);
+		//container.setPadding(20);
+		//container.setMargin(20);
+		
+		GridLayout gridLayout = new GridLayout(4,4);
+		container.setLayoutManager(gridLayout);
+		
+		Button buttonFirst = new Button("First");
+		container.addComponent(buttonFirst);
+		gridLayout.setComponentOn(buttonFirst, 1, 1, 1, 1);
 		//component.setText("Hello");
 		//component.setAutoResizeModeEnabled(true);
 		//component.setFont(createFont("C:\\Windows\\Fonts\\Alibi___.ttf",32));
@@ -52,7 +61,7 @@ public final class Launcher extends PApplet {
 		if(mouseButton == RIGHT) {
 			container.setSize(mouseX,mouseY);
 		}
-		
+		System.out.println(frameRate);
 	}
 
 	@Override
