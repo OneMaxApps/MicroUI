@@ -1,6 +1,7 @@
 package microui.layout;
 
 import microui.core.base.Component;
+import microui.core.base.Container.ComponentEntry;
 
 public final class GridLayout extends LayoutManager {
 	private int columns,rows;
@@ -23,9 +24,9 @@ public final class GridLayout extends LayoutManager {
 		float colWidth = w/getColumns();
 		float rowHeight = h/getRows();
 		
-		for(int i = 0; i < getComponentList().size(); i++) {
-			Component component = getComponentList().get(i).getComponent();
-			GridLayoutParams params = (GridLayoutParams) getComponentList().get(i).getParams();
+		for(int i = 0; i < getComponentEntryList().size(); i++) {
+			Component component = getComponentEntryList().get(i).getComponent();
+			GridLayoutParams params = (GridLayoutParams) getComponentEntryList().get(i).getParams();
 			
 			component.setConstrainDimensionsEnabled(false);
 			
@@ -34,15 +35,15 @@ public final class GridLayout extends LayoutManager {
 			float componentPrefferedWidth = colWidth*params.getColSpan();
 			float componentPrefferedHeight = rowHeight*params.getRowSpan();
 			
-			component.setAbsoluteWidth(componentPrefferedWidth);
-			component.setAbsoluteHeight(componentPrefferedHeight);
-			component.setAbsoluteX(x+colWidth*params.getCol());
-			component.setAbsoluteY(y+rowHeight*params.getRow());
+			component.setAbsoluteBounds(x+colWidth*params.getCol(),y+rowHeight*params.getRow(),componentPrefferedWidth,componentPrefferedHeight);
+
 		}
 	}
 	
 	@Override
-	public void onAddComponent(Component component) {
+	public void onAddComponent() {
+		checkGridOnEqualsCellsOfComponents();
+		//getContainer().setMinWidth(getMinWidth());
 	}
 
 	@Override
@@ -71,5 +72,50 @@ public final class GridLayout extends LayoutManager {
 		if(params.getCol()+(params.getColSpan()-1) >= getColumns() || (params.getRow()+params.getRowSpan()-1) >= getRows()) {
 			throw new IndexOutOfBoundsException("out of grid layout");
 		}
+	}
+	
+	private void checkGridOnEqualsCellsOfComponents() {
+		for(ComponentEntry entry : getComponentEntryList()) {
+			GridLayoutParams params = (GridLayoutParams) entry.getParams();
+			for(ComponentEntry otherEntry : getComponentEntryList()) {
+				GridLayoutParams paramsOther = (GridLayoutParams) otherEntry.getParams();
+				
+				int pc = params.getCol(),
+					pcs = params.getColSpan(),
+					pr = params.getRow(),
+					prs = params.getRowSpan();
+				
+				int opc = paramsOther.getCol(),
+					opcs = paramsOther.getColSpan(),
+					opr = paramsOther.getRow(),
+					oprs = paramsOther.getRowSpan();
+				
+				if(params != paramsOther) {
+					if(pc > opc-pcs && pc < opc+opcs && pr > opr-prs && pr < opr+oprs) {
+						throw new IllegalArgumentException("several components cannot be in one cell of grid");
+					}
+				}
+			}
+		}
+	}
+	
+	private float getMinWidth() {
+		int[][] grid = new int[getColumns()][getRows()];
+		for(ComponentEntry entry : getComponentEntryList()) {
+			Component component = entry.getComponent();
+			GridLayoutParams params = (GridLayoutParams) entry.getParams();
+			grid[params.getCol()][params.getRow()] += component.getMinWidth();
+		}
+		
+		int tmpMaxWidth = 0;
+		for(int i = 0; i < grid.length; i++) {
+			int tmpSumOfCols = 0;
+			for(int j = 0; j < grid[i].length; j++) {
+				tmpSumOfCols += grid[i][j];
+				if(tmpSumOfCols > tmpMaxWidth) { tmpMaxWidth = tmpSumOfCols; }
+			}
+		}
+		
+		return tmpMaxWidth;
 	}
 }

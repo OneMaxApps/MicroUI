@@ -11,7 +11,7 @@ public abstract class LayoutManager {
 	
 	public abstract void recalculate();
 
-	public abstract void onAddComponent(Component component);
+	public abstract void onAddComponent();
 
 	public abstract void onRemoveComponent(Component component);
 
@@ -23,7 +23,7 @@ public abstract class LayoutManager {
 		this.container = container;
 	}
 
-	protected final List<ComponentEntry> getComponentList() {
-		return container.getComponentList();
+	protected final List<ComponentEntry> getComponentEntryList() {
+		return container.getComponentEntryList();
 	}
 }

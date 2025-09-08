@@ -390,6 +390,11 @@ public abstract class Component extends Bounds {
 		setAbsoluteWidth(width);
 		setAbsoluteHeight(height);
 	}
+	
+	public final void setAbsoluteBounds(float x, float y, float width, float height) {
+		setAbsoluteSize(width,height);
+		setAbsolutePosition(x,y);
+	}
 	///////////////////////////////////////////
 	
 	

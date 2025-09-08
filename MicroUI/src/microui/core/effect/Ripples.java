@@ -85,6 +85,8 @@ public final class Ripples extends View {
 	}
 	
 	private final boolean isResized() {
+		if(component.getContentWidth() <= 1 || component.getContentHeight() <= 1) { return false; }
+		
 		return pg.width != (int) component.getContentWidth() || pg.height != (int) component.getContentHeight();
 	}
 	

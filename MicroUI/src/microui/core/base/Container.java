@@ -98,7 +98,7 @@ public final class Container extends Component implements Focusable, KeyPressabl
 			}
 		}
 
-		// layoutManager.onAddComponent(component);
+		layoutManager.onAddComponent();
 		layoutManager.recalculate();
 
 		recalculateMaxPriority();
@@ -128,7 +128,7 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		recalculateMaxPriority();
 	}
 
-	public List<ComponentEntry> getComponentList() {
+	public List<ComponentEntry> getComponentEntryList() {
 		return componentList;
 	}
 

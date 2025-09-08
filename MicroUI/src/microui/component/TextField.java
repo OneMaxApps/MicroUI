@@ -332,7 +332,7 @@ public final class TextField extends Component implements KeyPressable {
 			font = new Font();
 			
 			updatePosition();
-			size.set(getContentHeight()/2);
+			size.set(getContentHeight());
 		}
 		
 		private final void draw(final PGraphics pg) {

@@ -1,11 +1,11 @@
 package microui;
 
 import microui.component.Button;
-import microui.component.TextField;
 import microui.core.base.Container;
 import microui.event.Event;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
+import microui.util.Metrics;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -27,6 +27,7 @@ import processing.event.MouseEvent;
 public final class Launcher extends PApplet {
 
 	Container container;
+	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
@@ -39,25 +40,12 @@ public final class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		//MicroUI.setDebugModeEnabled(true);
+		MicroUI.setDebugModeEnabled(true);
+		
+		container = new Container(new GridLayout(5,5));
+		container.addComponent(new Button(), new GridLayoutParams(0,0,1,1));
+		container.addComponent(new Button(), new GridLayoutParams(1,0,1,1));
 
-		container = new Container(new GridLayout(4,5));
-		
-		Container innerContainer = new Container(new GridLayout(4,1));
-		
-		TextField textField = new TextField();
-		innerContainer.addComponent(textField, new GridLayoutParams(0,0,3,1));
-		
-		Button buttonSend = new Button("Send");
-		buttonSend.setPadding(10);
-		innerContainer.addComponent(buttonSend, new GridLayoutParams(3,0,1,1));
-		
-		innerContainer.setPadding(30,0);
-		innerContainer.setMargin(10);
-		
-		container.addComponent(innerContainer, new GridLayoutParams(0,2,4,1));
-		
-		
 	}
 
 	@Override
@@ -67,8 +55,12 @@ public final class Launcher extends PApplet {
 		
 		if(mouseButton == RIGHT) {
 			container.setSize(mouseX,mouseY);
+			//container.setPosition(mouseX,mouseY);
+
 		}
 		
+		//System.out.println(frameRate);
+		Metrics.printAll();
 	}
 
 	@Override
