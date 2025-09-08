@@ -461,14 +461,19 @@ public abstract class Component extends Bounds {
 		if (MicroUI.isDebugModeEnabled()) {
 			ctx.push();
 			ctx.noFill();
-
-			// for showing margin area (Green rectangle)
-			ctx.stroke(0, 200, 0, 100);
+			ctx.strokeWeight(5);
+			
+			// for showing margin area (Red rectangle)
+			ctx.stroke(200, 0, 0, 100);
 			ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());
 
-			// for showing padding area (Red rectangle)
-			ctx.stroke(200, 0, 0, 100);
+			// for showing padding area (Green rectangle)
+			ctx.stroke(0, 200, 0, 100);
 			ctx.rect(getX(), getY(), getWidth(), getHeight());
+			
+			// for showing content area (Blue rectangle)
+			ctx.stroke(0, 0, 200, 100);
+			ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
 
 			ctx.noStroke();
 			ctx.pop();

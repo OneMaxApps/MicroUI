@@ -1,6 +1,6 @@
 package microui;
 
-import microui.component.EditText;
+import microui.component.Container;
 import microui.event.Event;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
@@ -22,7 +22,7 @@ import processing.event.MouseEvent;
 
 public final class Launcher extends PApplet {
 
-	EditText component;
+	Container container;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -37,9 +37,9 @@ public final class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		MicroUI.setDebugModeEnabled(true);
-		component = new EditText();
-		component.setPadding(50);
-		component.setMargin(40,20);
+		container = new Container();
+		container.setPadding(20);
+		container.setMargin(20);
 		//component.setText("Hello");
 		//component.setAutoResizeModeEnabled(true);
 		//component.setFont(createFont("C:\\Windows\\Fonts\\Alibi___.ttf",32));
@@ -47,17 +47,17 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void draw() {
-		background(32);
-		component.draw();
+		background(200);
+		container.draw();
 		if(mouseButton == RIGHT) {
-			component.setSize(mouseX,mouseY);
+			container.setSize(mouseX,mouseY);
 		}
 		
 	}
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		component.mouseWheel(event);
+		container.mouseWheel(event);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public final class Launcher extends PApplet {
 	@Override
 	public void keyPressed() {
 		Event.keyPressed();
-		component.keyPressed();
+		container.keyPressed();
 	}
 
 	@Override
