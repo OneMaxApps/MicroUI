@@ -1,9 +1,11 @@
 package microui;
 
 import microui.component.Button;
+import microui.component.TextField;
 import microui.core.base.Container;
 import microui.event.Event;
 import microui.layout.GridLayout;
+import microui.layout.GridLayoutParams;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -25,7 +27,6 @@ import processing.event.MouseEvent;
 public final class Launcher extends PApplet {
 
 	Container container;
-	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
@@ -38,30 +39,36 @@ public final class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		MicroUI.setDebugModeEnabled(true);
-		container = new Container();
-		//container.setPadding(20);
-		//container.setMargin(20);
+		//MicroUI.setDebugModeEnabled(true);
+
+		container = new Container(new GridLayout(4,5));
 		
-		GridLayout gridLayout = new GridLayout(4,4);
-		container.setLayoutManager(gridLayout);
+		Container innerContainer = new Container(new GridLayout(4,1));
 		
-		Button buttonFirst = new Button("First");
-		container.addComponent(buttonFirst);
-		gridLayout.setComponentOn(buttonFirst, 1, 1, 1, 1);
-		//component.setText("Hello");
-		//component.setAutoResizeModeEnabled(true);
-		//component.setFont(createFont("C:\\Windows\\Fonts\\Alibi___.ttf",32));
+		TextField textField = new TextField();
+		innerContainer.addComponent(textField, new GridLayoutParams(0,0,3,1));
+		
+		Button buttonSend = new Button("Send");
+		buttonSend.setPadding(10);
+		innerContainer.addComponent(buttonSend, new GridLayoutParams(3,0,1,1));
+		
+		innerContainer.setPadding(30,0);
+		innerContainer.setMargin(10);
+		
+		container.addComponent(innerContainer, new GridLayoutParams(0,2,4,1));
+		
+		
 	}
 
 	@Override
 	public void draw() {
 		background(200);
 		container.draw();
+		
 		if(mouseButton == RIGHT) {
 			container.setSize(mouseX,mouseY);
 		}
-		System.out.println(frameRate);
+		
 	}
 
 	@Override

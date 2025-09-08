@@ -363,7 +363,36 @@ public abstract class Component extends Bounds {
 	public final float getAbsoluteHeight() {
 		return isMarginEnabled() ? getHeight() + getMarginTop() + getMarginBottom() : getHeight();
 	}
-
+	
+	//Demo settings///////////////////////////
+	public final void setAbsoluteX(float x) {
+		setX(x+getMarginLeft());
+	}
+	
+	public final void setAbsoluteY(float y) {
+		setY(y+getMarginTop());
+	}
+	
+	public final void setAbsoluteWidth(float width) {
+		setWidth(width-(getMarginLeft()+getMarginRight()));
+	}
+	
+	public final void setAbsoluteHeight(float height) {
+		setHeight(height-(getMarginTop()+getMarginBottom()));
+	}
+	
+	public final void setAbsolutePosition(float x, float y) {
+		setAbsoluteX(x);
+		setAbsoluteY(y);
+	}
+	
+	public final void setAbsoluteSize(float width, float height) {
+		setAbsoluteWidth(width);
+		setAbsoluteHeight(height);
+	}
+	///////////////////////////////////////////
+	
+	
 	/*
 	 * public final String getTooltipText() { return tooltip == null ? "" :
 	 * tooltip.getText().getAsString(); }

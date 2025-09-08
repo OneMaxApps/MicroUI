@@ -4,6 +4,7 @@ import java.util.List;
 
 import microui.core.base.Component;
 import microui.core.base.Container;
+import microui.core.base.Container.ComponentEntry;
 
 public abstract class LayoutManager {
 	private Container container;
@@ -22,7 +23,7 @@ public abstract class LayoutManager {
 		this.container = container;
 	}
 
-	protected final List<Component> getComponentList() {
+	protected final List<ComponentEntry> getComponentList() {
 		return container.getComponentList();
 	}
 }

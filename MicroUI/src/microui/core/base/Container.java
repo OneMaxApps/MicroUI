@@ -8,29 +8,33 @@ import microui.core.interfaces.Focusable;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import microui.layout.LayoutManager;
+import microui.layout.LayoutParams;
 import processing.event.MouseEvent;
 
 public final class Container extends Component implements Focusable, KeyPressable, Scrollable {
-	private final List<Component> componentList;
+	private final List<ComponentEntry> componentList;
 	private LayoutManager layoutManager;
 	private int maxPriority;
 
-	public Container(float x, float y, float width, float height) {
+	public Container(LayoutManager layoutManager, float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setVisible(true);
 		setNegativeDimensionsEnabled(false);
 		setConstrainDimensionsEnabled(true);
 		setPaddingEnabled(true);
 		setMarginEnabled(true);
-		setMinSize(100);
+		setMaxSize(width, height);
+		setMinSize(1);
 
 		getMutableColor().set(255, 0);
 
-		componentList = new ArrayList<Component>();
+		componentList = new ArrayList<ComponentEntry>();
+		
+		setLayoutManager(layoutManager);
 	}
 
-	public Container() {
-		this(0, 0, ctx.width, ctx.height);
+	public Container(LayoutManager layoutManager) {
+		this(layoutManager, 0, 0, ctx.width, ctx.height);
 	}
 
 	@Override
@@ -49,8 +53,8 @@ public final class Container extends Component implements Focusable, KeyPressabl
 			return;
 		}
 
-		componentList.forEach(component -> {
-			if (component instanceof Scrollable c) {
+		componentList.forEach(entry -> {
+			if (entry.getComponent() instanceof Scrollable c) {
 				c.mouseWheel(event);
 			}
 		});
@@ -62,8 +66,8 @@ public final class Container extends Component implements Focusable, KeyPressabl
 			return;
 		}
 
-		componentList.forEach(component -> {
-			if (component instanceof KeyPressable k) {
+		componentList.forEach(entry -> {
+			if (entry.getComponent() instanceof KeyPressable k) {
 				k.keyPressed();
 			}
 		});
@@ -77,38 +81,54 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		}
 	}
 
-	public void addComponent(Component... components) {
-		for (Component component : components) {
+	public void addComponent(Component component, LayoutParams params) {
 
-			if (isComponentNotNull(component) && componentList.contains(component)) {
-				throw new IllegalArgumentException("component cannot be added twice");
+		if (isComponentNotNull(component) && isParamsNotNull(params)) {
+			boolean isComponentExists = false;
+
+			for (int i = 0; i < componentList.size(); i++) {
+				if (componentList.get(i).getComponent() == component) {
+					throw new IllegalArgumentException(
+							"component cannot be added twice");
+				}
 			}
 
-			componentList.add(component);
-			layoutManager.onAddComponent(component);
-			layoutManager.recalculate();
+			if (!isComponentExists) {
+				componentList.add(new ComponentEntry(component, params));
+			}
 		}
+
+		// layoutManager.onAddComponent(component);
+		layoutManager.recalculate();
 
 		recalculateMaxPriority();
 	}
 
-	public void removeComponent(Component... components) {
-		for (Component component : components) {
+	public void removeComponent(Component component) {
 
-			if (isComponentNotNull(component) && !componentList.contains(component)) {
+		if (isComponentNotNull(component)) {
+			boolean isComponentExists = false;
+
+			for (int i = 0; i < componentList.size(); i++) {
+				if (componentList.get(i).getComponent() == component) {
+					isComponentExists = true;
+					componentList.remove(i);
+				}
+			}
+
+			if (!isComponentExists) {
 				throw new IllegalArgumentException(
 						"component cannot be removed, because he is not exists in container");
 			}
-
-			componentList.remove(component);
-			layoutManager.onRemoveComponent(component);
-			layoutManager.recalculate();
 		}
+
+		// layoutManager.onRemoveComponent(component);
+		layoutManager.recalculate();
 
 		recalculateMaxPriority();
 	}
 
-	public List<Component> getComponentList() {
+	public List<ComponentEntry> getComponentList() {
 		return componentList;
 	}
 
@@ -121,6 +141,7 @@ public final class Container extends Component implements Focusable, KeyPressabl
 			throw new NullPointerException("layout manager cannot be null");
 		}
 		this.layoutManager = layoutManager;
+		layoutManager.setContainer(this);
 		layoutManager.recalculate();
 	}
 
@@ -128,15 +149,14 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		if (componentList.isEmpty()) {
 			return;
 		}
-			
+
 		for (int i = 0; i <= getMaxPriority(); i++) {
-			for(Component component : componentList) {
-				if (component.getPriority() == i) {
-					component.draw();
+			for (ComponentEntry entry : componentList) {
+				if (entry.getComponent().getPriority() == i) {
+					entry.getComponent().draw();
 				}
 			}
 		}
-		
 
 	}
 
@@ -156,6 +176,13 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		}
 		return true;
 	}
+	
+	private boolean isParamsNotNull(LayoutParams params) {
+		if (params == null) {
+			throw new NullPointerException("params cannot be null");
+		}
+		return true;
+	}
 
 	private int getMaxPriority() {
 		return maxPriority;
@@ -164,13 +191,32 @@ public final class Container extends Component implements Focusable, KeyPressabl
 	private void recalculateMaxPriority() {
 		int tmpPriority = 0;
 
-		for (Component component : componentList) {
-			if (component.getPriority() > tmpPriority) {
-				tmpPriority = component.getPriority();
+		for (ComponentEntry component : componentList) {
+			if (component.getComponent().getPriority() > tmpPriority) {
+				tmpPriority = component.getComponent().getPriority();
 			}
 		}
 
 		maxPriority = tmpPriority;
 	}
 
+	public static class ComponentEntry {
+		private Component component;
+		private LayoutParams params;
+
+		private ComponentEntry(Component component, LayoutParams params) {
+			super();
+			this.component = component;
+			this.params = params;
+		}
+
+		public final Component getComponent() {
+			return component;
+		}
+
+		public final LayoutParams getParams() {
+			return params;
+		}
+
+	}
 }

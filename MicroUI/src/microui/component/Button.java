@@ -12,8 +12,8 @@ public class Button extends AbstractButton {
 
 	public Button(String text, float x, float y, float w, float h) {
 		super(x, y, w, h);
-		setMinSize(80, 30);
-
+		setMinSize(100,50);
+		
 		this.text = new TextView(getContentX(), getContentY(), getContentWidth(), getContentHeight());
 		this.text.setAutoResizeModeEnabled(true);
 		this.text.setAutoResizeMode(BIG);
