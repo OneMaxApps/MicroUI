@@ -84,16 +84,48 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		});
 	}
 	
-	public View getViewByID(final int ID) {
+	public View getViewByID(final int id) {
 		for(ComponentEntry entry : componentEntryList) {
 			Component component = entry.getComponent();
-			System.out.println(component.getID());
-			if(ID == component.getID()) { return component; }
+			if(id == component.getID()) { return component; }
 			if(component instanceof Container container) {
-				return container.getViewByID(ID);
+				return container.getViewByID(id);
 			}
 		}
 		throw new IllegalArgumentException("ID is not found");
+	}
+	
+	public View getViewByTextID(final String textId) {
+		for(ComponentEntry entry : componentEntryList) {
+			Component component = entry.getComponent();
+			if(textId.equals(component.getTextID())) { return component; }
+			if(component instanceof Container container) {
+				return container.getViewByTextID(textId);
+			}
+		}
+		throw new IllegalArgumentException("text ID is not found");
+	}
+	
+	public Component getComponentByID(final int id) {
+		for(ComponentEntry entry : componentEntryList) {
+			Component component = entry.getComponent();
+			if(id == component.getID()) { return component; }
+			if(component instanceof Container container) {
+				return container.getComponentByID(id);
+			}
+		}
+		throw new IllegalArgumentException("ID is not found");
+	}
+	
+	public Component getComponentByTextID(final String textId) {
+		for(ComponentEntry entry : componentEntryList) {
+			Component component = entry.getComponent();
+			if(textId.equals(component.getTextID())) { return component; }
+			if(component instanceof Container container) {
+				return container.getComponentByTextID(textId);
+			}
+		}
+		throw new IllegalArgumentException("text ID is not found");
 	}
 
 	public Container addComponent(Component component, LayoutParams params) {

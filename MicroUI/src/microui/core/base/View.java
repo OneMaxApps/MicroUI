@@ -11,8 +11,10 @@ import processing.core.PApplet;
 // Last Reviewed: 03.09.2025
 public abstract class View implements Visible {
 	protected static final PApplet ctx = requireNonNull(MicroUI.getContext(),"context for MicroUI was not sended");
+	private static final String DEFAULT_EMPTY_TEXT_ID = "";
+	private String textId;
+	private int priority,id;
 	private boolean isVisible;
-	private int priority,ID;
 
 	public View() {
 		Metrics.register(this);
@@ -48,11 +50,29 @@ public abstract class View implements Visible {
 	}
 	
 	public final int getID() {
-		return ID;
+		return id;
 	}
 
-	public final void setID(int iD) {
-		ID = iD;
+	public final void setID(int id) {
+		this.id = id;
+	}
+
+	public final String getTextID() {
+		if(textId == null) {
+			return DEFAULT_EMPTY_TEXT_ID;
+		}
+		return textId;
+	}
+
+	public final void setTextID(final String textId) {
+		if(textId == null) {
+			throw new IllegalArgumentException("text id cannot be null");
+		}
+		if(textId.trim().isEmpty()) {
+			throw new IllegalArgumentException("text id cannot be empty");
+		}
+		
+		this.textId = textId;
 	}
 
 	protected abstract void update();

@@ -2,6 +2,7 @@ package microui;
 
 import microui.component.Button;
 import microui.core.base.Container;
+import microui.core.style.Color;
 import microui.event.Event;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
@@ -42,12 +43,13 @@ public final class Launcher extends PApplet {
 		MicroUI.setDebugModeEnabled(true);
 		
 		container = new Container(new GridLayout(4,4));
-		Button button = new Button();
-		button.setID(123);
+		Button button = new Button("Start");
+		button.setTextID("button_start");
+		
 		
 		container.addComponent(new Container(new GridLayout(3,3)).addComponent(button, new GridLayoutParams(1,1,1,1)), new GridLayoutParams(1,1,1,1));
-		container.getViewByID(123).setVisible(false);
 		
+		container.getComponentByTextID("button_start").setColor(new Color(200));
 	}
 
 	@Override
