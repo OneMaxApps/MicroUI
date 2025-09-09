@@ -13,6 +13,7 @@ public abstract class LayoutManager {
 
 	public void onAddComponent() {
 		recalculate();
+		
 	}
 
 	public void onRemoveComponent() {
