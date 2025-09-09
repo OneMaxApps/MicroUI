@@ -12,7 +12,7 @@ import processing.core.PApplet;
 public abstract class View implements Visible {
 	protected static final PApplet ctx = requireNonNull(MicroUI.getContext(),"context for MicroUI was not sended");
 	private boolean isVisible;
-	private int priority;
+	private int priority,ID;
 
 	public View() {
 		Metrics.register(this);
@@ -45,6 +45,14 @@ public abstract class View implements Visible {
 			throw new IllegalArgumentException("priority cannot be less than zero");
 		}
 		this.priority = priority;
+	}
+	
+	public final int getID() {
+		return ID;
+	}
+
+	public final void setID(int iD) {
+		ID = iD;
 	}
 
 	protected abstract void update();
