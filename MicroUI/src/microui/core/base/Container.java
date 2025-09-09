@@ -3,6 +3,7 @@ package microui.core.base;
 import static microui.constants.ContainerMode.STRICT;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import microui.MicroUI;
@@ -92,7 +93,7 @@ public final class Container extends Component implements Focusable, KeyPressabl
 
 	public Container addComponent(Component component, LayoutParams params) {
 
-		if (isComponentNotNull(component) && isParamsCorrect(params)) {
+		if (isComponentNotNull(component) && isLayoutParamsCorrect(params)) {
 
 			for (ComponentEntry componentEntry : componentEntryList) {
 				if (componentEntry.getComponent() == component) {
@@ -125,7 +126,7 @@ public final class Container extends Component implements Focusable, KeyPressabl
 
 			if (!isComponentExists) {
 				throw new IllegalArgumentException(
-						"component cannot be removed, because he is not exists in container");
+						"component is not found");
 			}
 		}
 
@@ -135,7 +136,7 @@ public final class Container extends Component implements Focusable, KeyPressabl
 	}
 
 	public List<ComponentEntry> getComponentEntryList() {
-		return componentEntryList;
+		return Collections.unmodifiableList(componentEntryList);
 	}
 
 	public final LayoutManager getLayoutManager() {
@@ -147,7 +148,6 @@ public final class Container extends Component implements Focusable, KeyPressabl
 			throw new NullPointerException("layout manager cannot be null");
 		}
 		if (this.layoutManager == layoutManager) {
-			System.out.println("layout manager already exists");
 			return;
 		}
 		
@@ -162,8 +162,8 @@ public final class Container extends Component implements Focusable, KeyPressabl
 
 	public final void setContainerMode(ContainerMode containerMode) {
 		if (this.containerMode != containerMode) {
-			layoutManager.recalculate();
 			this.containerMode = containerMode;
+			layoutManager.recalculate();
 		}
 
 	}
@@ -175,8 +175,9 @@ public final class Container extends Component implements Focusable, KeyPressabl
 
 		for (int i = 0; i <= getMaxPriority(); i++) {
 			for (ComponentEntry entry : componentEntryList) {
-				if (entry.getComponent().getPriority() == i) {
-					entry.getComponent().draw();
+				Component component = entry.getComponent();
+				if (component.getPriority() == i) {
+					component.draw();
 				}
 			}
 		}
@@ -216,7 +217,7 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		return true;
 	}
 
-	private boolean isParamsCorrect(LayoutParams params) {
+	private boolean isLayoutParamsCorrect(LayoutParams params) {
 		if (params == null) {
 			throw new NullPointerException("params cannot be null");
 		}
@@ -246,20 +247,20 @@ public final class Container extends Component implements Focusable, KeyPressabl
 
 	public static class ComponentEntry {
 		private Component component;
-		private LayoutParams params;
+		private LayoutParams layoutParams;
 
-		private ComponentEntry(Component component, LayoutParams params) {
+		private ComponentEntry(Component component, LayoutParams layoutParams) {
 			super();
 			this.component = component;
-			this.params = params;
+			this.layoutParams = layoutParams;
 		}
 
 		public final Component getComponent() {
 			return component;
 		}
 
-		public final LayoutParams getParams() {
-			return params;
+		public final LayoutParams getLayoutParams() {
+			return layoutParams;
 		}
 
 	}

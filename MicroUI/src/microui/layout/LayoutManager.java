@@ -7,7 +7,8 @@ import microui.core.base.Container.ComponentEntry;
 
 public abstract class LayoutManager {
 	private Container container;
-	
+	private List<Container.ComponentEntry> componentEntryList;
+
 	public abstract void recalculate();
 
 	public void onAddComponent() {
@@ -18,6 +19,7 @@ public abstract class LayoutManager {
 		recalculate();
 	}
 
+	
 	public final Container getContainer() {
 		return container;
 	}
@@ -27,9 +29,11 @@ public abstract class LayoutManager {
 			throw new NullPointerException("container cannot be null");
 		}
 		this.container = container;
+		componentEntryList = container.getComponentEntryList();
 	}
 
+	
 	protected final List<ComponentEntry> getComponentEntryList() {
-		return container.getComponentEntryList();
+		return componentEntryList;
 	}
 }

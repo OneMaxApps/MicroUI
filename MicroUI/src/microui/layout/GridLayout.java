@@ -25,7 +25,7 @@ public final class GridLayout extends LayoutManager {
 
 		for (int i = 0; i < getComponentEntryList().size(); i++) {
 			Component component = getComponentEntryList().get(i).getComponent();
-			GridLayoutParams params = (GridLayoutParams) getComponentEntryList().get(i).getParams();
+			GridLayoutParams params = (GridLayoutParams) getComponentEntryList().get(i).getLayoutParams();
 
 			checkIsOutOfGrid(params);
 
@@ -64,7 +64,7 @@ public final class GridLayout extends LayoutManager {
 	@Override
 	public void onAddComponent() {
 		super.onAddComponent();
-		checkGridOnEqualsCellsOfComponents();
+		checkComponentsForOverlap();
 	}
 
 	@Override
@@ -83,14 +83,14 @@ public final class GridLayout extends LayoutManager {
 
 	private void setColumns(int columns) {
 		if (columns < 1) {
-			throw new IllegalArgumentException("columns in grid layout cannot be less than zero");
+			throw new IllegalArgumentException("columns in grid layout cannot be less than 1");
 		}
 		this.columns = columns;
 	}
 
 	private void setRows(int rows) {
 		if (rows < 1) {
-			throw new IllegalArgumentException("rows in grid layout cannot be less than zero");
+			throw new IllegalArgumentException("rows in grid layout cannot be less than 1");
 		}
 		this.rows = rows;
 	}
@@ -98,15 +98,18 @@ public final class GridLayout extends LayoutManager {
 	private void checkIsOutOfGrid(GridLayoutParams params) {
 		if (params.getColumn() + (params.getColumnSpan() - 1) >= getColumns()
 				|| (params.getRow() + params.getRowSpan() - 1) >= getRows()) {
-			throw new IndexOutOfBoundsException("out of grid layout");
+			throw new IndexOutOfBoundsException("component is out of grid layout");
 		}
 	}
 
-	private void checkGridOnEqualsCellsOfComponents() {
+	private void checkComponentsForOverlap() {
 		for (ComponentEntry entry : getComponentEntryList()) {
-			GridLayoutParams params = (GridLayoutParams) entry.getParams();
+			
+			GridLayoutParams params = (GridLayoutParams) entry.getLayoutParams();
+			
 			for (ComponentEntry otherEntry : getComponentEntryList()) {
-				GridLayoutParams paramsOther = (GridLayoutParams) otherEntry.getParams();
+				
+				GridLayoutParams paramsOther = (GridLayoutParams) otherEntry.getLayoutParams();
 
 				int pc = params.getColumn(), pcs = params.getColumnSpan(), pr = params.getRow(),
 						prs = params.getRowSpan();
@@ -119,6 +122,7 @@ public final class GridLayout extends LayoutManager {
 						throw new IllegalArgumentException("several components cannot be in one cell of grid");
 					}
 				}
+				
 			}
 		}
 	}

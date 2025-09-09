@@ -1,6 +1,7 @@
 package microui;
 
 import microui.component.Button;
+import microui.constants.ContainerMode;
 import microui.core.base.Container;
 import microui.event.Event;
 import microui.layout.GridLayout;
@@ -27,6 +28,7 @@ import processing.event.MouseEvent;
 public final class Launcher extends PApplet {
 
 	Container container;
+	Button buttonSearch;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -44,9 +46,9 @@ public final class Launcher extends PApplet {
 		
 		container = new Container(new GridLayout(3,3));
 		container.setPadding(20);
-		//container.setContainerMode(ContainerMode.FLEXIBLE);
+		container.setContainerMode(ContainerMode.FLEXIBLE);
+		buttonSearch = new Button("Search");
 		
-		Button buttonSearch = new Button("Search");
 		buttonSearch.setMargin(40,10);
 		buttonSearch.setMinMaxSize(20,100);
 		buttonSearch.setMinSize(40,20);
@@ -54,6 +56,7 @@ public final class Launcher extends PApplet {
 		
 		
 		container.addComponent(buttonSearch, new GridLayoutParams(1,1,2,1));
+		container.addComponent(new Button(), new GridLayoutParams(0,0,2,1));
 		
 	}
 
@@ -81,7 +84,9 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void mousePressed() {
-
+		if(mouseButton == RIGHT) {
+			//container.removeComponent(buttonSearch);
+		}
 	}
 
 	@Override
