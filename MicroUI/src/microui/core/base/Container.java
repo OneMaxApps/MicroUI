@@ -128,17 +128,20 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		throw new IllegalArgumentException("text ID is not found");
 	}
 
-	public Container addComponent(Component component, LayoutParams params) {
-		if (isComponentNotNull(component) && isLayoutParamsCorrect(params)) {
-			if (isNotAddedComponent(component)) {
-				componentEntryList.add(new ComponentEntry(component, params));
-				layoutManager.onAddComponent();
-				recalculateMaxPriority();
-			}
-		}
-		
-		requestUpdateForInnerComponents();
-		
+	public Container addComponent(Component component, LayoutParams layoutParams, int id) {
+		addComponentCorrect(component,layoutParams);
+		component.setID(id);
+		return this;
+	}
+	
+	public Container addComponent(Component component, LayoutParams layoutParams, String textId) {
+		addComponentCorrect(component,layoutParams);
+		component.setTextID(textId);
+		return this;
+	}
+	
+	public Container addComponent(Component component, LayoutParams layoutParams) {
+		addComponentCorrect(component,layoutParams);
 		return this;
 	}
 
@@ -183,6 +186,18 @@ public final class Container extends Component implements Focusable, KeyPressabl
 			layoutManager.recalculate();
 			requestUpdateForInnerComponents();
 		}
+	}
+	
+	private void addComponentCorrect(Component component, LayoutParams layoutParams) {
+		if (isComponentNotNull(component) && isLayoutParamsCorrect(layoutParams)) {
+			if (isNotAddedComponent(component)) {
+				componentEntryList.add(new ComponentEntry(component, layoutParams));
+				layoutManager.onAddComponent();
+				recalculateMaxPriority();
+			}
+		}
+		
+		requestUpdateForInnerComponents();
 	}
 
 	private void setLayoutManager(LayoutManager layoutManager) {

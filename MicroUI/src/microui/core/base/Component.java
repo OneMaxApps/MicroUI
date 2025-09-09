@@ -186,10 +186,7 @@ public abstract class Component extends Bounds {
 
 	public final void setPadding(float left, float right, float top, float bottom) {
 		ensurePadding();
-		padding.setLeft(left);
-		padding.setRight(right);
-		padding.setTop(top);
-		padding.setBottom(bottom);
+		padding.setPadding(left, right, top, bottom);
 	}
 
 	public final void setPadding(float paddingHorizontal, float paddingVertical) {
@@ -541,47 +538,29 @@ public abstract class Component extends Bounds {
 			return left;
 		}
 
-		void setLeft(float left) {
-			if (!isValidValue(this.left, left)) {
-				return;
-			}
-			this.left = left;
-			onChangePadding();
-		}
-
 		float getRight() {
 			return right;
-		}
-
-		void setRight(float right) {
-			if (!isValidValue(this.right, right)) {
-				return;
-			}
-			this.right = right;
-			onChangePadding();
 		}
 
 		float getTop() {
 			return top;
 		}
 
-		void setTop(float top) {
-			if (!isValidValue(this.top, top)) {
-				return;
-			}
-			this.top = top;
-			onChangePadding();
-		}
-
 		float getBottom() {
 			return bottom;
 		}
 
-		void setBottom(float bottom) {
-			if (!isValidValue(this.bottom, bottom)) {
-				return;
-			}
+		public void setPadding(float left, float right, float top, float bottom) {
+			boolean hasChanges = isCorrectNewValue(this.left, left) || isCorrectNewValue(this.right, right)
+								 || isCorrectNewValue(this.top, top) || isCorrectNewValue(this.bottom, bottom);
+
+			if(!hasChanges) { return; }
+
+			this.left = left;
+			this.right = right;
+			this.top = top;
 			this.bottom = bottom;
+
 			onChangePadding();
 		}
 
@@ -590,7 +569,7 @@ public abstract class Component extends Bounds {
 			requestUpdate();
 		}
 
-		private boolean isValidValue(float currentValue, float newValue) {
+		private boolean isCorrectNewValue(float currentValue, float newValue) {
 			if (newValue < 0) {
 				throw new IllegalArgumentException("padding cannot be less than zero");
 			}

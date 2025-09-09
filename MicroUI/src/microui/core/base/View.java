@@ -8,7 +8,7 @@ import microui.util.Metrics;
 import processing.core.PApplet;
 
 // Status: STABLE - Do not modify
-// Last Reviewed: 03.09.2025
+// Last Reviewed: 10.09.2025
 public abstract class View implements Visible {
 	protected static final PApplet ctx = requireNonNull(MicroUI.getContext(),"context for MicroUI was not sended");
 	private static final String DEFAULT_EMPTY_TEXT_ID = "";
