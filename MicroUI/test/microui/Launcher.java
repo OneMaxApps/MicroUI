@@ -5,7 +5,7 @@ import microui.core.base.Container;
 import microui.event.Event;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
-import microui.util.Metrics;
+import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -42,10 +42,19 @@ public final class Launcher extends PApplet {
 		MicroUI.setContext(this);
 		MicroUI.setDebugModeEnabled(true);
 		
-		container = new Container(new GridLayout(5,5));
-		container.addComponent(new Button(), new GridLayoutParams(0,0,1,1));
-		container.addComponent(new Button(), new GridLayoutParams(1,0,1,1));
-
+		container = new Container(new GridLayout(3,3));
+		container.setPadding(20);
+		//container.setContainerMode(ContainerMode.FLEXIBLE);
+		
+		Button buttonSearch = new Button("Search");
+		buttonSearch.setMargin(40,10);
+		buttonSearch.setMinMaxSize(20,100);
+		buttonSearch.setMinSize(40,20);
+		buttonSearch.setMaxSize(200,50);
+		
+		
+		container.addComponent(buttonSearch, new GridLayoutParams(1,1,2,1));
+		
 	}
 
 	@Override
@@ -60,7 +69,9 @@ public final class Launcher extends PApplet {
 		}
 		
 		//System.out.println(frameRate);
-		Metrics.printAll();
+		//Metrics.printAll();
+		
+		GlobalTooltip.draw();
 	}
 
 	@Override

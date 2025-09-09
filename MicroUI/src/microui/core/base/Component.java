@@ -21,6 +21,7 @@ import microui.core.style.Color;
 import microui.event.Callback;
 import microui.event.Event;
 import microui.event.Listener;
+import microui.feedback.Tooltip;
 
 //Status: STABLE - Do not modify
 //Last Reviewed: 07.09.2025
@@ -28,7 +29,7 @@ public abstract class Component extends Bounds {
 	private Color color;
 	private Event event;
 	private Callback callback;
-	// private Tooltip tooltip;
+	private Tooltip tooltip;
 	private Padding padding;
 	private Margin margin;
 
@@ -54,10 +55,10 @@ public abstract class Component extends Bounds {
 			callback.listen();
 		}
 
-		/*
-		 * if (tooltip != null) { tooltip.init(); }
-		 */
-		
+		if (tooltip != null) {
+			tooltip.listen();
+		}
+
 		debugOnDraw();
 	}
 
@@ -262,7 +263,8 @@ public abstract class Component extends Bounds {
 		if (padding == null) {
 			return false;
 		}
-		return padding.isEnabled() && (padding.getLeft() > 0 || padding.getRight() > 0 || padding.getTop() > 0 || padding.getBottom() > 0);
+		return padding.isEnabled()
+				&& (padding.getLeft() > 0 || padding.getRight() > 0 || padding.getTop() > 0 || padding.getBottom() > 0);
 	}
 
 	public final float getMarginLeft() {
@@ -345,7 +347,8 @@ public abstract class Component extends Bounds {
 		if (margin == null) {
 			return false;
 		}
-		return margin.isEnabled() && (margin.getLeft() > 0 || margin.getRight() > 0 || margin.getTop() > 0 || margin.getBottom() > 0);
+		return margin.isEnabled()
+				&& (margin.getLeft() > 0 || margin.getRight() > 0 || margin.getTop() > 0 || margin.getBottom() > 0);
 	}
 
 	public final float getAbsoluteX() {
@@ -363,78 +366,84 @@ public abstract class Component extends Bounds {
 	public final float getAbsoluteHeight() {
 		return isMarginEnabled() ? getHeight() + getMarginTop() + getMarginBottom() : getHeight();
 	}
-	
-	//Demo settings///////////////////////////
+
+	// Demo settings///////////////////////////
 	public final void setAbsoluteX(float x) {
-		setX(x+getMarginLeft());
+		setX(x + getMarginLeft());
 	}
-	
+
 	public final void setAbsoluteY(float y) {
-		setY(y+getMarginTop());
+		setY(y + getMarginTop());
 	}
-	
+
 	public final void setAbsoluteWidth(float width) {
-		setWidth(width-(getMarginLeft()+getMarginRight()));
+		setWidth(width - (getMarginLeft() + getMarginRight()));
 	}
-	
+
 	public final void setAbsoluteHeight(float height) {
-		setHeight(height-(getMarginTop()+getMarginBottom()));
+		setHeight(height - (getMarginTop() + getMarginBottom()));
 	}
-	
+
 	public final void setAbsolutePosition(float x, float y) {
 		setAbsoluteX(x);
 		setAbsoluteY(y);
 	}
-	
+
 	public final void setAbsoluteSize(float width, float height) {
 		setAbsoluteWidth(width);
 		setAbsoluteHeight(height);
 	}
-	
+
 	public final void setAbsoluteBounds(float x, float y, float width, float height) {
-		setAbsoluteSize(width,height);
-		setAbsolutePosition(x,y);
+		setAbsoluteSize(width, height);
+		setAbsolutePosition(x, y);
 	}
 	///////////////////////////////////////////
-	
-	
-	/*
-	 * public final String getTooltipText() { return tooltip == null ? "" :
-	 * tooltip.getText().getAsString(); }
-	 */
-	/*
-	 * public final void setTooltipText(String text) { ensureTooltip();
-	 * 
-	 * tooltip.getText().set(requireNonNull(text, "text cannot be null")); }
-	 */
-	/*
-	 * public final boolean isTooltipEnabled() { ensureTooltip(); return
-	 * tooltip.isEnabled(); }
-	 */
-	/*
-	 * public final void setTooltipEnabled(boolean enabled) { ensureTooltip();
-	 * tooltip.setEnabled(enabled); }
-	 */
-	/*
-	 * public final Color getTooltipColor() { ensureTooltip(); return
-	 * tooltip.getColor(); }
-	 */
-	/*
-	 * public final void setTooltipColor(Color color) { ensureTooltip();
-	 * tooltip.setColor(requireNonNull(color, "color cannot be null")); }
-	 */
-	/*
-	 * public final Color getTooltipTextColor() { ensureTooltip(); return
-	 * tooltip.getText().getColor(); }
-	 */
-	/*
-	 * public final void setTooltipTextColor(Color color) { ensureTooltip();
-	 * tooltip.getText().setColor(requireNonNull(color, "color cannot be null")); }
-	 */
-	/*
-	 * protected final void setTooltipAdditionalCondition(boolean condition) {
-	 * ensureTooltip(); tooltip.setAdditionalCondition(condition); }
-	 */
+
+	public final String getTooltipText() {
+		return tooltip == null ? "" : tooltip.getText().getAsString();
+	}
+
+	public final void setTooltipText(String text) {
+		ensureTooltip();
+
+		tooltip.getText().set(requireNonNull(text, "text cannot be null"));
+	}
+
+	public final boolean isTooltipEnabled() {
+		ensureTooltip();
+		return tooltip.isEnabled();
+	}
+
+	public final void setTooltipEnabled(boolean enabled) {
+		ensureTooltip();
+		tooltip.setEnabled(enabled);
+	}
+
+	public final Color getTooltipColor() {
+		ensureTooltip();
+		return tooltip.getColor();
+	}
+
+	public final void setTooltipColor(Color color) {
+		ensureTooltip();
+		tooltip.setColor(requireNonNull(color, "color cannot be null"));
+	}
+
+	public final Color getTooltipTextColor() {
+		ensureTooltip();
+		return tooltip.getText().getColor();
+	}
+
+	public final void setTooltipTextColor(Color color) {
+		ensureTooltip();
+		tooltip.getText().setColor(requireNonNull(color, "color cannot be null"));
+	}
+
+	protected final void setTooltipAdditionalCondition(boolean condition) {
+		ensureTooltip();
+		tooltip.setAdditionalCondition(condition);
+	}
 
 	protected final void setEventListener(Bounds bounds) {
 		ensureEvent();
@@ -456,10 +465,12 @@ public abstract class Component extends Bounds {
 		return color;
 	}
 
-	/*
-	 * private void ensureTooltip() { ensureCallback(); if (tooltip == null) {
-	 * tooltip = new Tooltip(callback); } }
-	 */
+	private void ensureTooltip() {
+		ensureCallback();
+		if (tooltip == null) {
+			tooltip = new Tooltip(callback);
+		}
+	}
 
 	private void ensureCallback() {
 		if (callback == null) {
@@ -490,13 +501,13 @@ public abstract class Component extends Bounds {
 			margin = new Margin();
 		}
 	}
-	
+
 	private void debugOnDraw() {
 		if (MicroUI.isDebugModeEnabled()) {
 			ctx.push();
 			ctx.noFill();
 			ctx.strokeWeight(5);
-			
+
 			// for showing margin area (Red rectangle)
 			ctx.stroke(200, 0, 0, 100);
 			ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());
@@ -504,7 +515,7 @@ public abstract class Component extends Bounds {
 			// for showing padding area (Green rectangle)
 			ctx.stroke(0, 200, 0, 100);
 			ctx.rect(getX(), getY(), getWidth(), getHeight());
-			
+
 			// for showing content area (Blue rectangle)
 			ctx.stroke(0, 0, 200, 100);
 			ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());

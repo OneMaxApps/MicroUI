@@ -66,7 +66,6 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		scrollV = new Scroll();
 		scrollH = new Scroll();
 		initDefaultScrollsSettings();
-		scrollV.setPadding(2,30);
 
 		items = new Items();
 		selection = new Selection();

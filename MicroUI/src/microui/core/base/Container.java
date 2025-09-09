@@ -1,19 +1,25 @@
 package microui.core.base;
 
+import static microui.constants.ContainerMode.STRICT;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import microui.MicroUI;
+import microui.constants.ContainerMode;
 import microui.core.interfaces.Focusable;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
+import microui.layout.GridLayout;
+import microui.layout.GridLayoutParams;
 import microui.layout.LayoutManager;
 import microui.layout.LayoutParams;
 import processing.event.MouseEvent;
 
 public final class Container extends Component implements Focusable, KeyPressable, Scrollable {
-	private final List<ComponentEntry> componentList;
+	private final List<ComponentEntry> componentEntryList;
 	private LayoutManager layoutManager;
+	private ContainerMode containerMode;
 	private int maxPriority;
 
 	public Container(LayoutManager layoutManager, float x, float y, float width, float height) {
@@ -28,9 +34,12 @@ public final class Container extends Component implements Focusable, KeyPressabl
 
 		getMutableColor().set(255, 0);
 
-		componentList = new ArrayList<ComponentEntry>();
-		
+		componentEntryList = new ArrayList<ComponentEntry>();
+
 		setLayoutManager(layoutManager);
+
+		setContainerMode(STRICT);
+
 	}
 
 	public Container(LayoutManager layoutManager) {
@@ -49,11 +58,11 @@ public final class Container extends Component implements Focusable, KeyPressabl
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		if (componentList.isEmpty()) {
+		if (componentEntryList.isEmpty()) {
 			return;
 		}
 
-		componentList.forEach(entry -> {
+		componentEntryList.forEach(entry -> {
 			if (entry.getComponent() instanceof Scrollable c) {
 				c.mouseWheel(event);
 			}
@@ -62,11 +71,11 @@ public final class Container extends Component implements Focusable, KeyPressabl
 
 	@Override
 	public void keyPressed() {
-		if (componentList.isEmpty()) {
+		if (componentEntryList.isEmpty()) {
 			return;
 		}
 
-		componentList.forEach(entry -> {
+		componentEntryList.forEach(entry -> {
 			if (entry.getComponent() instanceof KeyPressable k) {
 				k.keyPressed();
 			}
@@ -81,27 +90,25 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		}
 	}
 
-	public void addComponent(Component component, LayoutParams params) {
+	public Container addComponent(Component component, LayoutParams params) {
 
-		if (isComponentNotNull(component) && isParamsNotNull(params)) {
-			boolean isComponentExists = false;
+		if (isComponentNotNull(component) && isParamsCorrect(params)) {
 
-			for (int i = 0; i < componentList.size(); i++) {
-				if (componentList.get(i).getComponent() == component) {
-					throw new IllegalArgumentException(
-							"component cannot be added twice");
+			for (ComponentEntry componentEntry : componentEntryList) {
+				if (componentEntry.getComponent() == component) {
+					throw new IllegalArgumentException("component cannot be added twice");
 				}
 			}
 
-			if (!isComponentExists) {
-				componentList.add(new ComponentEntry(component, params));
-			}
+			componentEntryList.add(new ComponentEntry(component, params));
+
 		}
 
 		layoutManager.onAddComponent();
-		layoutManager.recalculate();
 
 		recalculateMaxPriority();
+		
+		return this;
 	}
 
 	public void removeComponent(Component component) {
@@ -109,10 +116,10 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		if (isComponentNotNull(component)) {
 			boolean isComponentExists = false;
 
-			for (int i = 0; i < componentList.size(); i++) {
-				if (componentList.get(i).getComponent() == component) {
+			for (int i = 0; i < componentEntryList.size(); i++) {
+				if (componentEntryList.get(i).getComponent() == component) {
 					isComponentExists = true;
-					componentList.remove(i);
+					componentEntryList.remove(i);
 				}
 			}
 
@@ -122,14 +129,13 @@ public final class Container extends Component implements Focusable, KeyPressabl
 			}
 		}
 
-		// layoutManager.onRemoveComponent(component);
-		layoutManager.recalculate();
+		layoutManager.onRemoveComponent();
 
 		recalculateMaxPriority();
 	}
 
 	public List<ComponentEntry> getComponentEntryList() {
-		return componentList;
+		return componentEntryList;
 	}
 
 	public final LayoutManager getLayoutManager() {
@@ -140,18 +146,35 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		if (layoutManager == null) {
 			throw new NullPointerException("layout manager cannot be null");
 		}
+		if (this.layoutManager == layoutManager) {
+			System.out.println("layout manager already exists");
+			return;
+		}
+		
 		this.layoutManager = layoutManager;
 		layoutManager.setContainer(this);
 		layoutManager.recalculate();
 	}
 
+	public final ContainerMode getContainerMode() {
+		return containerMode;
+	}
+
+	public final void setContainerMode(ContainerMode containerMode) {
+		if (this.containerMode != containerMode) {
+			layoutManager.recalculate();
+			this.containerMode = containerMode;
+		}
+
+	}
+
 	private void componentsOnDraw() {
-		if (componentList.isEmpty()) {
+		if (componentEntryList.isEmpty()) {
 			return;
 		}
 
 		for (int i = 0; i <= getMaxPriority(); i++) {
-			for (ComponentEntry entry : componentList) {
+			for (ComponentEntry entry : componentEntryList) {
 				if (entry.getComponent().getPriority() == i) {
 					entry.getComponent().draw();
 				}
@@ -162,12 +185,28 @@ public final class Container extends Component implements Focusable, KeyPressabl
 
 	private void debugOnDraw() {
 		if (MicroUI.isDebugModeEnabled()) {
-			ctx.push();
+			ctx.pushStyle();
 			ctx.noStroke();
 			ctx.fill(0, 0, 255, 32);
 			ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());
-			ctx.pop();
+			ctx.popStyle();
+			
+			debugLayoutOnDraw();
 		}
+	}
+	
+	private void debugLayoutOnDraw() {
+		ctx.pushStyle();
+		ctx.stroke(0,128);
+		ctx.noFill();
+		if(layoutManager instanceof GridLayout grid) {
+			for(int col = 0; col < grid.getColumns(); col++) {
+				for(int row = 0; row < grid.getRows(); row++) {
+					ctx.rect(getContentX()+(getContentWidth()/grid.getColumns())*col, getContentY()+(getContentHeight()/grid.getRows())*row, getContentWidth()/grid.getColumns(), getContentHeight()/grid.getRows());
+				}
+			}
+		}
+		ctx.popStyle();
 	}
 
 	private boolean isComponentNotNull(Component component) {
@@ -176,11 +215,16 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		}
 		return true;
 	}
-	
-	private boolean isParamsNotNull(LayoutParams params) {
+
+	private boolean isParamsCorrect(LayoutParams params) {
 		if (params == null) {
 			throw new NullPointerException("params cannot be null");
 		}
+		
+		if((layoutManager instanceof GridLayout) && !(params instanceof GridLayoutParams)) {
+			throw new IllegalStateException("you need use GridLayoutParams for GridLayout");
+		}
+		
 		return true;
 	}
 
@@ -191,7 +235,7 @@ public final class Container extends Component implements Focusable, KeyPressabl
 	private void recalculateMaxPriority() {
 		int tmpPriority = 0;
 
-		for (ComponentEntry component : componentList) {
+		for (ComponentEntry component : componentEntryList) {
 			if (component.getComponent().getPriority() > tmpPriority) {
 				tmpPriority = component.getComponent().getPriority();
 			}

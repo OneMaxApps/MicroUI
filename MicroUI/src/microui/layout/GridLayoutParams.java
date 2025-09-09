@@ -1,29 +1,33 @@
 package microui.layout;
 
 public final class GridLayoutParams implements LayoutParams {
-	private int col,row,colSpan,rowSpan;
+	private int column,row,columnSpan,rowSpan;
 
-	public GridLayoutParams(int col, int row, int colSpan, int rowSpan) {
+	public GridLayoutParams(int column, int row, int columnSpan, int rowSpan) {
 		super();
-		if(col < 0 || row < 0 || colSpan < 0 || rowSpan < 0) {
+		if(column < 0 || row < 0 || columnSpan < 0 || rowSpan < 0) {
 			throw new IllegalArgumentException("grid layout params cannot be less than zero");
 		}
-		this.col = col;
+		this.column = column;
 		this.row = row;
-		this.colSpan = colSpan;
+		this.columnSpan = columnSpan;
 		this.rowSpan = rowSpan;
 	}
+	
+	public GridLayoutParams(int column, int row) {
+		this(column,row,1,1);
+	}
 
-	public int getCol() {
-		return col;
+	public int getColumn() {
+		return column;
 	}
 
 	public int getRow() {
 		return row;
 	}
 
-	public int getColSpan() {
-		return colSpan;
+	public int getColumnSpan() {
+		return columnSpan;
 	}
 
 	public int getRowSpan() {

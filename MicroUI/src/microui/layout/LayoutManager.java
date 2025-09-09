@@ -2,7 +2,6 @@ package microui.layout;
 
 import java.util.List;
 
-import microui.core.base.Component;
 import microui.core.base.Container;
 import microui.core.base.Container.ComponentEntry;
 
@@ -11,15 +10,22 @@ public abstract class LayoutManager {
 	
 	public abstract void recalculate();
 
-	public abstract void onAddComponent();
+	public void onAddComponent() {
+		recalculate();
+	}
 
-	public abstract void onRemoveComponent(Component component);
+	public void onRemoveComponent() {
+		recalculate();
+	}
 
 	public final Container getContainer() {
 		return container;
 	}
 
 	public final void setContainer(Container container) {
+		if(container == null) {
+			throw new NullPointerException("container cannot be null");
+		}
 		this.container = container;
 	}
 
