@@ -81,15 +81,7 @@ public final class Container extends Component implements Focusable, KeyPressabl
 				k.keyPressed();
 			}
 		});
-	}
-
-	@Override
-	protected void onChangeBounds() {
-		super.onChangeBounds();
-		if (layoutManager != null) {
-			layoutManager.recalculate();
-		}
-	}
+	}	
 
 	public Container addComponent(Component component, LayoutParams params) {
 
@@ -138,36 +130,42 @@ public final class Container extends Component implements Focusable, KeyPressabl
 	public List<ComponentEntry> getComponentEntryList() {
 		return Collections.unmodifiableList(componentEntryList);
 	}
-
-	public final LayoutManager getLayoutManager() {
-		return layoutManager;
-	}
-
-	public final void setLayoutManager(LayoutManager layoutManager) {
-		if (layoutManager == null) {
-			throw new NullPointerException("layout manager cannot be null");
-		}
-		if (this.layoutManager == layoutManager) {
-			return;
-		}
-		
-		this.layoutManager = layoutManager;
-		layoutManager.setContainer(this);
-		layoutManager.recalculate();
-	}
-
+	
 	public final ContainerMode getContainerMode() {
 		return containerMode;
 	}
 
 	public final void setContainerMode(ContainerMode containerMode) {
-		if (this.containerMode != containerMode) {
+		if (this.containerMode == containerMode) {
+			throw new IllegalArgumentException("container mode already using");
+		}
 			this.containerMode = containerMode;
+			
+			requestUpdate();
+			
+			layoutManager.recalculate();
+			
+	}
+	
+	@Override
+	protected void onChangeBounds() {
+		super.onChangeBounds();
+		if (layoutManager != null) {
 			layoutManager.recalculate();
 		}
-
 	}
-
+	
+	private void setLayoutManager(LayoutManager layoutManager) {
+		if (layoutManager == null) {
+			throw new NullPointerException("layout manager cannot be null");
+		}
+		
+		this.layoutManager = layoutManager;
+		
+		layoutManager.setContainer(this);
+		layoutManager.recalculate();
+	}
+	
 	private void componentsOnDraw() {
 		if (componentEntryList.isEmpty()) {
 			return;

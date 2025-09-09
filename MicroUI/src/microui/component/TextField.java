@@ -70,8 +70,7 @@ public final class TextField extends Component implements KeyPressable {
 
 	@Override
 	protected final void update() {
-		//TODO uncomment
-		//setTooltipAdditionalCondition(!isFocused);
+		setTooltipAdditionalCondition(!isFocused);
 		
 		checkDimensions();
 		
@@ -332,7 +331,7 @@ public final class TextField extends Component implements KeyPressable {
 			font = new Font();
 			
 			updatePosition();
-			size.set(getContentHeight());
+			size.set(getContentHeight()*.8f);
 		}
 		
 		private final void draw(final PGraphics pg) {

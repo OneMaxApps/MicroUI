@@ -6,7 +6,7 @@ import static java.util.Objects.requireNonNull;
 import static processing.core.PApplet.constrain;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 06.09.2025
+//Last Reviewed: 09.09.2025
 public abstract class Bounds extends View {
 	private static final int DEFAULT_MIN_WIDTH = 1;
 	private static final int DEFAULT_MAX_WIDTH = ctx.width;
@@ -326,6 +326,20 @@ public abstract class Bounds extends View {
 
 	protected final void setNegativeDimensionsEnabled(boolean isNegativeDimensionsEnabled) {
 		this.isNegativeDimensionsEnabled = isNegativeDimensionsEnabled;
+	}
+	
+	
+	/**
+	 * request for update state
+	 * <p>
+	 * this method calling hooks force, even if not was really changes in position or dimensions
+	 * </p>
+	 */
+	protected final void requestUpdate() {
+		System.out.println("requested for update");
+		onChangePositions();
+		onChangeDimensions();
+		onChangeBounds();
 	}
 
 	private static boolean areEqual(float firstValue, float secondValue) {

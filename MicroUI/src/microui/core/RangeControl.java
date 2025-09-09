@@ -25,8 +25,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		value = new Value(0, 100, 0) {
 			@Override
 			public void action() {
-				onChangeBounds();
-
+				requestUpdate();
 			}
 		};
 
@@ -97,7 +96,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 
 		setWidth(h);
 		setHeight(w);
-		onChangeBounds();
+		requestUpdate();
 	}
 
 	public void swapOrientation() {

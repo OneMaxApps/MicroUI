@@ -1,12 +1,11 @@
 package microui;
 
 import microui.component.Button;
-import microui.constants.ContainerMode;
+import microui.component.TextField;
 import microui.core.base.Container;
 import microui.event.Event;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
-import microui.service.GlobalTooltip;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -44,19 +43,11 @@ public final class Launcher extends PApplet {
 		MicroUI.setContext(this);
 		MicroUI.setDebugModeEnabled(true);
 		
-		container = new Container(new GridLayout(3,3));
-		container.setPadding(20);
-		container.setContainerMode(ContainerMode.FLEXIBLE);
-		buttonSearch = new Button("Search");
-		
-		buttonSearch.setMargin(40,10);
-		buttonSearch.setMinMaxSize(20,100);
-		buttonSearch.setMinSize(40,20);
-		buttonSearch.setMaxSize(200,50);
-		
-		
-		container.addComponent(buttonSearch, new GridLayoutParams(1,1,2,1));
-		container.addComponent(new Button(), new GridLayoutParams(0,0,2,1));
+		container = new Container(new GridLayout(8,10));
+		Button buttonSearch = new Button("Search");
+		buttonSearch.setPadding(5);
+		container.addComponent(new TextField(), new GridLayoutParams(1,4,5,1));
+		container.addComponent(buttonSearch, new GridLayoutParams(6,4,1,1));
 		
 	}
 
@@ -65,16 +56,6 @@ public final class Launcher extends PApplet {
 		background(200);
 		container.draw();
 		
-		if(mouseButton == RIGHT) {
-			container.setSize(mouseX,mouseY);
-			//container.setPosition(mouseX,mouseY);
-
-		}
-		
-		//System.out.println(frameRate);
-		//Metrics.printAll();
-		
-		GlobalTooltip.draw();
 	}
 
 	@Override
@@ -84,9 +65,7 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void mousePressed() {
-		if(mouseButton == RIGHT) {
-			//container.removeComponent(buttonSearch);
-		}
+		
 	}
 
 	@Override

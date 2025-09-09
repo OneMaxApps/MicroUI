@@ -24,7 +24,7 @@ import microui.event.Listener;
 import microui.feedback.Tooltip;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 07.09.2025
+//Last Reviewed: 08.09.2025
 public abstract class Component extends Bounds {
 	private Color color;
 	private Event event;
@@ -587,9 +587,7 @@ public abstract class Component extends Bounds {
 
 		private void onChangePadding() {
 			checkCorrectState();
-			onChangePositions();
-			onChangeDimensions();
-			onChangeBounds();
+			requestUpdate();
 		}
 
 		private boolean isValidValue(float currentValue, float newValue) {
