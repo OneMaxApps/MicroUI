@@ -42,7 +42,7 @@ public final class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		//MicroUI.setDebugModeEnabled(true);
+		MicroUI.setDebugModeEnabled(true);
 		
 		containerFirst = new Container(new GridLayout(80,40));
 		containerFirst.setPadding(5);
@@ -71,8 +71,14 @@ public final class Launcher extends PApplet {
 		containerSecond = new Container(new GridLayout(20,20));
 		
 		containerManager = new ContainerManager();
-		containerManager.add(containerFirst,containerSecond);
+		containerManager.add(containerFirst,"container_first");
+		containerManager.add(containerSecond,"container_second");
+		
 		containerManager.setFocusOn(containerFirst);
+		
+		containerManager.remove("container_first");
+	
+		
 	}
 
 	@Override
