@@ -1,7 +1,8 @@
 package microui;
 
-import microui.component.MenuButton;
+import microui.component.Button;
 import microui.core.base.Container;
+import microui.core.style.Color;
 import microui.event.Event;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
@@ -26,7 +27,6 @@ import processing.event.MouseEvent;
 
 public final class Launcher extends PApplet {
 	
-	Container containerFirst,containerSecond;
 	ContainerManager containerManager;
 	
 	public static void main(String[] args) {
@@ -35,8 +35,8 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-		//size(640, 480);
-		fullScreen();
+		size(640, 480);
+//		fullScreen();
 	}
 
 	@Override
@@ -44,62 +44,57 @@ public final class Launcher extends PApplet {
 		MicroUI.setContext(this);
 		MicroUI.setDebugModeEnabled(true);
 		
-		containerFirst = new Container(new GridLayout(80,40));
-		containerFirst.setPadding(5);
-		MenuButton menuFile = new MenuButton("File");
-		menuFile.addSubMenu(new MenuButton("New"),"Class","Enum","Interface","Record","Other");
-		menuFile.add("Save","Save As","Import","Export");
-		((MenuButton) (menuFile.getItemDeep("New"))).addSubMenu(new MenuButton("category"),"1","2","3","4");
+		containerManager = new ContainerManager();
 		
-		containerFirst.addComponent(menuFile, new GridLayoutParams(0,0,4,1),"menu_file");
-		containerFirst.addComponent(new MenuButton("Edit"), new GridLayoutParams(4,0,4,1),"menu_edit");
-		containerFirst.addComponent(new MenuButton("Source"), new GridLayoutParams(8,0,4,1),"menu_source");
-		containerFirst.addComponent(new MenuButton("Refactor"), new GridLayoutParams(12,0,4,1),"menu_refactor");
-		containerFirst.addComponent(new MenuButton("Navigate"), new GridLayoutParams(16,0,4,1),"menu_navigate");
-		containerFirst.addComponent(new MenuButton("Search"), new GridLayoutParams(20,0,4,1),"menu_search");
-		containerFirst.addComponent(new MenuButton("Project"), new GridLayoutParams(24,0,4,1),"menu_project");
-		containerFirst.addComponent(new MenuButton("Run"), new GridLayoutParams(28,0,4,1),"menu_run");
-		containerFirst.addComponent(new MenuButton("Window"), new GridLayoutParams(32,0,4,1),"menu_window");
-		containerFirst.addComponent(new MenuButton("Help"), new GridLayoutParams(36,0,4,1),"menu_help");
+		Container menu,workspace;
 		
-		containerFirst.getComponentEntryList().forEach(entry -> {
-			entry.getComponent().setPadding(5,0);
+		containerManager.add(menu = new Container(new GridLayout(12,12)),"menu");
+		containerManager.add(workspace = new Container(new GridLayout(12,12)),"settings");
+
+		menu.setColor(new Color(255,200,0));
+		menu.addComponent(new Button("Start"), new GridLayoutParams(4,5,4,1), "start");
+		menu.addComponent(new Button("Settings"), new GridLayoutParams(4,6,4,1), "settings");
+		menu.addComponent(new Button("Quit"), new GridLayoutParams(4,7,4,1), "quit");
+		
+		menu.getComponentByTextID("settings").onClick(() -> {
+			containerManager.switchOn("settings");
 		});
 		
 		
+		workspace.setColor(new Color(0,64,0));
+		workspace.addComponent(new Button("Graphics"), new GridLayoutParams(4,5,4,1), "graphics");
+		workspace.addComponent(new Button("Sounds"), new GridLayoutParams(4,6,4,1), "sounds");
+		workspace.addComponent(new Button("Menu"), new GridLayoutParams(4,7,4,1), "menu");
 		
-		containerSecond = new Container(new GridLayout(20,20));
+		workspace.getComponentByTextID("menu").onClick(() -> {
+			containerManager.switchOn("menu");
+		});
 		
-		containerManager = new ContainerManager();
-		containerManager.add(containerFirst,"container_first");
-		containerManager.add(containerSecond,"container_second");
+		menu.getComponentEntryList().forEach(entry -> {
+			entry.getComponent().setPadding(10,0);
+		});
+		containerManager.setAnimationType(ContainerManager.AnimationType.SLIDE_RANDOM);
 		
-		containerManager.setFocusOn(containerFirst);
+		//menu.setPadding(100);
 		
-		containerManager.remove("container_first");
-	
-		
+		menu.setBackgroundImage(loadImage("C:\\Users\\002\\Desktop\\i.jpg"));
 	}
 
 	@Override
 	public void draw() {
 		background(200);
-		containerManager.draw();
 		
-		if(mouseButton == RIGHT) {
-			//containerManager.setSize(mouseX,mouseY);
-		}
+		containerManager.draw();
+//		System.out.println(frameRate);
 	}
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		containerFirst.mouseWheel(event);
-		
+		containerManager.mouseWheel(event);
 	}
 
 	@Override
 	public void mousePressed() {
-		//containerManager.setFocusOn(containerSecond);
 		
 	}
 

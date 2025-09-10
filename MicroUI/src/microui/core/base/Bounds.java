@@ -6,7 +6,7 @@ import static java.util.Objects.requireNonNull;
 import static processing.core.PApplet.constrain;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 09.09.2025
+//Last Reviewed: 10.09.2025
 public abstract class Bounds extends View {
 	private static final int DEFAULT_MIN_WIDTH = 1;
 	private static final int DEFAULT_MAX_WIDTH = ctx.width;
@@ -291,24 +291,40 @@ public abstract class Bounds extends View {
 		setX(getX()+delta);
 	}
 	
+	public final void appendX(float delta, float min, float max) {
+		setX(constrain(getX()+delta,min,max));  
+	}
+	
 	public final void appendY(float delta) {
 		setY(getY()+delta);
+	}
+	
+	public final void appendY(float delta, float min, float max) {
+		setY(constrain(getY()+delta,min,max));
 	}
 	
 	public final void appendWidth(float delta) {
 		setWidth(getWidth()+delta);
 	}
 	
+	public final void appendWidth(float delta, float min, float max) {
+		setWidth(constrain(getWidth()+delta,min,max));
+	}
+	
 	public final void appendHeight(float delta) {
 		setHeight(getHeight()+delta);
+	}
+	
+	public final void appendHeight(float delta, float min, float max) {
+		setHeight(constrain(getHeight()+delta,min,max));
 	}
 
 	public final void appendSize(float delta) {
 		setSize(getWidth()+delta,getHeight()+delta);
 	}
 	
-	public final void appendSize(float deltaWidth, float deltaHeight) {
-		setSize(getWidth()+deltaWidth,getHeight()+deltaHeight);
+	public final void appendSize(float delta, float min, float max) {
+		setSize(constrain(getWidth()+delta,min,max),constrain(getHeight()+delta,min,max));
 	}
 	
 	protected void onChangePositions() {
@@ -336,7 +352,6 @@ public abstract class Bounds extends View {
 	 * </p>
 	 */
 	protected final void requestUpdate() {
-		System.out.println("requested for update");
 		onChangePositions();
 		onChangeDimensions();
 		onChangeBounds();

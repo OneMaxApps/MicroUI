@@ -1,5 +1,6 @@
 package microui.core.base;
 
+import static java.util.Objects.requireNonNull;
 import static microui.constants.ContainerMode.STRICT;
 
 import java.util.ArrayList;
@@ -8,18 +9,21 @@ import java.util.List;
 
 import microui.MicroUI;
 import microui.constants.ContainerMode;
-import microui.core.interfaces.Focusable;
+import microui.core.Texture;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
+import microui.core.style.Color;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
 import microui.layout.LayoutManager;
 import microui.layout.LayoutParams;
+import processing.core.PImage;
 import processing.event.MouseEvent;
 
-public final class Container extends Component implements Focusable, KeyPressable, Scrollable {
+public final class Container extends Component implements KeyPressable, Scrollable {
 	private final List<ComponentEntry> componentEntryList;
-	private LayoutManager layoutManager;
+	private final LayoutManager layoutManager;
+	private Texture backgroundImage;
 	private ContainerMode containerMode;
 	private int maxPriority;
 
@@ -36,9 +40,10 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		getMutableColor().set(255, 0);
 
 		componentEntryList = new ArrayList<ComponentEntry>();
-
-		setLayoutManager(layoutManager);
-
+		
+		this.layoutManager = requireNonNull(layoutManager,"layout manager cannot be null");
+		layoutManager.setContainer(this);
+		
 		setContainerMode(STRICT);
 
 	}
@@ -49,9 +54,8 @@ public final class Container extends Component implements Focusable, KeyPressabl
 
 	@Override
 	protected void update() {
-		getMutableColor().apply();
-		ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());
-
+		backgroundOnDraw();
+		
 		debugOnDraw();
 
 		componentsOnDraw();
@@ -177,6 +181,17 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		layoutManager.recalculate();
 
 	}
+	
+	public void setBackgroundImage(PImage image) {
+		ensureBackgroundImage(); 
+		backgroundImage.set(image);
+		requestUpdate();
+	}
+	
+	public void setBackgroundImageColor(Color color) {
+		ensureBackgroundImage();
+		backgroundImage.setColor(color);
+	}
 
 	@Override
 	protected void onChangeBounds() {
@@ -185,6 +200,10 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		if (layoutManager != null) {
 			layoutManager.recalculate();
 			requestUpdateForInnerComponents();
+			
+			if(backgroundImage != null) {
+				backgroundImage.setBounds(getContentX(),getContentY(),getContentWidth(),getContentHeight());
+			}
 		}
 	}
 	
@@ -198,17 +217,6 @@ public final class Container extends Component implements Focusable, KeyPressabl
 		}
 		
 		requestUpdateForInnerComponents();
-	}
-
-	private void setLayoutManager(LayoutManager layoutManager) {
-		if (layoutManager == null) {
-			throw new NullPointerException("layout manager cannot be null");
-		}
-
-		this.layoutManager = layoutManager;
-
-		layoutManager.setContainer(this);
-		layoutManager.recalculate();
 	}
 
 	private void componentsOnDraw() {
@@ -309,6 +317,20 @@ public final class Container extends Component implements Focusable, KeyPressabl
 				container.requestUpdateForInnerComponents();
 			}
 		});
+	}
+	
+	private void backgroundOnDraw() {
+		if(backgroundImage != null && backgroundImage.isLoaded()) {
+			backgroundImage.draw();
+		} else {
+			getMutableColor().apply();
+			ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());		
+		}
+	}
+	
+	private void ensureBackgroundImage() {
+		if(backgroundImage != null) { return; }
+		backgroundImage = new Texture();
 	}
 
 	public static class ComponentEntry {
