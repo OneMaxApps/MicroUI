@@ -113,15 +113,12 @@ class SpatialViewTest {
 	@Test
 	void setNegativeDimensionsTest() {
 		SpatialView spatialView = new SpatialView(0,0,0,0) {
-			{
-				setNegativeDimensionsEnabled(true);
-			}
-			
 			@Override
 			protected void update() {
 			}
-			
 		};
+		
+		spatialView.setNegativeDimensionsEnabled(true);
 		
 		spatialView.setBounds(10,20,-30,-40);
 

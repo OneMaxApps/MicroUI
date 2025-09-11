@@ -35,8 +35,8 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-//		size(640, 480);
-		fullScreen();
+		size(640, 480);
+//		fullScreen();
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public final class Launcher extends PApplet {
 		
 		containerManager.draw();
 		
-		System.out.println(frameRate);
+//		System.out.println(frameRate);
 	}
 
 	@Override

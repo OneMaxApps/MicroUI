@@ -2,6 +2,7 @@ package microui.core.base;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.util.Objects.requireNonNull;
 
 //Status: STABLE - Do not modify
@@ -69,7 +70,7 @@ public abstract class SpatialView extends View {
 
 	public final void setWidth(float width) {
 		this.width = getCorrectDimension(this.width, width, minWidth, maxWidth);
-		
+
 	}
 
 	public final void setWidth(SpatialView spatialView) {
@@ -125,13 +126,15 @@ public abstract class SpatialView extends View {
 	}
 
 	public final void setMinWidth(float minWidth) {
+		if(areEqual(this.minWidth,minWidth)) { return; }
+		
 		this.minWidth = isNegativeDimensionsEnabled ? minWidth : max(0, minWidth);
 
 		if (this.minWidth > maxWidth) {
 			throw new IllegalArgumentException("min width cannot be greater than max width");
 		}
 
-		setWidth(width);
+		setWidth(max(this.minWidth,width));
 
 	}
 
@@ -144,13 +147,15 @@ public abstract class SpatialView extends View {
 	}
 
 	public final void setMinHeight(float minHeight) {
+		if(areEqual(this.minHeight,minHeight)) { return; }
+		
 		this.minHeight = isNegativeDimensionsEnabled ? minHeight : max(0, minHeight);
 
 		if (this.minHeight > maxHeight) {
 			throw new IllegalArgumentException("min height cannot be greater than max height");
 		}
 
-		setHeight(height);
+		setHeight(max(this.minHeight,height));
 	}
 
 	public final void setMinHeight(SpatialView spatialView) {
@@ -162,13 +167,16 @@ public abstract class SpatialView extends View {
 	}
 
 	public final void setMaxWidth(float maxWidth) {
+		if(areEqual(this.maxWidth,maxWidth)) { return; }
+		
 		this.maxWidth = isNegativeDimensionsEnabled ? maxWidth : max(0, maxWidth);
+		
 		if (this.maxWidth < minWidth) {
 			throw new IllegalArgumentException("max width cannot be lower than min width");
 		}
 
-		setWidth(width);
-		
+		setWidth(min(this.maxWidth,width));
+
 	}
 
 	public final void setMaxWidth(SpatialView spatialView) {
@@ -180,13 +188,15 @@ public abstract class SpatialView extends View {
 	}
 
 	public final void setMaxHeight(float maxHeight) {
+		if(areEqual(this.maxHeight,maxHeight)) { return; }
+		
 		this.maxHeight = isNegativeDimensionsEnabled ? maxHeight : max(0, maxHeight);
 
 		if (this.maxHeight < minHeight) {
 			throw new IllegalArgumentException("max height cannot be lower than min height");
 		}
 
-		setHeight(height);
+		setHeight(min(this.maxHeight,height));
 	}
 
 	public final void setMaxHeight(SpatialView spatialView) {
@@ -348,6 +358,7 @@ public abstract class SpatialView extends View {
 	}
 
 	private void updateHooks() {
+		
 		if (isPosDirty || isDimDirty) {
 			onChangeBounds();
 			if (isPosDirty) {
@@ -356,15 +367,18 @@ public abstract class SpatialView extends View {
 			if (isDimDirty) {
 				onChangeDimensions();
 			}
+			System.out.println("hooks is updating");
 			isPosDirty = isDimDirty = false;
 		}
 	}
 
-	private float getCorrectDimension(float currentValue, float newValue, float min, float max) {
-
-		float correctValue = currentValue, constrainedValue = constrain(newValue,
-				isNegativeDimensionsEnabled ? min : max(0, min), isNegativeDimensionsEnabled ? max : max(0, max));
+	private float getCorrectDimension(float currentValue, float newValue, float min, float max) { 
+		if(areEqual(currentValue, newValue)) { return currentValue; }
 		
+		float correctValue = currentValue;
+
+		float constrainedValue = constrain(newValue, min, max);
+
 		if (isConstrainDimensionsEnabled) {
 			correctValue = constrainedValue;
 		} else {
@@ -374,12 +388,10 @@ public abstract class SpatialView extends View {
 				correctValue = max(0, newValue);
 			}
 		}
-
+		
 		if (isDimDirty = !areEqual(currentValue, correctValue)) {
 			updateHooks();
 		}
-		
-		
 		
 		return correctValue;
 	}
