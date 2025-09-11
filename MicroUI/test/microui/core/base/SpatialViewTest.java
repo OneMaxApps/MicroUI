@@ -50,6 +50,7 @@ class SpatialViewTest {
 		
 	}
 
+	
 	@Test
 	void setConstrainDimensionsTest() {
 		SpatialView spatialView = new SpatialView(0,0,0,0) {
@@ -94,9 +95,19 @@ class SpatialViewTest {
 		assertEquals(spatialView.getHeight(),100);
 		
 		spatialView.setConstrainDimensionsEnabled(true);
-		
+		spatialView.setSize(20);
+		spatialView.setMaxSize(10);
+
 		assertEquals(spatialView.getWidth(),10);
 		assertEquals(spatialView.getHeight(),10);
+		
+		spatialView.setNegativeDimensionsEnabled(true);
+		spatialView.setMinSize(-20);
+		
+		spatialView.setSize(-21);
+
+		assertEquals(spatialView.getWidth(),-20);
+		assertEquals(spatialView.getHeight(),-20);
 	}
 	
 	@Test
