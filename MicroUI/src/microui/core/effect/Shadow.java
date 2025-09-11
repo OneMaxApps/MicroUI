@@ -6,17 +6,17 @@ import static processing.core.PApplet.map;
 import static processing.core.PConstants.CORNERS;
 import static processing.core.PConstants.SQUARE;
 
-import microui.core.base.Bounds;
+import microui.core.base.SpatialView;
 import microui.core.base.View;
 import microui.core.style.Color;
 
 public final class Shadow extends View {
 	  private final Color color;
-	  private final Bounds bounds;
+	  private final SpatialView bounds;
 	  private int leftSize,rightSize,upSize,downSize;
 	  private byte absoluteSize;
 	  
-	  public Shadow(Bounds bounds) {
+	  public Shadow(SpatialView bounds) {
 		super();
 	    this.bounds = requireNonNull(bounds, "bounds cannot be null");
 	    color = new Color(34);
@@ -46,7 +46,7 @@ public final class Shadow extends View {
 	    		  bounds.getX()+bounds.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
 	    		  bounds.getY()+bounds.getHeight()+map(i,0f,absoluteSize,0f,downSize));
     		  } else {*/
-		    	  if(bounds instanceof Bounds) {
+		    	  if(bounds instanceof SpatialView) {
 		    		 ctx.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
 		             bounds.getY()-map(i,0f,absoluteSize,0f,upSize),
 		             bounds.getX()+bounds.getWidth()+map(i,0f,absoluteSize,0f,rightSize),

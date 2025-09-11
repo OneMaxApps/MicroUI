@@ -4,7 +4,7 @@ import static microui.constants.Orientation.HORIZONTAL;
 import static processing.core.PApplet.map;
 
 import microui.core.RangeControl;
-import microui.core.base.Bounds;
+import microui.core.base.SpatialView;
 import microui.core.style.Color;
 import microui.core.style.Stroke;
 
@@ -86,7 +86,7 @@ public class Slider extends RangeControl {
 		level.color.set(color);
 	}
 
-	private final class Rect extends Bounds {
+	private final class Rect extends SpatialView {
 		public final Stroke stroke;
 		public final Color color;
 

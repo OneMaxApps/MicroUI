@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import java.util.Objects;
 
 import microui.MicroUI;
-import microui.core.base.Bounds;
+import microui.core.base.SpatialView;
 import microui.core.base.Component;
 import processing.core.PApplet;
 
@@ -13,7 +13,7 @@ public final class Callback {
 	private static PApplet app = MicroUI.getContext();
 	private static final int ONE_SECOND = 1000, TWO_SECONDS = 2000, THREE_SECONDS = 3000, THREE_PIXELS = 3;
 
-	private Bounds bounds;
+	private SpatialView bounds;
 
 	private final EnumMap<EventType, ArrayList<Listener>> eventList = new EnumMap<>(EventType.class);
 
@@ -24,7 +24,7 @@ public final class Callback {
 	private long clickedTimePrev, clickedTimeNow, delta, pressStartTime, currentPressDuration, longPressThreshold,
 			doubleClickThreshold, insideTimerStart, timerInside, insideTimeThreshold;
 
-	public Callback(Bounds otherBounds) {
+	public Callback(SpatialView otherBounds) {
 		bounds = otherBounds;
 		isEnabled = true;
 
@@ -46,7 +46,7 @@ public final class Callback {
 
 	}
 
-	public final void setListener(Bounds bounds) {
+	public final void setListener(SpatialView bounds) {
 		this.bounds = bounds;
 	}
 
@@ -240,7 +240,7 @@ public final class Callback {
 
 	}
 
-	private static final boolean isInside(final Bounds bounds) {
+	private static final boolean isInside(final SpatialView bounds) {
 
 		if (bounds instanceof Component component) {
 			if (component.getContentWidth() < 0 && component.getContentHeight() < 0) {
@@ -290,7 +290,7 @@ public final class Callback {
 		return !isInside();
 	}
 
-	private static final boolean isPressed(Bounds bounds) {
+	private static final boolean isPressed(SpatialView bounds) {
 		return isInside(bounds) && app.mousePressed;
 	}
 
@@ -314,7 +314,7 @@ public final class Callback {
 		return isDragged;
 	}
 
-	private static final boolean isDragging(Bounds bounds) {
+	private static final boolean isDragging(SpatialView bounds) {
 		if (isPressed(bounds)) {
 			if (app.mouseX != app.pmouseX || app.mouseY != app.pmouseY) {
 				return true;

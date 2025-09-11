@@ -1,10 +1,10 @@
 package microui.util;
 
-import microui.core.base.Bounds;
+import microui.core.base.SpatialView;
 
 public final class Physics {
 	
-	public final static boolean collision(final Bounds form, final  Bounds otherForm) {
+	public final static boolean collision(final SpatialView form, final  SpatialView otherForm) {
 		
 		if(form.getX() > otherForm.getX()-form.getWidth() 		&&
 		   form.getX() < otherForm.getX()+otherForm.getWidth()	&&
@@ -16,7 +16,7 @@ public final class Physics {
 		return false;
 	}
 	
-	public final static void constrain(final float x, final float y, final  Bounds form, final  Bounds otherForm) {
+	public final static void constrain(final float x, final float y, final  SpatialView form, final  SpatialView otherForm) {
 		final float px = form.getX(), py = form.getY();
 		form.setPosition(x,y);
 		

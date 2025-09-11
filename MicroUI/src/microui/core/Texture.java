@@ -2,13 +2,13 @@ package microui.core;
 
 import static java.util.Objects.requireNonNull;
 
-import microui.core.base.Bounds;
+import microui.core.base.SpatialView;
 import microui.core.style.Color;
 import processing.core.PImage;
 
 // Status: Stable - Do not modify
 // Last Reviewed: 10.09.2025
-public class Texture extends Bounds {
+public class Texture extends SpatialView {
 	private Color color;
 	private PImage image;
 	
@@ -63,7 +63,7 @@ public class Texture extends Bounds {
 	protected void onChangeDimensions() {
 		super.onChangeBounds();
 		if(image == null) { return; }
-		image.resize(ctx.width,ctx.height);
+		image.resize((int) getWidth(), (int) getHeight());
 		
 	}
 	

@@ -35,8 +35,8 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-		size(640, 480);
-//		fullScreen();
+//		size(640, 480);
+		fullScreen();
 	}
 
 	@Override
@@ -60,7 +60,6 @@ public final class Launcher extends PApplet {
 			containerManager.switchOn("settings");
 		});
 		
-		
 		workspace.setColor(new Color(0,64,0));
 		workspace.addComponent(new Button("Graphics"), new GridLayoutParams(4,5,4,1), "graphics");
 		workspace.addComponent(new Button("Sounds"), new GridLayoutParams(4,6,4,1), "sounds");
@@ -77,7 +76,7 @@ public final class Launcher extends PApplet {
 		
 		//menu.setPadding(100);
 		
-		menu.setBackgroundImage(loadImage("C:\\Users\\002\\Desktop\\i.jpg"));
+		//menu.setBackgroundImage(loadImage("C:\\Users\\002\\Desktop\\i.jpg"));
 	}
 
 	@Override
@@ -85,7 +84,8 @@ public final class Launcher extends PApplet {
 		background(200);
 		
 		containerManager.draw();
-//		System.out.println(frameRate);
+		
+		System.out.println(frameRate);
 	}
 
 	@Override

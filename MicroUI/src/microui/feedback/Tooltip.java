@@ -4,7 +4,7 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PConstants.CENTER;
 
 import microui.core.TextController;
-import microui.core.base.Bounds;
+import microui.core.base.SpatialView;
 import microui.core.base.Container;
 import microui.core.style.Color;
 import microui.event.Callback;
@@ -12,7 +12,7 @@ import microui.event.EventType;
 import microui.service.GlobalTooltip;
 
 
-public final class Tooltip extends Bounds {
+public final class Tooltip extends SpatialView {
 	private static final int PADDING_X = 10;
 
 	private final Text text;

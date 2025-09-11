@@ -25,7 +25,7 @@ import microui.feedback.Tooltip;
 
 //Status: STABLE - Do not modify
 //Last Reviewed: 08.09.2025
-public abstract class Component extends Bounds {
+public abstract class Component extends SpatialView {
 	private Color color;
 	private Event event;
 	private Callback callback;
@@ -442,7 +442,7 @@ public abstract class Component extends Bounds {
 		tooltip.setAdditionalCondition(condition);
 	}
 
-	protected final void setEventListener(Bounds bounds) {
+	protected final void setEventListener(SpatialView bounds) {
 		ensureEvent();
 		event.setListener(requireNonNull(bounds, "bounds cannot be null"));
 	}
@@ -452,7 +452,7 @@ public abstract class Component extends Bounds {
 		return event;
 	}
 
-	protected final void setCallbackListener(Bounds bounds) {
+	protected final void setCallbackListener(SpatialView bounds) {
 		ensureCallback();
 		callback.setListener(requireNonNull(bounds, "bounds cannot be null"));
 	}

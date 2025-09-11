@@ -3,7 +3,7 @@ package microui.event;
 import static java.util.Objects.requireNonNull;
 
 import microui.MicroUI;
-import microui.core.base.Bounds;
+import microui.core.base.SpatialView;
 import microui.core.base.Component;
 import microui.util.Metrics;
 import processing.core.PApplet;
@@ -17,14 +17,14 @@ public class Event {
 	private byte wasPressed, longPressed, clickCounter;
 	private int secondsSinceMouseInside;
 	private boolean holding, dragged, enable;
-	private Bounds bounds;
+	private SpatialView bounds;
 
 	public Event() {
 		enable = true;
 		Metrics.register(this);
 	}
 
-	public final void setListener(Bounds bounds) {
+	public final void setListener(SpatialView bounds) {
 		this.bounds = requireNonNull(bounds, "bounds cannot be null");
 	}
 
