@@ -36,8 +36,8 @@ public class Button extends AbstractButton {
 	}
 
 	@Override
-	protected void update() {
-		super.update();
+	protected void render() {
+		super.render();
 		text.draw();
 	}
 

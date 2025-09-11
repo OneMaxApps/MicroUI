@@ -29,7 +29,7 @@ public final class Shadow extends View {
 	  }
 	  
 	  @Override
-	  public void update() {
+	  public void render() {
 	    if(bounds.isVisible()) {
 	      ctx.pushStyle();
 	      

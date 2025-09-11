@@ -28,6 +28,13 @@ public abstract class SpatialView extends View {
 	public SpatialView() {
 		this(0, 0, 0, 0);
 	}
+	
+	@Override
+	public void draw() {
+		updateHooks();
+		super.draw();
+		
+	}
 
 	public final float getX() {
 		return x;
@@ -40,7 +47,7 @@ public abstract class SpatialView extends View {
 
 		this.x = x;
 		isPosDirty = true;
-		updateHooks();
+		//updateHooks();
 	}
 
 	public final void setX(SpatialView spatialView) {
@@ -57,7 +64,7 @@ public abstract class SpatialView extends View {
 		}
 		this.y = y;
 		isPosDirty = true;
-		updateHooks();
+		//updateHooks();
 	}
 
 	public final void setY(SpatialView spatialView) {
@@ -356,7 +363,10 @@ public abstract class SpatialView extends View {
 	private static boolean areEqual(float firstValue, float secondValue) {
 		return abs(firstValue - secondValue) < EPSILON;
 	}
-
+	
+	static int hooksCount = 0;
+	// 106 times
+	// 7 times
 	private void updateHooks() {
 		
 		if (isPosDirty || isDimDirty) {
@@ -367,7 +377,8 @@ public abstract class SpatialView extends View {
 			if (isDimDirty) {
 				onChangeDimensions();
 			}
-			System.out.println("hooks is updating");
+			hooksCount++;
+			System.out.println("hooks is updating: "+hooksCount+" times");
 			isPosDirty = isDimDirty = false;
 		}
 	}
@@ -389,10 +400,12 @@ public abstract class SpatialView extends View {
 			}
 		}
 		
-		if (isDimDirty = !areEqual(currentValue, correctValue)) {
-			updateHooks();
-		}
+//		if (isDimDirty = !areEqual(currentValue, correctValue)) {
+//			updateHooks();
+//		}
 		
+		isDimDirty = !areEqual(currentValue, correctValue);
+				
 		return correctValue;
 	}
 

@@ -31,7 +31,7 @@ public final class Ripples extends View {
 	}
 
 	@Override
-	public void update() {
+	public void render() {
 		if(!isEnabled) { return; }
 		
 		checkResizing();

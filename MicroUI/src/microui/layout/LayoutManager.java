@@ -37,4 +37,6 @@ public abstract class LayoutManager {
 	protected final List<ComponentEntry> getComponentEntryList() {
 		return componentEntryList;
 	}
+	
+	protected abstract void isCorrectParams();
 }

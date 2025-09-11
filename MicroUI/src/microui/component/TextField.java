@@ -69,7 +69,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 
 	@Override
-	protected final void update() {
+	protected final void render() {
 		setTooltipAdditionalCondition(!isFocused);
 		
 		checkDimensions();

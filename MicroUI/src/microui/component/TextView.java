@@ -45,7 +45,7 @@ public final class TextView extends Component {
 	}
 
 	@Override
-	protected void update() {
+	protected void render() {
 		if(text.isEmpty()) { return; }
 		
 		getMutableColor().apply();

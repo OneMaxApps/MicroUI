@@ -54,8 +54,8 @@ public class MenuButton extends Button implements Scrollable {
 	}
 
 	@Override
-	protected final void update() {
-			super.update();
+	protected final void render() {
+			super.render();
 			scrolling.update();
 			
 			itemsOnDraw();
@@ -137,6 +137,8 @@ public class MenuButton extends Button implements Scrollable {
 		}
 		
 		setRootForSubMenus();
+		
+		requestUpdate();
 	}
 	
 	
@@ -165,6 +167,7 @@ public class MenuButton extends Button implements Scrollable {
 		listHeight = 0;
 		for(int i = 0; i < itemList.size(); i++) {
 			final Button item = itemList.get(i);
+			item.setConstrainDimensionsEnabled(false);
 			item.setSize(getWidth(), getHeight());
 			if(isRoot) {
 				item.setPosition(getX(),getY()+getHeight()*(i+1));

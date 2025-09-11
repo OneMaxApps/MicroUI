@@ -24,7 +24,7 @@ public final class Hover extends View {
 	}
 
 	@Override
-	public void update() {
+	public void render() {
 		if(!isEnabled) { return; }
 		
 		if(isInside) {

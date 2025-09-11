@@ -12,6 +12,17 @@ public final class GridLayout extends LayoutManager {
 		setRows(rows);
 
 	}
+	
+	
+
+	@Override
+	protected void isCorrectParams() {
+		getComponentEntryList().forEach(entry -> {
+			if(!(entry.getLayoutParams() instanceof GridLayoutParams)) {
+				throw new RuntimeException("using not correct layout params for GridLayout");
+			}
+		});
+	}
 
 	@Override
 	public void recalculate() {
@@ -65,6 +76,7 @@ public final class GridLayout extends LayoutManager {
 	public void onAddComponent() {
 		super.onAddComponent();
 		checkComponentsForOverlap();
+		isCorrectParams();
 	}
 
 	@Override

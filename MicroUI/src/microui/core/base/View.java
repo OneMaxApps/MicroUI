@@ -33,7 +33,7 @@ public abstract class View implements Visible {
 	public void draw() {
 		if (isVisible()) {
 			ctx.pushStyle();
-			update();
+			render();
 			ctx.popStyle();
 		}
 	}
@@ -49,22 +49,22 @@ public abstract class View implements Visible {
 		this.priority = priority;
 	}
 	
-	public final int getID() {
+	public final int getId() {
 		return id;
 	}
 
-	public final void setID(int id) {
+	public final void setId(int id) {
 		this.id = id;
 	}
 
-	public final String getTextID() {
+	public final String getTextId() {
 		if(textId == null) {
 			return DEFAULT_EMPTY_TEXT_ID;
 		}
 		return textId;
 	}
 
-	public final void setTextID(final String textId) {
+	public final void setTextId(final String textId) {
 		if(textId == null) {
 			throw new IllegalArgumentException("text id cannot be null");
 		}
@@ -75,6 +75,6 @@ public abstract class View implements Visible {
 		this.textId = textId;
 	}
 
-	protected abstract void update();
+	protected abstract void render();
 
 }

@@ -30,7 +30,7 @@ public abstract class AbstractButton extends Component {
 	}
 
 	@Override
-	protected void update() {
+	protected void render() {
 		ctx.pushStyle();
 		stroke.apply();
 		getMutableColor().apply();

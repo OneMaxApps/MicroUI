@@ -30,8 +30,8 @@ public class CheckBox extends AbstractButton {
 	}
 
 	@Override
-	protected void update() {
-		super.update();
+	protected void render() {
+		super.render();
 
 		if (isChecked) {
 			markOnDraw();

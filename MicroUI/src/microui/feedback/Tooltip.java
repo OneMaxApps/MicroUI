@@ -57,7 +57,7 @@ public final class Tooltip extends SpatialView {
 	}
 
 	@Override
-	public void update() {
+	public void render() {
 		if(!isEnabled) { return; }
 		
 		color.apply();

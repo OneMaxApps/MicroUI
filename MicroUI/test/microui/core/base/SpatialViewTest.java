@@ -22,7 +22,7 @@ class SpatialViewTest {
 	void initBoundsTest() {
 		SpatialView spatialView = new SpatialView(10,20,30,40) {
 			@Override
-			protected void update() {
+			protected void render() {
 			}
 		};
 		
@@ -37,7 +37,7 @@ class SpatialViewTest {
 	void setBoundsTest() {
 		SpatialView spatialView = new SpatialView(0,0,0,0) {
 			@Override
-			protected void update() {
+			protected void render() {
 			}
 		};
 		
@@ -55,7 +55,7 @@ class SpatialViewTest {
 	void setConstrainDimensionsTest() {
 		SpatialView spatialView = new SpatialView(0,0,0,0) {
 			@Override
-			protected void update() {
+			protected void render() {
 			}
 		};
 		spatialView.setConstrainDimensionsEnabled(true);
@@ -114,7 +114,7 @@ class SpatialViewTest {
 	void setNegativeDimensionsTest() {
 		SpatialView spatialView = new SpatialView(0,0,0,0) {
 			@Override
-			protected void update() {
+			protected void render() {
 			}
 		};
 		

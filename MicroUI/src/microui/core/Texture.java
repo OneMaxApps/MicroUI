@@ -24,7 +24,7 @@ public class Texture extends SpatialView {
 	}
 	
 	@Override
-	protected void update() {
+	protected void render() {
 		if(isLoaded()) {
 		  ctx.pushStyle();
 		  ctx.tint(color.get());

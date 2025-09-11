@@ -39,7 +39,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 	}
 
 	@Override
-	protected void update() {
+	protected void render() {
 
 		ctx.pushStyle();
 		getMutableColor().apply();

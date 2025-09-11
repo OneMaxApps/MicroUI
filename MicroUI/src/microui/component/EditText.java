@@ -86,7 +86,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			}
 		});
 
-		
+		setEventListener(this);
 		
 	}
 
@@ -95,11 +95,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	}
 
 	@Override
-	protected void update() {
-		setEventListener(this);
-
-		// TODO uncomment
-		//setTooltipAdditionalCondition(!isFocused);
+	protected void render() {
+		setTooltipAdditionalCondition(!isFocused);
 		
 		scrollH.setVisible(isFocused);
 		scrollV.setVisible(isFocused);
@@ -238,7 +235,6 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			if (isAllowedChar(ctx.key)) {
 				getCurrentItem().insert(String.valueOf(ctx.key));
 				cursor.next();
-				//System.out.println(items.getMaxTextWidthFromItems());
 				scrollH.setMaxValue(items.getMaxTextWidthFromItems());
 			}
 			break;
@@ -419,12 +415,12 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			return;
 		}
 
+		//FIXME a lot of calls to hooks
 		updateValueForScrollH();
 		updateValueForScrollV();
 	}
 
 	private void updateValueForScrollH() {
-		//System.out.println(getCurrentItem().getTextWidth());
 		if (!items.isEmpty()) {
 			scrollH.setMaxValue(getCurrentItem().getTextWidth());
 		} else {

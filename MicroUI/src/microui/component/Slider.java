@@ -29,8 +29,8 @@ public class Slider extends RangeControl {
 	}
 
 	@Override
-	protected void update() {
-		super.update();
+	protected void render() {
+		super.render();
 		level.draw();
 
 		if (isHolding()) {
@@ -100,7 +100,7 @@ public class Slider extends RangeControl {
 		}
 
 		@Override
-		public void update() {
+		public void render() {
 			ctx.pushStyle();
 			stroke.apply();
 			color.apply();
