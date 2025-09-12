@@ -45,6 +45,8 @@ public abstract class Component extends SpatialView {
 
 	@Override
 	public void draw() {
+		if (!isVisible()) { return; }
+		
 		super.draw();
 
 		if (event != null) {

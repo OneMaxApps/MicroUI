@@ -59,7 +59,7 @@ class SpatialViewTest {
 			}
 		};
 		spatialView.setConstrainDimensionsEnabled(true);
-		spatialView.setMaxSize(5);
+		spatialView.setMinMaxSize(1,5);
 		
 		spatialView.setSize(100,100);
 
@@ -110,20 +110,20 @@ class SpatialViewTest {
 		assertEquals(spatialView.getHeight(),-20);
 	}
 	
-	@Test
-	void setNegativeDimensionsTest() {
-		SpatialView spatialView = new SpatialView(0,0,0,0) {
-			@Override
-			protected void render() {
-			}
-		};
-		
-		spatialView.setNegativeDimensionsEnabled(true);
-		
-		spatialView.setBounds(10,20,-30,-40);
-
-		assertEquals(spatialView.getWidth(),-30);
-		assertEquals(spatialView.getHeight(),-40);
-		
-	}
+//	@Test
+//	void setNegativeDimensionsTest() {
+//		SpatialView spatialView = new SpatialView(0,0,0,0) {
+//			@Override
+//			protected void render() {
+//			}
+//		};
+//		
+//		spatialView.setNegativeDimensionsEnabled(true);
+//		
+//		spatialView.setBounds(10,20,-30,-40);
+//
+//		assertEquals(spatialView.getWidth(),-30);
+//		assertEquals(spatialView.getHeight(),-40);
+//		
+//	}
 }

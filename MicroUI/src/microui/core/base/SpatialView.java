@@ -1,23 +1,28 @@
 package microui.core.base;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.lang.System.currentTimeMillis;
 import static java.util.Objects.requireNonNull;
+import static microui.core.base.SpatialView.HooksUpdateMode.REACTIVE;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 11.09.2025
+//Last Reviewed: 12.09.2025
 public abstract class SpatialView extends View {
-	private static final int DEFAULT_MIN_SIZE = 1;
+	private static final int DEFAULT_MIN_SIZE = 10;
 	private static final int DEFAULT_MAX_SIZE = 200;
 	private static final float EPSILON = .01f;
 
-	private float x, y, width, height, minWidth, minHeight, maxWidth, maxHeight;
 	private boolean isPosDirty, isDimDirty, isNegativeDimensionsEnabled, isConstrainDimensionsEnabled;
+	private float x, y, width, height, minWidth, minHeight, maxWidth, maxHeight;
+	private long lastUpdateHooksMs;
+
+	private HooksUpdateMode hooksUpdateMode;
 
 	public SpatialView(float x, float y, float width, float height) {
 		initDefaultMinMaxSize();
 		setBounds(x, y, width, height);
+		setHooksUpdateMode(REACTIVE);
 	}
 
 	public SpatialView(SpatialView spatialView) {
@@ -26,14 +31,25 @@ public abstract class SpatialView extends View {
 	}
 
 	public SpatialView() {
-		this(0, 0, 0, 0);
+		this(0, 0, DEFAULT_MIN_SIZE, DEFAULT_MIN_SIZE);
 	}
-	
+
 	@Override
 	public void draw() {
-		updateHooks();
+		if (!isVisible()) {
+			return;
+		}
+
+		if (hooksUpdateMode == REACTIVE) {
+			hooksUpdate();
+		} else {
+			if (currentTimeMillis() - lastUpdateHooksMs >= hooksUpdateMode.getMs()) {
+				hooksUpdate();
+				lastUpdateHooksMs = currentTimeMillis();
+			}
+		}
+
 		super.draw();
-		
 	}
 
 	public final float getX() {
@@ -47,11 +63,6 @@ public abstract class SpatialView extends View {
 
 		this.x = x;
 		isPosDirty = true;
-		//updateHooks();
-	}
-
-	public final void setX(SpatialView spatialView) {
-		setX(requireNonNull(spatialView, "spatialView cannot be null").getX());
 	}
 
 	public final float getY() {
@@ -64,11 +75,6 @@ public abstract class SpatialView extends View {
 		}
 		this.y = y;
 		isPosDirty = true;
-		//updateHooks();
-	}
-
-	public final void setY(SpatialView spatialView) {
-		setY(requireNonNull(spatialView, "spatialView cannot be null").getY());
 	}
 
 	public final float getWidth() {
@@ -77,11 +83,6 @@ public abstract class SpatialView extends View {
 
 	public final void setWidth(float width) {
 		this.width = getCorrectDimension(this.width, width, minWidth, maxWidth);
-
-	}
-
-	public final void setWidth(SpatialView spatialView) {
-		setWidth(requireNonNull(spatialView, "spatialView cannot be null").getWidth());
 	}
 
 	public final float getHeight() {
@@ -92,17 +93,9 @@ public abstract class SpatialView extends View {
 		this.height = getCorrectDimension(this.height, height, minHeight, maxHeight);
 	}
 
-	public final void setHeight(SpatialView spatialView) {
-		setHeight(requireNonNull(spatialView, "spatialView cannot be null").getHeight());
-	}
-
 	public final void setPosition(float x, float y) {
 		setX(x);
 		setY(y);
-	}
-
-	public final void setPosition(SpatialView spatialView) {
-		setPosition(requireNonNull(spatialView, "spatialView cannot be null").getX(), spatialView.getY());
 	}
 
 	public final void setSize(float width, float height) {
@@ -114,18 +107,9 @@ public abstract class SpatialView extends View {
 		setSize(size, size);
 	}
 
-	public final void setSize(SpatialView spatialView) {
-		setSize(requireNonNull(spatialView, "spatialView cannot be null").getWidth(), spatialView.getHeight());
-	}
-
 	public final void setBounds(float x, float y, float width, float height) {
 		setPosition(x, y);
 		setSize(width, height);
-	}
-
-	public final void setBounds(SpatialView spatialView) {
-		setBounds(requireNonNull(spatialView, "spatialView cannot be null").getX(), spatialView.getY(),
-				spatialView.getWidth(), spatialView.getHeight());
 	}
 
 	public final float getMinWidth() {
@@ -133,20 +117,18 @@ public abstract class SpatialView extends View {
 	}
 
 	public final void setMinWidth(float minWidth) {
-		if(areEqual(this.minWidth,minWidth)) { return; }
-		
+		if (areEqual(this.minWidth, minWidth)) {
+			return;
+		}
+
 		this.minWidth = isNegativeDimensionsEnabled ? minWidth : max(0, minWidth);
 
 		if (this.minWidth > maxWidth) {
 			throw new IllegalArgumentException("min width cannot be greater than max width");
 		}
 
-		setWidth(max(this.minWidth,width));
+		setWidth(max(this.minWidth, width));
 
-	}
-
-	public final void setMinWidth(SpatialView spatialView) {
-		setMinWidth(requireNonNull(spatialView, "spatialView cannot be null").getMinWidth());
 	}
 
 	public final float getMinHeight() {
@@ -154,19 +136,17 @@ public abstract class SpatialView extends View {
 	}
 
 	public final void setMinHeight(float minHeight) {
-		if(areEqual(this.minHeight,minHeight)) { return; }
-		
+		if (areEqual(this.minHeight, minHeight)) {
+			return;
+		}
+
 		this.minHeight = isNegativeDimensionsEnabled ? minHeight : max(0, minHeight);
 
 		if (this.minHeight > maxHeight) {
 			throw new IllegalArgumentException("min height cannot be greater than max height");
 		}
 
-		setHeight(max(this.minHeight,height));
-	}
-
-	public final void setMinHeight(SpatialView spatialView) {
-		setMinHeight(requireNonNull(spatialView, "spatialView cannot be null").getMinHeight());
+		setHeight(max(this.minHeight, height));
 	}
 
 	public final float getMaxWidth() {
@@ -174,20 +154,18 @@ public abstract class SpatialView extends View {
 	}
 
 	public final void setMaxWidth(float maxWidth) {
-		if(areEqual(this.maxWidth,maxWidth)) { return; }
-		
+		if (areEqual(this.maxWidth, maxWidth)) {
+			return;
+		}
+
 		this.maxWidth = isNegativeDimensionsEnabled ? maxWidth : max(0, maxWidth);
-		
+
 		if (this.maxWidth < minWidth) {
 			throw new IllegalArgumentException("max width cannot be lower than min width");
 		}
 
-		setWidth(min(this.maxWidth,width));
+		setWidth(min(this.maxWidth, width));
 
-	}
-
-	public final void setMaxWidth(SpatialView spatialView) {
-		setMaxWidth(requireNonNull(spatialView, "spatialView cannot be null").getMaxWidth());
 	}
 
 	public final float getMaxHeight() {
@@ -195,19 +173,17 @@ public abstract class SpatialView extends View {
 	}
 
 	public final void setMaxHeight(float maxHeight) {
-		if(areEqual(this.maxHeight,maxHeight)) { return; }
-		
+		if (areEqual(this.maxHeight, maxHeight)) {
+			return;
+		}
+
 		this.maxHeight = isNegativeDimensionsEnabled ? maxHeight : max(0, maxHeight);
 
 		if (this.maxHeight < minHeight) {
 			throw new IllegalArgumentException("max height cannot be lower than min height");
 		}
 
-		setHeight(min(this.maxHeight,height));
-	}
-
-	public final void setMaxHeight(SpatialView spatialView) {
-		setMaxHeight(requireNonNull(spatialView, "spatialView cannot be null").getMaxHeight());
+		setHeight(min(this.maxHeight, height));
 	}
 
 	public final void setMinSize(float minWidth, float minHeight) {
@@ -220,11 +196,6 @@ public abstract class SpatialView extends View {
 		setMinHeight(minSize);
 	}
 
-	public final void setMinSize(SpatialView spatialView) {
-		setMinWidth(requireNonNull(spatialView, "spatialView cannot be null"));
-		setMinHeight(spatialView);
-	}
-
 	public final void setMaxSize(float maxWidth, float maxHeight) {
 		setMaxWidth(maxWidth);
 		setMaxHeight(maxHeight);
@@ -235,11 +206,6 @@ public abstract class SpatialView extends View {
 		setMaxHeight(maxSize);
 	}
 
-	public final void setMaxSize(SpatialView spatialView) {
-		setMaxWidth(requireNonNull(spatialView, "spatialView cannot be null"));
-		setMaxHeight(spatialView);
-	}
-
 	public final void setMinMaxSize(float minSize, float maxSize) {
 		setMinSize(minSize);
 		setMaxSize(maxSize);
@@ -247,25 +213,6 @@ public abstract class SpatialView extends View {
 
 	public final void setMinMaxSize(float size) {
 		setMinMaxSize(size, size);
-	}
-
-	public final void setMinMaxSize(SpatialView spatialView) {
-		setMinSize(requireNonNull(spatialView, "spatialView cannot be null").getMinWidth(), spatialView.getMinHeight());
-		setMaxSize(spatialView.getMaxWidth(), spatialView.getMaxHeight());
-	}
-
-	public final void setBoundsProperty(SpatialView spatialView) {
-		setConstrainProperty(spatialView);
-		setBounds(spatialView);
-	}
-
-	public final void setConstrainProperty(SpatialView spatialView) {
-		setMinWidth(requireNonNull(spatialView, "spatialView cannot be null").getMinWidth());
-		setMinHeight(spatialView.getMinHeight());
-		setMaxWidth(spatialView.getMaxWidth());
-		setMaxHeight(spatialView.getMaxHeight());
-		setConstrainDimensionsEnabled(spatialView.isConstrainDimensionsEnabled());
-		setNegativeDimensionsEnabled(spatialView.isNegativeDimensionsEnabled());
 	}
 
 	public final boolean isConstrainDimensionsEnabled() {
@@ -322,6 +269,119 @@ public abstract class SpatialView extends View {
 		setSize(constrain(getWidth() + delta, min, max), constrain(getHeight() + delta, min, max));
 	}
 
+	public final HooksUpdateMode getHooksUpdateMode() {
+		return hooksUpdateMode;
+	}
+
+	public final void setHooksUpdateMode(HooksUpdateMode hooksUpdateMode) {
+		this.hooksUpdateMode = hooksUpdateMode;
+	}
+
+	public final void setXFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setX(other.getX());
+	}
+
+	public final void setYFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setY(other.getY());
+	}
+
+	public final void setHeightFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setHeight(other.getHeight());
+	}
+
+	public final void setWidthFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setWidth(other.getWidth());
+	}
+
+	public final void setPositionFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setPosition(other.getX(), other.getY());
+	}
+
+	public final void setSizeFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setSize(other.getWidth(), other.getHeight());
+	}
+
+	public final void setBoundsFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setBounds(other.getX(), other.getY(), other.getWidth(), other.getHeight());
+	}
+
+	public final void setMinWidthFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setMinWidth(other.getMinWidth());
+	}
+
+	public final void setMinHeightFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setMinHeight(other.getMinHeight());
+	}
+
+	public final void setMaxWidthFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setMaxWidth(other.getMaxWidth());
+	}
+
+	public final void setMaxHeightFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setMaxHeight(other.getMaxHeight());
+	}
+
+	public final void setMaxSizeFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setMaxWidthFrom(other);
+		setMaxHeightFrom(other);
+	}
+
+	public final void setMinSizeFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setMinWidthFrom(other);
+		setMinHeightFrom(other);
+	}
+
+	public final void setMinMaxSizeFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setMinSize(other.getMinWidth(), other.getMinHeight());
+		setMaxSize(other.getMaxWidth(), other.getMaxHeight());
+	}
+
+	public final void setSpatialConfingFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setConstrainConfingFrom(other);
+		setBoundsFrom(other);
+	}
+
+	public final void setConstrainConfingFrom(SpatialView other) {
+		checkSpatialViewObject(other);
+		
+		setMinWidth(other.getMinWidth());
+		setMinHeight(other.getMinHeight());
+		setMaxWidth(other.getMaxWidth());
+		setMaxHeight(other.getMaxHeight());
+		setConstrainDimensionsEnabled(other.isConstrainDimensionsEnabled());
+		setNegativeDimensionsEnabled(other.isNegativeDimensionsEnabled());
+	}
+
 	protected void onChangePositions() {
 	}
 
@@ -363,12 +423,8 @@ public abstract class SpatialView extends View {
 	private static boolean areEqual(float firstValue, float secondValue) {
 		return abs(firstValue - secondValue) < EPSILON;
 	}
-	
-	static int hooksCount = 0;
-	// 106 times
-	// 7 times
-	private void updateHooks() {
-		
+
+	private void hooksUpdate() {
 		if (isPosDirty || isDimDirty) {
 			onChangeBounds();
 			if (isPosDirty) {
@@ -377,15 +433,15 @@ public abstract class SpatialView extends View {
 			if (isDimDirty) {
 				onChangeDimensions();
 			}
-			hooksCount++;
-			System.out.println("hooks is updating: "+hooksCount+" times");
 			isPosDirty = isDimDirty = false;
 		}
 	}
 
-	private float getCorrectDimension(float currentValue, float newValue, float min, float max) { 
-		if(areEqual(currentValue, newValue)) { return currentValue; }
-		
+	private float getCorrectDimension(float currentValue, float newValue, float min, float max) {
+		if (areEqual(currentValue, newValue)) {
+			return currentValue;
+		}
+
 		float correctValue = currentValue;
 
 		float constrainedValue = constrain(newValue, min, max);
@@ -399,28 +455,46 @@ public abstract class SpatialView extends View {
 				correctValue = max(0, newValue);
 			}
 		}
-		
-//		if (isDimDirty = !areEqual(currentValue, correctValue)) {
-//			updateHooks();
-//		}
-		
+
 		isDimDirty = !areEqual(currentValue, correctValue);
-				
+
 		return correctValue;
 	}
 
 	private static float constrain(float value, float min, float max) {
-		if (value < min) {
-			return min;
-		}
-		if (value > max) {
-			return max;
-		}
-		return value;
+		return value < min ? min : value > max ? max : value;
+	}
+
+	private static float abs(float value) {
+		return value < 0 ? -value : value;
 	}
 
 	private void initDefaultMinMaxSize() {
 		minWidth = minHeight = DEFAULT_MIN_SIZE;
 		maxWidth = maxHeight = DEFAULT_MAX_SIZE;
 	}
+
+	private void checkSpatialViewObject(SpatialView other) {
+		if (other == this) {
+			throw new IllegalArgumentException("Cannot set property from itself");
+		}
+		requireNonNull(other, "other SpatialView cannot be null");
+	}
+
+	
+	public static enum HooksUpdateMode {
+		REACTIVE(0), FAST(16), NORMAL(32), SLOW(64), VERY_SLOW(128);
+
+		private final int ms;
+
+		HooksUpdateMode(int ms) {
+			this.ms = ms;
+		}
+
+		public int getMs() {
+			return ms;
+		}
+		
+	}
+	
 }

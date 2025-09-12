@@ -4,8 +4,8 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PConstants.CENTER;
 
 import microui.core.TextController;
-import microui.core.base.SpatialView;
 import microui.core.base.Container;
+import microui.core.base.SpatialView;
 import microui.core.style.Color;
 import microui.event.Callback;
 import microui.event.EventType;
@@ -118,8 +118,8 @@ public final class Tooltip extends SpatialView {
 			setPosition(constrain(ctx.mouseX+PADDING_X,0,ctx.width-getWidth()),constrain(ctx.mouseY,0,ctx.height-getHeight()));
 			
 			if(container != null) {
-				container.setPosition(this);
-				setSize(container);
+				container.setPositionFrom(this);
+				setSizeFrom(container);
 			} else {
 				setSize(text.getWidth(),text.getHeight());
 			}

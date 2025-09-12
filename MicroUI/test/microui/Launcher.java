@@ -83,9 +83,11 @@ public final class Launcher extends PApplet {
 		
 		menu.getComponentByTextId("settings").setColor(new Color(200,200,0));
 		
-		containerManager.setAnimationSpeed(500);
+		//containerManager.setAnimationSpeed(500);
+
+		menu.getComponentByTextId("start").onClick(() -> exit());
+		menu.getComponentByTextId("start").setVisible(false);
 		
-		containerManager.remove(settings);
 	}
 
 	@Override

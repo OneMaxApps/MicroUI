@@ -17,7 +17,7 @@ import microui.core.interfaces.Scrollable;
 import processing.event.MouseEvent;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 11.09.2025
+//Last Reviewed: 12.09.2025
 public final class ContainerManager extends View implements Scrollable, KeyPressable {
 	private final List<Container> containerList;
 	private final Animation animation;
@@ -245,7 +245,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		private int typeOfRandomSlide;
 		private boolean isStart, isNewContainerPrepared, isEasing;
 
-		public Animation() {
+		private Animation() {
 			super();
 			setVisible(true);
 			setSpeed(max(1, ctx.width * .2f));
@@ -256,7 +256,10 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		@Override
 		protected void render() {
 			if (isStart()) {
-				prevContainer.draw();
+				
+				if(prevContainer != null) {
+					prevContainer.draw();
+				}
 
 				switch (animationType) {
 				case SLIDE_LEFT:
@@ -382,7 +385,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 		void complete() {
 			prevContainer.setBounds(0,0,ctx.width,ctx.height);
-			currentContainer.setBounds(prevContainer);
+			currentContainer.setBoundsFrom(prevContainer);
 			setStart(false);
 			isNewContainerPrepared = false;
 		}
