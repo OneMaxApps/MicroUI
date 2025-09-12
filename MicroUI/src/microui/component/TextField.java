@@ -305,17 +305,6 @@ public final class TextField extends Component implements KeyPressable {
 		updateScrollMax();
 		cursor.column.updatePositionX();
 	}
-	
-	public void setStyle(final TextField otherTextField) {
-		super.setStyle(otherTextField);
-		text.color.set(otherTextField.text.color);
-		cursor.color.set(otherTextField.cursor.color);
-		selection.color.set(otherTextField.selection.color);
-		
-		text.font.set(otherTextField.text.font.get());
-		text.size.set(otherTextField.text.size.get());
-		
-	}
 
 	public final class Text extends TextController {
 		private final Color color;

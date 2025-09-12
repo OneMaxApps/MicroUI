@@ -10,6 +10,7 @@ import microui.core.base.SpatialView;
 import microui.core.base.View;
 import microui.core.style.Color;
 
+@Deprecated
 public final class Shadow extends View {
 	  private final Color color;
 	  private final SpatialView bounds;
@@ -39,21 +40,13 @@ public final class Shadow extends View {
 	    	  ctx.stroke(color.get(),constrain(164-i*20,0,255));
 	    	  ctx.noFill();
 	    	  ctx.rectMode(CORNERS);
-	    	  /*
-	    	  if(bounds instanceof Layout) {
-    			  ctx.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
-	    		  bounds.getY()-map(i,0f,absoluteSize,0f,upSize),
-	    		  bounds.getX()+bounds.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
-	    		  bounds.getY()+bounds.getHeight()+map(i,0f,absoluteSize,0f,downSize));
-    		  } else {*/
-		    	  if(bounds instanceof SpatialView) {
-		    		 ctx.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
-		             bounds.getY()-map(i,0f,absoluteSize,0f,upSize),
-		             bounds.getX()+bounds.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
-		             bounds.getY()+bounds.getHeight()+map(i,0f,absoluteSize,0f,downSize),leftSize,upSize,rightSize,downSize);
-		    	  } 
-	    		  
-	    	  //}
+	    	  if(bounds instanceof SpatialView) {
+	    		 ctx.rect(bounds.getX()-map(i,0f,absoluteSize,0f,leftSize),
+	             bounds.getY()-map(i,0f,absoluteSize,0f,upSize),
+	             bounds.getX()+bounds.getWidth()+map(i,0f,absoluteSize,0f,rightSize),
+	             bounds.getY()+bounds.getHeight()+map(i,0f,absoluteSize,0f,downSize),leftSize,upSize,rightSize,downSize);
+	    	  } 
+
 	      }
 	      ctx.popStyle();
 	    }
@@ -61,16 +54,6 @@ public final class Shadow extends View {
 	  
       public final Color getColor() {
 	  	return color;
-	  }
-
-	  public void setStyle(Shadow shadow) {
-		  requireNonNull(shadow, "shadow cannot be null");
-		  color.set(shadow.color);  
-		  leftSize = shadow.leftSize;
-		  rightSize = shadow.rightSize;
-		  upSize = shadow.upSize;
-		  downSize = shadow.downSize;
-		  absoluteSize = shadow.absoluteSize;
 	  }
 	  
 	  public void set(float left, float up, float right, float down) {

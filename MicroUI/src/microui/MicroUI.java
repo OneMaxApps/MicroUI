@@ -3,9 +3,9 @@ package microui;
 import processing.core.PApplet;
 
 // Status: STABLE - Do not modify
-// Last Reviewed: 01.06.2025
+// Last Reviewed: 12.09.2025
 public final class MicroUI {
-	private static PApplet app;
+	private static PApplet ctx;
 	
 	private static final int MAJOR = 2;
 	private static final int MINOR = 0;
@@ -17,14 +17,14 @@ public final class MicroUI {
 	
 	private MicroUI() {}
 
-	public static final void setContext(PApplet applet) {
-		if(applet != null && MicroUI.app == null) {
-			MicroUI.app = applet;
+	public static final void setContext(PApplet context) {
+		if(context != null && MicroUI.ctx == null) {
+			MicroUI.ctx = context;
 		}
 	}
 	
 	public static final PApplet getContext() {
-		return app;
+		return ctx;
 	}
 	
 	public static final String getVersion() {
@@ -35,8 +35,7 @@ public final class MicroUI {
 		return isDebugModeEnabled;
 	}
 
-	public static final void setDebugModeEnabled(boolean isDebugModeEnabled) {
+	public static final void setDebugModeEnabled(boolean isDebugModeEnabled) {	
 		MicroUI.isDebugModeEnabled = isDebugModeEnabled;
 	}
-	
 }

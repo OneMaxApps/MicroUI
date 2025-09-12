@@ -41,11 +41,6 @@ public class Button extends AbstractButton {
 		text.draw();
 	}
 
-	public void setStyle(Button otherButton) {
-		super.setStyle(requireNonNull(otherButton, "other button cannot be null"));
-		text.setText(otherButton.text.getText());
-	}
-
 	public final String getText() {
 		return text.getText();
 	}

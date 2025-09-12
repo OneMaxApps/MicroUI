@@ -1,5 +1,6 @@
 package microui.core.base;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.System.currentTimeMillis;
@@ -274,6 +275,7 @@ public abstract class SpatialView extends View {
 	}
 
 	public final void setHooksUpdateMode(HooksUpdateMode hooksUpdateMode) {
+		if(hooksUpdateMode == null) { throw new NullPointerException("hooksUpdateMode cannot be null"); }
 		this.hooksUpdateMode = hooksUpdateMode;
 	}
 
@@ -364,14 +366,14 @@ public abstract class SpatialView extends View {
 		setMaxSize(other.getMaxWidth(), other.getMaxHeight());
 	}
 
-	public final void setSpatialConfingFrom(SpatialView other) {
+	public final void setSpatialConfigFrom(SpatialView other) {
 		checkSpatialViewObject(other);
 		
-		setConstrainConfingFrom(other);
+		setConstrainConfigFrom(other);
 		setBoundsFrom(other);
 	}
 
-	public final void setConstrainConfingFrom(SpatialView other) {
+	public final void setConstrainConfigFrom(SpatialView other) {
 		checkSpatialViewObject(other);
 		
 		setMinWidth(other.getMinWidth());
@@ -425,6 +427,7 @@ public abstract class SpatialView extends View {
 	}
 
 	private void hooksUpdate() {
+		
 		if (isPosDirty || isDimDirty) {
 			onChangeBounds();
 			if (isPosDirty) {
@@ -465,20 +468,17 @@ public abstract class SpatialView extends View {
 		return value < min ? min : value > max ? max : value;
 	}
 
-	private static float abs(float value) {
-		return value < 0 ? -value : value;
-	}
-
 	private void initDefaultMinMaxSize() {
 		minWidth = minHeight = DEFAULT_MIN_SIZE;
 		maxWidth = maxHeight = DEFAULT_MAX_SIZE;
 	}
 
 	private void checkSpatialViewObject(SpatialView other) {
+		requireNonNull(other, "other SpatialView cannot be null");
+		
 		if (other == this) {
 			throw new IllegalArgumentException("Cannot set property from itself");
 		}
-		requireNonNull(other, "other SpatialView cannot be null");
 	}
 
 	

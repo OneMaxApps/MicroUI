@@ -24,7 +24,7 @@ import microui.event.Listener;
 import microui.feedback.Tooltip;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 08.09.2025
+//Last Reviewed: 12.09.2025
 public abstract class Component extends SpatialView {
 	private Color color;
 	private Event event;
@@ -64,21 +64,15 @@ public abstract class Component extends SpatialView {
 		debugOnDraw();
 	}
 
-	public void setStyle(Component component) {
-		ensureColor();
-		color.set(requireNonNull(component, "component cannot be null").getColor());
-		copyPaddingFrom(component);
-		copyMarginFrom(component);
-	}
-
 	public final Color getColor() {
 		ensureColor();
 		return new Color(color);
 	}
 
-	public final void setColor(Color color) {
+	public final Component setColor(Color color) {
 		ensureColor();
 		this.color.set(requireNonNull(color, "color cannot be null"));
+		return this;
 	}
 
 	public final boolean isClicked() {
@@ -121,87 +115,104 @@ public abstract class Component extends SpatialView {
 		return event.holding();
 	}
 
-	public final void onClick(Listener listener) {
+	public final Component onClick(Listener listener) {
 		ensureCallback();
 		callback.addListener(CLICK, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onDoubleClick(Listener listener) {
+	public final Component onDoubleClick(Listener listener) {
 		ensureCallback();
 		callback.addListener(DOUBLE_CLICK, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onDragged(Listener listener) {
+	public final Component onDragged(Listener listener) {
 		ensureCallback();
 		callback.addListener(DRAGGED, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onDragging(Listener listener) {
+	public final Component onDragging(Listener listener) {
 		ensureCallback();
 		callback.addListener(DRAGGING, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onHold(Listener listener) {
+	public final Component onHold(Listener listener) {
 		ensureCallback();
 		callback.addListener(HOLD_START, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onMouseInside(Listener listener) {
+	public final Component onMouseInside(Listener listener) {
 		ensureCallback();
 		callback.addListener(MOUSE_INSIDE, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onMouseInsideLong(Listener listener) {
+	public final Component onMouseInsideLong(Listener listener) {
 		ensureCallback();
 		callback.addListener(MOUSE_INSIDE_LONG, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onMouseOutside(Listener listener) {
+	public final Component onMouseOutside(Listener listener) {
 		ensureCallback();
 		callback.addListener(MOUSE_OUTSIDE, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onLongPress(Listener listener) {
+	public final Component onLongPress(Listener listener) {
 		ensureCallback();
 		callback.addListener(LONG_PRESSED, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onPress(Listener listener) {
+	public final Component onPress(Listener listener) {
 		ensureCallback();
 		callback.addListener(PRESS, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onRelease(Listener listener) {
+	public final Component onRelease(Listener listener) {
 		ensureCallback();
 		callback.addListener(RELEASE, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onHoldEnd(Listener listener) {
+	public final Component onHoldEnd(Listener listener) {
 		ensureCallback();
 		callback.addListener(HOLD_END, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void onShake(Listener listener) {
+	public final Component onShake(Listener listener) {
 		ensureCallback();
 		callback.addListener(SHAKE, requireNonNull(listener, "listener cannot be null"));
+		return this;
 	}
 
-	public final void setPadding(float left, float right, float top, float bottom) {
+	public final Component setPadding(float left, float right, float top, float bottom) {
 		ensurePadding();
 		padding.setPadding(left, right, top, bottom);
+		return this;
 	}
 
-	public final void setPadding(float paddingHorizontal, float paddingVertical) {
+	public final Component setPadding(float paddingHorizontal, float paddingVertical) {
 		setPadding(paddingHorizontal, paddingHorizontal, paddingVertical, paddingVertical);
+		return this;
 	}
 
-	public final void setPadding(float padding) {
+	public final Component setPadding(float padding) {
 		setPadding(padding, padding);
+		return this;
 	}
 
-	public final void copyPaddingFrom(Component otherComponent) {
+	public final Component copyPaddingFrom(Component otherComponent) {
 		setPadding(requireNonNull(otherComponent, "other component cannot be null").getPaddingLeft(),
 				otherComponent.getPaddingRight(), otherComponent.getPaddingTop(), otherComponent.getPaddingBottom());
+		return this;
 	}
 
 	public final float getPaddingLeft() {
@@ -249,13 +260,15 @@ public abstract class Component extends SpatialView {
 		return padding.isEnabled();
 	}
 
-	public final void setPaddingEnabled(boolean isEnabled) {
+	public final Component setPaddingEnabled(boolean isEnabled) {
 		ensurePadding();
 		padding.setEnabled(isEnabled);
+		return this;
 	}
 
-	public final void resetPadding() {
+	public final Component resetPadding() {
 		setPadding(0);
+		return this;
 	}
 
 	public final boolean hasPadding() {
@@ -286,48 +299,57 @@ public abstract class Component extends SpatialView {
 		return margin.getBottom();
 	}
 
-	public final void setMarginLeft(float left) {
+	public final Component setMarginLeft(float left) {
 		ensureMargin();
 		margin.setLeft(left);
+		return this;
 	}
 
-	public final void setMarginRight(float right) {
+	public final Component setMarginRight(float right) {
 		ensureMargin();
 		margin.setRight(right);
+		return this;
 	}
 
-	public final void setMarginTop(float top) {
+	public final Component setMarginTop(float top) {
 		ensureMargin();
 		margin.setTop(top);
+		return this;
 	}
 
-	public final void setMarginBottom(float bottom) {
+	public final Component setMarginBottom(float bottom) {
 		ensureMargin();
 		margin.setBottom(bottom);
+		return this;
 	}
 
-	public final void setMargin(float left, float right, float top, float bottom) {
+	public final Component setMargin(float left, float right, float top, float bottom) {
 		setMarginLeft(left);
 		setMarginRight(right);
 		setMarginTop(top);
 		setMarginBottom(bottom);
+		return this;
 	}
 
-	public final void setMargin(float marginHorizontal, float marginVertical) {
+	public final Component setMargin(float marginHorizontal, float marginVertical) {
 		setMargin(marginHorizontal, marginHorizontal, marginVertical, marginVertical);
+		return this;
 	}
 
-	public final void setMargin(float margin) {
+	public final Component setMargin(float margin) {
 		setMargin(margin, margin);
+		return this;
 	}
 
-	public final void copyMarginFrom(Component otherComponent) {
+	public final Component copyMarginFrom(Component otherComponent) {
 		setMargin(requireNonNull(otherComponent, "other component cannot be null").getMarginLeft(),
 				otherComponent.getMarginRight(), otherComponent.getMarginTop(), otherComponent.getMarginBottom());
+		return this;
 	}
 
-	public final void resetMargin() {
+	public final Component resetMargin() {
 		setMargin(0);
+		return this;
 	}
 
 	public final boolean isMarginEnabled() {
@@ -337,9 +359,10 @@ public abstract class Component extends SpatialView {
 		return margin.isEnabled();
 	}
 
-	public final void setMarginEnabled(boolean isEnabled) {
+	public final Component setMarginEnabled(boolean isEnabled) {
 		ensureMargin();
 		margin.setEnabled(isEnabled);
+		return this;
 	}
 
 	public final boolean hasMargin() {
@@ -366,7 +389,6 @@ public abstract class Component extends SpatialView {
 		return isMarginEnabled() ? getHeight() + getMarginTop() + getMarginBottom() : getHeight();
 	}
 
-	// Demo settings///////////////////////////
 	public final void setAbsoluteX(float x) {
 		setX(x + getMarginLeft());
 	}
@@ -397,16 +419,16 @@ public abstract class Component extends SpatialView {
 		setAbsoluteSize(width, height);
 		setAbsolutePosition(x, y);
 	}
-	///////////////////////////////////////////
 
 	public final String getTooltipText() {
 		return tooltip == null ? "" : tooltip.getText().getAsString();
 	}
 
-	public final void setTooltipText(String text) {
+	public final Component setTooltipText(String text) {
 		ensureTooltip();
 
 		tooltip.getText().set(requireNonNull(text, "text cannot be null"));
+		return this;
 	}
 
 	public final boolean isTooltipEnabled() {
@@ -414,9 +436,10 @@ public abstract class Component extends SpatialView {
 		return tooltip.isEnabled();
 	}
 
-	public final void setTooltipEnabled(boolean enabled) {
+	public final Component setTooltipEnabled(boolean enabled) {
 		ensureTooltip();
 		tooltip.setEnabled(enabled);
+		return this;
 	}
 
 	public final Color getTooltipColor() {
@@ -424,9 +447,10 @@ public abstract class Component extends SpatialView {
 		return tooltip.getColor();
 	}
 
-	public final void setTooltipColor(Color color) {
+	public final Component setTooltipColor(Color color) {
 		ensureTooltip();
 		tooltip.setColor(requireNonNull(color, "color cannot be null"));
+		return this;
 	}
 
 	public final Color getTooltipTextColor() {
@@ -434,19 +458,22 @@ public abstract class Component extends SpatialView {
 		return tooltip.getText().getColor();
 	}
 
-	public final void setTooltipTextColor(Color color) {
+	public final Component setTooltipTextColor(Color color) {
 		ensureTooltip();
 		tooltip.getText().setColor(requireNonNull(color, "color cannot be null"));
+		return this;
 	}
 
-	protected final void setTooltipAdditionalCondition(boolean condition) {
+	protected final Component setTooltipAdditionalCondition(boolean condition) {
 		ensureTooltip();
 		tooltip.setAdditionalCondition(condition);
+		return this;
 	}
 
-	protected final void setEventListener(SpatialView bounds) {
+	protected final Component setEventListener(SpatialView bounds) {
 		ensureEvent();
 		event.setListener(requireNonNull(bounds, "bounds cannot be null"));
+		return this;
 	}
 
 	protected final Event getMutableEvent() {
@@ -454,9 +481,10 @@ public abstract class Component extends SpatialView {
 		return event;
 	}
 
-	protected final void setCallbackListener(SpatialView bounds) {
+	protected final Component setCallbackListener(SpatialView bounds) {
 		ensureCallback();
 		callback.setListener(requireNonNull(bounds, "bounds cannot be null"));
+		return this;
 	}
 
 	protected final Color getMutableColor() {
