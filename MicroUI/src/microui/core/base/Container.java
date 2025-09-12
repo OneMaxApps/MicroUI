@@ -15,7 +15,6 @@ import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
 import microui.event.Listener;
-import microui.layout.GridLayout;
 import microui.layout.LayoutManager;
 import microui.layout.LayoutParams;
 import processing.core.PImage;
@@ -31,12 +30,11 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		super(x, y, width, height);
 		setVisible(true);
 		setNegativeDimensionsEnabled(false);
-		setConstrainDimensionsEnabled(true);
+		setConstrainDimensionsEnabled(false);
 		setPaddingEnabled(true);
 		setMarginEnabled(true);
-		setMaxSize(width, height);
-		setMinSize(1);
-
+		setMinMaxSize(1,1,width,height);
+		
 		getMutableColor().set(255, 0);
 
 		componentEntryList = new ArrayList<ComponentEntry>();
@@ -91,14 +89,14 @@ public final class Container extends Component implements KeyPressable, Scrollab
 	public Component getComponentById(final int id) {
 		return componentEntryList.stream().map(entry -> (Component) entry.getComponent())
 				.filter(component -> component.getId() == id).findFirst()
-				.orElseThrow(() -> new RuntimeException("component with id: " + id + " is not found in to Container"));
+				.orElseThrow(() -> new RuntimeException("component with id: " + id + " is not found in to this Container"));
 	}
 
 	public Component getComponentByTextId(final String textId) {
 		return componentEntryList.stream().map(component -> (Component) component.getComponent())
 				.filter(component -> component.getTextId().equals(textId)).findFirst()
 				.orElseThrow(() -> new RuntimeException(
-						"component with text id: " + textId + " is not found in to Container"));
+						"component with text id: " + textId + " is not found in to this Container"));
 	}
 
 	public Container addComponent(Component component, LayoutParams layoutParams, int id) {
@@ -106,13 +104,12 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		component.setId(id);
 		return this;
 	}
-	
+
 	public Container addComponent(Component component, LayoutParams layoutParams, int id, Listener onClickListener) {
-		addComponent(component,layoutParams,id);
+		addComponent(component, layoutParams, id);
 		component.onClick(onClickListener);
 		return this;
 	}
-	
 
 	public Container addComponent(Component component, LayoutParams layoutParams, String textId) {
 		addComponentCorrect(component, layoutParams);
@@ -120,17 +117,18 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		return this;
 	}
 
-	public Container addComponent(Component component, LayoutParams layoutParams, String textId, Listener onClickListener) {
-		addComponent(component,layoutParams,textId);
+	public Container addComponent(Component component, LayoutParams layoutParams, String textId,
+			Listener onClickListener) {
+		addComponent(component, layoutParams, textId);
 		component.onClick(onClickListener);
 		return this;
 	}
-	
+
 	public Container addComponent(Component component, LayoutParams layoutParams) {
 		addComponentCorrect(component, layoutParams);
 		return this;
 	}
-	
+
 	public Container addComponent(Component component, LayoutParams layoutParams, Listener onClickListener) {
 		addComponentCorrect(component, layoutParams);
 		component.onClick(onClickListener);
@@ -147,8 +145,20 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		return this;
 	}
 
+	public Container removeComponentById(int id) {	
+		componentEntryList.removeIf(c -> c.getComponent().getId() == id);
+		return this;
+		
+	}
+	
+	public Container removeComponentByTextId(String textId) {
+		componentEntryList.removeIf(c -> c.getComponent().getTextId().equals(textId));
+		return this;
+	}
+
 	public void removeAllComponents() {
 		componentEntryList.clear();
+		
 	}
 
 	public List<ComponentEntry> getComponentEntryList() {
@@ -200,8 +210,9 @@ public final class Container extends Component implements KeyPressable, Scrollab
 	private void addComponentCorrect(Component component, LayoutParams layoutParams) {
 		if (isComponentNotNull(component) && isLayoutParamsNotNull(layoutParams)) {
 			if (isNotAddedComponent(component)) {
-				componentEntryList.add(new ComponentEntry(component, layoutParams));
-				layoutManager.onAddComponent();
+				ComponentEntry componentEntry = new ComponentEntry(component, layoutParams);
+				componentEntryList.add(componentEntry);
+				layoutManager.onAddComponent(componentEntry);
 				sortPriorityOfComponents();
 			}
 		}
@@ -226,24 +237,8 @@ public final class Container extends Component implements KeyPressable, Scrollab
 			ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());
 			ctx.popStyle();
 
-			debugLayoutOnDraw();
+			layoutManager.debugOnDraw();
 		}
-	}
-
-	private void debugLayoutOnDraw() {
-		ctx.pushStyle();
-		ctx.stroke(0, 128);
-		ctx.noFill();
-		if (layoutManager instanceof GridLayout grid) {
-			for (int col = 0; col < grid.getColumns(); col++) {
-				for (int row = 0; row < grid.getRows(); row++) {
-					ctx.rect(getContentX() + (getContentWidth() / grid.getColumns()) * col,
-							getContentY() + (getContentHeight() / grid.getRows()) * row,
-							getContentWidth() / grid.getColumns(), getContentHeight() / grid.getRows());
-				}
-			}
-		}
-		ctx.popStyle();
 	}
 
 	private boolean isComponentNotNull(Component component) {

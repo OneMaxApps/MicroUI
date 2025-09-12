@@ -1,11 +1,7 @@
 package microui;
 
-import static microui.service.ContainerManager.AnimationType.SLIDE_LEFT;
-import static microui.service.ContainerManager.AnimationType.SLIDE_RIGHT;
-
 import microui.component.Button;
 import microui.core.base.Container;
-import microui.core.style.Color;
 import microui.event.Event;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
@@ -45,24 +41,13 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void setup() {
-		MicroUI.setDebugModeEnabled(true);
+		//MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
-
+		
 		containerManager = new ContainerManager();
-		containerManager.add(new Container(new GridLayout(51, 91)), "first_container");
-		containerManager.add(new Container(new GridLayout(51, 91)), "second_container");
-
-		containerManager.getContainerByTextId("first_container").addComponent(new Button("go next").onClick(() -> containerManager.switchOn("second_container", SLIDE_LEFT)),
-				new GridLayoutParams(24, 41, 3, 3), "button_next");
-
-		containerManager.getContainerByTextId("second_container").addComponent(new Button("go back"),
-				new GridLayoutParams(24, 41, 3, 3), "button_back",
-				() -> containerManager.switchOn("first_container", SLIDE_RIGHT));
-
-		containerManager.getContainerByTextId("first_container")
-						.getComponentByTextId("button_next")
-						.setTooltipText("click")
-						.setColor(new Color(255,200,0));
+		containerManager.add(new Container(new GridLayout(9,5)).addComponent(new Button("go next").setPadding(10,20).onClick(() -> containerManager.switchOn(2)), new GridLayoutParams(3,2,3,1),1), 1);
+		containerManager.add(new Container(new GridLayout(9,5)).addComponent(new Button("go back").setPadding(10,20).onClick(() -> containerManager.switchOn(1)), new GridLayoutParams(3,2,3,1),2), 2);
+		
 	}
 
 	@Override

@@ -211,6 +211,13 @@ public abstract class SpatialView extends View {
 		setMinSize(minSize);
 		setMaxSize(maxSize);
 	}
+	
+	public final void setMinMaxSize(float minWidth, float minHeight, float maxWidth, float maxHeight) {
+		setMinWidth(minWidth);
+		setMinHeight(minHeight);
+		setMaxWidth(maxWidth);
+		setMaxHeight(maxHeight);
+	}
 
 	public final void setMinMaxSize(float size) {
 		setMinMaxSize(size, size);

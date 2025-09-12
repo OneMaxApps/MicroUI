@@ -5,7 +5,7 @@ import microui.core.base.Container.ComponentEntry;
 
 public final class GridLayout extends LayoutManager {
 	private int columns, rows;
-
+	
 	public GridLayout(int columns, int rows) {
 		super();
 		setColumns(columns);
@@ -13,15 +13,26 @@ public final class GridLayout extends LayoutManager {
 
 	}
 	
-	
+	@Override
+	public void debugOnDraw() {
+		ctx.pushStyle();
+		ctx.stroke(0, 128);
+		ctx.noFill();
+		for (int col = 0; col < columns; col++) {
+			for (int row = 0; row < rows; row++) {
+				ctx.rect(getContainer().getContentX() + (getContainer().getContentWidth() / columns) * col,
+						getContainer().getContentY() + (getContainer().getContentHeight() / rows) * row,
+						getContainer().getContentWidth() / columns, getContainer().getContentHeight() / rows);
+			}
+		}
+		ctx.popStyle();
+	}
 
 	@Override
-	protected void isCorrectParams() {
-		getComponentEntryList().forEach(entry -> {
-			if(!(entry.getLayoutParams() instanceof GridLayoutParams)) {
-				throw new RuntimeException("using not correct layout params for GridLayout");
-			}
-		});
+	protected void checkCorrectParams(LayoutParams layoutParams) {	
+		if(!(layoutParams instanceof GridLayoutParams)) {
+			throw new RuntimeException("using not correct layout params for GridLayout");
+		}
 	}
 
 	@Override
@@ -38,7 +49,7 @@ public final class GridLayout extends LayoutManager {
 			Component component = getComponentEntryList().get(i).getComponent();
 			GridLayoutParams params = (GridLayoutParams) getComponentEntryList().get(i).getLayoutParams();
 
-			checkIsOutOfGrid(params);
+			checkOutOfGrid(params);
 
 			float componentPreferredX = x + colWidth * params.getColumn();
 			float componentPreferredY = y + rowHeight * params.getRow();
@@ -73,16 +84,14 @@ public final class GridLayout extends LayoutManager {
 	}
 
 	@Override
-	public void onAddComponent() {
-		super.onAddComponent();
+	public void onAddComponent(ComponentEntry componentEntry) {
+		super.onAddComponent(componentEntry);
 		checkComponentsForOverlap();
-		isCorrectParams();
 	}
 
 	@Override
 	public void onRemoveComponent() {
 		super.onRemoveComponent();
-
 	}
 
 	public final int getColumns() {
@@ -107,7 +116,7 @@ public final class GridLayout extends LayoutManager {
 		this.rows = rows;
 	}
 
-	private void checkIsOutOfGrid(GridLayoutParams params) {
+	private void checkOutOfGrid(GridLayoutParams params) {
 		if (params.getColumn() + (params.getColumnSpan() - 1) >= getColumns()
 				|| (params.getRow() + params.getRowSpan() - 1) >= getRows()) {
 			throw new IndexOutOfBoundsException("component is out of grid layout");
