@@ -11,7 +11,6 @@ public final class Color {
 	private int red,green,blue,alpha;
 	
 	public Color(float red, float green, float blue, float alpha) {
-		super();
 		set(red, green, blue, alpha);
 		Metrics.register("Color");
 	}
@@ -63,14 +62,14 @@ public final class Color {
 	}
 	
 	public void setHEX(int hex) {
-		setAlpha(hex >> 24 & 0xFF);
 		setRed(hex >> 16 & 0xFF);
 		setGreen(hex >> 8 & 0xFF);
 		setBlue(hex & 0xFF);	
+		setAlpha(hex >> 24 & 0xFF);
 	}
 	
 	public int get() {
-		return (int) hexFromRGBA(red,green,blue,alpha);
+		return hexFromRGBA(red,green,blue,alpha);
 	}
 	
 	public static int hexFromRGBA(float red, float green, float blue, float alpha) {
