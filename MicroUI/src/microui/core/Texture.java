@@ -7,9 +7,9 @@ import microui.core.style.Color;
 import processing.core.PImage;
 
 // Status: Stable - Do not modify
-// Last Reviewed: 10.09.2025
+// Last Reviewed: 13.09.2025
 public class Texture extends SpatialView {
-	private Color color;
+	private final Color color;
 	private PImage image;
 	
 	public Texture() {
@@ -39,12 +39,12 @@ public class Texture extends SpatialView {
 	
 	public final void set(final PImage image) {
 		this.image = requireNonNull(image, "image cannot be null");
-		this.image.resize(ctx.width,ctx.height);
+		this.image.resize((int) getWidth(), (int) getHeight());
 	}
 	
 	public final void load(final String path) {
 		image = ctx.loadImage(requireNonNull(path, "path cannot be null"));
-		image.resize(ctx.width,ctx.height);
+		image.resize((int) getWidth(), (int) getHeight());
 	}
 	
 	public final PImage get() {
@@ -61,12 +61,8 @@ public class Texture extends SpatialView {
 
 	@Override
 	protected void onChangeDimensions() {
-		super.onChangeBounds();
+		super.onChangeDimensions();
 		if(image == null) { return; }
 		image.resize((int) getWidth(), (int) getHeight());
-		
 	}
-	
-	
-
 }

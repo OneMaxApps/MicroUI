@@ -62,7 +62,7 @@ public class Slider extends RangeControl {
 		onChangeBounds();
 	}
 
-	public final int getLevelStrokeWeight() {
+	public final float getLevelStrokeWeight() {
 		return level.stroke.getWeight();
 	}
 

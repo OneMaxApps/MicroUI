@@ -42,7 +42,7 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void setup() {
-		//MicroUI.setDebugModeEnabled(true);
+		MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
 		
 		containerManager = new ContainerManager();

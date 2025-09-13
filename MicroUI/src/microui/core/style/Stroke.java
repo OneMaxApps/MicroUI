@@ -6,6 +6,8 @@ import static processing.core.PConstants.SQUARE;
 import microui.util.Metrics;
 import processing.core.PGraphics;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 13.09.2025
 public final class Stroke {
 	private static final int DEFAULT_STROKE_WEIGHT = 2;
 	private final Color color;

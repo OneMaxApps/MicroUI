@@ -64,7 +64,7 @@ public abstract class AbstractButton extends Component {
 		hover.setEnabled(enabled);
 	}
 
-	public int getStrokeWeight() {
+	public float getStrokeWeight() {
 		return stroke.getWeight();
 	}
 
