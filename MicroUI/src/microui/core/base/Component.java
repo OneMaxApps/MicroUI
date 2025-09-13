@@ -45,8 +45,10 @@ public abstract class Component extends SpatialView {
 
 	@Override
 	public void draw() {
-		if (!isVisible()) { return; }
-		
+		if (!isVisible()) {
+			return;
+		}
+
 		super.draw();
 
 		if (event != null) {
@@ -410,11 +412,31 @@ public abstract class Component extends SpatialView {
 		setAbsoluteY(y);
 	}
 
+	/**
+	 * Resize using margin. this method can change real width and height but it's
+	 * don't ignore constrain system. Also this method can't modify margin
+	 * parameters
+	 * 
+	 * @param width  change real width with using margin
+	 * @param height change real height with using margin
+	 * 
+	 */
 	public final void setAbsoluteSize(float width, float height) {
 		setAbsoluteWidth(width);
 		setAbsoluteHeight(height);
 	}
 
+	/**
+	 * Change bounds using margin. this method can change real bounds, but it's
+	 * don't ignore constrain system. Also this method can't modify margin
+	 * parameters
+	 * 
+	 * @param x change position with margin left
+	 * @param y change position with margin top
+	 * @param width  change real width with using margin
+	 * @param height change real height with using margin
+	 * 
+	 */
 	public final void setAbsoluteBounds(float x, float y, float width, float height) {
 		setAbsoluteSize(width, height);
 		setAbsolutePosition(x, y);
@@ -582,9 +604,11 @@ public abstract class Component extends SpatialView {
 
 		public void setPadding(float left, float right, float top, float bottom) {
 			boolean hasChanges = isCorrectNewValue(this.left, left) || isCorrectNewValue(this.right, right)
-								 || isCorrectNewValue(this.top, top) || isCorrectNewValue(this.bottom, bottom);
+					|| isCorrectNewValue(this.top, top) || isCorrectNewValue(this.bottom, bottom);
 
-			if(!hasChanges) { return; }
+			if (!hasChanges) {
+				return;
+			}
 
 			this.left = left;
 			this.right = right;

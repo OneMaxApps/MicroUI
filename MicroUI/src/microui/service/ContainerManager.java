@@ -157,7 +157,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	}
 
 	public Container getContainerByTextId(String textId) {
-		return containerList.stream().filter(container -> container.getTextId() == textId).findFirst()
+		return containerList.stream().filter(container -> container.getTextId().equals(textId)).findFirst()
 				.orElseThrow(() -> new RuntimeException("container is not found"));
 	}
 

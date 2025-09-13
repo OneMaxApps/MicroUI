@@ -1,8 +1,8 @@
 package microui;
 
 import microui.component.Button;
+import microui.constants.ContainerMode;
 import microui.core.base.Container;
-import microui.core.style.Color;
 import microui.event.Event;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
@@ -46,10 +46,8 @@ public final class Launcher extends PApplet {
 		MicroUI.setContext(this);
 		
 		containerManager = new ContainerManager();
-		containerManager.add(new Container(new GridLayout(9,5)).addComponent(new Button("go next").setPadding(10,20).onClick(() -> containerManager.switchOn(2)), new GridLayoutParams(3,2,3,1),1), 1);
-		containerManager.add(new Container(new GridLayout(9,5)).addComponent(new Button("go back").setPadding(10,20).onClick(() -> containerManager.switchOn(1)), new GridLayoutParams(3,2,3,1),2), 2);
-		containerManager.getContainerById(1).getComponentById(1).setColor(new Color(200));
-		containerManager.getContainerById(1).setColor(new Color(255,0,0,100));
+		containerManager.add(new Container(new GridLayout(3,3)).setContainerMode(ContainerMode.STRICT).addComponent(new Button("go next"), new GridLayoutParams(0,1, 3,1)),1);
+
 	}
 
 	@Override
@@ -57,6 +55,10 @@ public final class Launcher extends PApplet {
 		background(200);
 
 		containerManager.draw();
+		
+		if(mouseButton == RIGHT) {
+			containerManager.getContainerById(1).setSize(mouseX,mouseY);
+		}
 
 		GlobalTooltip.draw();
 	}

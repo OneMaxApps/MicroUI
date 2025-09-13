@@ -169,17 +169,22 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		return containerMode;
 	}
 
-	public final void setContainerMode(ContainerMode containerMode) {
+	public final Container setContainerMode(ContainerMode containerMode) {
+		if (containerMode == null) {
+			throw new NullPointerException("containerMode cannot be null");
+		}
+		
 		if (this.containerMode == containerMode) {
-			return;
+			return this;
 		}
 
 		this.containerMode = containerMode;
 
 		requestUpdate();
 
-		layoutManager.recalculate();
-
+		// not need here because it's calling inside to onChangeBounds()
+		// layoutManager.recalculate();
+		return this;
 	}
 
 	public void setBackgroundImage(PImage image) {
@@ -303,6 +308,14 @@ public final class Container extends Component implements KeyPressable, Scrollab
 
 		private ComponentEntry(Component component, LayoutParams layoutParams) {
 			super();
+			if(component == null) {
+				throw new NullPointerException("component cannot be null");
+			}
+			
+			if(layoutParams == null) {
+				throw new NullPointerException("layoutParams cannot be null");
+			}
+			
 			this.component = component;
 			this.layoutParams = layoutParams;
 		}
