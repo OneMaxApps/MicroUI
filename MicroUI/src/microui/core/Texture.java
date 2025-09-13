@@ -30,7 +30,7 @@ public class Texture extends SpatialView {
 		if (isLoaded()) {
 			ctx.pushStyle();
 			ctx.tint(color.get());
-			ctx.image(image, getX(), getY());
+			ctx.image(image, getX(), getY(),getWidth(),getHeight());
 			ctx.popStyle();
 		}
 	}
@@ -41,12 +41,12 @@ public class Texture extends SpatialView {
 
 	public final void set(final PImage image) {
 		this.image = requireNonNull(image, "image cannot be null");
-		updateDimensionsOfImageCorrect(this);
+		updateDimensionsOfImageCorrect(image);
 	}
 
 	public final void load(final String path) {
 		image = ctx.loadImage(requireNonNull(path, "path cannot be null"));
-		updateDimensionsOfImageCorrect(this);
+		updateDimensionsOfImageCorrect(image);
 	}
 
 	public final PImage get() {
@@ -61,14 +61,7 @@ public class Texture extends SpatialView {
 		this.color.set(requireNonNull(color, "color cannot be null"));
 	}
 
-	@Override
-	protected void onChangeDimensions() {
-		super.onChangeDimensions();
-		updateDimensionsOfImageCorrect(this);
-	}
-
-	private static final void updateDimensionsOfImageCorrect(Texture texture) {
-		if(texture == null || texture.get() == null) { return; }
-		texture.get().resize((int) max(1,texture.getWidth()) , (int) max(1,texture.getHeight()));
+	private static final void updateDimensionsOfImageCorrect(PImage texture) {
+		texture.resize((int) max(1,ctx.width) , (int) max(1,ctx.height));
 	}
 }
