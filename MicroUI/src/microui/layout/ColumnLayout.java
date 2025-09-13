@@ -4,7 +4,26 @@ import microui.core.base.Component;
 import microui.core.base.Container.ComponentEntry;
 
 public final class ColumnLayout extends LayoutManager {
+	private static final float EPSILON = .01f;
 	private static final float TOTAL_WEIGHT = 1.0f;
+
+	
+	
+	@Override
+	public void onAddComponent(ComponentEntry componentEntry) {
+		super.onAddComponent(componentEntry);
+		
+		float usedWeight = 0;
+		
+		for (ComponentEntry entry : getComponentEntryList()) {
+			ColumnLayoutParams params = (ColumnLayoutParams) entry.getLayoutParams();
+			usedWeight += params.getWeight();
+		}
+		
+		if(usedWeight > TOTAL_WEIGHT && usedWeight-TOTAL_WEIGHT > EPSILON) {
+			throw new IllegalStateException("weight limit out of bounds in ColumnLayout");
+		}
+	}
 
 	@Override
 	public void recalculate() {
@@ -23,7 +42,7 @@ public final class ColumnLayout extends LayoutManager {
 
 			switch (getContainer().getContainerMode()) {
 
-			case STRICT:
+			case IGNORE_CONSTRAINTS:
 				component.setConstrainDimensionsEnabled(false);
 				component.setAbsolutePosition(containerContentX, containerContentY+usedHeight);
 				component.setAbsoluteWidth(containerContentW);
@@ -31,7 +50,7 @@ public final class ColumnLayout extends LayoutManager {
 				
 				break;
 				
-			case FLEXIBLE:
+			case RESPECT_CONSTRAINTS:
 				float alignXLeft = containerContentX;
 				float alignXCenter = containerContentX+containerContentW/2-component.getAbsoluteWidth()/2;
 				float alignXRight = containerContentX+containerContentW-component.getAbsoluteWidth();
@@ -46,10 +65,6 @@ public final class ColumnLayout extends LayoutManager {
 			}
 			
 			usedWeight += params.getWeight();
-			
-			if (usedWeight > TOTAL_WEIGHT) {
-				throw new IllegalStateException("weight limit out of bounds in ColumnLayout");
-			}
 		}
 
 	}
