@@ -7,7 +7,7 @@ import microui.util.Metrics;
 public final class Stroke {
 	private static final int SQUARE = 1;
 	private final Color color;
-	private int weight;
+	private short weight;
 
 	public Stroke() {
 		Metrics.register("Stroke");
@@ -22,14 +22,14 @@ public final class Stroke {
 		getContext().strokeWeight(weight);
 	}
 
-	public void setWeight(final int size) {
+	public void setWeight(short weight) {
 		if(weight <= 0) {
 			throw new IllegalArgumentException("stroke weight cannot be lower than 1");
 		}
-		this.weight = size;
+		this.weight = (short) weight;
 	}
 
-	public int getWeight() {
+	public short getWeight() {
 		return weight;
 	}
 
