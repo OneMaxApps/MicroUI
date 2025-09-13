@@ -1,24 +1,19 @@
 package microui.core.style;
 
-import static processing.core.PApplet.constrain;
+import static java.util.Objects.requireNonNull;
+import static microui.MicroUI.getContext;
 
-import microui.MicroUI;
 import microui.util.Metrics;
 import processing.core.PGraphics;
 
-public class Color {
+public final class Color {
 	public static final int MIN_VALUE = 0, MAX_VALUE = 255;
-	private float red,green,blue,alpha;
+	private short red,green,blue,alpha;
 	
 	public Color(float red, float green, float blue, float alpha) {
 		super();
+		set(red, green, blue, alpha);
 		Metrics.register("Color");
-		
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
-		this.alpha = alpha;
-		
 	}
 	
 	public Color(float red, float green, float blue) {
@@ -33,26 +28,23 @@ public class Color {
 		this(gray,gray,gray,MAX_VALUE);
 	}
 	
-	public Color(final Color color) {
-		this(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+	public Color(Color color) {
+		this(requireNonNull(color, "color cannot be null").getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
 	}
 	
 	public Color() {
-		this(128,MAX_VALUE);
+		this(128);
 	}
 	
 	public void set(float red, float green, float blue, float alpha) {
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
-		this.alpha = alpha;
+		this.red   = constrain(red,MIN_VALUE,MAX_VALUE);
+		this.green = constrain(green,MIN_VALUE,MAX_VALUE);
+		this.blue  = constrain(blue,MIN_VALUE,MAX_VALUE);
+		this.alpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
 	}
 	
 	public void set(float red, float green, float blue) {
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
-		alpha = 255;
+		set(red,green,blue,MAX_VALUE);
 	}
 	
 	public void set(float gray, float alpha) {
@@ -60,14 +52,14 @@ public class Color {
 	}
 	
 	public void set(float gray) {
-		set(gray,255);
+		set(gray,MAX_VALUE);
 	}
 	
 	public void set(Color color) {
 		if(color == null) {
-			throw new NullPointerException("Color cannot be null");
+			throw new NullPointerException("color cannot be null");
 		}
-		setHEX(color.get());
+		set(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
 	}
 	
 	public void setHEX(int hex) {
@@ -77,15 +69,15 @@ public class Color {
 		setBlue(hex & 0xFF);	
 	}
 	
-	public int get() {
-		return hexFromRGBA(red,green,blue,alpha);
+	public short get() {
+		return (short) hexFromRGBA(red,green,blue,alpha);
 	}
 	
 	public static int hexFromRGBA(float red, float green, float blue, float alpha) {
-		return (int) alpha << 24 | (int) red << 16 | (int) green << 8 | (int) blue;
+		return (short) alpha << 24 | (short) red << 16 | (short) green << 8 | (short) blue;
 	}
 
-	public final float getRed() {
+	public final short getRed() {
 		return red;
 	}
 
@@ -93,7 +85,7 @@ public class Color {
 		this.red = constrain(red,MIN_VALUE,MAX_VALUE);
 	}
 
-	public final float getGreen() {
+	public final short getGreen() {
 		return green;
 	}
 
@@ -101,7 +93,7 @@ public class Color {
 		this.green = constrain(green,MIN_VALUE,MAX_VALUE);
 	}
 
-	public final float getBlue() {
+	public final short getBlue() {
 		return blue;
 	}
 
@@ -109,7 +101,7 @@ public class Color {
 		this.blue = constrain(blue,MIN_VALUE,MAX_VALUE);
 	}
 
-	public final float getAlpha() {
+	public final short getAlpha() {
 		return alpha;
 	}
 
@@ -118,12 +110,19 @@ public class Color {
 	}
 	
 	public void apply() {
-		MicroUI.getContext().fill(get());
+		getContext().fill(red,green,blue,alpha);
 	}
 	
-	public void apply(PGraphics pg) {
-		pg.fill(get());
+	public void apply(PGraphics pGraphics) {
+		if(pGraphics == null) {
+			throw new NullPointerException("pGraphics cannot be null in setter for color");
+		}
+		pGraphics.fill(red,green,blue,alpha);
 	}
 
 	public boolean isTransparent() { return (int) alpha == 0; }
+	
+	private static short constrain(float value, float min, float max) {
+		return (short) (value < min ? min : value > max ? max : value);
+	}
 }

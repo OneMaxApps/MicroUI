@@ -433,8 +433,7 @@ public abstract class SpatialView extends View {
 		return abs(firstValue - secondValue) < EPSILON;
 	}
 
-	private void hooksUpdate() {
-		
+	private void hooksUpdate() {	
 		if (isPosDirty || isDimDirty) {
 			onChangeBounds();
 			if (isPosDirty) {
