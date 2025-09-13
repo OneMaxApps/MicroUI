@@ -73,7 +73,12 @@ public final class Color {
 	}
 	
 	public static int hexFromRGBA(float red, float green, float blue, float alpha) {
-		return (int) alpha << 24 | (int) red << 16 | (int) green << 8 | (int) blue;
+		int tmpRed   = constrain(red,MIN_VALUE,MAX_VALUE);
+		int tmpGreen = constrain(green,MIN_VALUE,MAX_VALUE);
+		int tmpBlue  = constrain(blue,MIN_VALUE,MAX_VALUE);
+		int tmpAlpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
+		
+		return tmpAlpha << 24 | tmpRed << 16 | tmpGreen << 8 |  tmpBlue;
 	}
 
 	public int getRed() {
