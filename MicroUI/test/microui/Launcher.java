@@ -4,8 +4,8 @@ import microui.component.Button;
 import microui.constants.ContainerMode;
 import microui.core.base.Container;
 import microui.event.Event;
-import microui.layout.GridLayout;
-import microui.layout.GridLayoutParams;
+import microui.layout.ColumnLayout;
+import microui.layout.ColumnLayoutParams;
 import microui.service.ContainerManager;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
@@ -46,8 +46,10 @@ public final class Launcher extends PApplet {
 		MicroUI.setContext(this);
 		
 		containerManager = new ContainerManager();
-		containerManager.add(new Container(new GridLayout(3,3)).setContainerMode(ContainerMode.STRICT).addComponent(new Button("go next"), new GridLayoutParams(0,1, 3,1)),1);
-
+		containerManager.add(new Container(new ColumnLayout()).setContainerMode(ContainerMode.FLEXIBLE), "container");
+		containerManager.getContainerByTextId("container").addComponent(new Button(), new ColumnLayoutParams(.1f,-1));
+		containerManager.getContainerByTextId("container").addComponent(new Button(), new ColumnLayoutParams(.1f,1));
+		
 	}
 
 	@Override
@@ -57,7 +59,7 @@ public final class Launcher extends PApplet {
 		containerManager.draw();
 		
 		if(mouseButton == RIGHT) {
-			containerManager.getContainerById(1).setSize(mouseX,mouseY);
+			containerManager.getContainerByTextId("container").setSize(mouseX,mouseY);
 		}
 
 		GlobalTooltip.draw();

@@ -31,7 +31,7 @@ public final class GridLayout extends LayoutManager {
 	@Override
 	protected void checkCorrectParams(LayoutParams layoutParams) {
 		if (!(layoutParams instanceof GridLayoutParams)) {
-			throw new RuntimeException("using not correct layout params for GridLayout");
+			throw new IllegalArgumentException("using not correct layout params for GridLayout");
 		}
 	}
 
@@ -97,11 +97,6 @@ public final class GridLayout extends LayoutManager {
 	public void onAddComponent(ComponentEntry componentEntry) {
 		super.onAddComponent(componentEntry);
 		checkComponentsForOverlap();
-	}
-
-	@Override
-	public void onRemoveComponent() {
-		super.onRemoveComponent();
 	}
 
 	public final int getColumns() {

@@ -11,11 +11,11 @@ public final class GridLayoutParams implements LayoutParams {
 		if(row < 0) {
 			throw new IllegalArgumentException("grid layout param: \"row\" cannot be less than zero");
 		}
-		if(columnSpan < 0) {
-			throw new IllegalArgumentException("grid layout param: \"columnSpan\" cannot be less than zero");
+		if(columnSpan < 1) {
+			throw new IllegalArgumentException("grid layout param: \"columnSpan\" cannot be less than 1");
 		}
-		if(rowSpan < 0) {
-			throw new IllegalArgumentException("grid layout param: \"rowSpan\" cannot be less than zero");
+		if(rowSpan < 1) {
+			throw new IllegalArgumentException("grid layout param: \"rowSpan\" cannot be less than 1");
 		}
 		
 		if(alignX < -1) {
