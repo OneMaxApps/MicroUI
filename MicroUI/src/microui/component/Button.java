@@ -13,7 +13,7 @@ public class Button extends AbstractButton {
 	public Button(String text, float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setConstrainDimensionsEnabled(true);
-		setMinMaxSize(10,10,140,60);
+		setMinMaxSize(10,10,60,60);
 		
 		this.text = new TextView(getContentX(), getContentY(), getContentWidth(), getContentHeight());
 		this.text.setAutoResizeModeEnabled(true);

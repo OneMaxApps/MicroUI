@@ -17,7 +17,7 @@ public final class GridLayout extends LayoutManager {
 	public void debugOnDraw() {
 		ctx.pushStyle();
 		ctx.stroke(0, 128);
-		ctx.noFill();
+		ctx.fill(200,0,0,32);
 		for (int col = 0; col < columns; col++) {
 			for (int row = 0; row < rows; row++) {
 				ctx.rect(getContainer().getContentX() + (getContainer().getContentWidth() / columns) * col,
