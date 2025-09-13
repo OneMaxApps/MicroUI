@@ -69,6 +69,6 @@ public class Texture extends SpatialView {
 
 	private static final void updateDimensionsOfImageCorrect(Texture texture) {
 		if(texture == null || texture.get() == null) { return; }
-		texture.get().resize((int) max(1,texture.getWidth()) , (int) max(1,(texture.getHeight()));
+		texture.get().resize((int) max(1,texture.getWidth()) , (int) max(1,texture.getHeight()));
 	}
 }
