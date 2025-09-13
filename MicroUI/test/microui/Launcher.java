@@ -46,9 +46,11 @@ public final class Launcher extends PApplet {
 		MicroUI.setContext(this);
 		
 		containerManager = new ContainerManager();
-		containerManager.add(new Container(new ColumnLayout()).setContainerMode(ContainerMode.FLEXIBLE), "container");
-		containerManager.getContainerByTextId("container").addComponent(new Button(), new ColumnLayoutParams(.1f,-1));
-		containerManager.getContainerByTextId("container").addComponent(new Button(), new ColumnLayoutParams(.1f,1));
+		containerManager.add(new Container(new ColumnLayout()).setContainerMode(ContainerMode.RESPECT_CONSTRAINTS), "container");
+
+		containerManager.getContainerByTextId("container").addComponent(new Button(), new ColumnLayoutParams(.1f));
+		containerManager.getContainerByTextId("container").addComponent(new Button().setMarginTop(50), new ColumnLayoutParams(.4f));
+		containerManager.getContainerByTextId("container").addComponent(new Button(), new ColumnLayoutParams(.1f));
 		
 	}
 

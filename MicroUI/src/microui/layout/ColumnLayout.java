@@ -20,7 +20,7 @@ public final class ColumnLayout extends LayoutManager {
 			usedWeight += params.getWeight();
 		}
 		
-		if(usedWeight > TOTAL_WEIGHT && usedWeight-TOTAL_WEIGHT > EPSILON) {
+		if(usedWeight-TOTAL_WEIGHT > EPSILON) {
 			throw new IllegalStateException("weight limit out of bounds in ColumnLayout");
 		}
 	}
@@ -71,7 +71,17 @@ public final class ColumnLayout extends LayoutManager {
 
 	@Override
 	public void debugOnDraw() {
-
+		ctx.pushStyle();
+		ctx.stroke(0);
+		ctx.noFill();
+		
+		getComponentEntryList().forEach(entry -> {
+			Component component = entry.getComponent();
+			ColumnLayoutParams params = (ColumnLayoutParams) entry.getLayoutParams();	
+			ctx.rect(getContainer().getContentX(),component.getAbsoluteY(),getContainer().getContentWidth(),getContainer().getContentHeight()*params.getWeight());
+		});
+		
+		ctx.popStyle();
 	}
 
 	@Override

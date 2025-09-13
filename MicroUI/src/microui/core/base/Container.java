@@ -1,7 +1,7 @@
 package microui.core.base;
 
 import static java.util.Objects.requireNonNull;
-import static microui.constants.ContainerMode.STRICT;
+import static microui.constants.ContainerMode.IGNORE_CONSTRAINTS;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +42,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		this.layoutManager = requireNonNull(layoutManager, "layout manager cannot be null");
 		layoutManager.setContainer(this);
 
-		setContainerMode(STRICT);
+		setContainerMode(IGNORE_CONSTRAINTS);
 
 	}
 

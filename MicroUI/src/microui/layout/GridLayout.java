@@ -57,13 +57,13 @@ public final class GridLayout extends LayoutManager {
 			float requiredCellHeight = rowHeight * params.getRowSpan();
 			
 			switch (getContainer().getContainerMode()) {
-			case STRICT:
+			case IGNORE_CONSTRAINTS:
 				component.setConstrainDimensionsEnabled(false);
 				component.setAbsoluteSize(requiredCellWidth, requiredCellHeight);
 				component.setAbsolutePosition(requiredCellX, requiredCellY);
 				break;
 
-			case FLEXIBLE:
+			case RESPECT_CONSTRAINTS:
 				// in this mode container not ignore constrains of component(s), so any changes
 				// may be not round into the cell
 				// setting absolute size can change real size of component but only if component

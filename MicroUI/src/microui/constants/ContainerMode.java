@@ -2,6 +2,6 @@ package microui.constants;
 
 public enum ContainerMode {
 
-	STRICT, FLEXIBLE;
+	IGNORE_CONSTRAINTS, RESPECT_CONSTRAINTS;
 	
 }
