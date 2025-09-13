@@ -29,7 +29,7 @@ import processing.event.MouseEvent;
 public final class Launcher extends PApplet {
 
 	ContainerManager containerManager;
-
+	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
@@ -42,13 +42,14 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void setup() {
-		MicroUI.setDebugModeEnabled(true);
+		//MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
 		
 		containerManager = new ContainerManager();
 		containerManager.add(new Container(new GridLayout(9,5)).addComponent(new Button("go next").setPadding(10,20).onClick(() -> containerManager.switchOn(2)), new GridLayoutParams(3,2,3,1),1), 1);
 		containerManager.add(new Container(new GridLayout(9,5)).addComponent(new Button("go back").setPadding(10,20).onClick(() -> containerManager.switchOn(1)), new GridLayoutParams(3,2,3,1),2), 2);
-		containerManager.getContainerById(1).getComponentById(1).setColor(new Color(0,0));
+		containerManager.getContainerById(1).getComponentById(1).setColor(new Color(200));
+		containerManager.getContainerById(1).setColor(new Color(255,0,0,100));
 	}
 
 	@Override

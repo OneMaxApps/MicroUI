@@ -6,6 +6,8 @@ import static microui.MicroUI.getContext;
 import microui.util.Metrics;
 import processing.core.PGraphics;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 13.09.2025
 public final class Color {
 	public static final int MIN_VALUE = 0, MAX_VALUE = 255;
 	private int red,green,blue,alpha;
