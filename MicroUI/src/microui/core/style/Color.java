@@ -69,14 +69,14 @@ public final class Color {
 	}
 	
 	public int get() {
-		return hexFromRGBA(red,green,blue,alpha);
+		return hexFromARGB(alpha,red,green,blue);
 	}
 	
-	public static int hexFromRGBA(float red, float green, float blue, float alpha) {
+	public static int hexFromARGB(float alpha, float red, float green, float blue) {
+		int tmpAlpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
 		int tmpRed   = constrain(red,MIN_VALUE,MAX_VALUE);
 		int tmpGreen = constrain(green,MIN_VALUE,MAX_VALUE);
 		int tmpBlue  = constrain(blue,MIN_VALUE,MAX_VALUE);
-		int tmpAlpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
 		
 		return tmpAlpha << 24 | tmpRed << 16 | tmpGreen << 8 |  tmpBlue;
 	}
