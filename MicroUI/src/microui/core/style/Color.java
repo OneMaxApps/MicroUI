@@ -8,7 +8,7 @@ import processing.core.PGraphics;
 
 public final class Color {
 	public static final int MIN_VALUE = 0, MAX_VALUE = 255;
-	private short red,green,blue,alpha;
+	private int red,green,blue,alpha;
 	
 	public Color(float red, float green, float blue, float alpha) {
 		super();
@@ -69,43 +69,43 @@ public final class Color {
 		setBlue(hex & 0xFF);	
 	}
 	
-	public short get() {
-		return (short) hexFromRGBA(red,green,blue,alpha);
+	public int get() {
+		return (int) hexFromRGBA(red,green,blue,alpha);
 	}
 	
 	public static int hexFromRGBA(float red, float green, float blue, float alpha) {
-		return (short) alpha << 24 | (short) red << 16 | (short) green << 8 | (short) blue;
+		return (int) alpha << 24 | (int) red << 16 | (int) green << 8 | (int) blue;
 	}
 
-	public final short getRed() {
+	public int getRed() {
 		return red;
 	}
 
-	public final void setRed(float red) {
+	public void setRed(float red) {
 		this.red = constrain(red,MIN_VALUE,MAX_VALUE);
 	}
 
-	public final short getGreen() {
+	public int getGreen() {
 		return green;
 	}
 
-	public final void setGreen(float green) {
+	public void setGreen(float green) {
 		this.green = constrain(green,MIN_VALUE,MAX_VALUE);
 	}
 
-	public final short getBlue() {
+	public int getBlue() {
 		return blue;
 	}
 
-	public final void setBlue(float blue) {
+	public void setBlue(float blue) {
 		this.blue = constrain(blue,MIN_VALUE,MAX_VALUE);
 	}
 
-	public final short getAlpha() {
+	public int getAlpha() {
 		return alpha;
 	}
 
-	public final void setAlpha(float alpha) {
+	public void setAlpha(float alpha) {
 		this.alpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
 	}
 	
@@ -115,14 +115,14 @@ public final class Color {
 	
 	public void apply(PGraphics pGraphics) {
 		if(pGraphics == null) {
-			throw new NullPointerException("pGraphics cannot be null in setter for color");
+			throw new NullPointerException("pGraphics cannot be null");
 		}
 		pGraphics.fill(red,green,blue,alpha);
 	}
 
-	public boolean isTransparent() { return (int) alpha == 0; }
+	public boolean isTransparent() { return alpha == 0; }
 	
-	private static short constrain(float value, float min, float max) {
-		return (short) (value < min ? min : value > max ? max : value);
+	private static int constrain(float value, float min, float max) {
+		return (int) (value < min ? min : value > max ? max : value);
 	}
 }
