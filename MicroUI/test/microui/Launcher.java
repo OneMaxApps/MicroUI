@@ -4,8 +4,10 @@ import microui.component.Button;
 import microui.constants.ContainerMode;
 import microui.core.base.Container;
 import microui.event.Event;
-import microui.layout.RowLayout;
-import microui.layout.RowLayoutParams;
+import microui.layout.GridLayout;
+import microui.layout.LinearLayout;
+import microui.layout.params.GridLayoutParams;
+import microui.layout.params.LinearLayoutParams;
 import microui.service.ContainerManager;
 import microui.service.GlobalTooltip;
 import processing.core.PApplet;
@@ -29,7 +31,7 @@ import processing.event.MouseEvent;
 public final class Launcher extends PApplet {
 
 	ContainerManager containerManager;
-	
+	LinearLayout linearLayout;
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
@@ -44,13 +46,25 @@ public final class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
-		
+
 		containerManager = new ContainerManager();
-		containerManager.add(new Container(new RowLayout()).setContainerMode(ContainerMode.RESPECT_CONSTRAINTS), "container");
+		containerManager.add(new Container(new GridLayout(2, 1)), "container");
+		containerManager.getContainerByTextId("container").setPadding(20);
+		
+		containerManager.getContainerByTextId("container").addComponent(new Container(linearLayout = new LinearLayout()), new GridLayoutParams(0,0,1,1), "container_inner_left");
+		//containerManager.getContainerByTextId("container").addComponent(new Container(new RowLayout()), new GridLayoutParams(1,0,1,1), "container_inner_right");
+		
+		
+		
+		Container innerLeft = (Container) containerManager.getContainerByTextId("container").getComponentByTextId("container_inner_left");
+		innerLeft.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
+		//Container innerRight = (Container) containerManager.getContainerByTextId("container").getComponentByTextId("container_inner_right");
 
-		for(int i = 0; i < 10; i++)
-		containerManager.getContainerByTextId("container").addComponent(new Button(), new RowLayoutParams(.1f));
-
+		for(int i = 0; i < 10; i++) {
+			innerLeft.addComponent(new Button("column").setPadding(5), new LinearLayoutParams(.1f,-1,1));
+			//innerRight.addComponent(new Button("row").setPadding(5), new RowLayoutParams(.1f));
+		}
+		
 	}
 
 	@Override
@@ -58,11 +72,11 @@ public final class Launcher extends PApplet {
 		background(200);
 
 		containerManager.draw();
-		
-		if(mouseButton == RIGHT) {
-			containerManager.getContainerByTextId("container").setSize(mouseX,mouseY);
-		}
 
+		if (mouseButton == RIGHT) {
+			//containerManager.getContainerByTextId("container").setSize(mouseX, mouseY);
+		}
+		
 		GlobalTooltip.draw();
 	}
 
@@ -73,7 +87,9 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void mousePressed() {
-
+		if(mouseButton == RIGHT) {
+			linearLayout.setVerticalMode(!linearLayout.isVerticalMode());
+		}
 	}
 
 	@Override

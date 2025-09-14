@@ -16,7 +16,7 @@ import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
 import microui.event.Listener;
 import microui.layout.LayoutManager;
-import microui.layout.LayoutParams;
+import microui.layout.params.LayoutParams;
 import processing.core.PImage;
 import processing.event.MouseEvent;
 
