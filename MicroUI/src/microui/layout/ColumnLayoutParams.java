@@ -1,4 +1,4 @@
-package microui.layout.params;
+package microui.layout;
 
 public final class ColumnLayoutParams extends LinearAxisLayoutParams {
 	

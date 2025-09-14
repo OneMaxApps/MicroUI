@@ -2,8 +2,6 @@ package microui.layout;
 
 import microui.core.base.Component;
 import microui.core.base.Container.ComponentEntry;
-import microui.layout.params.LayoutParams;
-import microui.layout.params.LinearLayoutParams;
 
 public abstract class LinearAxisLayout extends LayoutManager {
 	private static final float EPSILON = .01f;
@@ -21,7 +19,7 @@ public abstract class LinearAxisLayout extends LayoutManager {
 		
 		for (ComponentEntry entry : getComponentEntryList()) {
 			Component component = entry.getComponent();
-			LinearLayoutParams params = (LinearLayoutParams) entry.getLayoutParams();
+			LinearAxisLayoutParams params = (LinearAxisLayoutParams) entry.getLayoutParams();
 			
 			float usedSpace = isVerticalMode ? containerH*usedWeight : containerW*usedWeight;
 			
@@ -65,7 +63,7 @@ public abstract class LinearAxisLayout extends LayoutManager {
 		
 		getComponentEntryList().forEach(entry -> {
 			Component component = entry.getComponent();
-			LinearLayoutParams params = (LinearLayoutParams) entry.getLayoutParams();	
+			LinearAxisLayoutParams params = (LinearAxisLayoutParams) entry.getLayoutParams();	
 			if(isVerticalMode) {
 			ctx.rect(getContainer().getContentX(),component.getAbsoluteY(),getContainer().getContentWidth(),getContainer().getContentHeight()*params.getWeight());
 			} else {
@@ -76,10 +74,11 @@ public abstract class LinearAxisLayout extends LayoutManager {
 		ctx.popStyle();
 	}
 
+	
 	@Override
 	protected void checkCorrectParams(LayoutParams layoutParams) {
-		if (!(layoutParams instanceof LinearLayoutParams)) {
-			throw new IllegalArgumentException("using not correct layout params for LinearLayout");
+		if (!(layoutParams instanceof LinearAxisLayoutParams)) {
+			throw new IllegalArgumentException("using not correct layout params for LinearAxisLayoutParams");
 		}
 	}
 
@@ -98,7 +97,7 @@ public abstract class LinearAxisLayout extends LayoutManager {
 	protected boolean isOutOfSpace() {
 		float usedWeight = 0;
 		for (ComponentEntry entry : getComponentEntryList()) {
-			LinearLayoutParams params = (LinearLayoutParams) entry.getLayoutParams();
+			LinearAxisLayoutParams params = (LinearAxisLayoutParams) entry.getLayoutParams();
 			usedWeight += params.getWeight();
 		}
 		if(usedWeight-TOTAL_WEIGHT > EPSILON) {

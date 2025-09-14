@@ -1,6 +1,7 @@
 package microui.core.base;
 
 import static java.util.Objects.requireNonNull;
+import static microui.MicroUI.isDebugModeEnabled;
 import static microui.constants.ContainerMode.IGNORE_CONSTRAINTS;
 
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import microui.MicroUI;
 import microui.constants.ContainerMode;
 import microui.core.Texture;
 import microui.core.interfaces.KeyPressable;
@@ -16,7 +16,7 @@ import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
 import microui.event.Listener;
 import microui.layout.LayoutManager;
-import microui.layout.params.LayoutParams;
+import microui.layout.LayoutParams;
 import processing.core.PImage;
 import processing.event.MouseEvent;
 
@@ -35,7 +35,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		setMarginEnabled(true);
 		setMinMaxSize(1,1,width,height);
 		
-		getMutableColor().set(255, 0);
+		getMutableColor().set(0,0);
 
 		componentEntryList = new ArrayList<ComponentEntry>();
 
@@ -65,11 +65,12 @@ public final class Container extends Component implements KeyPressable, Scrollab
 			return;
 		}
 
-		componentEntryList.forEach(entry -> {
-			if (entry.getComponent() instanceof Scrollable s) {
-				s.mouseWheel(event);
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			Component component = componentEntryList.get(i).getComponent();
+			if(component instanceof Scrollable scrollable) {
+				scrollable.mouseWheel(event);
 			}
-		});
+		}
 
 	}
 
@@ -79,28 +80,47 @@ public final class Container extends Component implements KeyPressable, Scrollab
 			return;
 		}
 
-		componentEntryList.forEach(entry -> {
-			if (entry.getComponent() instanceof KeyPressable k) {
-				k.keyPressed();
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			Component component = componentEntryList.get(i).getComponent();
+			if(component instanceof KeyPressable pressable) {
+				pressable.keyPressed();
 			}
-		});
+		}
+		
 	}
 
 	public Component getComponentById(final int id) {
-		return componentEntryList.stream().map(entry -> (Component) entry.getComponent())
-				.filter(component -> component.getId() == id).findFirst()
-				.orElseThrow(() -> new RuntimeException("component with id: " + id + " is not found in to this Container"));
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			Component component = componentEntryList.get(i).getComponent();
+			if(component.getId() == id) {
+				return component;
+			}
+		}
+		
+		throw new IllegalArgumentException("component with id: " + id + " is not found in to this Container");
+	}
+	
+	public Container getContainerById(final int id) {
+		return (Container) getComponentById(id);
 	}
 
 	public Component getComponentByTextId(final String textId) {
-		return componentEntryList.stream().map(component -> (Component) component.getComponent())
-				.filter(component -> component.getTextId().equals(textId)).findFirst()
-				.orElseThrow(() -> new RuntimeException(
-						"component with text id: " + textId + " is not found in to this Container"));
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			Component component = componentEntryList.get(i).getComponent();
+			if(component.getTextId().equals(textId)) {
+				return component;
+			}
+		}
+		
+		throw new IllegalArgumentException("component with text id: " + textId + " is not found in to this Container");
+	}
+	
+	public Component getContainerByTextId(final String textId) {
+		return (Container) getComponentByTextId(textId);
 	}
 
 	public Container addComponent(Component component, LayoutParams layoutParams, int id) {
-		addComponentCorrect(component, layoutParams);
+		addComponentSafe(component, layoutParams);
 		component.setId(id);
 		return this;
 	}
@@ -112,64 +132,74 @@ public final class Container extends Component implements KeyPressable, Scrollab
 	}
 
 	public Container addComponent(Component component, LayoutParams layoutParams, String textId) {
-		addComponentCorrect(component, layoutParams);
+		addComponentSafe(component, layoutParams);
 		component.setTextId(textId);
 		return this;
 	}
 
-	public Container addComponent(Component component, LayoutParams layoutParams, String textId,
-			Listener onClickListener) {
+	public Container addComponent(Component component, LayoutParams layoutParams, String textId,Listener onClickListener) {
 		addComponent(component, layoutParams, textId);
 		component.onClick(onClickListener);
 		return this;
 	}
 
 	public Container addComponent(Component component, LayoutParams layoutParams) {
-		addComponentCorrect(component, layoutParams);
+		addComponentSafe(component, layoutParams);
 		return this;
 	}
 
 	public Container addComponent(Component component, LayoutParams layoutParams, Listener onClickListener) {
-		addComponentCorrect(component, layoutParams);
+		addComponent(component, layoutParams);
 		component.onClick(onClickListener);
 		return this;
 	}
 
 	public Container removeComponent(Component component) {
-		if (isComponentNotNull(component)) {
-			componentEntryList.removeIf(c -> c.getComponent() == component);
-			layoutManager.onRemoveComponent();
-			sortPriorityOfComponents();
-		}
-
+		removeComponentSafe(component);
 		return this;
 	}
 
 	public Container removeComponentById(int id) {	
-		componentEntryList.removeIf(c -> c.getComponent().getId() == id);
-		return this;
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			Component component = componentEntryList.get(i).getComponent();
+			if(component.getId() == id) {
+				removeComponentSafe(component);
+				return this;
+			}
+		}
 		
+		throw new IllegalArgumentException("component with id: \" "+ id +"\" is not found in to Container");
 	}
 	
 	public Container removeComponentByTextId(String textId) {
-		componentEntryList.removeIf(c -> c.getComponent().getTextId().equals(textId));
-		return this;
+		if(textId == null) {
+			throw new NullPointerException("textId cannot be null");
+		}
+		
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			Component component = componentEntryList.get(i).getComponent();
+			if(component.getTextId().equals(textId)) {
+				removeComponentSafe(component);
+				return this;
+			}
+		}
+		
+		throw new IllegalArgumentException("component with text id: \""+ textId +"\" is not found in to Container");
 	}
 
 	public void removeAllComponents() {
 		componentEntryList.clear();
-		
 	}
 
 	public List<ComponentEntry> getComponentEntryList() {
 		return Collections.unmodifiableList(componentEntryList);
 	}
 
-	public final ContainerMode getContainerMode() {
+	public ContainerMode getContainerMode() {
 		return containerMode;
 	}
 
-	public final Container setContainerMode(ContainerMode containerMode) {
+	public Container setContainerMode(ContainerMode containerMode) {
 		if (containerMode == null) {
 			throw new NullPointerException("containerMode cannot be null");
 		}
@@ -182,13 +212,14 @@ public final class Container extends Component implements KeyPressable, Scrollab
 
 		requestUpdate();
 
-		// not need here because it's calling inside to onChangeBounds()
-		// layoutManager.recalculate();
 		return this;
 	}
 
 	public void setBackgroundImage(PImage image) {
 		ensureBackgroundImage();
+		
+		if(image == backgroundImage.get()) { return; }
+		
 		backgroundImage.set(image);
 		requestUpdate();
 	}
@@ -204,25 +235,23 @@ public final class Container extends Component implements KeyPressable, Scrollab
 
 		if (layoutManager != null) {
 			layoutManager.recalculate();
-			requestUpdateForInnerComponents();
-
-			if (backgroundImage != null) {
-				backgroundImage.setBounds(getContentX(), getContentY(), getContentWidth(), getContentHeight());
-			}
+		}
+		
+		if (backgroundImage != null) {
+			backgroundImage.setBounds(getContentX(), getContentY(), getContentWidth(), getContentHeight());
 		}
 	}
 
-	private void addComponentCorrect(Component component, LayoutParams layoutParams) {
-		if (isComponentNotNull(component) && isLayoutParamsNotNull(layoutParams)) {
-			if (isNotAddedComponent(component)) {
-				ComponentEntry componentEntry = new ComponentEntry(component, layoutParams);
-				componentEntryList.add(componentEntry);
-				layoutManager.onAddComponent(componentEntry);
-				sortPriorityOfComponents();
-			}
-		}
-
-		requestUpdateForInnerComponents();
+	private void addComponentSafe(Component component, LayoutParams layoutParams) {
+		checkComponentNotNull(component);
+		checkLayoutParamsNotNull(layoutParams);
+		checkComponentAlreadyAddedInList(component);
+		
+		ComponentEntry componentEntry = new ComponentEntry(component, layoutParams);
+		componentEntryList.add(componentEntry);
+		layoutManager.onAddComponent(componentEntry);
+		sortPriorityOfComponents();
+		
 	}
 
 	private void componentsOnDraw() {
@@ -230,12 +259,14 @@ public final class Container extends Component implements KeyPressable, Scrollab
 			return;
 		}
 
-		componentEntryList.forEach(entry -> entry.getComponent().draw());
-
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			componentEntryList.get(i).getComponent().draw();
+		}
 	}
 
 	private void debugOnDraw() {
-		if (MicroUI.isDebugModeEnabled()) {
+		if (isDebugModeEnabled()) {
+			
 			ctx.pushStyle();
 			ctx.noStroke();
 			ctx.fill(0, 0, 255, 32);
@@ -246,44 +277,29 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		}
 	}
 
-	private boolean isComponentNotNull(Component component) {
+	private void checkComponentNotNull(Component component) {
 		if (component == null) {
 			throw new NullPointerException("component cannot be null");
 		}
-		return true;
 	}
 
-	private boolean isLayoutParamsNotNull(LayoutParams params) {
-		if (params == null) {
-			throw new NullPointerException("params cannot be null");
+	private void checkLayoutParamsNotNull(LayoutParams layoutParams) {
+		if (layoutParams == null) {
+			throw new NullPointerException("layoutParams cannot be null");
 		}
-
-		return true;
 	}
 
 	private void sortPriorityOfComponents() {
 		componentEntryList.sort(Comparator.comparingInt(entry -> entry.getComponent().getPriority()));
 	}
 
-	private boolean isNotAddedComponent(Component component) {
-		componentEntryList.forEach(componentEntry -> {
-			if (componentEntry.getComponent() == component) {
+	private void checkComponentAlreadyAddedInList(Component component) {
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			if(componentEntryList.get(i).getComponent() == component) {
 				throw new IllegalArgumentException("component cannot be added twice");
 			}
-		});
-
-		return true;
-	}
-
-	private void requestUpdateForInnerComponents() {
-		componentEntryList.forEach(entry -> {
-			Component component = entry.getComponent();
-			component.requestUpdate();
-
-			if (component instanceof Container container) {
-				container.requestUpdateForInnerComponents();
-			}
-		});
+		}
+		
 	}
 
 	private void backgroundOnDraw() {
@@ -291,7 +307,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 			backgroundImage.draw();
 		} else {
 			getMutableColor().apply();
-			ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());
+			ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
 		}
 	}
 
@@ -300,6 +316,34 @@ public final class Container extends Component implements KeyPressable, Scrollab
 			return;
 		}
 		backgroundImage = new Texture();
+	}
+	
+	private void removeComponentSafe(Component component) {
+		checkComponentNotNull(component);
+		checkComponentExistInList(component);
+		
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			Component c = componentEntryList.get(i).getComponent();
+			if(c == component) {
+				componentEntryList.remove(i);
+			}
+		}
+		
+		layoutManager.onRemoveComponent();
+		
+		if(componentEntryList.size() > 1) {
+			sortPriorityOfComponents();
+		}
+	}
+	
+	private void checkComponentExistInList(Component component) {
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			if(componentEntryList.get(i).getComponent() == component) {
+				return;
+			}
+		}
+
+		throw new IllegalArgumentException("component not found in to Container");
 	}
 
 	public static class ComponentEntry {

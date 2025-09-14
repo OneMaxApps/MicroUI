@@ -2,8 +2,6 @@ package microui.layout;
 
 import microui.core.base.Component;
 import microui.core.base.Container.ComponentEntry;
-import microui.layout.params.GridLayoutParams;
-import microui.layout.params.LayoutParams;
 
 public final class GridLayout extends LayoutManager {
 	private int columns, rows;

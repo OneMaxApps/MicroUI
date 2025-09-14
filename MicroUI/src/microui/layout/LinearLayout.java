@@ -12,9 +12,20 @@ public class LinearLayout extends LinearAxisLayout {
 		}
 	}
 	
-	public LinearLayout() {
+	public LinearLayout(boolean isVerticalMode) {
 		super();
-		setVerticalMode(true);
+		setVerticalMode(isVerticalMode);
+	}
+	
+	public LinearLayout() {
+		this(true);
+	}
+	
+	@Override
+	protected void checkCorrectParams(LayoutParams layoutParams) {
+		if (!(layoutParams instanceof LinearLayoutParams)) {
+			throw new IllegalArgumentException("using not correct layout params for LinearLayoutParams");
+		}
 	}
 
 	@Override

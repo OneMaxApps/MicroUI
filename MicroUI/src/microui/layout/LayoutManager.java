@@ -5,7 +5,6 @@ import java.util.List;
 import microui.MicroUI;
 import microui.core.base.Container;
 import microui.core.base.Container.ComponentEntry;
-import microui.layout.params.LayoutParams;
 import processing.core.PApplet;
 
 public abstract class LayoutManager {

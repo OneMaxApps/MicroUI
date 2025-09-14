@@ -7,6 +7,8 @@ import static java.lang.System.currentTimeMillis;
 import static java.util.Objects.requireNonNull;
 import static microui.core.base.SpatialView.HooksUpdateMode.REACTIVE;
 
+import microui.util.Metrics;
+
 //Status: STABLE - Do not modify
 //Last Reviewed: 12.09.2025
 public abstract class SpatialView extends View {
@@ -433,6 +435,7 @@ public abstract class SpatialView extends View {
 		return abs(firstValue - secondValue) < EPSILON;
 	}
 
+	static int hooksCalledCount;
 	private void hooksUpdate() {	
 		if (isPosDirty || isDimDirty) {
 			onChangeBounds();
@@ -442,6 +445,9 @@ public abstract class SpatialView extends View {
 			if (isDimDirty) {
 				onChangeDimensions();
 			}
+			hooksCalledCount++;
+			System.out.println("count of called hooks: "+hooksCalledCount);
+			Metrics.printAll();
 			isPosDirty = isDimDirty = false;
 		}
 	}

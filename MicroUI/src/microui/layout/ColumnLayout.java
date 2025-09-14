@@ -1,8 +1,6 @@
 package microui.layout;
 
 import microui.core.base.Container.ComponentEntry;
-import microui.layout.params.ColumnLayoutParams;
-import microui.layout.params.LayoutParams;
 
 public final class ColumnLayout extends LinearAxisLayout {
 	

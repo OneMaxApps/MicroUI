@@ -1,4 +1,4 @@
-package microui.layout.params;
+package microui.layout;
 
 public final class GridLayoutParams implements LayoutParams {
 	private final int column,row,columnSpan,rowSpan,alignX,alignY;

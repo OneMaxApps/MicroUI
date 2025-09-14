@@ -1,4 +1,4 @@
-package microui.layout.params;
+package microui.layout;
 
 public abstract class LinearAxisLayoutParams implements LayoutParams {
 	private final float weight;
