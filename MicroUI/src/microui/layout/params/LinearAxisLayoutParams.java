@@ -1,10 +1,10 @@
 package microui.layout.params;
 
-public class AbstractLinearLayoutParams implements LayoutParams {
+public abstract class LinearAxisLayoutParams implements LayoutParams {
 	private final float weight;
 	private final int alignX, alignY;
 	
-	public AbstractLinearLayoutParams(float weight, int alignX, int alignY) {
+	public LinearAxisLayoutParams(float weight, int alignX, int alignY) {
 		super();
 		
 		if(weight < 0) {

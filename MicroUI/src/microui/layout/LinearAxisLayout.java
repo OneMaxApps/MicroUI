@@ -5,26 +5,10 @@ import microui.core.base.Container.ComponentEntry;
 import microui.layout.params.LayoutParams;
 import microui.layout.params.LinearLayoutParams;
 
-public abstract class AbstractLinearLayout extends LayoutManager {
+public abstract class LinearAxisLayout extends LayoutManager {
 	private static final float EPSILON = .01f;
 	private static final float TOTAL_WEIGHT = 1.0f;
 	private boolean isVerticalMode;
-	
-	@Override
-	public void onAddComponent(ComponentEntry componentEntry) {
-		super.onAddComponent(componentEntry);
-		
-		float usedWeight = 0;
-		
-		for (ComponentEntry entry : getComponentEntryList()) {
-			LinearLayoutParams params = (LinearLayoutParams) entry.getLayoutParams();
-			usedWeight += params.getWeight();
-		}
-		
-		if(usedWeight-TOTAL_WEIGHT > EPSILON) {
-			throw new IllegalStateException("weight limit out of bounds in ColumnLayout");
-		}
-	}
 	
 	@Override
 	public void recalculate() {
@@ -109,6 +93,19 @@ public abstract class AbstractLinearLayout extends LayoutManager {
 		if(getContainer() != null) {
 			recalculate();
 		}
+	}
+	
+	protected boolean isOutOfSpace() {
+		float usedWeight = 0;
+		for (ComponentEntry entry : getComponentEntryList()) {
+			LinearLayoutParams params = (LinearLayoutParams) entry.getLayoutParams();
+			usedWeight += params.getWeight();
+		}
+		if(usedWeight-TOTAL_WEIGHT > EPSILON) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 }

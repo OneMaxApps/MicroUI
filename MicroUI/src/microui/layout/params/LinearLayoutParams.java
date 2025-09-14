@@ -1,6 +1,6 @@
 package microui.layout.params;
 
-public class LinearLayoutParams extends AbstractLinearLayoutParams {
+public class LinearLayoutParams extends LinearAxisLayoutParams {
 
 	public LinearLayoutParams(float weight, int alignX, int alignY) {
 		super(weight, alignX, alignY);

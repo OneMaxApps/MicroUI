@@ -1,7 +1,17 @@
 package microui.layout;
 
-public class LinearLayout extends AbstractLinearLayout {
+import microui.core.base.Container.ComponentEntry;
 
+public class LinearLayout extends LinearAxisLayout {
+
+	@Override
+	public void onAddComponent(ComponentEntry componentEntry) {
+		super.onAddComponent(componentEntry);
+		if(isOutOfSpace()) {
+			throw new IllegalStateException("weight limit out of bounds in LinearLayout");
+		}
+	}
+	
 	public LinearLayout() {
 		super();
 		setVerticalMode(true);
