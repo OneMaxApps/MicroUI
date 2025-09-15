@@ -24,13 +24,13 @@ public class Scroll extends RangeControl {
 			
 			switch(getOrientation()) {
 				case HORIZONTAL :
-					thumb.setX(constrain(ctx.mouseX+distToThumb,getContentX(),getContentX()+getContentWidth()-thumb.getContentWidth()));
-					setValueWithoutActions(map(thumb.getContentX(),getContentX(),getContentX()+getContentWidth()-thumb.getContentWidth(),getMinValue(),getMaxValue()));
+					thumb.setX(constrain(ctx.mouseX+distToThumb,getX(),getX()+getWidth()-thumb.getWidth()));
+					setValueWithoutActions(map(thumb.getX(),getX(),getX()+getWidth()-thumb.getWidth(),getMinValue(),getMaxValue()));
 				break;
 				
 				case VERTICAL :
-					thumb.setY(constrain(ctx.mouseY+distToThumb,getContentY(),getContentY()+getContentHeight()-thumb.getContentHeight()));
-					setValueWithoutActions(map(thumb.getContentY(),getContentY()+getContentHeight()-thumb.getContentHeight(),getContentY(),getMinValue(),getMaxValue()));
+					thumb.setY(constrain(ctx.mouseY+distToThumb,getY(),getY()+getHeight()-thumb.getHeight()));
+					setValueWithoutActions(map(thumb.getY(),getY()+getHeight()-thumb.getHeight(),getY(),getMinValue(),getMaxValue()));
 				break;
 			}
 			
@@ -47,7 +47,7 @@ public class Scroll extends RangeControl {
 	public Scroll() {
 		this(0,0,0,0);
 		setWidth(getMaxWidth());
-		setPosition(ctx.width/2-getContentWidth()/2,ctx.height/2-getHeight()/2);
+		setPosition(ctx.width/2-getWidth()/2,ctx.height/2-getHeight()/2);
 	}
 
 	@Override
@@ -62,11 +62,11 @@ public class Scroll extends RangeControl {
 		
 		switch(getOrientation()) {
 			case HORIZONTAL :
-				 distToThumb = thumb.getContentX()-ctx.mouseX;
+				 distToThumb = thumb.getX()-ctx.mouseX;
 			break;
 			
 			case VERTICAL :
-				distToThumb = thumb.getContentY()-ctx.mouseY;
+				distToThumb = thumb.getY()-ctx.mouseY;
 			break;
 		}
 		
@@ -124,21 +124,21 @@ public class Scroll extends RangeControl {
 
 	private final void updateThumbTransforms() {
 		//thumb.setBoundsProperty(this);
-		thumb.setBounds(getContentX(),getContentY(),getContentWidth(),getContentHeight());
+		thumb.setBounds(getX(),getY(),getWidth(),getHeight());
 
 		switch(getOrientation()) {
 		
 		case HORIZONTAL :
-			thumb.setWidth(getContentWidth()/10);
+			thumb.setWidth(getWidth()/10);
 			if(hasEqualMinMax()) { return; }
-			final float NEW_POS_X = map(getValue(),getMinValue(),getMaxValue(),getContentX(),getContentX()+getContentWidth()-thumb.getContentWidth());
-			thumb.setX(constrain(NEW_POS_X,getContentX(),getContentX()+getContentWidth()-thumb.getContentWidth()));
+			final float NEW_POS_X = map(getValue(),getMinValue(),getMaxValue(),getX(),getX()+getWidth()-thumb.getWidth());
+			thumb.setX(constrain(NEW_POS_X,getX(),getX()+getWidth()-thumb.getWidth()));
 			break;
 		case VERTICAL :
-			thumb.setHeight(getContentHeight()/10);
+			thumb.setHeight(getHeight()/10);
 			if(hasEqualMinMax()) { return; }
-			final float NEW_POS_Y = map(getValue(),getMaxValue(),getMinValue(),getContentY(),getContentY()+getContentHeight()-thumb.getContentHeight());
-			thumb.setY(constrain(NEW_POS_Y,getContentY(),getContentY()+getContentHeight()-thumb.getContentHeight()));
+			final float NEW_POS_Y = map(getValue(),getMaxValue(),getMinValue(),getY(),getY()+getHeight()-thumb.getHeight());
+			thumb.setY(constrain(NEW_POS_Y,getY(),getY()+getHeight()-thumb.getHeight()));
 			break;
 		}
 		

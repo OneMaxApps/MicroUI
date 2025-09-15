@@ -1,8 +1,6 @@
 package microui.core.base;
 
 import static java.util.Objects.requireNonNull;
-import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.CORNER;
 
 import microui.MicroUI;
 import microui.core.interfaces.Visible;
@@ -39,7 +37,6 @@ public abstract class View implements Visible {
 			ctx.popStyle();
 		}
 		
-		debugOnDraw();
 	}
 
 	public final int getPriority() {
@@ -81,13 +78,4 @@ public abstract class View implements Visible {
 
 	protected abstract void render();
 
-	private static void debugOnDraw() {
-		if(!MicroUI.isDebugModeEnabled()) { return; } 
-		ctx.pushStyle();
-		ctx.fill(255);
-		ctx.textSize(32);
-		ctx.textAlign(CORNER,CENTER);
-		ctx.text("fps: "+ (int) ctx.frameRate, 10, 20);
-		ctx.popStyle();
-	}
 }

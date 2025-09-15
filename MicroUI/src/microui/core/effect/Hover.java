@@ -74,6 +74,6 @@ public final class Hover extends View {
 	}
 	
 	private void rectOnDraw() {
-		ctx.rect(component.getContentX(),component.getContentY(),component.getContentWidth(),component.getContentHeight());
+		ctx.rect(component.getPadX(),component.getPadY(),component.getPadWidth(),component.getPadHeight());
 	}
 }

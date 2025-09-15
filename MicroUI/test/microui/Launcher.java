@@ -1,17 +1,13 @@
 package microui;
 
-import microui.component.Button;
+import microui.component.MenuButton;
 import microui.core.base.Container;
 import microui.event.Event;
-import microui.layout.ColumnLayout;
-import microui.layout.ColumnLayoutParams;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
-import microui.layout.LinearLayout;
-import microui.layout.LinearLayoutParams;
-import microui.layout.RowLayout;
-import microui.layout.RowLayoutParams;
+import microui.service.ContainerManager;
 import microui.service.GlobalTooltip;
+import microui.util.Metrics;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -32,8 +28,8 @@ import processing.event.MouseEvent;
 
 public final class Launcher extends PApplet {
 
+	ContainerManager containerManager;
 	Container container;
-	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
@@ -49,42 +45,40 @@ public final class Launcher extends PApplet {
 		MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
 
-		container = new Container(new GridLayout(2,2));
-		container.addComponent(new Container(new GridLayout(4,4)), new GridLayoutParams(0,0,1,1),1);
-		container.addComponent(new Container(new LinearLayout()), new GridLayoutParams(1,0,1,1),2);
-		container.addComponent(new Container(new ColumnLayout()), new GridLayoutParams(0,1,1,1),3);
-		container.addComponent(new Container(new RowLayout()), new GridLayoutParams(1,1,1,1),4);
+		containerManager = new ContainerManager();
 		
-		container.getContainerById(1).addComponent(new Button(), new GridLayoutParams(0,0,1,1));
+		containerManager.add(container = new Container(new GridLayout(5,10)));
 		
-		for(int i = 0; i < 10; i++) {
-		container.getContainerById(2).addComponent(new Button(), new LinearLayoutParams(.1f));
-		container.getContainerById(3).addComponent(new Button(), new ColumnLayoutParams(.1f));
-		container.getContainerById(4).addComponent(new Button(), new RowLayoutParams(.1f));
-		}
+		MenuButton component;
+		//container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
 		
-		container.getContainerById(1).setPadding(10);
-		container.getContainerById(2).setPadding(20);
-		container.getContainerById(3).setPadding(30);
-		container.getContainerById(4).setPadding(40);
+		container.addComponent(component = new MenuButton(), new GridLayoutParams(0,0,2,1));
+		
+		
+		component.setMargin(50,0);
+		//component.setPadding(100,0);
+		
 	}
 
 	@Override
 	public void draw() {
 		background(200);
 
-		container.draw();
+		containerManager.draw();
 		if(mouseButton == RIGHT) {
 			container.setSize(mouseX,mouseY);
-			
 		}
+		
+		System.out.println(frameRate);
+		
+		Metrics.print("PGraphicsJava2D");
 		
 		GlobalTooltip.draw();
 	}
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		container.mouseWheel(event);
+		containerManager.mouseWheel(event);
 	}
 
 	@Override
@@ -95,7 +89,7 @@ public final class Launcher extends PApplet {
 	@Override
 	public void keyPressed() {
 		Event.keyPressed();
-		container.keyPressed();
+		containerManager.keyPressed();
 	}
 
 	@Override

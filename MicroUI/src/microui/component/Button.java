@@ -13,12 +13,12 @@ public class Button extends AbstractButton {
 	public Button(String text, float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setConstrainDimensionsEnabled(true);
-		setMinMaxSize(10,10,60,60);
+		setMinMaxSize(10,10,100,50);
 		
-		this.text = new TextView(getContentX(), getContentY(), getContentWidth(), getContentHeight());
+		this.text = new TextView(getX(), getY(), getWidth(), getHeight());
 		this.text.setAutoResizeModeEnabled(true);
 		this.text.setAutoResizeMode(BIG);
-		setTextColor(new Color(0));
+		//setTextColor(new Color(0));
 		setText(text);
 	}
 
@@ -77,7 +77,7 @@ public class Button extends AbstractButton {
 	protected void onChangeBounds() {
 		super.onChangeBounds();
 		if (text != null) {
-			text.setBounds(getContentX(), getContentY(), getContentWidth(), getContentHeight());
+			text.setBounds(getX(), getY(), getWidth(), getHeight());
 		}
 	}
 

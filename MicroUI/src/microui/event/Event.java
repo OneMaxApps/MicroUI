@@ -3,8 +3,8 @@ package microui.event;
 import static java.util.Objects.requireNonNull;
 
 import microui.MicroUI;
-import microui.core.base.SpatialView;
 import microui.core.base.Component;
+import microui.core.base.SpatialView;
 import microui.util.Metrics;
 import processing.core.PApplet;
 
@@ -30,7 +30,7 @@ public class Event {
 
 	public void listen() {
 		if (bounds instanceof Component component) {
-			listener(component.getContentX(), component.getContentY(), component.getContentWidth(), component.getContentHeight());
+			listener(component.getPadX(), component.getPadY(), component.getPadWidth(), component.getPadHeight());
 		} else {
 			listener(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 

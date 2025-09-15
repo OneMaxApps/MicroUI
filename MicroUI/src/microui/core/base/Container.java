@@ -238,7 +238,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		}
 		
 		if (backgroundImage != null) {
-			backgroundImage.setBounds(getContentX(), getContentY(), getContentWidth(), getContentHeight());
+			backgroundImage.setBounds(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		}
 	}
 
@@ -307,7 +307,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 			backgroundImage.draw();
 		} else {
 			getMutableColor().apply();
-			ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
+			ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		}
 	}
 

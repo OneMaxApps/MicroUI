@@ -237,22 +237,22 @@ public abstract class Component extends SpatialView {
 		return padding.getBottom();
 	}
 
-	public final float getContentX() {
+	public final float getPadX() {
 		ensurePadding();
-		return isPaddingEnabled() ? getX() + getPaddingLeft() : getX();
+		return isPaddingEnabled() ? getX() - getPaddingLeft() : getX();
 	}
 
-	public final float getContentY() {
+	public final float getPadY() {
 		ensurePadding();
-		return isPaddingEnabled() ? getY() + getPaddingTop() : getY();
+		return isPaddingEnabled() ? getY() - getPaddingTop() : getY();
 	}
 
-	public final float getContentWidth() {
-		return isPaddingEnabled() ? max(0, getWidth() - (getPaddingRight() + getPaddingLeft())) : getWidth();
+	public final float getPadWidth() {
+		return isPaddingEnabled() ? max(0, getWidth() + (getPaddingRight() + getPaddingLeft())) : getWidth();
 	}
 
-	public final float getContentHeight() {
-		return isPaddingEnabled() ? max(0, getHeight() - (getPaddingBottom() + getPaddingTop())) : getHeight();
+	public final float getPadHeight() {
+		return isPaddingEnabled() ? max(0, getHeight() + (getPaddingBottom() + getPaddingTop())) : getHeight();
 	}
 
 	public final boolean isPaddingEnabled() {
@@ -376,35 +376,50 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final float getAbsoluteX() {
+		if(isPaddingEnabled()) {
+			return isMarginEnabled() ? getX() - (getMarginLeft()+getPaddingLeft()) : getX();
+		}
+		
 		return isMarginEnabled() ? getX() - getMarginLeft() : getX();
 	}
 
 	public final float getAbsoluteY() {
+		if(isPaddingEnabled()) {
+			return isMarginEnabled() ? getY() - (getMarginTop()+getPaddingTop()) : getY();
+		}
+		
 		return isMarginEnabled() ? getY() - getMarginTop() : getY();
 	}
 
 	public final float getAbsoluteWidth() {
+		if(isPaddingEnabled()) {
+			return isMarginEnabled() ? getWidth() + getMarginLeft() + getMarginRight() + getPaddingLeft() + getPaddingRight() : getWidth();
+		}
 		return isMarginEnabled() ? getWidth() + getMarginLeft() + getMarginRight() : getWidth();
 	}
 
 	public final float getAbsoluteHeight() {
+		if(isPaddingEnabled()) {
+			return isMarginEnabled() ? getHeight() + getMarginTop() + getMarginBottom() + getPaddingTop() + getPaddingBottom(): getHeight();
+
+		}
 		return isMarginEnabled() ? getHeight() + getMarginTop() + getMarginBottom() : getHeight();
 	}
 
 	public final void setAbsoluteX(float x) {
-		setX(x + getMarginLeft());
+		setX(x + getMarginLeft() + getPaddingLeft());
 	}
 
 	public final void setAbsoluteY(float y) {
-		setY(y + getMarginTop());
+		setY(y + getMarginTop() + getPaddingTop());
 	}
 
 	public final void setAbsoluteWidth(float width) {
-		setWidth(width - (getMarginLeft() + getMarginRight()));
+		setWidth(width - (getMarginLeft() + getMarginRight()) - (getPaddingLeft() + getPaddingRight()));
 	}
 
 	public final void setAbsoluteHeight(float height) {
-		setHeight(height - (getMarginTop() + getMarginBottom()));
+		setHeight(height - (getMarginTop() + getMarginBottom()) - (getPaddingTop() + getPaddingBottom()));
 	}
 
 	public final void setAbsolutePosition(float x, float y) {
@@ -553,7 +568,7 @@ public abstract class Component extends SpatialView {
 
 	private void debugOnDraw() {
 		if (MicroUI.isDebugModeEnabled()) {
-			ctx.push();
+			ctx.pushStyle();
 			ctx.noFill();
 			ctx.strokeWeight(5);
 
@@ -561,16 +576,16 @@ public abstract class Component extends SpatialView {
 			ctx.stroke(200, 0, 0, 100);
 			ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());
 
-			// for showing padding area (Green rectangle)
+			// for showing pad area (Green rectangle)
 			ctx.stroke(0, 200, 0, 100);
-			ctx.rect(getX(), getY(), getWidth(), getHeight());
-
+			ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
+			
 			// for showing content area (Blue rectangle)
 			ctx.stroke(0, 0, 200, 100);
-			ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
+			ctx.rect(getX(), getY(), getWidth(), getHeight());
 
 			ctx.noStroke();
-			ctx.pop();
+			ctx.popStyle();
 		}
 	}
 
@@ -640,9 +655,9 @@ public abstract class Component extends SpatialView {
 				throw new IllegalStateException("negative dimensions must be disabled for using Padding system");
 			}
 
-			if (left + right > getWidth() || top + bottom > getHeight()) {
-				throw new IllegalArgumentException("padding cannot be greater than size of component");
-			}
+//			if (left + right > getWidth() || top + bottom > getHeight()) {
+//				throw new IllegalArgumentException("padding cannot be greater than size of component");
+//			}
 		}
 
 	}

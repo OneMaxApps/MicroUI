@@ -36,10 +36,10 @@ public class Slider extends RangeControl {
 		if (isHolding()) {
 			switch (getOrientation()) {
 			case HORIZONTAL:
-				setValue(map(ctx.mouseX, getContentX(), getContentX() + getContentWidth(), getMinValue(), getMaxValue()));
+				setValue(map(ctx.mouseX, getX(), getX() + getWidth(), getMinValue(), getMaxValue()));
 				break;
 			case VERTICAL:
-				setValue(map(ctx.mouseY, getContentY(), getContentY() + getContentHeight(), getMaxValue(), getMinValue()));
+				setValue(map(ctx.mouseY, getY(), getY() + getHeight(), getMaxValue(), getMinValue()));
 				break;
 			}
 			updateLevelBounds();
@@ -116,19 +116,19 @@ public class Slider extends RangeControl {
 			return;
 		}
 
-		level.setBounds(getContentX(),getContentY(),getContentWidth(),getContentHeight());
+		level.setBounds(getX(),getY(),getWidth(),getHeight());
 
 		switch (getOrientation()) {
 
 		case HORIZONTAL:
-			level.setWidth(map(getValue(), getMinValue(), getMaxValue(), 0, getContentWidth()));
+			level.setWidth(map(getValue(), getMinValue(), getMaxValue(), 0, getWidth()));
 
 			break;
 
 		case VERTICAL:
-			level.setY(getY() + getContentHeight());
-			level.setWidth(getContentWidth());
-			level.setHeight(map(getValue(), getMinValue(), getMaxValue(), 0, -getContentHeight()));
+			level.setY(getY() + getHeight());
+			level.setWidth(getWidth());
+			level.setHeight(map(getValue(), getMinValue(), getMaxValue(), 0, -getHeight()));
 			break;
 
 		}

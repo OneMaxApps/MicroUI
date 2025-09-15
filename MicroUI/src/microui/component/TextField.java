@@ -76,7 +76,7 @@ public final class TextField extends Component implements KeyPressable {
 		
 		ctx.pushStyle();
 		getMutableColor().apply();
-			ctx.rect(getContentX(),getContentY(),getContentWidth(),getContentHeight());
+			ctx.rect(getX(),getY(),getWidth(),getHeight());
 			
 			pg.beginDraw();
 				pg.clear();
@@ -87,11 +87,11 @@ public final class TextField extends Component implements KeyPressable {
 				}
 			pg.endDraw();
 			
-			ctx.image(pg, getContentX(), getContentY(), getContentWidth(), getContentHeight());
+			ctx.image(pg, getX(), getY(), getWidth(), getHeight());
 			
 			if(!isFocused) {
 				ctx.fill(0,32);
-				ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
+				ctx.rect(getX(), getY(), getWidth(), getHeight());
 			}
 		ctx.popStyle();
 		
@@ -125,7 +125,7 @@ public final class TextField extends Component implements KeyPressable {
 		if(isHolding()) {
 			if(text.isEmpty()) { return; }
 			
-			cursor.column.set((int) map(ctx.mouseX-getContentX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
+			cursor.column.set((int) map(ctx.mouseX-getX(),text.getX(),text.getX()+text.getWidth(),0,text.length()));
 			
 			if(ctx.frameCount%3 == 0) {
 				if(cursor.isCloseToLeftSide()) { scroll.append(-cursor.column.getCurrentCharWidth()); }
@@ -160,12 +160,12 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	private final void updateScrollMax() {
-		if(text.isEmpty() || text.getWidth() < getContentWidth()*.8f) {
+		if(text.isEmpty() || text.getWidth() < getWidth()*.8f) {
 			scroll.setMax(0);
 			return;
 		}
 		
-		scroll.setMax((text.getWidth()-getContentWidth()*.8f));
+		scroll.setMax((text.getWidth()-getWidth()*.8f));
 	}
 	
 	private final void checkDimensions() {
@@ -174,7 +174,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 	
 	private final void createPGraphics() {
-		pg = ctx.createGraphics((int) max(1,getContentWidth()), (int) max(1,getContentHeight()), ctx.sketchRenderer());
+		pg = ctx.createGraphics((int) max(1,getWidth()), (int) max(1,getHeight()), ctx.sketchRenderer());
 		componentSizeChanged = false;
 		Metrics.register(pg);
 	}
@@ -320,7 +320,7 @@ public final class TextField extends Component implements KeyPressable {
 			font = new Font();
 			
 			updatePosition();
-			size.set(getContentHeight()*.8f);
+			size.set(getHeight()*.8f);
 		}
 		
 		private final void draw(final PGraphics pg) {
@@ -354,7 +354,7 @@ public final class TextField extends Component implements KeyPressable {
 
 		private final void updatePosition() {
 			updatePositionX();
-			y = TextField.this.getContentHeight()*.5f;
+			y = TextField.this.getHeight()*.5f;
 		}
 		
 		private final void updatePositionX() {
@@ -400,7 +400,7 @@ public final class TextField extends Component implements KeyPressable {
 			
 			@Override
 			public final void set(final float size) {
-				if(size < 1 || size > TextField.this.getContentHeight()) { return; }
+				if(size < 1 || size > TextField.this.getHeight()) { return; }
 				this.size = size;
 			}
 
@@ -477,8 +477,8 @@ public final class TextField extends Component implements KeyPressable {
 		}
 
 		private final void updateTransforms() {
-			positionY = TextField.this.getContentHeight()*.1f;
-			height = TextField.this.getContentHeight()*.9f;
+			positionY = TextField.this.getHeight()*.1f;
+			height = TextField.this.getHeight()*.9f;
 		}
 		
 		private final boolean isInStart() { return column.get() == 0; }
@@ -486,11 +486,11 @@ public final class TextField extends Component implements KeyPressable {
 		private final boolean isInEnd() { return column.get() == text.length(); }
 		
 		private final boolean isCloseToLeftSide() {
-			return positionX < getContentWidth()*.1f;
+			return positionX < getWidth()*.1f;
 		}
 		
 		private final boolean isCloseToRightSide() {
-			return positionX > getContentWidth()*.9f;
+			return positionX > getWidth()*.9f;
 		}
 		
 		private final class Blink {
@@ -601,8 +601,8 @@ public final class TextField extends Component implements KeyPressable {
 		
 		private Selection() {
 			color = new Color(0,164,255,64);
-			y = getContentHeight()*.1f;
-			h = getContentHeight()*.8f;
+			y = getHeight()*.1f;
+			h = getHeight()*.8f;
 		}
 		
 		private final void draw(final PGraphics pg) {
@@ -616,8 +616,8 @@ public final class TextField extends Component implements KeyPressable {
 		private final void updateTransforms() {
 			
 			
-			y = getContentHeight()*.1f;
-			h = getContentHeight()*.8f;
+			y = getHeight()*.1f;
+			h = getHeight()*.8f;
 			
 			if(pg == null) { return; }
 			if(text.isEmpty()) { x = w = 0; return; }

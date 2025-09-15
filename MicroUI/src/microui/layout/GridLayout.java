@@ -20,9 +20,9 @@ public final class GridLayout extends LayoutManager {
 		ctx.fill(200,0,0,32);
 		for (int col = 0; col < columns; col++) {
 			for (int row = 0; row < rows; row++) {
-				ctx.rect(getContainer().getContentX() + (getContainer().getContentWidth() / columns) * col,
-						getContainer().getContentY() + (getContainer().getContentHeight() / rows) * row,
-						getContainer().getContentWidth() / columns, getContainer().getContentHeight() / rows);
+				ctx.rect(getContainer().getPadX() + (getContainer().getPadWidth() / columns) * col,
+						getContainer().getPadY() + (getContainer().getPadHeight() / rows) * row,
+						getContainer().getPadWidth() / columns, getContainer().getPadHeight() / rows);
 			}
 		}
 		ctx.popStyle();
@@ -37,13 +37,13 @@ public final class GridLayout extends LayoutManager {
 
 	@Override
 	public void recalculate() {
-		float containerContentX = getContainer().getContentX();
-		float containerContentY = getContainer().getContentY();
-		float containerContentW = getContainer().getContentWidth();
-		float containerContentH = getContainer().getContentHeight();
+		float containerPadX = getContainer().getPadX();
+		float containerPadY = getContainer().getPadY();
+		float containerPadW = getContainer().getPadWidth();
+		float containerPadH = getContainer().getPadHeight();
 
-		float colWidth = containerContentW / getColumns();
-		float rowHeight = containerContentH / getRows();
+		float colWidth = containerPadW / getColumns();
+		float rowHeight = containerPadH / getRows();
 
 		for (int i = 0; i < getComponentEntryList().size(); i++) {
 			Component component = getComponentEntryList().get(i).getComponent();
@@ -51,8 +51,8 @@ public final class GridLayout extends LayoutManager {
 
 			checkOutOfGrid(params);
 
-			float requiredCellX = containerContentX + colWidth * params.getColumn();
-			float requiredCellY = containerContentY + rowHeight * params.getRow();
+			float requiredCellX = containerPadX + colWidth * params.getColumn();
+			float requiredCellY = containerPadY + rowHeight * params.getRow();
 			float requiredCellWidth = colWidth * params.getColumnSpan();
 			float requiredCellHeight = rowHeight * params.getRowSpan();
 			

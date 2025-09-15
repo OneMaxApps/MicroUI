@@ -20,28 +20,35 @@ public final class Ripples extends View {
 	
 	public Ripples(Component component) {
 		super();
-		color = new Color(0,64);
-		
+		setVisible(true);
+		color = new Color(0,64);		
 		circle = new Circle();
 		
-		setVisible(true);
 		this.component = requireNonNull(component, "bounds cannot be null");
-		createGraphics();
+		
+		component.onClick(() -> {
+			if(pg == null) {
+				createGraphics();
+			}
+			
+			checkResizing();
+		});
+		
 		isEnabled = true;
 	}
 
 	@Override
 	public void render() {
-		if(!isEnabled) { return; }
+		if(!isEnabled || pg == null || !circle.isLauch) { return; }
 		
-		checkResizing();
+		
 		
 		if(pg.width != 0 && pg.height != 0) {
 		pg.beginDraw();
 		pg.clear();
 		circle.draw(pg);
 		pg.endDraw();
-		ctx.image(pg, component.getContentX(),component.getContentY(),component.getContentWidth(),component.getContentHeight());
+		ctx.image(pg, component.getPadX(),component.getPadY(),component.getPadWidth(),component.getPadHeight());
 		}
 		
 	}
@@ -54,14 +61,13 @@ public final class Ripples extends View {
 		this.component = requireNonNull(component, "bounds cannot be null");
 	}
 
-	public final void initAnim() {
+	public final void lauch() {
 		circle.resetSize();
 		circle.resetPosition();
-		circle.start = true;
+		circle.isLauch = true;
 	}
 	
 	public final Color getColor() {
-		System.out.println("created a new Color object");
 		return new Color(color);
 	}
 	
@@ -85,51 +91,50 @@ public final class Ripples extends View {
 	}
 	
 	private final boolean isResized() {
-		if(component.getContentWidth() <= 1 || component.getContentHeight() <= 1) { return false; }
+		if(component.getPadWidth() <= 1 || component.getPadHeight() <= 1) { return false; }
 		
-		return pg.width != (int) component.getContentWidth() || pg.height != (int) component.getContentHeight();
+		return pg.width != (int) component.getPadWidth() || pg.height != (int) component.getPadHeight();
 	}
 	
 	private final void createGraphics() {
-		pg = ctx.createGraphics((int) max(1,component.getContentWidth()),(int) max(1,component.getContentHeight()),ctx.sketchRenderer());
+		pg = ctx.createGraphics((int) max(1,component.getPadWidth()),(int) max(1,component.getPadHeight()),ctx.sketchRenderer());
 		Metrics.register(pg);
 	}
 
 	private final class Circle {
-		private float x,y,radius;
-		private boolean start;
+		float x,y,radius;
+		boolean isLauch;
 
-		private final void draw(PGraphics pGraphics) {
-			requireNonNull(pGraphics, "pGraphics cannot be null");
+		void draw(PGraphics pGraphics) {
 			
 			pGraphics.noStroke();
 			pGraphics.fill(color.get(),constrain(255-radius*.5f,0,255));
 			pGraphics.circle(x, y, radius);
 			
-			if(start) {
+			if(isLauch) {
 				playAnim();
 			}
 		}
 		
-		private final void incSize() {
-			radius += constrain(min(component.getContentWidth()*.2f,component.getContentHeight()*.2f),1,20);
+		void incSize() {
+			radius += constrain(min(component.getPadWidth()*.2f,component.getPadHeight()*.2f),1,20);
 		}
 		
-		private final void playAnim() {
+		void playAnim() {
 			incSize();
-			if(radius > max(component.getContentWidth()*2,component.getContentHeight()*2)) {
+			if(radius > max(component.getPadWidth()*2,component.getPadHeight()*2)) {
 				radius = 0;
-				start = false;
+				isLauch = false;
 			}
 		}
 		
-		private final void resetSize() {
+		void resetSize() {
 			radius = 0;
 		}
 		
-		private final void resetPosition() {
-			x = ctx.mouseX-component.getContentX();
-			y = ctx.mouseY-component.getContentY();
+		void resetPosition() {
+			x = ctx.mouseX-component.getPadX();
+			y = ctx.mouseY-component.getPadY();
 		}
 	}
 }

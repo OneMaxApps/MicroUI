@@ -24,7 +24,7 @@ public abstract class AbstractButton extends Component {
 		stroke = new Stroke();
 
 		onClick(() -> {
-			ripples.initAnim();
+			ripples.lauch();
 		});
 
 	}
@@ -34,7 +34,7 @@ public abstract class AbstractButton extends Component {
 		ctx.pushStyle();
 		stroke.apply();
 		getMutableColor().apply();
-		ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
+		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		hover.draw();
 		ripples.draw();
 		ctx.popStyle();

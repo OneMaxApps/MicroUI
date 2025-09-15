@@ -43,7 +43,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 
 		ctx.pushStyle();
 		getMutableColor().apply();
-		ctx.rect(getContentX(), getContentY(), getContentWidth(), getContentHeight());
+		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		ctx.popStyle();
 
 		if (scrolling.isScrolling()) {

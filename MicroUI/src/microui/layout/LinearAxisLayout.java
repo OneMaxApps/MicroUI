@@ -12,10 +12,10 @@ public abstract class LinearAxisLayout extends LayoutManager {
 	public void recalculate() {
 		float usedWeight = 0;
 		
-		float containerX = getContainer().getContentX();
-		float containerY = getContainer().getContentY();
-		float containerW = getContainer().getContentWidth();
-		float containerH = getContainer().getContentHeight();
+		float containerX = getContainer().getPadX();
+		float containerY = getContainer().getPadY();
+		float containerW = getContainer().getPadWidth();
+		float containerH = getContainer().getPadHeight();
 		
 		for (ComponentEntry entry : getComponentEntryList()) {
 			Component component = entry.getComponent();
@@ -65,9 +65,9 @@ public abstract class LinearAxisLayout extends LayoutManager {
 			Component component = entry.getComponent();
 			LinearAxisLayoutParams params = (LinearAxisLayoutParams) entry.getLayoutParams();	
 			if(isVerticalMode) {
-			ctx.rect(getContainer().getContentX(),component.getAbsoluteY(),getContainer().getContentWidth(),getContainer().getContentHeight()*params.getWeight());
+			ctx.rect(getContainer().getPadX(),component.getAbsoluteY(),getContainer().getPadWidth(),getContainer().getPadHeight()*params.getWeight());
 			} else {
-				ctx.rect(component.getAbsoluteX(),getContainer().getContentY(),getContainer().getContentWidth()*params.getWeight(),getContainer().getContentHeight());
+				ctx.rect(component.getAbsoluteX(),getContainer().getPadY(),getContainer().getPadWidth()*params.getWeight(),getContainer().getPadHeight());
 			}
 		});
 		

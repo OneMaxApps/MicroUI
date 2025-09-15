@@ -5,8 +5,8 @@ import java.util.EnumMap;
 import java.util.Objects;
 
 import microui.MicroUI;
-import microui.core.base.SpatialView;
 import microui.core.base.Component;
+import microui.core.base.SpatialView;
 import processing.core.PApplet;
 
 public final class Callback {
@@ -243,27 +243,27 @@ public final class Callback {
 	private static final boolean isInside(final SpatialView bounds) {
 
 		if (bounds instanceof Component component) {
-			if (component.getContentWidth() < 0 && component.getContentHeight() < 0) {
-				return app.mouseX > component.getContentX() + component.getContentWidth()
-						&& app.mouseX < component.getContentX()
-						&& app.mouseY > component.getContentY() + component.getContentHeight()
-						&& app.mouseY < component.getContentY();
+			if (component.getPadWidth() < 0 && component.getPadHeight() < 0) {
+				return app.mouseX > component.getPadX() + component.getPadWidth()
+						&& app.mouseX < component.getPadX()
+						&& app.mouseY > component.getPadY() + component.getPadHeight()
+						&& app.mouseY < component.getPadY();
 			}
-			if (component.getContentWidth() < 0) {
-				return app.mouseX > component.getContentX() + component.getContentWidth()
-						&& app.mouseX < component.getContentX() && app.mouseY > component.getContentY()
-						&& app.mouseY < component.getContentY() + component.getContentHeight();
+			if (component.getPadWidth() < 0) {
+				return app.mouseX > component.getPadX() + component.getPadWidth()
+						&& app.mouseX < component.getPadX() && app.mouseY > component.getPadY()
+						&& app.mouseY < component.getPadY() + component.getPadHeight();
 			}
-			if (component.getContentHeight() < 0) {
-				return app.mouseX > component.getContentX()
-						&& app.mouseX < component.getContentX() + component.getContentWidth()
-						&& app.mouseY > component.getContentY() + component.getContentHeight()
-						&& app.mouseY < component.getContentY();
+			if (component.getPadHeight() < 0) {
+				return app.mouseX > component.getPadX()
+						&& app.mouseX < component.getPadX() + component.getPadWidth()
+						&& app.mouseY > component.getPadY() + component.getPadHeight()
+						&& app.mouseY < component.getPadY();
 			}
-			return app.mouseX > component.getContentX()
-					&& app.mouseX < component.getContentX() + component.getContentWidth()
-					&& app.mouseY > component.getContentY()
-					&& app.mouseY < component.getContentY() + component.getContentHeight();
+			return app.mouseX > component.getPadX()
+					&& app.mouseX < component.getPadX() + component.getPadWidth()
+					&& app.mouseY > component.getPadY()
+					&& app.mouseY < component.getPadY() + component.getPadHeight();
 		}
 
 		if (bounds.getWidth() < 0 && bounds.getHeight() < 0) {

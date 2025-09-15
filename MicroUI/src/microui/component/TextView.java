@@ -25,6 +25,8 @@ public final class TextView extends Component {
 		setPaddingEnabled(true);
 		setMarginEnabled(true);
 		
+		getMutableColor().set(0);
+		
 		setText(text);
 		setTextSize(max(1, min(width, height)));
 		setAutoResizeModeEnabled(true);
@@ -56,12 +58,12 @@ public final class TextView extends Component {
 		ctx.textAlign(CENTER,CENTER);
 		
 		if(isAutoResizeModeEnabled()) {
-			ctx.textSize(max(1,min(getContentWidth(),getContentHeight())/getAutoResizeMode().getValue()));
+			ctx.textSize(max(1,min(getWidth(),getHeight())/getAutoResizeMode().getValue()));
 		} else {
 			ctx.textSize(getTextSize());
 		}
 		
-		ctx.text(text, getContentX(), getContentY(), getContentWidth(), getContentHeight());
+		ctx.text(text, getX(), getY(), getWidth(), getHeight());
 	}
 
 	public final float getTextSize() {

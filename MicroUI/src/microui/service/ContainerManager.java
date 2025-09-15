@@ -80,7 +80,11 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	public void setAnimationEasingEnabled(boolean isEasing) {
 		animation.setEasingEnabled(isEasing);
 	}
-
+	
+	public void add(Container container) {
+		addContainerSafe(container);
+	}
+	
 	public void add(Container container, String textId) {
 		requireNonNull(textId, "textId cannot be null");
 		if (textId.isEmpty()) {
@@ -174,6 +178,8 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	}
 
 	private void lauchContainer(Container container) {
+		//if(animation.isStart()) { return; }
+		
 		if (container == null) {
 			throw new NullPointerException("container cannot be null");
 		}
