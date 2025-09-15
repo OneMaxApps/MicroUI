@@ -197,7 +197,7 @@ public abstract class Component extends SpatialView {
 
 	public final Component setPadding(float left, float right, float top, float bottom) {
 		ensurePadding();
-		padding.setPadding(left, right, top, bottom);
+		padding.set(left, right, top, bottom);
 		return this;
 	}
 
@@ -301,6 +301,14 @@ public abstract class Component extends SpatialView {
 		return margin.getBottom();
 	}
 
+	public final Component setMargin(float left, float right, float top, float bottom) {
+		margin.setLeft(left);
+		margin.setRight(right);
+		margin.setTop(top);
+		margin.setBottom(bottom);
+		return this;
+	}
+	
 	public final Component setMarginLeft(float left) {
 		ensureMargin();
 		margin.setLeft(left);
@@ -322,14 +330,6 @@ public abstract class Component extends SpatialView {
 	public final Component setMarginBottom(float bottom) {
 		ensureMargin();
 		margin.setBottom(bottom);
-		return this;
-	}
-
-	public final Component setMargin(float left, float right, float top, float bottom) {
-		setMarginLeft(left);
-		setMarginRight(right);
-		setMarginTop(top);
-		setMarginBottom(bottom);
 		return this;
 	}
 
@@ -376,34 +376,19 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final float getAbsoluteX() {
-		if(isPaddingEnabled()) {
-			return isMarginEnabled() ? getX() - (getMarginLeft()+getPaddingLeft()) : getX();
-		}
-		
-		return isMarginEnabled() ? getX() - getMarginLeft() : getX();
+		return getX() - (getMarginLeft()+getPaddingLeft());
 	}
 
 	public final float getAbsoluteY() {
-		if(isPaddingEnabled()) {
-			return isMarginEnabled() ? getY() - (getMarginTop()+getPaddingTop()) : getY();
-		}
-		
-		return isMarginEnabled() ? getY() - getMarginTop() : getY();
+		return getY() - (getMarginTop()+getPaddingTop());
 	}
 
 	public final float getAbsoluteWidth() {
-		if(isPaddingEnabled()) {
-			return isMarginEnabled() ? getWidth() + getMarginLeft() + getMarginRight() + getPaddingLeft() + getPaddingRight() : getWidth();
-		}
-		return isMarginEnabled() ? getWidth() + getMarginLeft() + getMarginRight() : getWidth();
+		return getWidth() + getMarginLeft() + getMarginRight() + getPaddingLeft() + getPaddingRight();
 	}
 
 	public final float getAbsoluteHeight() {
-		if(isPaddingEnabled()) {
-			return isMarginEnabled() ? getHeight() + getMarginTop() + getMarginBottom() + getPaddingTop() + getPaddingBottom(): getHeight();
-
-		}
-		return isMarginEnabled() ? getHeight() + getMarginTop() + getMarginBottom() : getHeight();
+		return getHeight() + getMarginTop() + getMarginBottom() + getPaddingTop() + getPaddingBottom();
 	}
 
 	public final void setAbsoluteX(float x) {
@@ -602,22 +587,22 @@ public abstract class Component extends SpatialView {
 		}
 
 		float getLeft() {
-			return left;
+			return isEnabled ? left : 0;
 		}
 
 		float getRight() {
-			return right;
+			return isEnabled ? right : 0;
 		}
 
 		float getTop() {
-			return top;
+			return isEnabled ? top : 0;
 		}
 
 		float getBottom() {
-			return bottom;
+			return isEnabled ? bottom : 0;
 		}
 
-		public void setPadding(float left, float right, float top, float bottom) {
+		public void set(float left, float right, float top, float bottom) {
 			boolean hasChanges = isCorrectNewValue(this.left, left) || isCorrectNewValue(this.right, right)
 					|| isCorrectNewValue(this.top, top) || isCorrectNewValue(this.bottom, bottom);
 
@@ -654,10 +639,6 @@ public abstract class Component extends SpatialView {
 			if (isEnabled() && isNegativeDimensionsEnabled()) {
 				throw new IllegalStateException("negative dimensions must be disabled for using Padding system");
 			}
-
-//			if (left + right > getWidth() || top + bottom > getHeight()) {
-//				throw new IllegalArgumentException("padding cannot be greater than size of component");
-//			}
 		}
 
 	}
@@ -667,16 +648,24 @@ public abstract class Component extends SpatialView {
 		private boolean isEnabled;
 
 		float getLeft() {
-			return left;
-		}
-
-		void setLeft(float left) {
-			checkValue(left);
-			this.left = left;
+			return isEnabled ? left : 0;
 		}
 
 		float getRight() {
-			return right;
+			return isEnabled ? right : 0;
+		}
+
+		float getTop() {
+			return isEnabled ? top : 0;
+		}
+
+		float getBottom() {
+			return isEnabled ? bottom : 0;
+		}
+		
+		void setLeft(float left) {
+			checkValue(left);
+			this.left = left;
 		}
 
 		void setRight(float right) {
@@ -684,25 +673,17 @@ public abstract class Component extends SpatialView {
 			this.right = right;
 		}
 
-		float getTop() {
-			return top;
-		}
-
 		void setTop(float top) {
 			checkValue(top);
 			this.top = top;
 		}
 
-		float getBottom() {
-			return bottom;
-		}
-
 		void setBottom(float bottom) {
-			checkValue(bottom);
 			this.bottom = bottom;
 		}
 
 		boolean isEnabled() {
+			checkValue(bottom);
 			return isEnabled;
 		}
 
