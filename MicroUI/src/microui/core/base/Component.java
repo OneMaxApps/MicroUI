@@ -1,6 +1,5 @@
 package microui.core.base;
 
-import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 import static microui.event.EventType.CLICK;
 import static microui.event.EventType.DOUBLE_CLICK;
@@ -239,20 +238,20 @@ public abstract class Component extends SpatialView {
 
 	public final float getPadX() {
 		ensurePadding();
-		return isPaddingEnabled() ? getX() - getPaddingLeft() : getX();
+		return getX() - getPaddingLeft();
 	}
 
 	public final float getPadY() {
 		ensurePadding();
-		return isPaddingEnabled() ? getY() - getPaddingTop() : getY();
+		return getY() - getPaddingTop();
 	}
 
 	public final float getPadWidth() {
-		return isPaddingEnabled() ? max(0, getWidth() + (getPaddingRight() + getPaddingLeft())) : getWidth();
+		return getWidth() + getPaddingRight() + getPaddingLeft();
 	}
 
 	public final float getPadHeight() {
-		return isPaddingEnabled() ? max(0, getHeight() + (getPaddingBottom() + getPaddingTop())) : getHeight();
+		return getHeight() + getPaddingBottom() + getPaddingTop();
 	}
 
 	public final boolean isPaddingEnabled() {
@@ -376,19 +375,19 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final float getAbsoluteX() {
-		return getX() - (getMarginLeft()+getPaddingLeft());
+		return getPadX()-getMarginLeft();
 	}
 
 	public final float getAbsoluteY() {
-		return getY() - (getMarginTop()+getPaddingTop());
+		return getPadY()-getMarginTop();
 	}
 
 	public final float getAbsoluteWidth() {
-		return getWidth() + getMarginLeft() + getMarginRight() + getPaddingLeft() + getPaddingRight();
+		return getPadWidth() + getMarginLeft() + getMarginRight();
 	}
 
 	public final float getAbsoluteHeight() {
-		return getHeight() + getMarginTop() + getMarginBottom() + getPaddingTop() + getPaddingBottom();
+		return getPadHeight() + getMarginTop() + getMarginBottom();
 	}
 
 	public final void setAbsoluteX(float x) {
@@ -555,7 +554,7 @@ public abstract class Component extends SpatialView {
 		if (MicroUI.isDebugModeEnabled()) {
 			ctx.pushStyle();
 			ctx.noFill();
-			ctx.strokeWeight(5);
+			ctx.strokeWeight(4);
 
 			// for showing margin area (Red rectangle)
 			ctx.stroke(200, 0, 0, 100);
@@ -679,11 +678,11 @@ public abstract class Component extends SpatialView {
 		}
 
 		void setBottom(float bottom) {
+			checkValue(bottom);
 			this.bottom = bottom;
 		}
 
 		boolean isEnabled() {
-			checkValue(bottom);
 			return isEnabled;
 		}
 

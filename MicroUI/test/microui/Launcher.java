@@ -48,16 +48,15 @@ public final class Launcher extends PApplet {
 
 		containerManager = new ContainerManager();
 		
-		containerManager.add(container = new Container(new GridLayout(10,10)));
+		containerManager.add(container = new Container(new GridLayout(3,3)));
 		
 		MenuButton component;
 		container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
 		
-		container.addComponent(component = new MenuButton(), new GridLayoutParams(1,0,1,1,-1,-1));
+		container.addComponent(component = new MenuButton(), new GridLayoutParams(1,1,1,1));
 		
-		component.setMinMaxSize(100,30,200,100);
-		//component.setMargin(10,10,10,10);
-		component.setPadding(0,100,0,0);
+		component.setMargin(10);
+		component.setPadding(20,10);
 		
 	}
 
