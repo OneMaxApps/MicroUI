@@ -74,14 +74,13 @@ public final class Ripples extends View {
 	}
 
 	public void launch() {
-		this.isLaunched = true;
-		if (isLaunched) {
-			animation.resetState();
-		}
+		isLaunched = true;
+		animation.resetState();
+		animation.preparePosition();
 	}
 
 	private void createGraphics() {
-		pg = ctx.createGraphics((int) max(1, component.getWidth()), (int) max(1, component.getHeight()),
+		pg = ctx.createGraphics((int) max(1, component.getPadWidth()), (int) max(1, component.getPadHeight()),
 				ctx.sketchRenderer());
 		Metrics.register(pg);
 	}
@@ -120,9 +119,7 @@ public final class Ripples extends View {
 			if (!isLaunched) {
 				return;
 			}
-
-			preparePosition();
-
+			
 			pg.noStroke();
 			color.apply(pg);
 			pg.fill(color.getRed(), color.getGreen(), color.getBlue(), max(0, 190 - map(radius, 0, maxRadius, 0, 190)));
@@ -171,7 +168,7 @@ public final class Ripples extends View {
 		}
 		
 		float getSpeed() {
-			return ((maxRadius + (radius * .1f)) * .02f);
+			return ((maxRadius + (radius * .2f)) * .02f);
 		}
 	}
 }
