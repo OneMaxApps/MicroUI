@@ -31,48 +31,56 @@ public abstract class AbstractButton extends Component {
 		stroke.apply();
 		getMutableColor().apply();
 		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
-		hover.draw();
 		ripples.draw();
+		hover.draw();
 		ctx.popStyle();
 	}
 
-	public Color getRipplesColor() {
+	public final Color getRipplesColor() {
 		return ripples.getColor();
 	}
 
-	public void setRipplesColor(Color color) {
+	public final void setRipplesColor(Color color) {
 		ripples.setColor(requireNonNull(color,"color cannot be null"));
 	}
 
-	public boolean isRipplesEnabled() {
+	public final boolean isRipplesEnabled() {
 		return ripples.isEnabled();
 	}
 
-	public void setRipplesEnabled(boolean enable) {
+	public final void setRipplesEnabled(boolean enable) {
 		ripples.setEnabled(enable);
 	}
 
-	public boolean isHoverEnabled() {
+	public final boolean isHoverEnabled() {
 		return hover.isEnabled();
 	}
 
-	public void setHoverEnabled(boolean enabled) {
+	public final void setHoverEnabled(boolean enabled) {
 		hover.setEnabled(enabled);
 	}
+	
+	public final float getHoverSpeed() {
+		return hover.getSpeed();
+	}
 
-	public float getStrokeWeight() {
+	public final void setHoverSpeed(float speed) {
+		hover.setSpeed(speed);
+	}
+
+	public final float getStrokeWeight() {
 		return stroke.getWeight();
 	}
 
-	public void setStrokeWeight(int weight) {
+	public final void setStrokeWeight(int weight) {
 		stroke.setWeight(weight);
 	}
 
-	public Color getStrokeColor() {
+	public final Color getStrokeColor() {
 		return new Color(stroke.getColor());
 	}
 
-	public void setStrokeColor(Color color) {
+	public final void setStrokeColor(Color color) {
 		stroke.setColor(requireNonNull(color,"color cannot be null"));
 	}
 

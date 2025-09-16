@@ -38,25 +38,21 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-		size(640, 480);
-//		fullScreen();
+//		size(640, 480);
+		fullScreen();
 	}
 
 	@Override
 	public void setup() {
-		MicroUI.setDebugModeEnabled(true);
+//		MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
 
 		containerManager = new ContainerManager();
 		
-		Container container = new Container(new GridLayout(20,20));
+		container = new Container(new GridLayout(11,11));
 		
-		for(int c = 0; c < 20; c++) {
-			for(int r = 0; r < 20; r++) {
-				container.addComponent(new Button(), new GridLayoutParams(c,r));
-			}	
-		}
-		
+		container.addComponent(new Button().setMargin(0,20), new GridLayoutParams(5,5));
+
 		containerManager.add(container);
 		
 	}

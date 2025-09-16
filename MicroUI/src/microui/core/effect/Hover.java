@@ -1,79 +1,89 @@
 package microui.core.effect;
 
 import static java.util.Objects.requireNonNull;
+import static processing.core.PApplet.map;
 
 import microui.core.base.Component;
 import microui.core.base.View;
 import microui.core.style.Color;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 16.09.2025
 public final class Hover extends View {
 	private final Color color;
-	private Component component;
-	private boolean isInside,isPressed,isEnabled;
+	private final Component component;
+	private float timer,timerMax,speed;
+	private boolean isEnabled;
 	
-    public Hover(Component component) {
-    	requireNonNull(component, "component cannot be null");
-    	setVisible(true);
-    	color = new Color(0,100,255,24);
-		this.component = component;
-		component.onMouseInside(() -> isInside = true);
-		component.onMouseOutside(() -> isInside = false);
-		component.onPress(() -> isPressed = true);
-		component.onRelease(() -> isPressed = false);
-		isEnabled = true;
+	public Hover(Component component) {
+		super();
+		setVisible(true);
+		
+		color = new Color(0,100,255,24);
+		
+		this.component = requireNonNull(component,"component cannot be null");
+	
+		timerMax = 100;
+		
+		setSpeed(10);
+		
+		setEnabled(true);
 	}
 
 	@Override
-	public void render() {
-		if(!isEnabled) { return; }
-		
-		if(isInside) {
-			ctx.pushStyle();
-			ctx.fill(color.get());
-			rectOnDraw();
-			if(isPressed) {
-			ctx.fill(0,64);
-			rectOnDraw();
-			}
-			ctx.popStyle();
+	public void draw() {
+		if(!isEnabled ) { return; }
+		super.draw();
+	}
+
+	@Override
+	protected void render() {
+		if(component.isMouseInside()) {
+			if(timer < timerMax) { timer+=speed; }
+		} else {
+			if(timer > 0) { timer-=speed*2; }
 		}
-	}
-	
-	public final Component getComponent() {
-		return component;
+		
+		if(component.isPressed()) {
+			ctx.fill(0,getAlpha());
+		} else {
+			ctx.fill(color.getRed(),color.getGreen(),color.getBlue(),getAlpha());
+		}
+		
+		ctx.rect(component.getPadX(),component.getPadY(),component.getPadWidth(),component.getPadHeight());
+		
 	}
 
-	public final void setComponent(Component component) {
-		requireNonNull(component, "component cannot be null");
-		if(this.component == component) { return; }
-		
-		this.component = component;
-		
-		component.onMouseInside(() -> isInside = true);
-		component.onMouseOutside(() -> isInside = false);
-		component.onPress(() -> isPressed = true);
-		component.onRelease(() -> isPressed = false);
-	}
-
-	public final Color getColor() {
-		System.out.println("created a new Color object");
+	public Color getColor() {
 		return new Color(color);
 	}
 	
-	public final void setColor(Color color) {
-		requireNonNull(color, "color cannot be null");
-		this.color.set(color);
+	public void setColor(Color color) {
+		requireNonNull(color,"color cannot be null");
+		color.set(color);
+	}
+	
+	public float getSpeed() {
+		return speed;
 	}
 
-	public final boolean isEnabled() {
+	public void setSpeed(float speed) {
+		if(speed <= 0) { 
+			throw new IllegalArgumentException("speed for hover animation cannot be less or equal to zero");
+		}
+		this.speed = speed;
+	}
+
+	public boolean isEnabled() {
 		return isEnabled;
 	}
 
-	public final void setEnabled(boolean isEnabled) {
+	public void setEnabled(boolean isEnabled) {
 		this.isEnabled = isEnabled;
 	}
 	
-	private void rectOnDraw() {
-		ctx.rect(component.getPadX(),component.getPadY(),component.getPadWidth(),component.getPadHeight());
+	private float getAlpha() {
+		return map(timer,0,timerMax,0,color.getAlpha());
 	}
+	
 }

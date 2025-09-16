@@ -11,6 +11,8 @@ import microui.core.style.Color;
 import microui.util.Metrics;
 import processing.core.PGraphics;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 16.09.2025
 public final class Ripples extends View {
 	private final Animation animation;
 	private final Component component;
@@ -159,7 +161,7 @@ public final class Ripples extends View {
 		}
 
 		void recalculateMaxRadius() {
-			maxRadius = dist(0, 0, component.getPadWidth() * 2, component.getPadHeight() * 2);
+			maxRadius = dist(0, 0, component.getPadWidth(), component.getPadHeight())*2;
 		}
 
 		void complete() {
@@ -168,7 +170,7 @@ public final class Ripples extends View {
 		}
 		
 		float getSpeed() {
-			return ((maxRadius + (radius * .2f)) * .02f);
+			return ((maxRadius + (radius * .2f)) * .04f);
 		}
 	}
 }
