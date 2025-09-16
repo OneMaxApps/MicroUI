@@ -23,10 +23,6 @@ public abstract class AbstractButton extends Component {
 		hover = new Hover(this);
 		stroke = new Stroke();
 
-		onClick(() -> {
-			ripples.lauch();
-		});
-
 	}
 
 	@Override

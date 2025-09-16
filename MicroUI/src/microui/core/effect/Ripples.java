@@ -1,9 +1,9 @@
 package microui.core.effect;
 
+import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
-import static processing.core.PApplet.constrain;
-import static processing.core.PApplet.max;
-import static processing.core.PApplet.min;
+import static processing.core.PApplet.dist;
+import static processing.core.PApplet.map;
 
 import microui.core.base.Component;
 import microui.core.base.View;
@@ -12,129 +12,166 @@ import microui.util.Metrics;
 import processing.core.PGraphics;
 
 public final class Ripples extends View {
-	private final Color color;
-	private final Circle circle;
-	private Component component;
+	private final Animation animation;
+	private final Component component;
+	private boolean isEnabled, isLaunched;
 	private PGraphics pg;
-	private boolean isEnabled;
-	
+
 	public Ripples(Component component) {
 		super();
 		setVisible(true);
-		color = new Color(0,64);		
-		circle = new Circle();
 		
-		this.component = requireNonNull(component, "bounds cannot be null");
+		animation = new Animation();
 		
-		component.onClick(() -> {
-			if(pg == null) {
-				createGraphics();
-			}
-			
-			checkResizing();
-		});
+		this.component = requireNonNull(component, "component cannot be null");
+		initCallbackForComponent();
 		
-		isEnabled = true;
+		setEnabled(true);
 	}
 
 	@Override
-	public void render() {
-		if(!isEnabled || pg == null || !circle.isLauch) { return; }
-		
-		
-		
-		if(pg.width != 0 && pg.height != 0) {
+	public void draw() {
+		if (!isEnabled()) {
+			return;
+		}
+		super.draw();
+	}
+
+	@Override
+	protected void render() {
+		if (pg == null || !isLaunched()) {
+			return;
+		}
+
 		pg.beginDraw();
 		pg.clear();
-		circle.draw(pg);
+		pg.pushStyle();
+		animation.render(pg);
+		pg.popStyle();
 		pg.endDraw();
-		ctx.image(pg, component.getPadX(),component.getPadY(),component.getPadWidth(),component.getPadHeight());
-		}
-		
-	}
-	
-	public final Component getComponent() {
-		return component;
+
+		ctx.image(pg, component.getPadX(), component.getPadY(), component.getPadWidth(), component.getPadHeight());
 	}
 
-	public final void setComponent(Component component) {
-		this.component = requireNonNull(component, "bounds cannot be null");
-	}
-
-	public final void lauch() {
-		circle.resetSize();
-		circle.resetPosition();
-		circle.isLauch = true;
-	}
-	
-	public final Color getColor() {
-		return new Color(color);
-	}
-	
-	public final void setColor(Color color) {
-		this.color.set(requireNonNull(color, "color cannot be null"));
-	}
-	
-	public final boolean isEnabled() {
+	public boolean isEnabled() {
 		return isEnabled;
 	}
 
-	public final void setEnabled(boolean enabled) {
-		this.isEnabled = enabled;
+	public Color getColor() {
+		return animation.getColor();
 	}
 
-	private final void checkResizing() {
-		if(!isVisible() || ctx.mousePressed) { return; }
-		
-		if(isResized()) { createGraphics(); }
-		
+	public void setColor(Color color) {
+		animation.setColor(color);
 	}
-	
-	private final boolean isResized() {
-		if(component.getPadWidth() <= 1 || component.getPadHeight() <= 1) { return false; }
-		
-		return pg.width != (int) component.getPadWidth() || pg.height != (int) component.getPadHeight();
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
-	
-	private final void createGraphics() {
-		pg = ctx.createGraphics((int) max(1,component.getPadWidth()),(int) max(1,component.getPadHeight()),ctx.sketchRenderer());
+
+	public boolean isLaunched() {
+		return isLaunched;
+	}
+
+	public void launch() {
+		this.isLaunched = true;
+		if (isLaunched) {
+			animation.resetState();
+		}
+	}
+
+	private void createGraphics() {
+		pg = ctx.createGraphics((int) max(1, component.getWidth()), (int) max(1, component.getHeight()),
+				ctx.sketchRenderer());
 		Metrics.register(pg);
 	}
 
-	private final class Circle {
-		float x,y,radius;
-		boolean isLauch;
+	private boolean isComponentResized() {
+		return pg.width != (int) component.getPadWidth() || pg.height != (int) component.getPadHeight();
+	}
+	
+	private void initCallbackForComponent() {
+		component.onClick(() -> {
+			if (pg == null) {
+				createGraphics();
+				animation.recalculateMaxRadius();
+			}
 
-		void draw(PGraphics pGraphics) {
-			
-			pGraphics.noStroke();
-			pGraphics.fill(color.get(),constrain(255-radius*.5f,0,255));
-			pGraphics.circle(x, y, radius);
-			
-			if(isLauch) {
-				playAnim();
+			if (isComponentResized()) {
+				createGraphics();
+				animation.recalculateMaxRadius();
+			}
+
+			launch();
+		});
+	}
+
+	private final class Animation {
+		private final Color color;
+		private float maxRadius;
+		private int startX, startY, radius;
+		private boolean isPositionPrepared;
+
+		Animation() {
+			color = new Color(200,255,255);
+		}
+
+		void render(PGraphics pg) {
+			if (!isLaunched) {
+				return;
+			}
+
+			preparePosition();
+
+			pg.noStroke();
+			color.apply(pg);
+			pg.fill(color.getRed(), color.getGreen(), color.getBlue(), max(0, 190 - map(radius, 0, maxRadius, 0, 190)));
+			pg.circle(startX, startY, radius);
+
+			radius += getSpeed();
+
+			if (radius > maxRadius) {
+				complete();
 			}
 		}
-		
-		void incSize() {
-			radius += constrain(min(component.getPadWidth()*.2f,component.getPadHeight()*.2f),1,20);
+
+		Color getColor() {
+			return new Color(color);
 		}
-		
-		void playAnim() {
-			incSize();
-			if(radius > max(component.getPadWidth()*2,component.getPadHeight()*2)) {
-				radius = 0;
-				isLauch = false;
+
+		void setColor(Color color) {
+			if (color == null) {
+				throw new NullPointerException("color cannot be null");
+			}
+
+			this.color.set(color);
+		}
+
+		void preparePosition() {
+			if (!isPositionPrepared) {
+				startX = (int) (ctx.mouseX - component.getPadX());
+				startY = (int) (ctx.mouseY - component.getPadY());
+				isPositionPrepared = true;
 			}
 		}
-		
-		void resetSize() {
+
+		void resetState() {
+			startX = startY = -1;
+			isPositionPrepared = false;
 			radius = 0;
 		}
+
+		void recalculateMaxRadius() {
+			maxRadius = dist(0, 0, component.getPadWidth() * 2, component.getPadHeight() * 2);
+		}
+
+		void complete() {
+			resetState();
+			isLaunched = false;
+		}
 		
-		void resetPosition() {
-			x = ctx.mouseX-component.getPadX();
-			y = ctx.mouseY-component.getPadY();
+		float getSpeed() {
+			return ((maxRadius + (radius * .1f)) * .02f);
 		}
 	}
 }

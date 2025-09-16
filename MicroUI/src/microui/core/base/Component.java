@@ -25,15 +25,19 @@ import microui.feedback.Tooltip;
 //Status: STABLE - Do not modify
 //Last Reviewed: 12.09.2025
 public abstract class Component extends SpatialView {
+	private final Padding padding;
+	private final Margin margin;
 	private Color color;
 	private Event event;
 	private Callback callback;
 	private Tooltip tooltip;
-	private Padding padding;
-	private Margin margin;
 
 	public Component(float x, float y, float width, float height) {
 		super(x, y, width, height);
+		
+		padding = new Padding();
+		margin = new Margin();
+		
 		setPaddingEnabled(true);
 		setMarginEnabled(true);
 	}
@@ -195,7 +199,6 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final Component setPadding(float left, float right, float top, float bottom) {
-		ensurePadding();
 		padding.set(left, right, top, bottom);
 		return this;
 	}
@@ -217,32 +220,26 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final float getPaddingLeft() {
-		ensurePadding();
 		return padding.getLeft();
 	}
 
 	public final float getPaddingRight() {
-		ensurePadding();
 		return padding.getRight();
 	}
 
 	public final float getPaddingTop() {
-		ensurePadding();
 		return padding.getTop();
 	}
 
 	public final float getPaddingBottom() {
-		ensurePadding();
 		return padding.getBottom();
 	}
 
 	public final float getPadX() {
-		ensurePadding();
 		return getX() - getPaddingLeft();
 	}
 
 	public final float getPadY() {
-		ensurePadding();
 		return getY() - getPaddingTop();
 	}
 
@@ -255,14 +252,10 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final boolean isPaddingEnabled() {
-		if (padding == null) {
-			return false;
-		}
 		return padding.isEnabled();
 	}
 
 	public final Component setPaddingEnabled(boolean isEnabled) {
-		ensurePadding();
 		padding.setEnabled(isEnabled);
 		return this;
 	}
@@ -273,30 +266,23 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final boolean hasPadding() {
-		if (padding == null) {
-			return false;
-		}
 		return padding.isEnabled()
 				&& (padding.getLeft() > 0 || padding.getRight() > 0 || padding.getTop() > 0 || padding.getBottom() > 0);
 	}
 
 	public final float getMarginLeft() {
-		ensureMargin();
 		return margin.getLeft();
 	}
 
 	public final float getMarginRight() {
-		ensureMargin();
 		return margin.getRight();
 	}
 
 	public final float getMarginTop() {
-		ensureMargin();
 		return margin.getTop();
 	}
 
 	public final float getMarginBottom() {
-		ensureMargin();
 		return margin.getBottom();
 	}
 
@@ -307,27 +293,23 @@ public abstract class Component extends SpatialView {
 		margin.setBottom(bottom);
 		return this;
 	}
-	
+
 	public final Component setMarginLeft(float left) {
-		ensureMargin();
 		margin.setLeft(left);
 		return this;
 	}
 
 	public final Component setMarginRight(float right) {
-		ensureMargin();
 		margin.setRight(right);
 		return this;
 	}
 
 	public final Component setMarginTop(float top) {
-		ensureMargin();
 		margin.setTop(top);
 		return this;
 	}
 
 	public final Component setMarginBottom(float bottom) {
-		ensureMargin();
 		margin.setBottom(bottom);
 		return this;
 	}
@@ -354,32 +336,25 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final boolean isMarginEnabled() {
-		if (margin == null) {
-			return false;
-		}
 		return margin.isEnabled();
 	}
 
 	public final Component setMarginEnabled(boolean isEnabled) {
-		ensureMargin();
 		margin.setEnabled(isEnabled);
 		return this;
 	}
 
 	public final boolean hasMargin() {
-		if (margin == null) {
-			return false;
-		}
 		return margin.isEnabled()
 				&& (margin.getLeft() > 0 || margin.getRight() > 0 || margin.getTop() > 0 || margin.getBottom() > 0);
 	}
 
 	public final float getAbsoluteX() {
-		return getPadX()-getMarginLeft();
+		return getPadX() - getMarginLeft();
 	}
 
 	public final float getAbsoluteY() {
-		return getPadY()-getMarginTop();
+		return getPadY() - getMarginTop();
 	}
 
 	public final float getAbsoluteWidth() {
@@ -430,8 +405,8 @@ public abstract class Component extends SpatialView {
 	 * don't ignore constrain system. Also this method can't modify margin
 	 * parameters
 	 * 
-	 * @param x change position with margin left
-	 * @param y change position with margin top
+	 * @param x      change position with margin left
+	 * @param y      change position with margin top
 	 * @param width  change real width with using margin
 	 * @param height change real height with using margin
 	 * 
@@ -538,18 +513,6 @@ public abstract class Component extends SpatialView {
 		}
 	}
 
-	private void ensurePadding() {
-		if (padding == null) {
-			padding = new Padding();
-		}
-	}
-
-	private void ensureMargin() {
-		if (margin == null) {
-			margin = new Margin();
-		}
-	}
-
 	private void debugOnDraw() {
 		if (MicroUI.isDebugModeEnabled()) {
 			ctx.pushStyle();
@@ -563,7 +526,7 @@ public abstract class Component extends SpatialView {
 			// for showing pad area (Green rectangle)
 			ctx.stroke(0, 200, 0, 100);
 			ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
-			
+
 			// for showing content area (Blue rectangle)
 			ctx.stroke(0, 0, 200, 100);
 			ctx.rect(getX(), getY(), getWidth(), getHeight());
@@ -661,7 +624,7 @@ public abstract class Component extends SpatialView {
 		float getBottom() {
 			return isEnabled ? bottom : 0;
 		}
-		
+
 		void setLeft(float left) {
 			checkValue(left);
 			this.left = left;

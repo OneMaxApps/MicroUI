@@ -1,7 +1,6 @@
 package microui;
 
-import microui.component.MenuButton;
-import microui.constants.ContainerMode;
+import microui.component.Button;
 import microui.core.base.Container;
 import microui.event.Event;
 import microui.layout.GridLayout;
@@ -23,9 +22,11 @@ import processing.event.MouseEvent;
 // [0] TextField;
 // [1] TextView;
 
-// absoluteX,Y,Width,Height its with margin; (FOR CONTAINERS)
-// contentX,Y,Width,Height its with padding; (FOR RENDER, EVENT AND CALLBACK LOGIC)
-// getX,Y,Width,Height its raw data about bounds without padding and margin; (FOR REAL BOUNDS MANIPULATIONS)
+// NOTE: ///////////////////////////////////////////////////
+// getX,Y,Width,Height = content area;
+// getPadX,Y,Width,Height = padded area;
+// getAbsoluteX,Y,Width,Height = margin area;
+////////////////////////////////////////////////////////////
 
 public final class Launcher extends PApplet {
 
@@ -48,15 +49,15 @@ public final class Launcher extends PApplet {
 
 		containerManager = new ContainerManager();
 		
-		containerManager.add(container = new Container(new GridLayout(3,3)));
+		Container container = new Container(new GridLayout(20,20));
 		
-		MenuButton component;
-		container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
+		for(int c = 0; c < 20; c++) {
+			for(int r = 0; r < 20; r++) {
+				container.addComponent(new Button(), new GridLayoutParams(c,r));
+			}	
+		}
 		
-		container.addComponent(component = new MenuButton(), new GridLayoutParams(1,1,1,1));
-		
-		component.setMargin(10);
-		component.setPadding(20,10);
+		containerManager.add(container);
 		
 	}
 
