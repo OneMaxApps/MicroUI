@@ -60,7 +60,7 @@ public final class Hover extends View {
 	
 	public void setColor(Color color) {
 		requireNonNull(color,"color cannot be null");
-		color.set(color);
+		this.color.set(color);
 	}
 	
 	public float getSpeed() {

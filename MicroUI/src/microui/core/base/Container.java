@@ -6,7 +6,6 @@ import static microui.constants.ContainerMode.IGNORE_CONSTRAINTS;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import microui.constants.ContainerMode;
@@ -25,7 +24,8 @@ public final class Container extends Component implements KeyPressable, Scrollab
 	private final LayoutManager layoutManager;
 	private Texture backgroundImage;
 	private ContainerMode containerMode;
-
+	private int maxPriority;
+	
 	public Container(LayoutManager layoutManager, float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setVisible(true);
@@ -241,6 +241,13 @@ public final class Container extends Component implements KeyPressable, Scrollab
 			backgroundImage.setBounds(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		}
 	}
+	
+	private void recalculateMaxPriority() {
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			int priority = componentEntryList.get(i).getComponent().getPriority();
+			maxPriority = Math.max(maxPriority, priority);
+		}
+	}
 
 	private void addComponentSafe(Component component, LayoutParams layoutParams) {
 		checkComponentNotNull(component);
@@ -250,7 +257,8 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		ComponentEntry componentEntry = new ComponentEntry(component, layoutParams);
 		componentEntryList.add(componentEntry);
 		layoutManager.onAddComponent(componentEntry);
-		sortPriorityOfComponents();
+		
+		recalculateMaxPriority();
 		
 	}
 
@@ -259,9 +267,15 @@ public final class Container extends Component implements KeyPressable, Scrollab
 			return;
 		}
 
-		for(int i = 0; i < componentEntryList.size(); i++) {
-			componentEntryList.get(i).getComponent().draw();
+		for(int priority = 0; priority <= maxPriority; priority++) {
+			for(int i = 0; i < componentEntryList.size(); i++) {
+				Component component = componentEntryList.get(i).getComponent();
+				if(component.getPriority() == priority) {
+					component.draw();
+				}
+			}
 		}
+		
 	}
 
 	private void debugOnDraw() {
@@ -289,10 +303,6 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		}
 	}
 
-	private void sortPriorityOfComponents() {
-		componentEntryList.sort(Comparator.comparingInt(entry -> entry.getComponent().getPriority()));
-	}
-
 	private void checkComponentAlreadyAddedInList(Component component) {
 		for(int i = 0; i < componentEntryList.size(); i++) {
 			if(componentEntryList.get(i).getComponent() == component) {
@@ -306,6 +316,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		if (backgroundImage != null && backgroundImage.isLoaded()) {
 			backgroundImage.draw();
 		} else {
+			ctx.noStroke();
 			getMutableColor().apply();
 			ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		}
@@ -332,7 +343,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		layoutManager.onRemoveComponent();
 		
 		if(componentEntryList.size() > 1) {
-			sortPriorityOfComponents();
+			recalculateMaxPriority();
 		}
 	}
 	

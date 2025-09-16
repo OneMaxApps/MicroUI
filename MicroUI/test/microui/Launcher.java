@@ -1,13 +1,11 @@
 package microui;
 
-import microui.component.Button;
+import microui.component.LabeledCheckBox;
 import microui.core.base.Container;
 import microui.event.Event;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
-import microui.service.ContainerManager;
 import microui.service.GlobalTooltip;
-import microui.util.Metrics;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -30,7 +28,6 @@ import processing.event.MouseEvent;
 
 public final class Launcher extends PApplet {
 
-	ContainerManager containerManager;
 	Container container;
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -38,22 +35,19 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-//		size(640, 480);
-		fullScreen();
+		size(640, 480);
+//		fullScreen();
 	}
 
 	@Override
 	public void setup() {
-//		MicroUI.setDebugModeEnabled(true);
+		//MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
 
-		containerManager = new ContainerManager();
+		container = new Container(new GridLayout(10,11));
+		// container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
 		
-		container = new Container(new GridLayout(11,11));
-		
-		container.addComponent(new Button().setMargin(0,20), new GridLayoutParams(5,5));
-
-		containerManager.add(container);
+		container.addComponent(new LabeledCheckBox(), new GridLayoutParams(4,5,2,1));
 		
 	}
 
@@ -61,21 +55,17 @@ public final class Launcher extends PApplet {
 	public void draw() {
 		background(200);
 
-		containerManager.draw();
+		container.draw();
 		if(mouseButton == RIGHT) {
 			container.setSize(mouseX,mouseY);
 		}
-		
-		System.out.println(frameRate);
-		
-		Metrics.print("PGraphicsJava2D");
 		
 		GlobalTooltip.draw();
 	}
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		containerManager.mouseWheel(event);
+		container.mouseWheel(event);
 	}
 
 	@Override
@@ -86,7 +76,7 @@ public final class Launcher extends PApplet {
 	@Override
 	public void keyPressed() {
 		Event.keyPressed();
-		containerManager.keyPressed();
+		container.keyPressed();
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static microui.constants.AutoResizeMode.SMALL;
 import static processing.core.PConstants.CENTER;
+import static processing.core.PConstants.CORNER;
 
 import microui.constants.AutoResizeMode;
 import microui.core.base.Component;
@@ -15,7 +16,7 @@ public final class TextView extends Component {
 	private String text;
 	private AutoResizeMode autoResizeMode;
 	private float textSize;
-	private boolean isAutoResizeModeEnabled;
+	private boolean isAutoResizeModeEnabled,isCenterMode;
 	
 	public TextView(String text, float x, float y, float width, float height) {
 		super(x, y, width, height);
@@ -31,6 +32,7 @@ public final class TextView extends Component {
 		setTextSize(max(1, min(width, height)));
 		setAutoResizeModeEnabled(true);
 		setAutoResizeMode(SMALL);
+		setCenterMode(true);
 	}
 
 	public TextView(float x, float y, float width, float height) {
@@ -55,7 +57,8 @@ public final class TextView extends Component {
 		if (font != null) {
 			ctx.textFont(font);
 		}
-		ctx.textAlign(CENTER,CENTER);
+		
+		ctx.textAlign(isCenterMode ? CENTER : CORNER,CENTER);
 		
 		if(isAutoResizeModeEnabled()) {
 			ctx.textSize(max(1,min(getWidth(),getHeight())/getAutoResizeMode().getValue()));
@@ -66,53 +69,61 @@ public final class TextView extends Component {
 		ctx.text(text, getX(), getY(), getWidth(), getHeight());
 	}
 
-	public final float getTextSize() {
+	public float getTextSize() {
 		return textSize;
 	}
 
-	public final void setTextSize(float textSize) {
+	public void setTextSize(float textSize) {
 		if (textSize <= 0) {
 			throw new IllegalArgumentException("text size cannot be equal to zero and lower");
 		}
 		this.textSize = textSize;
 	}
 
-	public final PFont getFont() {
+	public PFont getFont() {
 		return font;
 	}
 
-	public final void setFont(PFont font) {
+	public void setFont(PFont font) {
 		if (font == null) {
 			throw new IllegalArgumentException("font cannot be null");
 		}
 		this.font = font;
 	}
 
-	public final String getText() {
+	public String getText() {
 		return text;
 	}
 
-	public final void setText(String text) {
+	public void setText(String text) {
 		if (text == null) {
 			throw new IllegalArgumentException("text cannot be null");
 		}
 		this.text = text;
 	}
 
-	public final boolean isAutoResizeModeEnabled() {
+	public boolean isAutoResizeModeEnabled() {
 		return isAutoResizeModeEnabled;
 	}
 
-	public final void setAutoResizeModeEnabled(boolean isAutoResizeModeEnabled) {
+	public void setAutoResizeModeEnabled(boolean isAutoResizeModeEnabled) {
 		this.isAutoResizeModeEnabled = isAutoResizeModeEnabled;
 	}
 
-	public final AutoResizeMode getAutoResizeMode() {
+	public AutoResizeMode getAutoResizeMode() {
 		return autoResizeMode;
 	}
 
-	public final void setAutoResizeMode(AutoResizeMode autoResizeMode) {
+	public void setAutoResizeMode(AutoResizeMode autoResizeMode) {
 		this.autoResizeMode = autoResizeMode;
 	}
 
+	public boolean isCenterMode() {
+		return isCenterMode;
+	}
+
+	public void setCenterMode(boolean isCenterMode) {
+		this.isCenterMode = isCenterMode;
+	}
+	
 }

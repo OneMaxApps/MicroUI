@@ -17,23 +17,20 @@ public class Event {
 	private byte wasPressed, longPressed, clickCounter;
 	private int secondsSinceMouseInside;
 	private boolean holding, dragged, enable;
-	private SpatialView bounds;
+	private SpatialView spatialView;
 
 	public Event() {
 		enable = true;
 		Metrics.register(this);
 	}
 
-	public final void setListener(SpatialView bounds) {
-		this.bounds = requireNonNull(bounds, "bounds cannot be null");
+	public final void setListener(SpatialView spatialView) {
+		this.spatialView = requireNonNull(spatialView, "spatialView cannot be null");
 	}
 
 	public void listen() {
-		if (bounds instanceof Component component) {
+		if (spatialView instanceof Component component) {
 			listener(component.getPadX(), component.getPadY(), component.getPadWidth(), component.getPadHeight());
-		} else {
-			listener(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
-
 		}
 	}
 
