@@ -1,6 +1,7 @@
 package microui.event;
 
 import static java.util.Objects.requireNonNull;
+import static microui.MicroUI.getContext;
 
 import microui.MicroUI;
 import microui.core.base.Component;
@@ -9,18 +10,24 @@ import microui.util.Metrics;
 import processing.core.PApplet;
 
 public class Event {
-	private static PApplet app = MicroUI.getContext();
+	private static PApplet app = getContext();
 	private static final int MIN_SHAKE_DIST = 3;
 	private static final boolean[] keys = new boolean[Character.MAX_VALUE + 1];
 
 	private float x, y, w, h;
 	private byte wasPressed, longPressed, clickCounter;
 	private int secondsSinceMouseInside;
-	private boolean holding, dragged, enable;
+	private boolean isHolding, isDragged, isEnabled;
 	private SpatialView spatialView;
 
+	public Event(SpatialView spatialView) {
+		setListener(spatialView);
+		isEnabled = true;
+		Metrics.register(this);
+	}
+	
 	public Event() {
-		enable = true;
+		isEnabled = true;
 		Metrics.register(this);
 	}
 
@@ -29,8 +36,13 @@ public class Event {
 	}
 
 	public void listen() {
+		if(spatialView == null) {
+			throw new NullPointerException("Event system not have object for listening");
+		}
 		if (spatialView instanceof Component component) {
 			listener(component.getPadX(), component.getPadY(), component.getPadWidth(), component.getPadHeight());
+		} else {
+			listener(spatialView.getX(), spatialView.getY(), spatialView.getWidth(), spatialView.getHeight());
 		}
 	}
 
@@ -39,7 +51,7 @@ public class Event {
 	}
 
 	private final void listener(final float x, final float y, final float w, final float h) {
-		if (!enable) {
+		if (!isEnabled) {
 			return;
 		}
 
@@ -49,7 +61,7 @@ public class Event {
 		this.h = h;
 
 		if (!app.mousePressed) {
-			holding = dragged = false;
+			isHolding = isDragged = false;
 		}
 
 		if (pressed()) {
@@ -73,11 +85,11 @@ public class Event {
 	}
 
 	public final void setEnable(boolean enable) {
-		this.enable = enable;
+		this.isEnabled = enable;
 	}
 
 	public final boolean isEnable() {
-		return enable;
+		return isEnabled;
 	}
 
 	public static final boolean isMouseShaking() {
@@ -128,9 +140,9 @@ public class Event {
 
 	public boolean holding() {
 		if (pressed()) {
-			return holding = true;
+			return isHolding = true;
 		} else {
-			return holding;
+			return isHolding;
 		}
 
 	}
@@ -141,10 +153,10 @@ public class Event {
 
 	public boolean dragged() {
 		if (dragging()) {
-			dragged = true;
+			isDragged = true;
 		}
 
-		return dragged;
+		return isDragged;
 	}
 
 	public boolean clicked() {
@@ -208,7 +220,7 @@ public class Event {
 		keyReleased();
 		longPressed = wasPressed = clickCounter = 0;
 		secondsSinceMouseInside = 0;
-		holding = dragged = false;
+		isHolding = isDragged = false;
 	}
 
 }

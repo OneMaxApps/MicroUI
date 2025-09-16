@@ -16,15 +16,11 @@ public final class TextView extends Component {
 	private String text;
 	private AutoResizeMode autoResizeMode;
 	private float textSize;
-	private boolean isAutoResizeModeEnabled,isCenterMode;
+	private boolean isAutoResizeModeEnabled,isCenterModeEnabled;
 	
 	public TextView(String text, float x, float y, float width, float height) {
 		super(x, y, width, height);
-		setVisible(true);
 		setConstrainDimensionsEnabled(false);
-		setNegativeDimensionsEnabled(false);
-		setPaddingEnabled(true);
-		setMarginEnabled(true);
 		
 		getMutableColor().set(0);
 		
@@ -32,7 +28,7 @@ public final class TextView extends Component {
 		setTextSize(max(1, min(width, height)));
 		setAutoResizeModeEnabled(true);
 		setAutoResizeMode(SMALL);
-		setCenterMode(true);
+		setCenterModeEnabled(true);
 	}
 
 	public TextView(float x, float y, float width, float height) {
@@ -58,7 +54,7 @@ public final class TextView extends Component {
 			ctx.textFont(font);
 		}
 		
-		ctx.textAlign(isCenterMode ? CENTER : CORNER,CENTER);
+		ctx.textAlign(isCenterModeEnabled ? CENTER : CORNER,CENTER);
 		
 		if(isAutoResizeModeEnabled()) {
 			ctx.textSize(max(1,min(getWidth(),getHeight())/getAutoResizeMode().getValue()));
@@ -118,12 +114,12 @@ public final class TextView extends Component {
 		this.autoResizeMode = autoResizeMode;
 	}
 
-	public boolean isCenterMode() {
-		return isCenterMode;
+	public boolean isCenterModeEnabled() {
+		return isCenterModeEnabled;
 	}
 
-	public void setCenterMode(boolean isCenterMode) {
-		this.isCenterMode = isCenterMode;
+	public void setCenterModeEnabled(boolean isEnabled) {
+		this.isCenterModeEnabled = isEnabled;
 	}
 	
 }

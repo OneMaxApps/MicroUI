@@ -1,6 +1,7 @@
 package microui;
 
 import microui.component.LabeledCheckBox;
+import microui.constants.ContainerMode;
 import microui.core.base.Container;
 import microui.event.Event;
 import microui.layout.GridLayout;
@@ -35,19 +36,19 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-		size(640, 480);
-//		fullScreen();
+//		size(640, 480);
+		fullScreen();
 	}
 
 	@Override
 	public void setup() {
-		//MicroUI.setDebugModeEnabled(true);
+//		MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
 
-		container = new Container(new GridLayout(10,11));
-		// container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
+		container = new Container(new GridLayout(11,11));
+		container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
 		
-		container.addComponent(new LabeledCheckBox(), new GridLayoutParams(4,5,2,1));
+		container.addComponent(new LabeledCheckBox("i wanna check it"), new GridLayoutParams(4,5,3,1));
 		
 	}
 

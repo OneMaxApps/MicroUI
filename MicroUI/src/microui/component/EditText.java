@@ -58,8 +58,6 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	
 	public EditText(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		setVisible(true);
-		setConstrainDimensionsEnabled(true);
 		setMinMaxSize(100,100,Math.max(100,ctx.width*.9f),Math.max(100,ctx.height*.9f));
 		getMutableColor().set(255);
 		
@@ -85,8 +83,6 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 				items.selectAllText();
 			}
 		});
-
-		setEventListener(this);
 		
 	}
 

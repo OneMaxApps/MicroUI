@@ -1,61 +1,61 @@
 package microui.component;
 
-import static microui.constants.ContainerMode.RESPECT_CONSTRAINTS;
+import static java.util.Objects.requireNonNull;
+import static microui.component.CheckBox.DEFAULT_SIZE;
 
+import microui.constants.ContainerMode;
 import microui.core.base.Component;
 import microui.core.base.Container;
 import microui.core.effect.Hover;
 import microui.core.style.Color;
 import microui.layout.RowLayout;
 import microui.layout.RowLayoutParams;
+import processing.core.PFont;
 
 public final class LabeledCheckBox extends Component {
 	private final Container container;
 	private final CheckBox checkBox;
-	private final TextView text;
+	private final TextView textView;
 	private final Hover hover;
 	
 	public LabeledCheckBox(float x, float y, float width, float height) {
 		super(x, y, width, height);
-		setVisible(true);
-		setConstrainDimensionsEnabled(true);
-		setEventListener(this);
+		setMinSize(DEFAULT_SIZE);
+		setMaxSize(ctx.width,DEFAULT_SIZE);
 		
-		container = new Container(new RowLayout(), x, y, width, height);
-
 		checkBox = new CheckBox();
+		checkBox.setPriority(1);
+		checkBox.setMarginLeft(10);
 		
-		text = new TextView();
+		textView = new TextView();
 		
-		hover = new Hover(container);
+		hover = new Hover(this);
 		hover.setColor(new Color(32,16));
 		
-		setMinSize(checkBox.getAbsoluteWidth(),checkBox.getAbsoluteHeight());
-		setMaxSize(ctx.width,checkBox.getAbsoluteHeight());
 		onClick(() -> {
 			if(checkBox.isMouseOutside()) {
 				checkBox.toggle();	
 			}
 		});
 		
-		container.setConstrainDimensionsEnabled(true);
-		container.setMinSize(checkBox.getAbsoluteWidth(),checkBox.getAbsoluteHeight());
-		container.setMaxSize(ctx.width,checkBox.getAbsoluteHeight());
-		container.setContainerMode(RESPECT_CONSTRAINTS);
+		textView.setPadding(20,0);
+		textView.setAutoResizeModeEnabled(false);
+		textView.setCenterModeEnabled(false);
+		textView.setTextSize(DEFAULT_SIZE);
+		textView.setText("i accept this condition");
+		textView.setConstrainDimensionsEnabled(true);
+		textView.setMaxSize(ctx.width,DEFAULT_SIZE);
 		
-		checkBox.setPriority(1);
+		container = new Container(new RowLayout(), x, y, width, height);
+		container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
+		container.addComponent(checkBox, new RowLayoutParams(.1f));
+		container.addComponent(textView, new RowLayoutParams(.9f));
 		
-		text.setPaddingLeft(10);
-		text.setConstrainDimensionsEnabled(false);
-		text.setAutoResizeModeEnabled(false);
-		text.setCenterMode(false);
-		text.setTextSize(checkBox.getHeight());
-		
-		text.setText("i accept this condition");
-		
-		container.addComponent(checkBox, new RowLayoutParams(.2f));
-		container.addComponent(text, new RowLayoutParams(.8f));
-		
+	}
+	
+	public LabeledCheckBox(String label) {
+		this(ctx.width * .3f, ctx.height * .45f, ctx.width * .4f,ctx.height * .1f);
+		setText(label);
 	}
 	
 	public LabeledCheckBox() {
@@ -64,8 +64,8 @@ public final class LabeledCheckBox extends Component {
 
 	@Override
 	protected void render() {
-		container.draw();
 		hover.draw();
+		container.draw();
 	}
 
 	@Override
@@ -77,5 +77,51 @@ public final class LabeledCheckBox extends Component {
 		}
 	}
 	
+	public boolean isHoverEnabled() {
+		return hover.isEnabled();
+	}
+
+	public void setHoverEnabled(boolean enabled) {
+		hover.setEnabled(enabled);
+	}
 	
+	public float getHoverSpeed() {
+		return hover.getSpeed();
+	}
+
+	public void setHoverSpeed(float speed) {
+		hover.setSpeed(speed);
+	}
+	
+	public String getText() {
+		return textView.getText();
+	}
+
+	public void setText(String text) {
+		this.textView.setText(text);
+	}
+
+	public PFont getFont() {
+		return textView.getFont();
+	}
+
+	public void setFont(PFont font) {
+		textView.setFont(requireNonNull(font, "font cannot be null"));
+	}
+
+	public Color getTextColor() {
+		return textView.getColor();
+	}
+
+	public void setTextColor(Color color) {
+		textView.setColor(color);
+	}
+
+	public boolean isTextVisible() {
+		return textView.isVisible();
+	}
+
+	public void setTextVisible(boolean isVisible) {
+		textView.setVisible(isVisible);
+	}
 }

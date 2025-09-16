@@ -8,13 +8,12 @@ import microui.core.style.Color;
 import microui.event.Listener;
 
 public class CheckBox extends AbstractButton {
-	private static final int DEFAULT_SIZE = 16;
+	public static final int DEFAULT_SIZE = 16;
 	private final Color markColor;
 	private boolean isChecked;
 
 	public CheckBox(float x, float y) {
 		super(x, y, DEFAULT_SIZE, DEFAULT_SIZE);
-		setPaddingEnabled(true);
 		setMinMaxSize(DEFAULT_SIZE);
 		onClick(() -> toggle());
 		markColor = new Color(200,200,255);

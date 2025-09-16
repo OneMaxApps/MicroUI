@@ -15,10 +15,7 @@ public abstract class AbstractButton extends Component {
 	
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		setVisible(true);
-		setConstrainDimensionsEnabled(true);
-		setEventListener(this);
-
+		
 		ripples = new Ripples(this);
 		hover = new Hover(this);
 		stroke = new Stroke();

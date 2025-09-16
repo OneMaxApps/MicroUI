@@ -12,7 +12,6 @@ public class Button extends AbstractButton {
 
 	public Button(String text, float x, float y, float w, float h) {
 		super(x, y, w, h);
-		setConstrainDimensionsEnabled(true);
 		setMinMaxSize(10,10,100,50);
 		
 		this.text = new TextView(getX(), getY(), getWidth(), getHeight());
@@ -45,7 +44,7 @@ public class Button extends AbstractButton {
 		return text.getText();
 	}
 
-	public void setText(String text) {
+	public final void setText(String text) {
 		this.text.setText(text);
 	}
 

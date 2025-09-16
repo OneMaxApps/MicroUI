@@ -1,5 +1,6 @@
 package microui.core.base;
 
+import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 import static microui.MicroUI.isDebugModeEnabled;
 import static microui.constants.ContainerMode.IGNORE_CONSTRAINTS;
@@ -28,11 +29,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 	
 	public Container(LayoutManager layoutManager, float x, float y, float width, float height) {
 		super(x, y, width, height);
-		setVisible(true);
-		setNegativeDimensionsEnabled(false);
 		setConstrainDimensionsEnabled(false);
-		setPaddingEnabled(true);
-		setMarginEnabled(true);
 		setMinMaxSize(1,1,width,height);
 		
 		getMutableColor().set(0,0);
@@ -243,9 +240,10 @@ public final class Container extends Component implements KeyPressable, Scrollab
 	}
 	
 	private void recalculateMaxPriority() {
+		maxPriority = 0;
 		for(int i = 0; i < componentEntryList.size(); i++) {
 			int priority = componentEntryList.get(i).getComponent().getPriority();
-			maxPriority = Math.max(maxPriority, priority);
+			maxPriority = max(maxPriority, priority);
 		}
 	}
 
@@ -257,16 +255,17 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		ComponentEntry componentEntry = new ComponentEntry(component, layoutParams);
 		componentEntryList.add(componentEntry);
 		layoutManager.onAddComponent(componentEntry);
+
 		
 		recalculateMaxPriority();
-		
+		requestForUpdateInnerContainers();
 	}
 
 	private void componentsOnDraw() {
 		if (componentEntryList.isEmpty()) {
 			return;
 		}
-
+		
 		for(int priority = 0; priority <= maxPriority; priority++) {
 			for(int i = 0; i < componentEntryList.size(); i++) {
 				Component component = componentEntryList.get(i).getComponent();
@@ -342,9 +341,8 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		
 		layoutManager.onRemoveComponent();
 		
-		if(componentEntryList.size() > 1) {
-			recalculateMaxPriority();
-		}
+		recalculateMaxPriority();
+		
 	}
 	
 	private void checkComponentExistInList(Component component) {
@@ -356,8 +354,19 @@ public final class Container extends Component implements KeyPressable, Scrollab
 
 		throw new IllegalArgumentException("component not found in to Container");
 	}
+	
+	private void requestForUpdateInnerContainers() {
+		for(int i = 0; i < componentEntryList.size(); i++) {
+			Component component = componentEntryList.get(i).getComponent();
+			component.requestUpdate();
+			
+			if(component instanceof Container container) {
+				container.requestForUpdateInnerContainers();
+			}
+		}
+	}
 
-	public static class ComponentEntry {
+	public final static class ComponentEntry {
 		private final Component component;
 		private final LayoutParams layoutParams;
 

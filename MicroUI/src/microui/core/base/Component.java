@@ -23,21 +23,27 @@ import microui.event.Listener;
 import microui.feedback.Tooltip;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 16.09.2025
+//Last Reviewed: 17.09.2025
 public abstract class Component extends SpatialView {
 	private final Padding padding;
 	private final Margin margin;
-	private Color color;
-	private Event event;
-	private Callback callback;
+	private final Color color;
+	private final Event event;
+	private final Callback callback;
 	private Tooltip tooltip;
 
 	public Component(float x, float y, float width, float height) {
 		super(x, y, width, height);
+		setVisible(true);
+		setConstrainDimensionsEnabled(true);
+		setNegativeDimensionsEnabled(false);
 		
 		padding = new Padding();
 		margin = new Margin();
-		
+		color = new Color(200);
+		event = new Event(this);
+		callback = new Callback(this);
+
 		setPaddingEnabled(true);
 		setMarginEnabled(true);
 	}
@@ -54,13 +60,9 @@ public abstract class Component extends SpatialView {
 
 		super.draw();
 
-		if (event != null) {
-			event.listen();
-		}
+		event.listen();
 
-		if (callback != null) {
-			callback.listen();
-		}
+		callback.listen();
 
 		if (tooltip != null) {
 			tooltip.listen();
@@ -70,136 +72,136 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final Color getColor() {
-		return new Color(getOrCreateColor());
+		return new Color(color);
 	}
 
 	public final Component setColor(Color color) {
-		getOrCreateColor().set(requireNonNull(color, "color cannot be null"));
+		this.color.set(requireNonNull(color, "color cannot be null"));
 		return this;
 	}
 
 	public final boolean isClicked() {
-		return getOrCreateEvent().clicked();
+		return event.clicked();
 	}
 
 	public final boolean isClicked(int count) {
-		return getOrCreateEvent().clicked(count);
+		return event.clicked(count);
 	}
 
 	public final boolean isDragged() {
-		return getOrCreateEvent().dragged();
+		return event.dragged();
 	}
 
 	public final boolean isDragging() {
-		return getOrCreateEvent().dragging();
+		return event.dragging();
 	}
 
 	public final boolean isPressed() {
-		return getOrCreateEvent().pressed();
+		return event.pressed();
 	}
 
 	public final boolean isMouseInside() {
-		return getOrCreateEvent().inside();
+		return event.inside();
 	}
 
 	public final boolean isMouseOutside() {
-		return getOrCreateEvent().outside();
+		return event.outside();
 	}
 
 	public final boolean isHolding() {
-		return getOrCreateEvent().holding();
+		return event.holding();
 	}
 
 	public final Component onClick(Listener listener) {
-		getOrCreateCallback().addListener(CLICK, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(CLICK, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onDoubleClick(Listener listener) {
-		getOrCreateCallback().addListener(DOUBLE_CLICK, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(DOUBLE_CLICK, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onDragged(Listener listener) {
-		getOrCreateCallback().addListener(DRAGGED, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(DRAGGED, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onDragging(Listener listener) {
-		getOrCreateCallback().addListener(DRAGGING, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(DRAGGING, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onHold(Listener listener) {
-		getOrCreateCallback().addListener(HOLD_START, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(HOLD_START, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onMouseInside(Listener listener) {
-		getOrCreateCallback().addListener(MOUSE_INSIDE, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(MOUSE_INSIDE, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onMouseInsideLong(Listener listener) {
 
-		getOrCreateCallback().addListener(MOUSE_INSIDE_LONG, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(MOUSE_INSIDE_LONG, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onMouseOutside(Listener listener) {
-		getOrCreateCallback().addListener(MOUSE_OUTSIDE, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(MOUSE_OUTSIDE, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onLongPress(Listener listener) {
-		getOrCreateCallback().addListener(LONG_PRESSED, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(LONG_PRESSED, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onPress(Listener listener) {
-		getOrCreateCallback().addListener(PRESS, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(PRESS, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onRelease(Listener listener) {
-		getOrCreateCallback().addListener(RELEASE, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(RELEASE, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onHoldEnd(Listener listener) {
-		getOrCreateCallback().addListener(HOLD_END, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(HOLD_END, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component onShake(Listener listener) {
-		getOrCreateCallback().addListener(SHAKE, requireNonNull(listener, "listener cannot be null"));
+		callback.addListener(SHAKE, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
 	public final Component setPaddingLeft(float left) {
 		padding.setLeft(left);
-		
+
 		return this;
 	}
-	
+
 	public final Component setPaddingRight(float right) {
 		padding.setRight(right);
-		
+
 		return this;
 	}
-	
+
 	public final Component setPaddingTop(float top) {
 		padding.setTop(top);
-		
+
 		return this;
 	}
-	
+
 	public final Component setPaddingBottom(float bottom) {
 		padding.setBottom(bottom);
-		
+
 		return this;
 	}
-	
+
 	public final Component setPadding(float left, float right, float top, float bottom) {
 		padding.setLeft(left);
 		padding.setRight(right);
@@ -463,37 +465,25 @@ public abstract class Component extends SpatialView {
 	}
 
 	protected final Component setEventListener(SpatialView bounds) {
-		getOrCreateEvent().setListener(requireNonNull(bounds, "bounds cannot be null"));
+		event.setListener(requireNonNull(bounds, "bounds cannot be null"));
 		return this;
 	}
 
 	protected final Event getMutableEvent() {
-		return getOrCreateEvent();
+		return event;
 	}
 
 	protected final Component setCallbackListener(SpatialView bounds) {
-		getOrCreateCallback().setListener(requireNonNull(bounds, "bounds cannot be null"));
+		callback.setListener(requireNonNull(bounds, "bounds cannot be null"));
 		return this;
 	}
-	
+
 	protected final Color getMutableColor() {
-		return getOrCreateColor();
+		return color;
 	}
-	
-	private Color getOrCreateColor() {
-		return color == null ? color = new Color(200) : color;
-	}
-	
+
 	private Tooltip getOrCreateTooltip() {
-		return tooltip == null ? tooltip = new Tooltip(getOrCreateCallback()) : tooltip;
-	}
-	
-	private Callback getOrCreateCallback() {
-		return callback == null ? callback = new Callback(this) : callback;
-	}
-	
-	private Event getOrCreateEvent() {
-		return event == null ? event = new Event() : event;
+		return tooltip == null ? tooltip = new Tooltip(callback) : tooltip;
 	}
 
 	private void debugOnDraw() {
@@ -529,8 +519,8 @@ public abstract class Component extends SpatialView {
 
 		void setEnabled(boolean isEnabled) {
 			this.isEnabled = isEnabled;
-			if(isEnabled) {
-				checkCorrectState();	
+			if (isEnabled) {
+				checkCorrectState();
 			}
 		}
 
@@ -549,24 +539,32 @@ public abstract class Component extends SpatialView {
 		float getBottom() {
 			return isEnabled ? bottom : 0;
 		}
-		
+
 		void setLeft(float left) {
-			if(!isCorrectNewValue(this.left,left)) { return; }
+			if (!isCorrectNewValue(this.left, left)) {
+				return;
+			}
 			this.left = left;
 		}
 
 		void setRight(float right) {
-			if(!isCorrectNewValue(this.right,right)) { return; }
+			if (!isCorrectNewValue(this.right, right)) {
+				return;
+			}
 			this.right = right;
 		}
 
 		void setTop(float top) {
-			if(!isCorrectNewValue(this.top,top)) { return; }
+			if (!isCorrectNewValue(this.top, top)) {
+				return;
+			}
 			this.top = top;
 		}
 
 		void setBottom(float bottom) {
-			if(!isCorrectNewValue(this.bottom,bottom)) { return; }
+			if (!isCorrectNewValue(this.bottom, bottom)) {
+				return;
+			}
 			this.bottom = bottom;
 		}
 
@@ -636,8 +634,8 @@ public abstract class Component extends SpatialView {
 
 		void setEnabled(boolean isEnabled) {
 			this.isEnabled = isEnabled;
-			
-			if(isEnabled) {
+
+			if (isEnabled) {
 				checkCorrectState();
 			}
 		}
@@ -647,7 +645,7 @@ public abstract class Component extends SpatialView {
 				throw new IllegalArgumentException("margin cannot be less than zero");
 			}
 		}
-		
+
 		void checkCorrectState() {
 			if (isNegativeDimensionsEnabled()) {
 				throw new IllegalStateException("negative dimensions must be disabled for using Margin system");
