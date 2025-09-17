@@ -73,7 +73,6 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void draw() {
-		
 	}
 	
 }

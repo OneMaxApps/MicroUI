@@ -27,17 +27,17 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	private static boolean isInitialized,isCanDraw;
 	private boolean isAnimationEnabled;
 	private Container prevContainer, currentContainer;
-
+	
 	private ContainerManager() {
 		setVisible(true);
 		containerList = new ArrayList<Container>();
 		animation = new Animation();
 		setAnimationEnabled(true);
-		getContext().registerMethod("draw", this);
+		
 		getContext().registerMethod("keyPressed", this);
 		getContext().registerMethod("keyEvent", this);
 		getContext().registerMethod("mouseEvent", this);
-
+		new Render();
 	}
 
 	@Override
@@ -53,10 +53,11 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	
 	@Override
 	public void draw() {
-		isCanDraw = true;
+		if(!isCanDraw) {
+			throw new IllegalStateException("ContainerManager calling draw() only inside");
+		}
 		super.draw();
 		GlobalTooltip.draw();
-		isCanDraw = false;
 	}
 
 	@Override
@@ -217,9 +218,36 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	public static enum AnimationType {
 		SLIDE_LEFT, SLIDE_RIGHT, SLIDE_TOP, SLIDE_BOTTOM, SLIDE_RANDOM;
 	}
+	
+	public static ContainerManager getInstance() {
+		if (instance == null) {
+			instance = new ContainerManager();
+			isInitialized = true;
+		}
+
+		return instance;
+	}
+	
+	public final class Render {
+		private static boolean isAlreadyWasCreated;
+		
+		public Render() {
+			if(isAlreadyWasCreated) {
+				throw new IllegalStateException("cannot create Render twice");
+			} else {
+				getContext().registerMethod("draw", this);
+				isAlreadyWasCreated = true;
+			}
+		}
+		
+		public void draw() {
+			isCanDraw = true;
+			ContainerManager.this.draw();
+			isCanDraw = false;
+		}
+	}
 
 	private void lauchContainer(Container container) {
-		// if(animation.isStart()) { return; }
 
 		if (container == null) {
 			throw new NullPointerException("container cannot be null");
@@ -242,7 +270,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 		container.setConstrainDimensionsEnabled(false);
 		container.setSize(ctx.width, ctx.height);
-		container.setColor(new Color(200,0));
+		container.setColor(new Color(200));
 
 		containerList.add(container);
 
@@ -434,12 +462,4 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 	}
 
-	public static ContainerManager getInstance() {
-		if (instance == null) {
-			instance = new ContainerManager();
-			isInitialized = true;
-		}
-
-		return instance;
-	}
 }
