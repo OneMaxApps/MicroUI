@@ -3,17 +3,20 @@ package microui.service;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
+import static microui.MicroUI.getContext;
 import static processing.core.PApplet.dist;
 import static processing.core.PApplet.map;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import microui.MicroUI;
 import microui.core.base.Container;
 import microui.core.base.View;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
+import microui.core.style.Color;
+import microui.event.Event;
+import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 //Status: STABLE - Do not modify
@@ -30,7 +33,11 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		containerList = new ArrayList<Container>();
 		animation = new Animation();
 		setAnimationEnabled(true);
-		MicroUI.getRender().addView(this);
+		getContext().registerMethod("draw", this);
+		getContext().registerMethod("keyPressed", this);
+		getContext().registerMethod("keyEvent", this);
+		getContext().registerMethod("mouseEvent", this);
+
 	}
 
 	@Override
@@ -52,12 +59,27 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		currentContainer.keyPressed();
 	}
 
+	public void keyEvent(KeyEvent keyEvent) {
+		if (keyEvent.getAction() == KeyEvent.PRESS) {
+			Event.keyPressed();
+			keyPressed();
+		}
+		if (keyEvent.getAction() == KeyEvent.RELEASE) {
+			Event.keyReleased();
+		}
+	}
+
 	@Override
 	public void mouseWheel(MouseEvent mouseEvent) {
 		if (currentContainer == null) {
 			return;
 		}
+
 		currentContainer.mouseWheel(mouseEvent);
+	}
+
+	public void mouseEvent(MouseEvent mouseEvent) {
+		mouseWheel(mouseEvent);
 	}
 
 	public AnimationType getAnimationType() {
@@ -83,11 +105,11 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	public void setAnimationEasingEnabled(boolean isEasing) {
 		animation.setEasingEnabled(isEasing);
 	}
-	
+
 	public void add(Container container) {
 		addContainerSafe(container);
 	}
-	
+
 	public void add(Container container, String textId) {
 		requireNonNull(textId, "textId cannot be null");
 		if (textId.isEmpty()) {
@@ -181,8 +203,8 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	}
 
 	private void lauchContainer(Container container) {
-		//if(animation.isStart()) { return; }
-		
+		// if(animation.isStart()) { return; }
+
 		if (container == null) {
 			throw new NullPointerException("container cannot be null");
 		}
@@ -204,6 +226,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 		container.setConstrainDimensionsEnabled(false);
 		container.setSize(ctx.width, ctx.height);
+		container.setColor(new Color(200));
 
 		containerList.add(container);
 
@@ -249,7 +272,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		private static final float MAX_DIST = dist(0, 0, ctx.width, ctx.height);
 		private AnimationType animationType;
 		private float speed;
-		private int randDirX,randDirY;
+		private int randDirX, randDirY;
 		private boolean isStart, isNewContainerPrepared, isEasing;
 
 		private Animation() {
@@ -282,12 +305,12 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 					slideDirection(0, 1);
 					break;
 				case SLIDE_RANDOM:
-					if(!isNewContainerPrepared) {
+					if (!isNewContainerPrepared) {
 						do {
-							randDirX = (int) ctx.random(-1,2);
-							randDirY = (int) ctx.random(-1,2);
-						} while(randDirX != 0 && randDirY != 0 || randDirX == randDirY);
-						
+							randDirX = (int) ctx.random(-1, 2);
+							randDirY = (int) ctx.random(-1, 2);
+						} while (randDirX != 0 && randDirY != 0 || randDirX == randDirY);
+
 					}
 					slideDirection(randDirX, randDirY);
 					break;
@@ -355,7 +378,8 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 		private void slideDirection(int dirX, int dirY) {
 			if (!isNewContainerPrepared) {
-				currentContainer.setPosition(dirX == -1 ? ctx.width : dirX == 1 ? -ctx.width : 0, dirY == -1 ? ctx.height : dirY == 1 ? -ctx.height : 0);
+				currentContainer.setPosition(dirX == -1 ? ctx.width : dirX == 1 ? -ctx.width : 0,
+						dirY == -1 ? ctx.height : dirY == 1 ? -ctx.height : 0);
 				isNewContainerPrepared = true;
 			}
 
@@ -376,15 +400,15 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 			if (dirY == 1) {
 				prevContainer.appendY(getSpeedInternal());
-				currentContainer.appendY(getSpeedInternal(), -ctx.height, 0);	
+				currentContainer.appendY(getSpeedInternal(), -ctx.height, 0);
 			}
-			
+
 			if (dirX != 0) {
 				if ((int) currentContainer.getX() == 0) {
 					complete();
 				}
 			}
-			
+
 			if (dirY != 0) {
 				if ((int) currentContainer.getY() == 0) {
 					complete();
@@ -393,12 +417,12 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		}
 
 	}
-	
+
 	public static ContainerManager getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new ContainerManager();
 		}
-		
+
 		return instance;
 	}
 }

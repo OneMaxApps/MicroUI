@@ -1,7 +1,5 @@
 package microui.core;
 
-import static java.util.Objects.requireNonNull;
-
 import microui.core.base.Component;
 import microui.core.effect.Hover;
 import microui.core.effect.Ripples;
@@ -38,7 +36,7 @@ public abstract class AbstractButton extends Component {
 	}
 
 	public final void setRipplesColor(Color color) {
-		ripples.setColor(requireNonNull(color,"color cannot be null"));
+		ripples.setColor(color);
 	}
 
 	public final boolean isRipplesEnabled() {

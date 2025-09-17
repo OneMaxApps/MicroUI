@@ -1,14 +1,20 @@
 package microui;
 
 import microui.component.Button;
+import microui.component.CheckBox;
+import microui.component.EditText;
+import microui.component.LabeledCheckBox;
+import microui.component.MenuButton;
+import microui.component.Scroll;
 import microui.component.Slider;
+import microui.component.TextField;
+import microui.component.TextView;
+import microui.constants.ContainerMode;
 import microui.core.base.Container;
-import microui.event.Event;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
 import microui.service.ContainerManager;
 import processing.core.PApplet;
-import processing.event.MouseEvent;
 
 // TODO check full work life cycle of components
 // [1] Button;
@@ -29,7 +35,7 @@ import processing.event.MouseEvent;
 
 public final class Launcher extends PApplet {
 
-	ContainerManager containerManager;
+	ContainerManager cm;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -43,49 +49,31 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void setup() {
-		MicroUI.setDebugModeEnabled(true);
+		//MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
 
-		containerManager = ContainerManager.getInstance();
+		cm = ContainerManager.getInstance();
 		
-		Container containerMenu = new Container(new GridLayout(5,11));
-		Container containerGameplay = new Container(new GridLayout(5,11));
+		Container container = new Container(new GridLayout(5,5));
+		container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
 		
-		containerMenu.addComponent(new Slider(), new GridLayoutParams(2,5),() -> containerManager.switchOn(containerGameplay));
-		containerGameplay.addComponent(new Button("menu"), new GridLayoutParams(2,5),() -> containerManager.switchOn(containerMenu));
+		container.addComponent(new Button(), new GridLayoutParams(0,0));
+		container.addComponent(new CheckBox(), new GridLayoutParams(1,0));
+		container.addComponent(new EditText(), new GridLayoutParams(2,0));
+		container.addComponent(new LabeledCheckBox(), new GridLayoutParams(3,0));
+		container.addComponent(new MenuButton(), new GridLayoutParams(4,0));
+		container.addComponent(new Scroll(), new GridLayoutParams(0,1));
+		container.addComponent(new Slider(), new GridLayoutParams(1,1));
+		container.addComponent(new TextField(), new GridLayoutParams(2,1));
+		container.addComponent(new TextView("TextView"), new GridLayoutParams(3,1));
 		
-		containerManager.add(containerMenu);
-		containerManager.add(containerGameplay);
-		
+		cm.add(container);
 		
 	}
 
 	@Override
 	public void draw() {
-		background(200);
 
 	}
-
-	@Override
-	public void mouseWheel(MouseEvent event) {
-		containerManager.mouseWheel(event);
-	}
-
-	@Override
-	public void mousePressed() {
-
-	}
-
-	@Override
-	public void keyPressed() {
-		Event.keyPressed();
-		containerManager.keyPressed();
-	}
-
-	@Override
-	public void keyReleased() {
-		Event.keyReleased();
-
-	}
-
+	
 }
