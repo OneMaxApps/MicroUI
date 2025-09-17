@@ -38,6 +38,7 @@ public class MenuButton extends Button implements Scrollable {
 			isOpen = !isOpen;
 			if(!isOpen) { closeAllSubMenus(); } else { selectedId = -1; }
 		});
+		
 	}
 	
 	public MenuButton(String title) {

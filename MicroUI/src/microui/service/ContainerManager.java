@@ -9,6 +9,7 @@ import static processing.core.PApplet.map;
 import java.util.ArrayList;
 import java.util.List;
 
+import microui.MicroUI;
 import microui.core.base.Container;
 import microui.core.base.View;
 import microui.core.interfaces.KeyPressable;
@@ -18,16 +19,18 @@ import processing.event.MouseEvent;
 //Status: STABLE - Do not modify
 //Last Reviewed: 12.09.2025
 public final class ContainerManager extends View implements Scrollable, KeyPressable {
+	private static ContainerManager instance;
 	private final List<Container> containerList;
 	private final Animation animation;
 	private boolean isAnimationEnabled;
 	private Container prevContainer, currentContainer;
 
-	public ContainerManager() {
+	private ContainerManager() {
 		setVisible(true);
 		containerList = new ArrayList<Container>();
 		animation = new Animation();
 		setAnimationEnabled(true);
+		MicroUI.getRender().addView(this);
 	}
 
 	@Override
@@ -391,4 +394,11 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 	}
 	
+	public static ContainerManager getInstance() {
+		if(instance == null) {
+			instance = new ContainerManager();
+		}
+		
+		return instance;
+	}
 }

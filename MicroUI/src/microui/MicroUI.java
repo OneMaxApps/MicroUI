@@ -1,11 +1,13 @@
 package microui;
 
+import microui.service.Render;
 import processing.core.PApplet;
 
 // Status: STABLE - Do not modify
 // Last Reviewed: 12.09.2025
 public final class MicroUI {
 	private static PApplet ctx;
+	private static Render render;
 	
 	private static final int MAJOR = 2;
 	private static final int MINOR = 0;
@@ -20,6 +22,8 @@ public final class MicroUI {
 	public static final void setContext(PApplet context) {
 		if(context != null && MicroUI.ctx == null) {
 			MicroUI.ctx = context;
+			
+			render = new Render();
 		}
 	}
 	
@@ -37,5 +41,9 @@ public final class MicroUI {
 
 	public static final void setDebugModeEnabled(boolean isDebugModeEnabled) {	
 		MicroUI.isDebugModeEnabled = isDebugModeEnabled;
+	}
+	
+	public static final Render getRender() {
+		return render;
 	}
 }

@@ -170,7 +170,7 @@ public final class Ripples extends View {
 		}
 		
 		float getSpeed() {
-			return ((maxRadius + (radius * .2f)) * .04f);
+			return ((maxRadius + (radius * .2f)) * .02f);
 		}
 	}
 }

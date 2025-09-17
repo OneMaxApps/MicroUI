@@ -1,12 +1,12 @@
 package microui;
 
-import microui.component.LabeledCheckBox;
-import microui.constants.ContainerMode;
+import microui.component.Button;
+import microui.component.Slider;
 import microui.core.base.Container;
 import microui.event.Event;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
-import microui.service.GlobalTooltip;
+import microui.service.ContainerManager;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 
@@ -29,7 +29,8 @@ import processing.event.MouseEvent;
 
 public final class Launcher extends PApplet {
 
-	Container container;
+	ContainerManager containerManager;
+	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
@@ -45,10 +46,17 @@ public final class Launcher extends PApplet {
 		MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
 
-		container = new Container(new GridLayout(11,11));
-		container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
+		containerManager = ContainerManager.getInstance();
 		
-		container.addComponent(new LabeledCheckBox("i wanna check it"), new GridLayoutParams(4,5,3,1));
+		Container containerMenu = new Container(new GridLayout(5,11));
+		Container containerGameplay = new Container(new GridLayout(5,11));
+		
+		containerMenu.addComponent(new Slider(), new GridLayoutParams(2,5),() -> containerManager.switchOn(containerGameplay));
+		containerGameplay.addComponent(new Button("menu"), new GridLayoutParams(2,5),() -> containerManager.switchOn(containerMenu));
+		
+		containerManager.add(containerMenu);
+		containerManager.add(containerGameplay);
+		
 		
 	}
 
@@ -56,17 +64,11 @@ public final class Launcher extends PApplet {
 	public void draw() {
 		background(200);
 
-		container.draw();
-		if(mouseButton == RIGHT) {
-			container.setSize(mouseX,mouseY);
-		}
-		
-		GlobalTooltip.draw();
 	}
 
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		container.mouseWheel(event);
+		containerManager.mouseWheel(event);
 	}
 
 	@Override
@@ -77,7 +79,7 @@ public final class Launcher extends PApplet {
 	@Override
 	public void keyPressed() {
 		Event.keyPressed();
-		container.keyPressed();
+		containerManager.keyPressed();
 	}
 
 	@Override

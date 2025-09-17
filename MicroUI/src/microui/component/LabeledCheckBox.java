@@ -81,79 +81,90 @@ public final class LabeledCheckBox extends Component {
 		return hover.isEnabled();
 	}
 
-	public void setHoverEnabled(boolean enabled) {
+	public LabeledCheckBox setHoverEnabled(boolean enabled) {
 		hover.setEnabled(enabled);
+		return this;
 	}
 	
 	public Color getHoverColor() {
 		return hover.getColor();
 	}
 	
-	public void setHoverColor(Color color) {
+	public LabeledCheckBox setHoverColor(Color color) {
 		hover.setColor(color);
+		return this;
 	}
 	
 	public float getHoverSpeed() {
 		return hover.getSpeed();
 	}
 
-	public void setHoverSpeed(float speed) {
+	public LabeledCheckBox setHoverSpeed(float speed) {
 		hover.setSpeed(speed);
+		return this;
 	}
 	
 	public boolean isChecked() {
 		return checkBox.isChecked();
 	}
 
-	public void setChecked(boolean isChecked) {
+	public LabeledCheckBox setChecked(boolean isChecked) {
 		checkBox.setChecked(isChecked);
+		return this;
 	}
 
-	public void toggle() {
+	public LabeledCheckBox toggle() {
 		checkBox.toggle();
+		return this;
 	}
 
 	public Color getMarkColor() {
 		return checkBox.getMarkColor();
 	}
 
-	public void setMarkColor(Color color) {
+	public LabeledCheckBox setMarkColor(Color color) {
 		checkBox.setMarkColor(color);
+		return this;
 	}
 
-	public void onStateChangedListener(Listener listener) {
+	public LabeledCheckBox onStateChangedListener(Listener listener) {
 		checkBox.onStateChangedListener(listener);
+		return this;
 	}
 	
 	public String getText() {
 		return textView.getText();
 	}
 
-	public void setText(String text) {
+	public LabeledCheckBox setText(String text) {
 		this.textView.setText(text);
+		return this;
 	}
 
 	public PFont getFont() {
 		return textView.getFont();
 	}
 
-	public void setFont(PFont font) {
+	public LabeledCheckBox setFont(PFont font) {
 		textView.setFont(font);
+		return this;
 	}
 
 	public Color getTextColor() {
 		return textView.getColor();
 	}
 
-	public void setTextColor(Color color) {
+	public LabeledCheckBox setTextColor(Color color) {
 		textView.setColor(color);
+		return this;
 	}
 
 	public boolean isTextVisible() {
 		return textView.isVisible();
 	}
 
-	public void setTextVisible(boolean isVisible) {
+	public LabeledCheckBox setTextVisible(boolean isVisible) {
 		textView.setVisible(isVisible);
+		return this;
 	}
 }
