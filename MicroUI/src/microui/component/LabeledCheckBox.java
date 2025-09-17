@@ -1,6 +1,5 @@
 package microui.component;
 
-import static java.util.Objects.requireNonNull;
 import static microui.component.CheckBox.DEFAULT_SIZE;
 
 import microui.constants.ContainerMode;
@@ -8,6 +7,7 @@ import microui.core.base.Component;
 import microui.core.base.Container;
 import microui.core.effect.Hover;
 import microui.core.style.Color;
+import microui.event.Listener;
 import microui.layout.RowLayout;
 import microui.layout.RowLayoutParams;
 import processing.core.PFont;
@@ -85,12 +85,44 @@ public final class LabeledCheckBox extends Component {
 		hover.setEnabled(enabled);
 	}
 	
+	public Color getHoverColor() {
+		return hover.getColor();
+	}
+	
+	public void setHoverColor(Color color) {
+		hover.setColor(color);
+	}
+	
 	public float getHoverSpeed() {
 		return hover.getSpeed();
 	}
 
 	public void setHoverSpeed(float speed) {
 		hover.setSpeed(speed);
+	}
+	
+	public boolean isChecked() {
+		return checkBox.isChecked();
+	}
+
+	public void setChecked(boolean isChecked) {
+		checkBox.setChecked(isChecked);
+	}
+
+	public void toggle() {
+		checkBox.toggle();
+	}
+
+	public Color getMarkColor() {
+		return checkBox.getMarkColor();
+	}
+
+	public void setMarkColor(Color color) {
+		checkBox.setMarkColor(color);
+	}
+
+	public void onStateChangedListener(Listener listener) {
+		checkBox.onStateChangedListener(listener);
 	}
 	
 	public String getText() {
@@ -106,7 +138,7 @@ public final class LabeledCheckBox extends Component {
 	}
 
 	public void setFont(PFont font) {
-		textView.setFont(requireNonNull(font, "font cannot be null"));
+		textView.setFont(font);
 	}
 
 	public Color getTextColor() {

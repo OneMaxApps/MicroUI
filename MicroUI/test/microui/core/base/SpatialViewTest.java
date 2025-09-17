@@ -13,9 +13,6 @@ class SpatialViewTest {
 	@BeforeAll
 	static void initMicroUI() {
 		MicroUI.setContext(new PApplet());
-		MicroUI.getContext().width = 1000;
-		MicroUI.getContext().height = 1000;
-		
 	}
 	
 	@Test

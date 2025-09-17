@@ -45,16 +45,24 @@ public abstract class AbstractButton extends Component {
 		return ripples.isEnabled();
 	}
 
-	public final void setRipplesEnabled(boolean enable) {
-		ripples.setEnabled(enable);
+	public final void setRipplesEnabled(boolean isEnabled) {
+		ripples.setEnabled(isEnabled);
 	}
 
 	public final boolean isHoverEnabled() {
 		return hover.isEnabled();
 	}
 
-	public final void setHoverEnabled(boolean enabled) {
-		hover.setEnabled(enabled);
+	public final void setHoverEnabled(boolean isEnabled) {
+		hover.setEnabled(isEnabled);
+	}
+	
+	public Color getHoverColor() {
+		return hover.getColor();
+	}
+	
+	public void setHoverColor(Color color) {
+		hover.setColor(color);
 	}
 	
 	public final float getHoverSpeed() {
@@ -74,11 +82,11 @@ public abstract class AbstractButton extends Component {
 	}
 
 	public final Color getStrokeColor() {
-		return new Color(stroke.getColor());
+		return stroke.getColor();
 	}
 
 	public final void setStrokeColor(Color color) {
-		stroke.setColor(requireNonNull(color,"color cannot be null"));
+		stroke.setColor(color);
 	}
 
 	protected final Ripples getMutableRipples() {

@@ -10,8 +10,8 @@ import static microui.core.base.SpatialView.HooksUpdateMode.REACTIVE;
 //Status: STABLE - Do not modify
 //Last Reviewed: 12.09.2025
 public abstract class SpatialView extends View {
-	private static final int DEFAULT_MIN_SIZE = 10;
-	private static final int DEFAULT_MAX_SIZE = 200;
+	private static final int DEFAULT_MIN_SIZE = 1;
+	private static final int DEFAULT_MAX_SIZE = 1000;
 	private static final float EPSILON = .01f;
 
 	private boolean isPosDirty, isDimDirty, isNegativeDimensionsEnabled, isConstrainDimensionsEnabled;

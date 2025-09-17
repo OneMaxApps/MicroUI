@@ -20,6 +20,7 @@ import microui.layout.LayoutParams;
 import processing.core.PImage;
 import processing.event.MouseEvent;
 
+
 public final class Container extends Component implements KeyPressable, Scrollable {
 	private final List<ComponentEntry> componentEntryList;
 	private final LayoutManager layoutManager;
@@ -258,7 +259,6 @@ public final class Container extends Component implements KeyPressable, Scrollab
 
 		
 		recalculateMaxPriority();
-		requestForUpdateInnerContainers();
 	}
 
 	private void componentsOnDraw() {
@@ -353,17 +353,6 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		}
 
 		throw new IllegalArgumentException("component not found in to Container");
-	}
-	
-	private void requestForUpdateInnerContainers() {
-		for(int i = 0; i < componentEntryList.size(); i++) {
-			Component component = componentEntryList.get(i).getComponent();
-			component.requestUpdate();
-			
-			if(component instanceof Container container) {
-				container.requestForUpdateInnerContainers();
-			}
-		}
 	}
 
 	public final static class ComponentEntry {
