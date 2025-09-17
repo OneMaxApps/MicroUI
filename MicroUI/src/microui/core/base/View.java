@@ -55,7 +55,15 @@ public abstract class View implements Visible {
 	 * <p>
 	 * Calls the {@link #render() method} only if the element is visible.
 	 */
-	public void draw() {
+	protected void draw() {
+		if(!ContainerManager.isInitialized()) {
+			throw new IllegalStateException("ContainerManager is not initialized");
+		}
+		
+		if(!ContainerManager.isCanDraw()) {
+			throw new IllegalStateException("Cannot draw outside from ContainerManager");
+		}
+		
 		if (isVisible()) {
 			ctx.pushStyle();
 			render();

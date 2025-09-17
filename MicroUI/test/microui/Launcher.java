@@ -9,11 +9,10 @@ import microui.component.Scroll;
 import microui.component.Slider;
 import microui.component.TextField;
 import microui.component.TextView;
-import microui.constants.ContainerMode;
 import microui.core.base.Container;
+import microui.core.base.ContainerManager;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
-import microui.service.ContainerManager;
 import processing.core.PApplet;
 
 // TODO check full work life cycle of components
@@ -36,6 +35,7 @@ import processing.core.PApplet;
 public final class Launcher extends PApplet {
 
 	ContainerManager cm;
+	Button button;
 	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
@@ -49,13 +49,13 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void setup() {
-		//MicroUI.setDebugModeEnabled(true);
+		MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
 
 		cm = ContainerManager.getInstance();
 		
-		Container container = new Container(new GridLayout(5,5));
-		container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
+		Container container = new Container(new GridLayout(5,10));
+		//container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
 		
 		container.addComponent(new Button(), new GridLayoutParams(0,0));
 		container.addComponent(new CheckBox(), new GridLayoutParams(1,0));
@@ -73,7 +73,7 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void draw() {
-
+		
 	}
 	
 }

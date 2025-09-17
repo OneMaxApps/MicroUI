@@ -1,4 +1,4 @@
-package microui.service;
+package microui.core.base;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
@@ -10,21 +10,21 @@ import static processing.core.PApplet.map;
 import java.util.ArrayList;
 import java.util.List;
 
-import microui.core.base.Container;
-import microui.core.base.View;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
 import microui.event.Event;
+import microui.service.GlobalTooltip;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 12.09.2025
+//Last Reviewed: 18.09.2025
 public final class ContainerManager extends View implements Scrollable, KeyPressable {
 	private static ContainerManager instance;
 	private final List<Container> containerList;
 	private final Animation animation;
+	private static boolean isInitialized,isCanDraw;
 	private boolean isAnimationEnabled;
 	private Container prevContainer, currentContainer;
 
@@ -49,6 +49,14 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 				currentContainer.draw();
 			}
 		}
+	}
+	
+	@Override
+	public void draw() {
+		isCanDraw = true;
+		super.draw();
+		GlobalTooltip.draw();
+		isCanDraw = false;
 	}
 
 	@Override
@@ -197,6 +205,14 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	public void setAnimationEnabled(boolean isAnimationEnabled) {
 		this.isAnimationEnabled = isAnimationEnabled;
 	}
+	
+	public static final boolean isInitialized() {
+		return isInitialized;
+	}
+	
+	public static final boolean isCanDraw() {
+		return isCanDraw;
+	}
 
 	public static enum AnimationType {
 		SLIDE_LEFT, SLIDE_RIGHT, SLIDE_TOP, SLIDE_BOTTOM, SLIDE_RANDOM;
@@ -226,7 +242,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 		container.setConstrainDimensionsEnabled(false);
 		container.setSize(ctx.width, ctx.height);
-		container.setColor(new Color(200));
+		container.setColor(new Color(200,0));
 
 		containerList.add(container);
 
@@ -421,6 +437,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	public static ContainerManager getInstance() {
 		if (instance == null) {
 			instance = new ContainerManager();
+			isInitialized = true;
 		}
 
 		return instance;
