@@ -43,10 +43,10 @@ public final class TextField extends Component implements KeyPressable {
 	
 	public TextField(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		setMinWidth(100);
-		setMinHeight(50);
-		setMaxWidth(400);
-		setMaxHeight(100);
+		setMinWidth(20);
+		setMinHeight(10);
+		setMaxWidth(200);
+		setMaxHeight(40);
 		
 		getMutableColor().set(255);
 

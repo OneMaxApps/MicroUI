@@ -245,6 +245,14 @@ public class MenuButton extends Button implements Scrollable {
 		throw new IllegalArgumentException(title + "  is not exists");
 	}
 	
+	public final MenuButton getSubMenu(final String subMenuItem) {
+		return (MenuButton) getItem(subMenuItem);
+	}
+	
+	public final MenuButton getSubMenuDeep(final String subMenuItem) {
+		return (MenuButton) getItemDeep(subMenuItem);
+	}
+	
 	public final ArrayList<Button> getItems() {
 		return itemList;
 	}

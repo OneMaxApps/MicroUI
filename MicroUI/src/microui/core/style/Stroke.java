@@ -27,7 +27,7 @@ public final class Stroke {
 	}
 	
 	public Stroke(float weight) {
-		this(new Color(),weight);
+		this(Theme.getDefaultStrokeColor(),weight);
 	}
 	
 	public Stroke() {

@@ -76,7 +76,7 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final Component setColor(Color color) {
-		this.color.set(requireNonNull(color, "color cannot be null"));
+		this.color.set(color);
 		return this;
 	}
 

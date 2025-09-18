@@ -17,7 +17,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 
 	public RangeControl(float x, float y, float width, float height) {
 		super(x, y, width, height);
-		setMinMaxSize(10,200);
+		setMinMaxSize(10,20,200,20);
 		getMutableColor().set(24);
 
 		value = new Value(0, 100, 0) {
@@ -89,7 +89,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		}
 		final float w = getWidth(), h = getHeight();
 		this.orientation = orientation;
-
+		
 		setWidth(h);
 		setHeight(w);
 		requestUpdate();

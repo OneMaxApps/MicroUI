@@ -8,6 +8,7 @@ import static processing.core.PApplet.map;
 import microui.core.base.Component;
 import microui.core.base.View;
 import microui.core.style.Color;
+import microui.core.style.Theme;
 import microui.util.Metrics;
 import processing.core.PGraphics;
 
@@ -114,7 +115,7 @@ public final class Ripples extends View {
 		private boolean isPositionPrepared;
 
 		Animation() {
-			color = new Color(200,255,255);
+			color = new Color(Theme.getDefaultRipplesColor());
 		}
 
 		void render(PGraphics pg) {

@@ -18,6 +18,7 @@ import processing.core.PApplet;
 // TODO check full work life cycle of components
 // [1] Button;
 // [1] CheckBox;
+// [1] LabeledCheckBox;
 // [0] Dial; (need full refactor)
 // [0] EditText; (need full refactor)
 // [1] MenuButton;
@@ -49,30 +50,33 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void setup() {
-		MicroUI.setDebugModeEnabled(true);
 		MicroUI.setContext(this);
+		//MicroUI.setDebugModeEnabled(true);
 
 		cm = ContainerManager.getInstance();
 		
 		Container container = new Container(new GridLayout(5,10));
-		//container.setContainerMode(ContainerMode.RESPECT_CONSTRAINTS);
 		
 		container.addComponent(new Button(), new GridLayoutParams(0,0));
 		container.addComponent(new CheckBox(), new GridLayoutParams(1,0));
 		container.addComponent(new EditText(), new GridLayoutParams(2,0));
 		container.addComponent(new LabeledCheckBox(), new GridLayoutParams(3,0));
-		container.addComponent(new MenuButton(), new GridLayoutParams(4,0));
+		container.addComponent(new MenuButton().add("one","two","three","four","five"), new GridLayoutParams(4,0));
 		container.addComponent(new Scroll(), new GridLayoutParams(0,1));
 		container.addComponent(new Slider(), new GridLayoutParams(1,1));
 		container.addComponent(new TextField(), new GridLayoutParams(2,1));
 		container.addComponent(new TextView("TextView"), new GridLayoutParams(3,1));
 		
-		cm.add(container);
+		cm.add(container,0);
 		
 	}
 
 	@Override
 	public void draw() {
+		
+		if(mouseButton == RIGHT) {
+			cm.getContainerById(0).setSize(mouseX,mouseY);
+		}
 	}
 	
 }

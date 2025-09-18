@@ -6,6 +6,7 @@ import static processing.core.PApplet.map;
 import microui.core.base.Component;
 import microui.core.base.View;
 import microui.core.style.Color;
+import microui.core.style.Theme;
 
 //Status: STABLE - Do not modify
 //Last Reviewed: 16.09.2025
@@ -19,7 +20,7 @@ public final class Hover extends View {
 		super();
 		setVisible(true);
 		
-		color = new Color(0,100,255,24);
+		color = new Color(Theme.getDefaultHoverColor());
 		
 		this.component = requireNonNull(component,"component cannot be null");
 	

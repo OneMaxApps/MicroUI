@@ -83,8 +83,10 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		if (currentContainer == null) {
 			return;
 		}
-
-		currentContainer.mouseWheel(mouseEvent);
+		
+		if(mouseEvent.getAction() == MouseEvent.WHEEL) {
+			currentContainer.mouseWheel(mouseEvent);
+		}
 	}
 
 	public void mouseEvent(MouseEvent mouseEvent) {
@@ -229,15 +231,9 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	}
 	
 	public final class Render {
-		private static boolean isAlreadyWasCreated;
 		
-		public Render() {
-			if(isAlreadyWasCreated) {
-				throw new IllegalStateException("cannot create Render twice");
-			} else {
-				getContext().registerMethod("draw", this);
-				isAlreadyWasCreated = true;
-			}
+		private Render() {
+			getContext().registerMethod("draw", this);
 		}
 		
 		public void draw() {
@@ -270,7 +266,10 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 		container.setConstrainDimensionsEnabled(false);
 		container.setSize(ctx.width, ctx.height);
-		container.setColor(new Color(200));
+		
+		if(container.getColor().isTransparent()) {
+			container.setColor(new Color(200));
+		}
 
 		containerList.add(container);
 

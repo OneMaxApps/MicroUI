@@ -58,7 +58,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	
 	public EditText(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		setMinMaxSize(100,100,Math.max(100,ctx.width*.9f),Math.max(100,ctx.height*.9f));
+		setMinMaxSize(40,20,200,100);
 		getMutableColor().set(255);
 		
 		scrollV = new Scroll();
