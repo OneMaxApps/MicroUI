@@ -138,7 +138,7 @@ public class Event {
 		return false;
 	}
 
-	public boolean holding() {
+	public boolean isHolding() {
 		if (pressed()) {
 			return isHolding = true;
 		} else {
@@ -148,7 +148,7 @@ public class Event {
 	}
 
 	public boolean dragging() {
-		return holding() && (app.mouseX != app.pmouseX || app.mouseY != app.pmouseY);
+		return isHolding() && (app.mouseX != app.pmouseX || app.mouseY != app.pmouseY);
 	}
 
 	public boolean dragged() {

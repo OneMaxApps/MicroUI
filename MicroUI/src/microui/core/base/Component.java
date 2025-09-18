@@ -109,7 +109,7 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final boolean isHolding() {
-		return event.holding();
+		return event.isHolding();
 	}
 
 	public final Component onClick(Listener listener) {

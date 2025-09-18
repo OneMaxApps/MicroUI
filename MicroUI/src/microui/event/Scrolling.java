@@ -38,7 +38,7 @@ public final class Scrolling {
       
       isScrolling = (speed < -.01f || speed > .01f);
       
-      if(event.holding()) { speed = 0; }
+      if(event.isHolding()) { speed = 0; }
       
       if(isScrolling) { return speed; }
       return 0f;
