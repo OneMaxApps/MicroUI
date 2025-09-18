@@ -9,7 +9,7 @@ import processing.core.PGraphics;
 //Status: STABLE - Do not modify
 //Last Reviewed: 13.09.2025
 public final class Stroke {
-	private static final int DEFAULT_STROKE_WEIGHT = 2;
+	private static final int DEFAULT_STROKE_WEIGHT = 1;
 	private final Color color;
 	private float weight;
 

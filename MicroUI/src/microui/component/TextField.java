@@ -71,6 +71,7 @@ public final class TextField extends Component implements KeyPressable {
 		checkDimensions();
 		
 		ctx.pushStyle();
+			getMutableColor().apply();
 			ctx.rect(getX(),getY(),getWidth(),getHeight());
 			
 			pg.beginDraw();

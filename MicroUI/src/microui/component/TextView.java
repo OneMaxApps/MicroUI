@@ -2,7 +2,6 @@ package microui.component;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static microui.constants.AutoResizeMode.SMALL;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
@@ -21,14 +20,15 @@ public final class TextView extends Component {
 	
 	public TextView(String text, float x, float y, float width, float height) {
 		super(x, y, width, height);
-		setConstrainDimensionsEnabled(false);
+		setMinSize(10);
+		setMaxSize(100,40);
 		
 		getMutableColor().set(Theme.getDefaultTextViewColor());
 		
 		setText(text);
 		setTextSize(max(1, min(width, height)));
 		setAutoResizeModeEnabled(true);
-		setAutoResizeMode(SMALL);
+		setAutoResizeMode(AutoResizeMode.BIG);
 		setCenterModeEnabled(true);
 	}
 

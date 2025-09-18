@@ -15,6 +15,7 @@ public class Button extends AbstractButton {
 		setMinMaxSize(20,10,100,40);
 		
 		this.text = new TextView(getX(), getY(), getWidth(), getHeight());
+		this.text.setConstrainDimensionsEnabled(false);
 		this.text.setAutoResizeModeEnabled(true);
 		this.text.setAutoResizeMode(BIG);
 		setText(text);

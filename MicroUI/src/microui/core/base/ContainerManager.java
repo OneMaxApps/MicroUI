@@ -87,6 +87,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		if(mouseEvent.getAction() == MouseEvent.WHEEL) {
 			currentContainer.mouseWheel(mouseEvent);
 		}
+		
 	}
 
 	public void mouseEvent(MouseEvent mouseEvent) {

@@ -24,7 +24,7 @@ public class MenuButton extends Button implements Scrollable {
 	
 	public MenuButton(String title, float x, float y, float w, float h) {
 		super(title,x,y,w,h);
-		
+		setPriority(1);
 		isAutoClose = true;
 		itemList = new ArrayList<Button>();
 		selectedId = -1;

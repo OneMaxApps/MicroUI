@@ -3,19 +3,20 @@ package microui.component;
 import static microui.constants.Orientation.HORIZONTAL;
 import static processing.core.PApplet.map;
 
-import microui.core.RangeControl;
+import microui.core.LinearRangeControl;
 import microui.core.base.SpatialView;
 import microui.core.style.Color;
 import microui.core.style.Stroke;
 
-public class Slider extends RangeControl {
+public class Slider extends LinearRangeControl {
 
-	private final Rect level;
+	private final Rect indicator;
 
 	public Slider(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		level = new Rect(x,y,w,h);
-		level.color.set(234);
+		indicator = new Rect(x,y,w,h);
+		indicator.color.set(0,200,255,164);
+		
 		setValue(0, 100, 0);
 
 		setOrientation(HORIZONTAL);
@@ -31,7 +32,7 @@ public class Slider extends RangeControl {
 	@Override
 	protected void render() {
 		super.render();
-		level.draw();
+		indicator.draw();
 
 		if (isHolding()) {
 			switch (getOrientation()) {
@@ -42,7 +43,7 @@ public class Slider extends RangeControl {
 				setValue(map(ctx.mouseY, getY(), getY() + getHeight(), getMaxValue(), getMinValue()));
 				break;
 			}
-			updateLevelBounds();
+			updateIndicatorBounds();
 
 			onStartChangeValue();
 			onChangeValue();
@@ -53,7 +54,7 @@ public class Slider extends RangeControl {
 
 	@Override
 	protected void onChangeBounds() {
-		updateLevelBounds();
+		updateIndicatorBounds();
 	}
 
 	@Override
@@ -62,28 +63,28 @@ public class Slider extends RangeControl {
 		onChangeBounds();
 	}
 
-	public final float getLevelStrokeWeight() {
-		return level.stroke.getWeight();
+	public final float getIndicatorStrokeWeight() {
+		return indicator.stroke.getWeight();
 	}
 
-	public final void setLevelStrokeWeight(int weight) {
-		level.stroke.setWeight(weight);
+	public final void setIndicatorStrokeWeight(int weight) {
+		indicator.stroke.setWeight(weight);
 	}
 
-	public final Color getLevelStrokeColor() {
-		return level.stroke.getColor();
+	public final Color getIndicatorStrokeColor() {
+		return indicator.stroke.getColor();
 	}
 
-	public final void setLevelStrokeColor(Color color) {
-		level.stroke.setColor(color);
+	public final void setIndicatorStrokeColor(Color color) {
+		indicator.stroke.setColor(color);
 	}
 
-	public final Color getLevelColor() {
-		return new Color(level.color);
+	public final Color getIndicatorColor() {
+		return new Color(indicator.color);
 	}
 
-	public final void setLevelColor(Color color) {
-		level.color.set(color);
+	public final void setIndicatorColor(Color color) {
+		indicator.color.set(color);
 	}
 
 	private final class Rect extends SpatialView {
@@ -96,6 +97,7 @@ public class Slider extends RangeControl {
 			setNegativeDimensionsEnabled(true);
 
 			stroke = new Stroke();
+			stroke.setWeight(1);
 			color = new Color(44);
 		}
 
@@ -111,24 +113,24 @@ public class Slider extends RangeControl {
 
 	}
 	
-	private void updateLevelBounds() {
-		if (level == null) {
+	private void updateIndicatorBounds() {
+		if (indicator == null) {
 			return;
 		}
 
-		level.setBounds(getX(),getY(),getWidth(),getHeight());
+		indicator.setBounds(getX(),getY(),getWidth(),getHeight());
 
 		switch (getOrientation()) {
 
 		case HORIZONTAL:
-			level.setWidth(map(getValue(), getMinValue(), getMaxValue(), 0, getWidth()));
+			indicator.setWidth(map(getValue(), getMinValue(), getMaxValue(), 0, getWidth()));
 
 			break;
 
 		case VERTICAL:
-			level.setY(getY() + getHeight());
-			level.setWidth(getWidth());
-			level.setHeight(map(getValue(), getMinValue(), getMaxValue(), 0, -getHeight()));
+			indicator.setY(getY() + getHeight());
+			indicator.setWidth(getWidth());
+			indicator.setHeight(map(getValue(), getMinValue(), getMaxValue(), 0, -getHeight()));
 			break;
 
 		}

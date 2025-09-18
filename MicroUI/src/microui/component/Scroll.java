@@ -3,9 +3,9 @@ package microui.component;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
-import microui.core.RangeControl;
+import microui.core.LinearRangeControl;
 
-public class Scroll extends RangeControl {
+public class Scroll extends LinearRangeControl {
 	private final Button thumb;
 	private float distToThumb;
 	private boolean needRecalculateDistToThumb;
