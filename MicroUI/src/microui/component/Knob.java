@@ -8,13 +8,12 @@ import static processing.core.PApplet.map;
 
 import microui.core.RangeControl;
 import microui.core.style.Color;
-import microui.core.style.Stroke;
+import microui.core.style.Theme;
 import microui.util.Value;
 import processing.event.MouseEvent;
 
 public final class Knob extends RangeControl {
 	private static final float START = 0, END = (float) (PI*2);
-	private final Stroke stroke;
 	private final Color indicatorColor;
 	private float centerX,centerY,radius;
 	private boolean isCanDrag;
@@ -22,12 +21,9 @@ public final class Knob extends RangeControl {
 	public Knob(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setMinMaxSize(10,50);
-		getMutableColor().set(200);
 	
 		value = new Value(0,100,0);
-		stroke = new Stroke();
-		stroke.setWeight(1);
-		indicatorColor = new Color(0,200,255,164);
+		indicatorColor = new Color(Theme.getTheme().getPrimaryColor());
 		
 	}
 	
@@ -37,8 +33,8 @@ public final class Knob extends RangeControl {
 
 	@Override
 	protected void render() {
-		stroke.apply();
-		getMutableColor().apply();
+		getMutableStroke().apply();
+		getMutableBackgroundColor().apply();
 		ctx.ellipse(centerX, centerY, radius, radius);
 		
 		indicatorOnDraw();

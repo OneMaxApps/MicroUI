@@ -17,6 +17,7 @@ import static microui.event.EventType.SHAKE;
 
 import microui.MicroUI;
 import microui.core.style.Color;
+import microui.core.style.Theme;
 import microui.event.Callback;
 import microui.event.Event;
 import microui.event.Listener;
@@ -27,7 +28,7 @@ import microui.feedback.Tooltip;
 public abstract class Component extends SpatialView {
 	private final Padding padding;
 	private final Margin margin;
-	private final Color color;
+	private final Color backgroundColor;
 	private final Event event;
 	private final Callback callback;
 	private Tooltip tooltip;
@@ -40,7 +41,7 @@ public abstract class Component extends SpatialView {
 		
 		padding = new Padding();
 		margin = new Margin();
-		color = new Color(200);
+		backgroundColor = Theme.getTheme().getBackgroundColor();
 		event = new Event(this);
 		callback = new Callback(this);
 
@@ -71,12 +72,12 @@ public abstract class Component extends SpatialView {
 		debugOnDraw();
 	}
 
-	public final Color getColor() {
-		return new Color(color);
+	public final Color getBackgroundColor() {
+		return new Color(backgroundColor);
 	}
 
-	public final Component setColor(Color color) {
-		this.color.set(color);
+	public final Component setBackgroundColor(Color color) {
+		this.backgroundColor.set(color);
 		return this;
 	}
 
@@ -478,8 +479,8 @@ public abstract class Component extends SpatialView {
 		return this;
 	}
 
-	protected final Color getMutableColor() {
-		return color;
+	protected final Color getMutableBackgroundColor() {
+		return backgroundColor;
 	}
 
 	private Tooltip getOrCreateTooltip() {

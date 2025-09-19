@@ -1,5 +1,6 @@
 package microui.component;
 
+import static microui.core.style.Theme.getTheme;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
@@ -13,11 +14,12 @@ public class Scroll extends LinearRangeControl {
 	public Scroll(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		
-		getMutableColor().set(0,32);
+		//getMutableBackgroundColor().set(0,32);
 		thumb = new Button("");
 		thumb.setConstrainDimensionsEnabled(false);
 		thumb.setRipplesEnabled(false);	
 		thumb.setTextVisible(false);
+		thumb.setBackgroundColor(getTheme().getPrimaryColor());
 		
 		thumb.onHold(() -> {
 			calcDistFromMouseToThumb();

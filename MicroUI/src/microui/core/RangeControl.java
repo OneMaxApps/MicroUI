@@ -2,16 +2,19 @@ package microui.core;
 
 import microui.core.base.Component;
 import microui.core.interfaces.Scrollable;
+import microui.core.style.Stroke;
 import microui.event.Scrolling;
 import microui.util.Value;
 
 public abstract class RangeControl extends Component implements Scrollable {
 	protected Value value;
 	private Scrolling scrolling;
+	private final Stroke stroke;
 	
 	public RangeControl(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		scrolling = new Scrolling(getMutableEvent());
+		stroke = new Stroke();
 	}
 
 	public final void setValue(float value) {
@@ -65,4 +68,7 @@ public abstract class RangeControl extends Component implements Scrollable {
 		return scrolling;
 	}
 
+	protected final Stroke getMutableStroke() {
+		return stroke;
+	}
 }

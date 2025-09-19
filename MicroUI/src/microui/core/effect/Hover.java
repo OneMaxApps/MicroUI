@@ -1,12 +1,12 @@
 package microui.core.effect;
 
 import static java.util.Objects.requireNonNull;
+import static microui.core.style.Theme.getTheme;
 import static processing.core.PApplet.map;
 
 import microui.core.base.Component;
 import microui.core.base.View;
 import microui.core.style.Color;
-import microui.core.style.Theme;
 
 //Status: STABLE - Do not modify
 //Last Reviewed: 16.09.2025
@@ -20,7 +20,7 @@ public final class Hover extends View {
 		super();
 		setVisible(true);
 		
-		color = new Color(Theme.getDefaultHoverColor());
+		color = new Color(getTheme().getHoverColor());
 		
 		this.component = requireNonNull(component,"component cannot be null");
 	

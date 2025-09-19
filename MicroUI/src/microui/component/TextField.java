@@ -6,6 +6,7 @@ import static java.awt.event.KeyEvent.VK_END;
 import static java.awt.event.KeyEvent.VK_HOME;
 import static java.awt.event.KeyEvent.VK_V;
 import static java.awt.event.KeyEvent.VK_X;
+import static microui.core.style.Theme.getTheme;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 import static processing.core.PApplet.max;
@@ -21,6 +22,7 @@ import microui.core.TextController;
 import microui.core.base.Component;
 import microui.core.interfaces.KeyPressable;
 import microui.core.style.Color;
+import microui.core.style.Stroke;
 import microui.event.Event;
 import microui.util.Clipboard;
 import microui.util.Metrics;
@@ -30,6 +32,8 @@ import processing.core.PGraphics;
 
 public final class TextField extends Component implements KeyPressable {
 	private static final int LEFT_OFFSET = 10;
+	
+	private final Stroke stroke;
 	
 	private final Text text;
 	private final Cursor cursor;
@@ -47,9 +51,11 @@ public final class TextField extends Component implements KeyPressable {
 		setMinHeight(10);
 		setMaxWidth(200);
 		setMaxHeight(40);
-		
-		getMutableColor().set(255);
 
+		stroke = new Stroke();
+		
+		getMutableBackgroundColor().set(getTheme().getEditableBackgroundColor());
+		
 		text = new Text();
 		cursor = new Cursor();
 		selection = new Selection();
@@ -71,7 +77,7 @@ public final class TextField extends Component implements KeyPressable {
 		checkDimensions();
 		
 		ctx.pushStyle();
-			getMutableColor().apply();
+			getMutableBackgroundColor().apply();
 			ctx.rect(getX(),getY(),getWidth(),getHeight());
 			
 			pg.beginDraw();
@@ -86,9 +92,15 @@ public final class TextField extends Component implements KeyPressable {
 			ctx.image(pg, getX(), getY(), getWidth(), getHeight());
 			
 			if(!isFocused) {
-				ctx.fill(0,32);
+				ctx.fill(0,10);
 				ctx.rect(getX(), getY(), getWidth(), getHeight());
 			}
+		ctx.popStyle();
+		
+		ctx.pushStyle();
+		stroke.apply();
+		ctx.noFill();
+		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		ctx.popStyle();
 		
 		events();
@@ -311,7 +323,7 @@ public final class TextField extends Component implements KeyPressable {
 		
 		private Text() {
 			super();
-			color = new Color(0);
+			color = new Color(getTheme().getEditableTextColor());
 			size = new Size();
 			font = new Font();
 			
@@ -434,7 +446,7 @@ public final class TextField extends Component implements KeyPressable {
 		private float positionX,positionY,height;
 		
 		private Cursor() {
-			color = new Color(0);
+			color = new Color(getTheme().getCursorColor());
 			weight = new Size(2);
 			column = new Column();
 			blink = new Blink();
@@ -596,7 +608,7 @@ public final class TextField extends Component implements KeyPressable {
 		private boolean isStarted;
 		
 		private Selection() {
-			color = new Color(0,164,255,64);
+			color = new Color(getTheme().getSelectColor());
 			y = getHeight()*.1f;
 			h = getHeight()*.8f;
 		}

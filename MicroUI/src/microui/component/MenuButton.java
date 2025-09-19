@@ -1,5 +1,7 @@
 package microui.component;
 
+import static microui.core.style.Theme.getTheme;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,6 +18,8 @@ public class MenuButton extends Button implements Scrollable {
 	
 	private float listHeight;
 	private float markX,markY,markW,markH;
+	
+	private final Color indicatorColor;
 	
 	private final ArrayList<Button> itemList;
 	private final Scrolling scrolling;
@@ -38,6 +42,8 @@ public class MenuButton extends Button implements Scrollable {
 			isOpen = !isOpen;
 			if(!isOpen) { closeAllSubMenus(); } else { selectedId = -1; }
 		});
+		
+		indicatorColor = new Color(getTheme().getPrimaryColor());
 		
 	}
 	
@@ -204,7 +210,7 @@ public class MenuButton extends Button implements Scrollable {
 	
 	public final void setItemsColor(final Color color) {
 		for(Button item : itemList) {
-			item.getColor().set(color);
+			item.setBackgroundColor(color);
 			
 			if(item instanceof MenuButton subMenu) {
 				subMenu.setItemsColor(color);
@@ -379,7 +385,9 @@ public class MenuButton extends Button implements Scrollable {
 			if(!isMarkVisible) { return; }
 			ctx.pushStyle();
 			ctx.noStroke();
-			if(isOpen) { ctx.fill(0,255,0,128); } else { ctx.fill(255,128); }
+			
+			if(isOpen) { indicatorColor.apply(); } else { ctx.fill(255,128); }
+			
 			ctx.rect(markX,markY,markW,markH);
 			ctx.popStyle();
 			

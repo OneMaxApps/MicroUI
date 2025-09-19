@@ -2,6 +2,7 @@ package microui.component;
 
 import static java.util.Objects.requireNonNull;
 import static microui.constants.AutoResizeMode.BIG;
+import static microui.core.style.Theme.getTheme;
 
 import microui.core.AbstractButton;
 import microui.core.style.Color;
@@ -18,6 +19,7 @@ public class Button extends AbstractButton {
 		this.text.setConstrainDimensionsEnabled(false);
 		this.text.setAutoResizeModeEnabled(true);
 		this.text.setAutoResizeMode(BIG);
+		this.text.setTextColor(getTheme().getButtonTextColor());
 		setText(text);
 	}
 
@@ -57,11 +59,11 @@ public class Button extends AbstractButton {
 	}
 
 	public final Color getTextColor() {
-		return text.getColor();
+		return text.getTextColor();
 	}
 
 	public final void setTextColor(Color color) {
-		text.setColor(requireNonNull(color, "color cannot be null"));
+		text.setTextColor(color);
 	}
 
 	public final boolean isTextVisible() {

@@ -12,7 +12,6 @@ import java.util.List;
 
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
-import microui.core.style.Color;
 import microui.event.Event;
 import microui.service.GlobalTooltip;
 import processing.event.KeyEvent;
@@ -268,9 +267,9 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		container.setConstrainDimensionsEnabled(false);
 		container.setSize(ctx.width, ctx.height);
 		
-		if(container.getColor().isTransparent()) {
-			container.setColor(new Color(200));
-		}
+//		if(container.getBackgroundColor().isTransparent()) {
+//			container.setBackgroundColor(new Color(128));
+//		}
 
 		containerList.add(container);
 

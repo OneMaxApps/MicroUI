@@ -9,12 +9,11 @@ public abstract class LinearRangeControl extends RangeControl {
 	private Orientation orientation;
 	private boolean valueChangeStart, valueChangeEnd;
 	private Listener onStartChangeValueListener, onChangeValueListener, onEndChangeValueListener;
-
+	
 	public LinearRangeControl(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setMinMaxSize(10,20,200,20);
-		getMutableColor().set(164);
-		
+
 		value = new Value(0, 100, 0) {
 			@Override
 			public void action() {
@@ -33,7 +32,8 @@ public abstract class LinearRangeControl extends RangeControl {
 	protected void render() {
 
 		ctx.pushStyle();
-		getMutableColor().apply();
+		getMutableStroke().apply();
+		getMutableBackgroundColor().apply();
 		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		ctx.popStyle();
 

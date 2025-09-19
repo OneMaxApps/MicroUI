@@ -33,7 +33,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		setConstrainDimensionsEnabled(false);
 		setMinMaxSize(1,1,width,height);
 		
-		getMutableColor().set(0,0);
+		getMutableBackgroundColor().set(0,0);
 
 		componentEntryList = new ArrayList<ComponentEntry>();
 
@@ -316,7 +316,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 			backgroundImage.draw();
 		} else {
 			ctx.noStroke();
-			getMutableColor().apply();
+			getMutableBackgroundColor().apply();
 			ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		}
 	}

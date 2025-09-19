@@ -11,6 +11,7 @@ import static java.awt.event.KeyEvent.VK_V;
 import static java.awt.event.KeyEvent.VK_X;
 import static java.lang.Math.max;
 import static microui.constants.Orientation.VERTICAL;
+import static microui.core.style.Theme.getTheme;
 import static microui.event.Event.checkKey;
 import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
@@ -34,6 +35,7 @@ import microui.core.base.Component;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
+import microui.core.style.Stroke;
 import microui.event.Event;
 import microui.util.Clipboard;
 import microui.util.Metrics;
@@ -48,6 +50,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	private float scrollsWeight;
 	private boolean isFocused;
 	
+	private final Stroke stroke;
+	
 	private final Scroll scrollV, scrollH;
 	private final Items items;
 	private final Selection selection;
@@ -59,12 +63,15 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 	public EditText(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setMinMaxSize(40,20,200,100);
-		getMutableColor().set(255);
+
+		getMutableBackgroundColor().set(getTheme().getEditableBackgroundColor());
 		
 		scrollV = new Scroll();
 		scrollH = new Scroll();
 		initDefaultScrollsSettings();
 
+		stroke = new Stroke(getTheme().getStrokeColor());
+		
 		items = new Items();
 		selection = new Selection();
 		cursor = new Cursor();
@@ -98,7 +105,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		scrollV.setVisible(isFocused);
 
 		graphics.beginDraw();
-		graphics.background(getMutableColor().get());
+		graphics.background(getMutableBackgroundColor().get());
 		items.draw(graphics);
 		cursor.draw(graphics);
 		graphics.endDraw();
@@ -110,6 +117,12 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		mouseEvents();
 		selection.update();
 
+		
+		ctx.pushStyle();
+		stroke.apply();
+		ctx.noFill();
+		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
+		ctx.popStyle();
 	}
 
 	@Override
@@ -627,8 +640,8 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		private int textSize;
 
 		private Items() {
-			color = new Color(0);
-			selectColor = new Color(0, 0, 255, 64);
+			color = new Color(getTheme().getEditableTextColor());
+			selectColor = new Color(getTheme().getSelectColor());
 			textSize = 32;
 			list = new ArrayList<Item>();
 			for (int i = 0; i < getHeight() / textSize; i++) {
@@ -1080,7 +1093,7 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		private int column, row, duration;
 
 		private Cursor() {
-			color = new Color(0);
+			color = new Color(getTheme().getCursorColor());
 		}
 
 		private void draw(final PGraphics pg) {

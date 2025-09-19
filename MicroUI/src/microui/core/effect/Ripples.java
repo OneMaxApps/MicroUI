@@ -115,7 +115,7 @@ public final class Ripples extends View {
 		private boolean isPositionPrepared;
 
 		Animation() {
-			color = new Color(Theme.getDefaultRipplesColor());
+			color = new Color(Theme.getTheme().getRipplesColor());
 		}
 
 		void render(PGraphics pg) {

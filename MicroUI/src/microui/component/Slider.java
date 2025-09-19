@@ -1,6 +1,7 @@
 package microui.component;
 
 import static microui.constants.Orientation.HORIZONTAL;
+import static microui.core.style.Theme.getTheme;
 import static processing.core.PApplet.map;
 
 import microui.core.LinearRangeControl;
@@ -15,7 +16,6 @@ public class Slider extends LinearRangeControl {
 	public Slider(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		indicator = new Rect(x,y,w,h);
-		indicator.color.set(0,200,255,164);
 		
 		setValue(0, 100, 0);
 
@@ -98,7 +98,7 @@ public class Slider extends LinearRangeControl {
 
 			stroke = new Stroke();
 			stroke.setWeight(1);
-			color = new Color(44);
+			color = new Color(getTheme().getPrimaryColor());
 		}
 
 		@Override

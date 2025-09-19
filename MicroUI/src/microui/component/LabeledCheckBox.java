@@ -151,11 +151,11 @@ public final class LabeledCheckBox extends Component {
 	}
 
 	public Color getTextColor() {
-		return textView.getColor();
+		return textView.getBackgroundColor();
 	}
 
 	public LabeledCheckBox setTextColor(Color color) {
-		textView.setColor(color);
+		textView.setBackgroundColor(color);
 		return this;
 	}
 

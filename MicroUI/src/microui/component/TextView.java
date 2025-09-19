@@ -7,11 +7,13 @@ import static processing.core.PConstants.CORNER;
 
 import microui.constants.AutoResizeMode;
 import microui.core.base.Component;
+import microui.core.style.Color;
 import microui.core.style.Theme;
 import processing.core.PFont;
 
 public final class TextView extends Component {
 	private static final String DEFAULT_TEXT = "";
+	private final Color textColor;
 	private PFont font;
 	private String text;
 	private AutoResizeMode autoResizeMode;
@@ -23,7 +25,8 @@ public final class TextView extends Component {
 		setMinSize(10);
 		setMaxSize(100,40);
 		
-		getMutableColor().set(Theme.getDefaultTextViewColor());
+		textColor = new Color(Theme.getTheme().getTextViewColor());
+		getMutableBackgroundColor().set(0,0);
 		
 		setText(text);
 		setTextSize(max(1, min(width, height)));
@@ -47,9 +50,11 @@ public final class TextView extends Component {
 
 	@Override
 	protected void render() {
+		getMutableBackgroundColor().apply();
+		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
+		
 		if(text.isEmpty()) { return; }
 		
-		getMutableColor().apply();
 
 		if (font != null) {
 			ctx.textFont(font);
@@ -62,7 +67,7 @@ public final class TextView extends Component {
 		} else {
 			ctx.textSize(getTextSize());
 		}
-		
+		textColor.apply();
 		ctx.text(text, getX(), getY(), getWidth(), getHeight());
 	}
 
@@ -122,5 +127,12 @@ public final class TextView extends Component {
 	public void setCenterModeEnabled(boolean isEnabled) {
 		this.isCenterModeEnabled = isEnabled;
 	}
+
+	public Color getTextColor() {
+		return new Color(textColor);
+	}
 	
+	public void setTextColor(Color color) {
+		textColor.set(color);
+	}
 }

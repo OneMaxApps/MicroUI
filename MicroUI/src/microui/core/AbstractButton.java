@@ -1,11 +1,12 @@
 package microui.core;
 
+import static microui.core.style.Theme.getTheme;
+
 import microui.core.base.Component;
 import microui.core.effect.Hover;
 import microui.core.effect.Ripples;
 import microui.core.style.Color;
 import microui.core.style.Stroke;
-import microui.core.style.Theme;
 
 public abstract class AbstractButton extends Component {
 	private final Ripples ripples;
@@ -14,7 +15,7 @@ public abstract class AbstractButton extends Component {
 	
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		getMutableColor().set(Theme.getDefaultButtonColor());
+		getMutableBackgroundColor().set(getTheme().getBackgroundColor());
 		ripples = new Ripples(this);
 		hover = new Hover(this);
 		stroke = new Stroke();
@@ -25,7 +26,7 @@ public abstract class AbstractButton extends Component {
 	protected void render() {
 		ctx.pushStyle();
 		stroke.apply();
-		getMutableColor().apply();
+		getMutableBackgroundColor().apply();
 		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		ripples.draw();
 		hover.draw();

@@ -51,6 +51,7 @@ public final class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
+		//Theme.setTheme(new ThemeBlack());
 		//MicroUI.setDebugModeEnabled(true);
 
 		cm = ContainerManager.getInstance();
@@ -69,11 +70,13 @@ public final class Launcher extends PApplet {
 		container.addComponent(new Knob(), new GridLayoutParams(4,1));
 
 		cm.add(container,0);
+		
+		
 	}
 
 	@Override
 	public void draw() {
-
+		background(164);
 		if(mouseButton == RIGHT) {
 			cm.getContainerById(0).setSize(mouseX,mouseY);
 		}
