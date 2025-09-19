@@ -1,6 +1,6 @@
-package microui.core.style;
+package microui.core.style.theme;
 
-public final class Theme {
+public final class ThemeManager {
 	private static AbstractTheme currentTheme = new ThemeWhite();
 	
 	public static void setTheme(AbstractTheme theme) {

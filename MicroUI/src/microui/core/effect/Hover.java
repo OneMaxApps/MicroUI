@@ -1,7 +1,7 @@
 package microui.core.effect;
 
 import static java.util.Objects.requireNonNull;
-import static microui.core.style.Theme.getTheme;
+import static microui.core.style.theme.ThemeManager.getTheme;
 import static processing.core.PApplet.map;
 
 import microui.core.base.Component;

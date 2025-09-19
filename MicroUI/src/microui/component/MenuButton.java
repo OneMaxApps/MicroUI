@@ -1,6 +1,6 @@
 package microui.component;
 
-import static microui.core.style.Theme.getTheme;
+import static microui.core.style.theme.ThemeManager.getTheme;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -3,6 +3,7 @@ package microui.core.style;
 import static microui.MicroUI.getContext;
 import static processing.core.PConstants.SQUARE;
 
+import microui.core.style.theme.ThemeManager;
 import microui.util.Metrics;
 import processing.core.PGraphics;
 
@@ -27,7 +28,7 @@ public final class Stroke {
 	}
 	
 	public Stroke(float weight) {
-		this(Theme.getTheme().getStrokeColor(),weight);
+		this(ThemeManager.getTheme().getStrokeColor(),weight);
 	}
 	
 	public Stroke() {

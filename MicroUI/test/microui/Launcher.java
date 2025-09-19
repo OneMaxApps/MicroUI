@@ -12,8 +12,11 @@ import microui.component.TextField;
 import microui.component.TextView;
 import microui.core.base.Container;
 import microui.core.base.ContainerManager;
+import microui.core.style.theme.ThemeGlass;
+import microui.core.style.theme.ThemeManager;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
+import microui.util.Metrics;
 import processing.core.PApplet;
 
 // TODO check full work life cycle of components
@@ -51,13 +54,14 @@ public final class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		//Theme.setTheme(new ThemeBlack());
+		ThemeManager.setTheme(new ThemeGlass());
 		//MicroUI.setDebugModeEnabled(true);
 
 		cm = ContainerManager.getInstance();
 		
 		Container container = new Container(new GridLayout(5,5));
-	
+		container.setBackgroundImage(loadImage("C:\\Users\\002\\Downloads\\i.jpg"));
+		
 		container.addComponent(new Button(), new GridLayoutParams(0,0));
 		container.addComponent(new CheckBox(), new GridLayoutParams(1,0));
 		container.addComponent(new EditText(), new GridLayoutParams(2,0));
@@ -70,8 +74,7 @@ public final class Launcher extends PApplet {
 		container.addComponent(new Knob(), new GridLayoutParams(4,1));
 
 		cm.add(container,0);
-		
-		
+
 	}
 
 	@Override
@@ -79,6 +82,22 @@ public final class Launcher extends PApplet {
 		background(164);
 		if(mouseButton == RIGHT) {
 			cm.getContainerById(0).setSize(mouseX,mouseY);
+		}
+		Metrics.printAll();
+	}
+
+	@Override
+	public void keyPressed() {
+		super.keyPressed();
+		
+		if(keyPressed) {
+			if(keyCode == LEFT) {
+				cm.switchOnPreviousContainer();
+			}
+			
+			if(keyCode == RIGHT) {
+				cm.switchOnNextContainer();
+			}
 		}
 	}
 	

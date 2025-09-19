@@ -10,6 +10,7 @@ import static processing.core.PApplet.map;
 import java.util.ArrayList;
 import java.util.List;
 
+import microui.core.exception.RenderException;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import microui.event.Event;
@@ -53,7 +54,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	@Override
 	public void draw() {
 		if(!isCanDraw) {
-			throw new IllegalStateException("ContainerManager calling draw() only inside");
+			throw new RenderException("ContainerManager calling draw() only inside");
 		}
 		super.draw();
 		GlobalTooltip.draw();
@@ -190,6 +191,40 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		setAnimationType(animationType);
 		switchOn(textId);
 	}
+	
+	public void switchOnPreviousContainer() {
+		if(animation.isStarted()) { return; }
+		
+		int currentContainerIndex = 0;
+		for(int i = 0; i < containerList.size(); i++) {
+			if(currentContainer == containerList.get(i)) {
+				currentContainerIndex = i;
+			}
+		}
+		
+		if(currentContainerIndex > 0) {
+			switchOn(containerList.get(currentContainerIndex-1));
+		} else {
+			switchOn(containerList.get(containerList.size()-1));
+		}
+	}
+	
+	public void switchOnNextContainer() {
+		if(animation.isStarted()) { return; }
+		int currentContainerIndex = 0;
+		
+		for(int i = 0; i < containerList.size(); i++) {
+			if(currentContainer == containerList.get(i)) {
+				currentContainerIndex = i;
+			}
+		}
+		
+		if(currentContainerIndex < containerList.size()-1) {
+			switchOn(containerList.get(currentContainerIndex+1));
+		} else {
+			switchOn(0);
+		}
+	}
 
 	public Container getContainerById(int id) {
 		return containerList.stream().filter(container -> container.getId() == id).findFirst()
@@ -242,9 +277,12 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 			isCanDraw = false;
 		}
 	}
-
+	
 	private void lauchContainer(Container container) {
-
+		if(containerList.size() <= 1) {
+			throw new IllegalStateException("cannot switch container when ContainerManager have only 1 container inner");
+		}
+		
 		if (container == null) {
 			throw new NullPointerException("container cannot be null");
 		}
@@ -255,7 +293,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 		prevContainer = currentContainer;
 		currentContainer = container;
-		animation.setStart(true);
+		animation.setStarted(true);
 	}
 
 	private void addContainerSafe(Container container) {
@@ -266,10 +304,6 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 		container.setConstrainDimensionsEnabled(false);
 		container.setSize(ctx.width, ctx.height);
-		
-//		if(container.getBackgroundColor().isTransparent()) {
-//			container.setBackgroundColor(new Color(128));
-//		}
 
 		containerList.add(container);
 
@@ -316,7 +350,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		private AnimationType animationType;
 		private float speed;
 		private int randDirX, randDirY;
-		private boolean isStart, isNewContainerPrepared, isEasing;
+		private boolean isStarted, isNewContainerPrepared, isEasing;
 
 		private Animation() {
 			super();
@@ -328,7 +362,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 		@Override
 		protected void render() {
-			if (isStart()) {
+			if (isStarted()) {
 
 				if (prevContainer != null) {
 					prevContainer.draw();
@@ -366,18 +400,18 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 			}
 		}
 
-		boolean isStart() {
-			return isStart;
+		boolean isStarted() {
+			return isStarted;
 		}
 
-		void setStart(boolean isStart) {
-			this.isStart = isStart;
+		void setStarted(boolean isStart) {
+			this.isStarted = isStart;
 		}
 
 		void complete() {
 			prevContainer.setBounds(0, 0, ctx.width, ctx.height);
 			currentContainer.setBoundsFrom(prevContainer);
-			setStart(false);
+			setStarted(false);
 			isNewContainerPrepared = false;
 		}
 

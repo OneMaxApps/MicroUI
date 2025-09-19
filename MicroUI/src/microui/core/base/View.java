@@ -3,6 +3,7 @@ package microui.core.base;
 import static java.util.Objects.requireNonNull;
 import static microui.MicroUI.getContext;
 
+import microui.core.exception.RenderException;
 import microui.core.interfaces.Visible;
 import microui.util.Metrics;
 import processing.core.PApplet;
@@ -57,11 +58,11 @@ public abstract class View implements Visible {
 	 */
 	protected void draw() {
 		if(!ContainerManager.isInitialized()) {
-			throw new IllegalStateException("ContainerManager is not initialized");
+			throw new RenderException("ContainerManager is not initialized");
 		}
 		
 		if(!ContainerManager.isCanDraw()) {
-			throw new IllegalStateException("Cannot draw outside from ContainerManager");
+			throw new RenderException("Cannot draw outside from ContainerManager");
 		}
 		
 		if (isVisible()) {

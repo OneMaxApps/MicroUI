@@ -1,7 +1,7 @@
 package microui.component;
 
 import static microui.constants.Orientation.HORIZONTAL;
-import static microui.core.style.Theme.getTheme;
+import static microui.core.style.theme.ThemeManager.getTheme;
 import static processing.core.PApplet.map;
 
 import microui.core.LinearRangeControl;

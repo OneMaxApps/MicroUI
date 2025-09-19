@@ -1,4 +1,6 @@
-package microui.core.style;
+package microui.core.style.theme;
+
+import microui.core.style.Color;
 
 public abstract class AbstractTheme {
 	public abstract Color getBackgroundColor();

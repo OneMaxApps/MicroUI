@@ -8,7 +8,7 @@ import static processing.core.PApplet.map;
 
 import microui.core.RangeControl;
 import microui.core.style.Color;
-import microui.core.style.Theme;
+import microui.core.style.theme.ThemeManager;
 import microui.util.Value;
 import processing.event.MouseEvent;
 
@@ -23,7 +23,7 @@ public final class Knob extends RangeControl {
 		setMinMaxSize(10,50);
 	
 		value = new Value(0,100,0);
-		indicatorColor = new Color(Theme.getTheme().getPrimaryColor());
+		indicatorColor = new Color(ThemeManager.getTheme().getPrimaryColor());
 		
 	}
 	

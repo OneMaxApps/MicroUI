@@ -8,7 +8,7 @@ import static processing.core.PConstants.CORNER;
 import microui.constants.AutoResizeMode;
 import microui.core.base.Component;
 import microui.core.style.Color;
-import microui.core.style.Theme;
+import microui.core.style.theme.ThemeManager;
 import processing.core.PFont;
 
 public final class TextView extends Component {
@@ -25,7 +25,7 @@ public final class TextView extends Component {
 		setMinSize(10);
 		setMaxSize(100,40);
 		
-		textColor = new Color(Theme.getTheme().getTextViewColor());
+		textColor = new Color(ThemeManager.getTheme().getTextViewColor());
 		getMutableBackgroundColor().set(0,0);
 		
 		setText(text);

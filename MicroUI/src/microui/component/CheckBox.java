@@ -1,6 +1,7 @@
 package microui.component;
 
 import static java.lang.Math.max;
+import static microui.core.style.theme.ThemeManager.getTheme;
 import static processing.core.PConstants.PROJECT;
 
 import microui.core.AbstractButton;
@@ -16,7 +17,7 @@ public class CheckBox extends AbstractButton {
 		super(x, y, DEFAULT_SIZE, DEFAULT_SIZE);
 		setMinMaxSize(DEFAULT_SIZE);
 		onClick(() -> toggle());
-		markColor = new Color(200,200,255);
+		markColor = new Color(getTheme().getPrimaryColor());
 	}
 
 	public CheckBox(boolean isChecked) {
@@ -73,7 +74,7 @@ public class CheckBox extends AbstractButton {
 		ctx.noStroke();
 		markColor.apply();
 		ctx.rect(getX(), getY(), getWidth(), getHeight());
-		ctx.stroke(0, 128);
+		ctx.stroke(255);
 		ctx.strokeWeight(max(1, getWidth() / 5));
 		ctx.strokeCap(PROJECT);
 		ctx.line(getX() + getWidth() * .3f, getY() + getHeight() * .6f, getX() + getWidth() / 2,

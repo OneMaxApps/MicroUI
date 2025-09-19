@@ -17,7 +17,7 @@ import static microui.event.EventType.SHAKE;
 
 import microui.MicroUI;
 import microui.core.style.Color;
-import microui.core.style.Theme;
+import microui.core.style.theme.ThemeManager;
 import microui.event.Callback;
 import microui.event.Event;
 import microui.event.Listener;
@@ -41,7 +41,7 @@ public abstract class Component extends SpatialView {
 		
 		padding = new Padding();
 		margin = new Margin();
-		backgroundColor = Theme.getTheme().getBackgroundColor();
+		backgroundColor = ThemeManager.getTheme().getBackgroundColor();
 		event = new Event(this);
 		callback = new Callback(this);
 

@@ -1,6 +1,6 @@
 package microui.core;
 
-import static microui.core.style.Theme.getTheme;
+import static microui.core.style.theme.ThemeManager.getTheme;
 
 import microui.core.base.Component;
 import microui.core.effect.Hover;

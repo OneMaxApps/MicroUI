@@ -11,7 +11,7 @@ import static java.awt.event.KeyEvent.VK_V;
 import static java.awt.event.KeyEvent.VK_X;
 import static java.lang.Math.max;
 import static microui.constants.Orientation.VERTICAL;
-import static microui.core.style.Theme.getTheme;
+import static microui.core.style.theme.ThemeManager.getTheme;
 import static microui.event.Event.checkKey;
 import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;

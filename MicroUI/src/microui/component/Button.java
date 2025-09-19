@@ -2,24 +2,24 @@ package microui.component;
 
 import static java.util.Objects.requireNonNull;
 import static microui.constants.AutoResizeMode.BIG;
-import static microui.core.style.Theme.getTheme;
+import static microui.core.style.theme.ThemeManager.getTheme;
 
 import microui.core.AbstractButton;
 import microui.core.style.Color;
 import processing.core.PFont;
 
 public class Button extends AbstractButton {
-	private final TextView text;
+	private final TextView textView;
 
 	public Button(String text, float x, float y, float w, float h) {
 		super(x, y, w, h);
 		setMinMaxSize(20,10,100,40);
 		
-		this.text = new TextView(getX(), getY(), getWidth(), getHeight());
-		this.text.setConstrainDimensionsEnabled(false);
-		this.text.setAutoResizeModeEnabled(true);
-		this.text.setAutoResizeMode(BIG);
-		this.text.setTextColor(getTheme().getButtonTextColor());
+		textView = new TextView(getX(), getY(), getWidth(), getHeight());
+		textView.setConstrainDimensionsEnabled(false);
+		textView.setAutoResizeModeEnabled(true);
+		textView.setAutoResizeMode(BIG);
+		textView.setTextColor(getTheme().getButtonTextColor());
 		setText(text);
 	}
 
@@ -39,46 +39,46 @@ public class Button extends AbstractButton {
 	@Override
 	protected void render() {
 		super.render();
-		text.draw();
+		textView.draw();
 	}
 
 	public final String getText() {
-		return text.getText();
+		return textView.getText();
 	}
 
 	public final void setText(String text) {
-		this.text.setText(text);
+		this.textView.setText(text);
 	}
 
 	public final PFont getFont() {
-		return text.getFont();
+		return textView.getFont();
 	}
 
 	public final void setFont(PFont font) {
-		text.setFont(requireNonNull(font, "font cannot be null"));
+		textView.setFont(requireNonNull(font, "font cannot be null"));
 	}
 
 	public final Color getTextColor() {
-		return text.getTextColor();
+		return textView.getTextColor();
 	}
 
 	public final void setTextColor(Color color) {
-		text.setTextColor(color);
+		textView.setTextColor(color);
 	}
 
 	public final boolean isTextVisible() {
-		return text.isVisible();
+		return textView.isVisible();
 	}
 
 	public final void setTextVisible(boolean isVisible) {
-		text.setVisible(isVisible);
+		textView.setVisible(isVisible);
 	}
 
 	@Override
 	protected void onChangeBounds() {
 		super.onChangeBounds();
-		if (text != null) {
-			text.setBoundsFrom(this);
+		if (textView != null) {
+			textView.setBoundsFrom(this);
 		}
 	}
 
