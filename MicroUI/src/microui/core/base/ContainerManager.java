@@ -197,7 +197,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	}
 
 	public void switchOnPreviousContainer() {
-		if (animation.isStarted()) {
+		if (animation.isAnimationRunningEnabled()) {
 			return;
 		}
 
@@ -216,7 +216,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	}
 
 	public void switchOnNextContainer() {
-		if (animation.isStarted()) {
+		if (animation.isAnimationRunningEnabled()) {
 			return;
 		}
 		int currentContainerIndex = 0;
@@ -302,7 +302,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 		prevContainer = currentContainer;
 		currentContainer = container;
-		animation.setStarted(true);
+		animation.setAnimationRunningEnabled(true);
 	}
 
 	private void addContainerSafe(Container container) {
@@ -311,8 +311,9 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 			throw new IllegalArgumentException("container cannot be added twice");
 		}
 
-		container.setConstrainDimensionsEnabled(false);
-		container.setSize(ctx.width, ctx.height);
+		container.setConstrainDimensionsEnabled(true);
+		container.setMaxSize(ctx.width, ctx.height);
+		container.setMinSize(ctx.width, ctx.height);
 
 		containerList.add(container);
 
@@ -370,7 +371,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 		private final Texture prevContainerImage,currentContainerImage;
 		private float speed;
 		private int randDirX, randDirY;
-		private boolean isStarted, isNewContainerPrepared, isEasing;
+		private boolean isAnimationRunningEnabled, isNewContainerPrepared, isEasing;
 
 		private Animation() {
 			super();
@@ -382,21 +383,18 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 			prevContainerImage.setSize(ctx.width,ctx.height);
 			currentContainerImage.setSize(ctx.width,ctx.height);
 			
-			setSpeed(max(1, ctx.width * .2f));
+			setSpeed(max(1, ctx.width * .1f));
 			setAnimationType(AnimationType.SLIDE_RANDOM);
 			setEasingEnabled(true);
 		}
 
 		@Override
 		protected void render() {
-			if (isStarted()) {
-
-				if (prevContainer != null) {
-					if(!prevContainerImage.isLoaded()) {
-						prevContainer.draw();
-						prevContainerImage.set(getImageBufferFrom(prevContainer));
-					}
-					prevContainerImage.draw();
+			if (isAnimationRunningEnabled()) {
+				if(!prevContainerImage.isLoaded()) {
+					prevContainer.draw();
+					prevContainerImage.set(getScreenBuffer());
+					return;
 				}
 
 				switch (animationType) {
@@ -423,19 +421,21 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 					slideDirection(randDirX, randDirY);
 					break;
 				}
-
-				if (currentContainer != null) {
+				
+				
+				if (isAnimationRunningEnabled()) {
 					if(!currentContainerImage.isLoaded()) {
 						currentContainer.draw();
-						currentContainerImage.set(getImageBufferFrom(currentContainer));
+						currentContainerImage.set(getScreenBuffer());
 					}
 					
+					prevContainerImage.draw();
 					currentContainerImage.draw();
 				}
 			
 			}
 			
-			if(!isStarted()) {
+			if(!isAnimationRunningEnabled()) {
 				prevContainerImage.removeTexture();
 				currentContainerImage.removeTexture();
 				
@@ -443,22 +443,23 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 			}
 		}
 
-		PImage getImageBufferFrom(SpatialView spatialView) {
-			return ctx.get((int) spatialView.getX(),(int) spatialView.getY(),(int) spatialView.getWidth(),(int) spatialView.getHeight());
+		PImage getScreenBuffer() {
+			return ctx.get(0,0,ctx.width,ctx.height);
+		
 		}
 		
-		boolean isStarted() {
-			return isStarted;
+		boolean isAnimationRunningEnabled() {
+			return isAnimationRunningEnabled;
 		}
 
-		void setStarted(boolean isStart) {
-			this.isStarted = isStart;
+		void setAnimationRunningEnabled(boolean isAnimationRunningEnabled) {
+			this.isAnimationRunningEnabled = isAnimationRunningEnabled;
 		}
 
 		void complete() {
 			prevContainerImage.setBounds(0, 0, ctx.width, ctx.height);
 			currentContainerImage.setBoundsFrom(prevContainerImage);
-			setStarted(false);
+			setAnimationRunningEnabled(false);
 			isNewContainerPrepared = false;
 		}
 

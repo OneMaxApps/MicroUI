@@ -49,22 +49,21 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-		//fullScreen();
-		size(480,360);
+		fullScreen();
+//		size(480,360);
 	}
 
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
 		ThemeManager.setTheme(new ThemeGray());
-		//MicroUI.setDebugModeEnabled(true);
+		MicroUI.setDebugModeEnabled(true);
 
 		cm = ContainerManager.getInstance();
 		
-		
 		cm.add(getContainerMain(),"main");
 		cm.add(getContainerAllComponents(),"all_components");
-		//cm.add(getContainerEditText(),"edit_text");
+		cm.add(getContainerEditText(),"edit_text");
 		
 	}
 
@@ -95,7 +94,7 @@ public final class Launcher extends PApplet {
 	
 	private Container getContainerMain() {
 		Container container = new Container(new GridLayout(3,3));
-		container.setBackgroundImage(loadImage("C:\\Users\\002\\Desktop\\background.jpg"));
+		//container.setBackgroundImage(loadImage("C:\\Users\\002\\Desktop\\background.jpg"));
 		
 		Container ContainerMenuItem = new Container(new ColumnLayout());
 		ContainerMenuItem.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
@@ -109,7 +108,7 @@ public final class Launcher extends PApplet {
 	
 	private Container getContainerAllComponents() {
 		Container container = new Container(new GridLayout(5,5));
-		container.setBackgroundImage(loadImage("C:\\Users\\002\\Desktop\\background1.jpg"));
+		//container.setBackgroundImage(loadImage("C:\\Users\\002\\Desktop\\background1.jpg"));
 		
 		container.addComponent(new Button(), new GridLayoutParams(0,0));
 		container.addComponent(new CheckBox(), new GridLayoutParams(1,0));
@@ -125,12 +124,12 @@ public final class Launcher extends PApplet {
 		return container;
 	}
 	
-//	private Container getContainerEditText() {
-//		Container container = new Container(new GridLayout(5,5));
-//		container.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
-//		
-//		container.addComponent(new EditText(), new GridLayoutParams(1,1,3,3));
-//		
-//		return container;
-//	}
+	private Container getContainerEditText() {
+		Container container = new Container(new GridLayout(5,5));
+		container.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
+		
+		container.addComponent(new EditText(), new GridLayoutParams(1,1,3,3));
+		
+		return container;
+	}
 }
