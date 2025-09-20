@@ -357,6 +357,12 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 		scrollV.setConstrainDimensionsEnabled(false);
 		scrollH.setConstrainDimensionsEnabled(false);
 		
+		scrollV.setStrokeColor(new Color(255,32));
+		scrollH.setStrokeColor(new Color(255,32));
+		
+		scrollV.setBackgroundColor(new Color(0,0));
+		scrollH.setBackgroundColor(new Color(0,0));
+		
 		calculateScrollsWeight();
 		
 		scrollsPositionUpdate();
@@ -424,7 +430,6 @@ public class EditText extends Component implements Scrollable, KeyPressable {
 			return;
 		}
 
-		//FIXME a lot of calls to hooks
 		updateValueForScrollH();
 		updateValueForScrollV();
 	}

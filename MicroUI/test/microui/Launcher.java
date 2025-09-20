@@ -12,11 +12,8 @@ import microui.component.TextField;
 import microui.component.TextView;
 import microui.core.base.Container;
 import microui.core.base.ContainerManager;
-import microui.core.style.theme.ThemeGlass;
-import microui.core.style.theme.ThemeManager;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
-import microui.util.Metrics;
 import processing.core.PApplet;
 
 // TODO check full work life cycle of components
@@ -47,25 +44,25 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-//		size(640, 480);
-		fullScreen();
+		size(640, 480);
+//		fullScreen();
 	}
 
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		ThemeManager.setTheme(new ThemeGlass());
-		//MicroUI.setDebugModeEnabled(true);
+		//ThemeManager.setTheme(new ThemeGray());
+		MicroUI.setDebugModeEnabled(true);
 
 		cm = ContainerManager.getInstance();
 		
 		Container container = new Container(new GridLayout(5,5));
-		container.setBackgroundImage(loadImage("C:\\Users\\002\\Downloads\\i.jpg"));
+		//container.setBackgroundImage(loadImage("C:\\Users\\002\\Downloads\\i.jpg"));
 		
 		container.addComponent(new Button(), new GridLayoutParams(0,0));
 		container.addComponent(new CheckBox(), new GridLayoutParams(1,0));
 		container.addComponent(new EditText(), new GridLayoutParams(2,0));
-		container.addComponent(new LabeledCheckBox(), new GridLayoutParams(3,0));
+		container.addComponent(new LabeledCheckBox("confirm"), new GridLayoutParams(3,0));
 		container.addComponent(new MenuButton().add("one","two","three","four","five"), new GridLayoutParams(4,0));
 		container.addComponent(new Scroll(), new GridLayoutParams(0,1));
 		container.addComponent(new Slider(), new GridLayoutParams(1,1));
@@ -79,11 +76,10 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void draw() {
-		background(164);
+		background(200);
 		if(mouseButton == RIGHT) {
 			cm.getContainerById(0).setSize(mouseX,mouseY);
 		}
-		Metrics.printAll();
 	}
 
 	@Override

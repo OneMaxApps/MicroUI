@@ -5,6 +5,7 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
 import microui.core.LinearRangeControl;
+import microui.core.style.Color;
 
 public class Scroll extends LinearRangeControl {
 	private final Button thumb;
@@ -113,6 +114,62 @@ public class Scroll extends LinearRangeControl {
 
 	public final boolean isThumbHolding() {
 		return thumb.isHolding();
+	}
+	
+	public final Color getThumbRipplesColor() {
+		return thumb.getRipplesColor();
+	}
+
+	public final void setThumbRipplesColor(Color color) {
+		thumb.setRipplesColor(color);
+	}
+
+	public final boolean isThumbRipplesEnabled() {
+		return thumb.isRipplesEnabled();
+	}
+
+	public final void setThumbRipplesEnabled(boolean isEnabled) {
+		thumb.setRipplesEnabled(isEnabled);
+	}
+
+	public final boolean isThumbHoverEnabled() {
+		return thumb.isHoverEnabled();
+	}
+
+	public final void setThumbHoverEnabled(boolean isEnabled) {
+		thumb.setHoverEnabled(isEnabled);
+	}
+	
+	public Color getThumbHoverColor() {
+		return thumb.getHoverColor();
+	}
+	
+	public void setThumbHoverColor(Color color) {
+		thumb.setHoverColor(color);
+	}
+	
+	public final float getThumbHoverSpeed() {
+		return thumb.getHoverSpeed();
+	}
+
+	public final void setThumbHoverSpeed(float speed) {
+		thumb.setHoverSpeed(speed);
+	}
+
+	public final float getThumbStrokeWeight() {
+		return thumb.getStrokeWeight();
+	}
+
+	public final void setThumbStrokeWeight(int weight) {
+		thumb.setStrokeWeight(weight);
+	}
+
+	public final Color getThumbStrokeColor() {
+		return thumb.getStrokeColor();
+	}
+
+	public final void setThumbStrokeColor(Color color) {
+		thumb.setStrokeColor(color);
 	}
 
 	@Override

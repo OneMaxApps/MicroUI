@@ -42,7 +42,6 @@ public final class LabeledCheckBox extends Component {
 		textView.setAutoResizeModeEnabled(false);
 		textView.setCenterModeEnabled(false);
 		textView.setTextSize(DEFAULT_SIZE);
-		textView.setText("i accept this condition");
 		textView.setConstrainDimensionsEnabled(true);
 		textView.setMaxSize(ctx.width,DEFAULT_SIZE);
 		
@@ -151,11 +150,11 @@ public final class LabeledCheckBox extends Component {
 	}
 
 	public Color getTextColor() {
-		return textView.getBackgroundColor();
+		return textView.getTextColor();
 	}
 
 	public LabeledCheckBox setTextColor(Color color) {
-		textView.setBackgroundColor(color);
+		textView.setTextColor(color);
 		return this;
 	}
 

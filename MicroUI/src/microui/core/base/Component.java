@@ -1,6 +1,7 @@
 package microui.core.base;
 
 import static java.util.Objects.requireNonNull;
+import static microui.core.style.theme.ThemeManager.getTheme;
 import static microui.event.EventType.CLICK;
 import static microui.event.EventType.DOUBLE_CLICK;
 import static microui.event.EventType.DRAGGED;
@@ -17,14 +18,13 @@ import static microui.event.EventType.SHAKE;
 
 import microui.MicroUI;
 import microui.core.style.Color;
-import microui.core.style.theme.ThemeManager;
 import microui.event.Callback;
 import microui.event.Event;
 import microui.event.Listener;
 import microui.feedback.Tooltip;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 17.09.2025
+//Last Reviewed: 20.09.2025
 public abstract class Component extends SpatialView {
 	private final Padding padding;
 	private final Margin margin;
@@ -41,7 +41,7 @@ public abstract class Component extends SpatialView {
 		
 		padding = new Padding();
 		margin = new Margin();
-		backgroundColor = ThemeManager.getTheme().getBackgroundColor();
+		backgroundColor = getTheme().getBackgroundColor();
 		event = new Event(this);
 		callback = new Callback(this);
 
@@ -468,10 +468,6 @@ public abstract class Component extends SpatialView {
 	protected final Component setEventListener(SpatialView bounds) {
 		event.setListener(requireNonNull(bounds, "bounds cannot be null"));
 		return this;
-	}
-
-	protected final Event getMutableEvent() {
-		return event;
 	}
 
 	protected final Component setCallbackListener(SpatialView bounds) {

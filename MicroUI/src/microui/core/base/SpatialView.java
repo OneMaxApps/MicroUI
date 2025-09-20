@@ -7,8 +7,10 @@ import static java.lang.System.currentTimeMillis;
 import static java.util.Objects.requireNonNull;
 import static microui.core.base.SpatialView.HooksUpdateMode.REACTIVE;
 
+import microui.MicroUI;
+
 //Status: STABLE - Do not modify
-//Last Reviewed: 12.09.2025
+//Last Reviewed: 20.09.2025
 public abstract class SpatialView extends View {
 	private static final int DEFAULT_MIN_SIZE = 1;
 	private static final int DEFAULT_MAX_SIZE = 1000;
@@ -41,6 +43,8 @@ public abstract class SpatialView extends View {
 			return;
 		}
 
+		boolean isHooksCalling = isPosDirty || isDimDirty;
+		
 		if (hooksUpdateMode == REACTIVE) {
 			hooksUpdate();
 		} else {
@@ -51,6 +55,11 @@ public abstract class SpatialView extends View {
 		}
 
 		super.draw();
+		
+		if(isHooksCalling) {
+			debugOnDraw();	
+		}
+		
 	}
 
 	public final float getX() {
@@ -446,6 +455,7 @@ public abstract class SpatialView extends View {
 			//hooksCalledCount++;
 			//System.out.println("count of called hooks: "+hooksCalledCount);
 			//Metrics.printAll();
+			
 			isPosDirty = isDimDirty = false;
 		}
 	}
@@ -488,6 +498,13 @@ public abstract class SpatialView extends View {
 		
 		if (other == this) {
 			throw new IllegalArgumentException("Cannot set property from itself");
+		}
+	}
+	
+	private void debugOnDraw() {
+		if(MicroUI.isDebugModeEnabled()) {
+			ctx.fill(255,0,0,64);
+			ctx.rect(getX(), getY(), getWidth(), getHeight());
 		}
 	}
 

@@ -19,7 +19,7 @@ import processing.core.PApplet;
  * </p>
  */
 public abstract class View implements Visible {
-	protected static final PApplet ctx = requireNonNull(getContext(), "context for MicroUI was not sended");
+	protected static final PApplet ctx = requireNonNull(getContext(), "Context (PApplet) for MicroUI is not initialized");
 	private static final String DEFAULT_EMPTY_TEXT_ID = "";
 	private String textId;
 	private int priority, id;
@@ -47,30 +47,6 @@ public abstract class View implements Visible {
 	@Override
 	public final void setVisible(final boolean isVisible) {
 		this.isVisible = isVisible;
-	}
-
-	/**
-	 * Renders the element if it is visible. Automatically manages Processing styles
-	 * (push/pop style).
-	 * 
-	 * <p>
-	 * Calls the {@link #render() method} only if the element is visible.
-	 */
-	protected void draw() {
-		if(!ContainerManager.isInitialized()) {
-			throw new RenderException("ContainerManager is not initialized");
-		}
-		
-		if(!ContainerManager.isCanDraw()) {
-			throw new RenderException("Cannot draw outside from ContainerManager");
-		}
-		
-		if (isVisible()) {
-			ctx.pushStyle();
-			render();
-			ctx.popStyle();
-		}
-
 	}
 
 	/**
@@ -150,5 +126,29 @@ public abstract class View implements Visible {
 	 * Abstract method for sub-classes for implementation them drawing logic 
 	 */
 	protected abstract void render();
+	
+	/**
+	 * Renders the element if it is visible. Automatically manages Processing styles
+	 * (push/pop style).
+	 * 
+	 * <p>
+	 * Calls the {@link #render() method} only if the element is visible.
+	 */
+	protected void draw() {
+		if(!ContainerManager.isInitialized()) {
+			throw new RenderException("ContainerManager is not initialized");
+		}
+		
+		if(!ContainerManager.isCanDraw()) {
+			throw new RenderException("Cannot draw outside from ContainerManager");
+		}
+		
+		if (isVisible()) {
+			ctx.pushStyle();
+			render();
+			ctx.popStyle();
+		}
+
+	}
 
 }

@@ -1,6 +1,5 @@
 package microui.component;
 
-import static microui.constants.Orientation.HORIZONTAL;
 import static microui.core.style.theme.ThemeManager.getTheme;
 import static processing.core.PApplet.map;
 
@@ -18,8 +17,6 @@ public class Slider extends LinearRangeControl {
 		indicator = new Rect(x,y,w,h);
 		
 		setValue(0, 100, 0);
-
-		setOrientation(HORIZONTAL);
 
 	}
 
@@ -54,6 +51,7 @@ public class Slider extends LinearRangeControl {
 
 	@Override
 	protected void onChangeBounds() {
+		super.onChangeBounds();
 		updateIndicatorBounds();
 	}
 

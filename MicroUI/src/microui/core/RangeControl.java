@@ -2,18 +2,21 @@ package microui.core;
 
 import microui.core.base.Component;
 import microui.core.interfaces.Scrollable;
+import microui.core.style.Color;
 import microui.core.style.Stroke;
 import microui.event.Scrolling;
 import microui.util.Value;
 
 public abstract class RangeControl extends Component implements Scrollable {
-	protected Value value;
-	private Scrolling scrolling;
+	private final Value value;
+	private final Scrolling scrolling;
 	private final Stroke stroke;
 	
 	public RangeControl(float x, float y, float width, float height) {
 		super(x, y, width, height);
-		scrolling = new Scrolling(getMutableEvent());
+		
+		value = new Value(0,100,0);
+		scrolling = new Scrolling(this);
 		stroke = new Stroke();
 	}
 
@@ -56,18 +59,40 @@ public abstract class RangeControl extends Component implements Scrollable {
 	public final void setScrollingVelocity(float velocity) {
 		scrolling.setVelocity(velocity);
 	}
+	
+	public final float getStrokeWeight() {
+		return stroke.getWeight();
+	}
+
+	public final void setStrokeWeight(int weight) {
+		stroke.setWeight(weight);
+	}
+
+	public final Color getStrokeColor() {
+		return stroke.getColor();
+	}
+
+	public final void setStrokeColor(Color color) {
+		stroke.setColor(color);
+	}
 
 	protected final boolean hasEqualMinMax() {
 		return value.hasEqualMinMax();
 	}
 
 	protected final void setValueWithoutActions(float value) {
-		this.value.setWithoutActions(value);
+		this.value.setSilently(value);
 	}
-	protected final Scrolling getScrollingMutable() {
+	
+	protected final Value getMutableValue() {
+		return value;
+		
+	}
+	
+	protected final Scrolling getMutableScrolling() {
 		return scrolling;
 	}
-
+	
 	protected final Stroke getMutableStroke() {
 		return stroke;
 	}

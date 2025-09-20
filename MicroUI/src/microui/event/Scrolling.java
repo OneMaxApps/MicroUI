@@ -1,14 +1,15 @@
 package microui.event;
 
+import microui.core.base.Component;
 import processing.event.MouseEvent;
  
 public final class Scrolling {
-	private final Event event;
+	private final Component component;
     private float speed,velocity;
     private boolean isScrolling,reverse;
     
-    public Scrolling(Event event) {
-    	this.event = event;
+    public Scrolling(Component component) {
+    	this.component = component;
     	velocity = .01f;
     }
     
@@ -38,7 +39,7 @@ public final class Scrolling {
       
       isScrolling = (speed < -.01f || speed > .01f);
       
-      if(event.isHolding()) { speed = 0; }
+      if(component.isHolding()) { speed = 0; }
       
       if(isScrolling) { return speed; }
       return 0f;

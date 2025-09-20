@@ -9,7 +9,6 @@ import static processing.core.PApplet.map;
 import microui.core.RangeControl;
 import microui.core.style.Color;
 import microui.core.style.theme.ThemeManager;
-import microui.util.Value;
 import processing.event.MouseEvent;
 
 public final class Knob extends RangeControl {
@@ -21,8 +20,7 @@ public final class Knob extends RangeControl {
 	public Knob(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setMinMaxSize(10,50);
-	
-		value = new Value(0,100,0);
+
 		indicatorColor = new Color(ThemeManager.getTheme().getPrimaryColor());
 		
 	}
@@ -48,10 +46,10 @@ public final class Knob extends RangeControl {
 		}
 		
 		if(isCanDrag) {
-			value.append(ctx.pmouseY-ctx.mouseY);
+			getMutableValue().append(ctx.pmouseY-ctx.mouseY);
 		}
 		
-		value.append(getScrollingMutable().get());
+		getMutableValue().append(getMutableScrolling().get());
 	}
 	
 	@Override
@@ -64,7 +62,7 @@ public final class Knob extends RangeControl {
 	@Override
 	public void mouseWheel(MouseEvent mouseEvent) {
 		if(isMouseInRadius()) {
-			getScrollingMutable().init(mouseEvent);
+			getMutableScrolling().init(mouseEvent);
 		}
 	}
 	
@@ -101,9 +99,9 @@ public final class Knob extends RangeControl {
 		ctx.arc(0,0,radius*.8f, radius*.8f,START,END);
 		
 		ctx.stroke(indicatorColor.get());
-		ctx.arc(0,0,radius*.8f, radius*.8f,START,map(value.get(),value.getMin(),value.getMax(),START,END));
+		ctx.arc(0,0,radius*.8f, radius*.8f,START,map(getMutableValue().get(),getMutableValue().getMin(),getMutableValue().getMax(),START,END));
 		
-		if(value.get() == value.getMax()) {
+		if(getMutableValue().get() == getMutableValue().getMax()) {
 			ctx.ellipse(0, 0, radius/4, radius/4);
 		}
 		
@@ -111,6 +109,6 @@ public final class Knob extends RangeControl {
 	}
 	
 	private float getIndicatorWeight() {
-		return radius*.1f+abs(getScrollingMutable().get()*2);
+		return radius*.1f+abs(getMutableScrolling().get()*2);
 	}
 }

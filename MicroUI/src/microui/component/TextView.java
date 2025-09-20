@@ -2,13 +2,13 @@ package microui.component;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static microui.core.style.theme.ThemeManager.getTheme;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
 
 import microui.constants.AutoResizeMode;
 import microui.core.base.Component;
 import microui.core.style.Color;
-import microui.core.style.theme.ThemeManager;
 import processing.core.PFont;
 
 public final class TextView extends Component {
@@ -17,17 +17,17 @@ public final class TextView extends Component {
 	private PFont font;
 	private String text;
 	private AutoResizeMode autoResizeMode;
-	private float textSize;
-	private boolean isAutoResizeModeEnabled,isCenterModeEnabled;
-	
+	private float textSize, autoTextSize;
+	private boolean isAutoResizeModeEnabled, isCenterModeEnabled;
+
 	public TextView(String text, float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setMinSize(10);
-		setMaxSize(100,40);
-		
-		textColor = new Color(ThemeManager.getTheme().getTextViewColor());
-		getMutableBackgroundColor().set(0,0);
-		
+		setMaxSize(100, 40);
+
+		getMutableBackgroundColor().set(0, 0);
+		setTextColor(textColor = getTheme().getTextViewColor());
+
 		setText(text);
 		setTextSize(max(1, min(width, height)));
 		setAutoResizeModeEnabled(true);
@@ -52,18 +52,19 @@ public final class TextView extends Component {
 	protected void render() {
 		getMutableBackgroundColor().apply();
 		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
-		
-		if(text.isEmpty()) { return; }
-		
+
+		if (text == DEFAULT_TEXT) {
+			return;
+		}
 
 		if (font != null) {
 			ctx.textFont(font);
 		}
-		
-		ctx.textAlign(isCenterModeEnabled ? CENTER : CORNER,CENTER);
-		
-		if(isAutoResizeModeEnabled()) {
-			ctx.textSize(max(1,min(getWidth(),getHeight())/getAutoResizeMode().getValue()));
+
+		ctx.textAlign(isCenterModeEnabled ? CENTER : CORNER, CENTER);
+
+		if (isAutoResizeModeEnabled()) {
+			ctx.textSize(autoTextSize);
 		} else {
 			ctx.textSize(getTextSize());
 		}
@@ -109,7 +110,12 @@ public final class TextView extends Component {
 	}
 
 	public void setAutoResizeModeEnabled(boolean isAutoResizeModeEnabled) {
+		if (isAutoResizeModeEnabled && !this.isAutoResizeModeEnabled) {
+			recalculateAutoTextSize();
+		}
+
 		this.isAutoResizeModeEnabled = isAutoResizeModeEnabled;
+
 	}
 
 	public AutoResizeMode getAutoResizeMode() {
@@ -131,8 +137,22 @@ public final class TextView extends Component {
 	public Color getTextColor() {
 		return new Color(textColor);
 	}
-	
+
 	public void setTextColor(Color color) {
 		textColor.set(color);
+	}
+
+	@Override
+	protected void onChangeBounds() {
+		super.onChangeBounds();
+		recalculateAutoTextSize();
+	}
+
+	private void recalculateAutoTextSize() {
+		if (getAutoResizeMode() == null) {
+			return;
+		}
+
+		autoTextSize = max(1, min(getWidth(), getHeight()) / getAutoResizeMode().getValue());
 	}
 }

@@ -2,7 +2,6 @@ package microui.core;
 
 import microui.constants.Orientation;
 import microui.event.Listener;
-import microui.util.Value;
 import processing.event.MouseEvent;
 
 public abstract class LinearRangeControl extends RangeControl {
@@ -14,12 +13,7 @@ public abstract class LinearRangeControl extends RangeControl {
 		super(x, y, width, height);
 		setMinMaxSize(10,20,200,20);
 
-		value = new Value(0, 100, 0) {
-			@Override
-			public void action() {
-				requestUpdate();
-			}
-		};
+		getMutableValue().setOnChangeValueListener(() -> requestUpdate());
 		
 		onPress(() -> valueChangeEnd = true);
 
@@ -37,8 +31,8 @@ public abstract class LinearRangeControl extends RangeControl {
 		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		ctx.popStyle();
 
-		if (getScrollingMutable().isScrolling()) {
-			value.append(getScrollingMutable().get());
+		if (getMutableScrolling().isScrolling()) {
+			getMutableValue().append(getMutableScrolling().get());
 			onChangeValue();
 			valueChangeEnd = true;
 			if (!ctx.mousePressed && !valueChangeStart) {
@@ -50,7 +44,7 @@ public abstract class LinearRangeControl extends RangeControl {
 			}
 		}
 
-		if (!ctx.mousePressed && valueChangeEnd && !getScrollingMutable().isScrolling()) {
+		if (!ctx.mousePressed && valueChangeEnd && !getMutableScrolling().isScrolling()) {
 			onEndChangeValue();
 			valueChangeEnd = false;
 		}
@@ -58,9 +52,9 @@ public abstract class LinearRangeControl extends RangeControl {
 	
 	@Override
 	public void mouseWheel(MouseEvent event) {
-		getScrollingMutable().init(event);
+		getMutableScrolling().init(event);
 		if (isMouseInside()) {
-			value.append(getScrollingMutable().get());
+			getMutableValue().append(getMutableScrolling().get());
 		}
 
 		onChangeValue();
@@ -68,8 +62,8 @@ public abstract class LinearRangeControl extends RangeControl {
 
 	public void mouseWheel(MouseEvent event, boolean additionalCondition) {
 		if (isMouseInside() || additionalCondition) {
-			getScrollingMutable().init(event);
-			value.append(getScrollingMutable().get());
+			getMutableScrolling().init(event);
+			getMutableValue().append(getMutableScrolling().get());
 		}
 		onChangeValue();
 	}
@@ -145,7 +139,7 @@ public abstract class LinearRangeControl extends RangeControl {
 	}
 	
 	protected final void autoScroll() {
-		value.append(getScrollingMutable().get());
+		getMutableValue().append(getMutableScrolling().get());
 		onChangeValue();
 	}
 }
