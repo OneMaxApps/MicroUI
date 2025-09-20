@@ -1,21 +1,21 @@
 package microui.component;
 
 import static microui.core.style.theme.ThemeManager.getTheme;
-import static processing.core.PApplet.constrain;
+import static microui.util.Value.constrain;
 import static processing.core.PApplet.map;
 
+import microui.constants.Orientation;
 import microui.core.LinearRangeControl;
 import microui.core.style.Color;
 
 public class Scroll extends LinearRangeControl {
 	private final Button thumb;
-	private float distToThumb;
+	private float distToThumb,thumbSizeRatio;
 	private boolean needRecalculateDistToThumb;
 	
 	public Scroll(float x, float y, float w, float h) {
 		super(x, y, w, h);
 		
-		//getMutableBackgroundColor().set(0,32);
 		thumb = new Button("");
 		thumb.setConstrainDimensionsEnabled(false);
 		thumb.setRipplesEnabled(false);	
@@ -42,6 +42,8 @@ public class Scroll extends LinearRangeControl {
 		});
 		
 		thumb.onHoldEnd(() -> needRecalculateDistToThumb = true);
+		
+		setThumbSizeRatio(.1f);
 		
 		updateThumbTransforms();
 		setValue(0,100,50);
@@ -171,6 +173,18 @@ public class Scroll extends LinearRangeControl {
 	public final void setThumbStrokeColor(Color color) {
 		thumb.setStrokeColor(color);
 	}
+	
+	public final float getCalculatedThumbSize() {
+		return getOrientation() == Orientation.HORIZONTAL ? getWidth()*thumbSizeRatio : getHeight()*thumbSizeRatio;
+		
+	}
+
+	public final void setThumbSizeRatio(float thumbSizeRatio) {
+		if(thumbSizeRatio < 0 || thumbSizeRatio > 1) {
+			throw new IllegalStateException("thumb ratio in scroll cannot be lower than zero or be greater than 1");
+		}
+		this.thumbSizeRatio = thumbSizeRatio;
+	}
 
 	@Override
 	protected void onChangeBounds() {
@@ -182,22 +196,23 @@ public class Scroll extends LinearRangeControl {
 	}
 
 	private final void updateThumbTransforms() {
-		//thumb.setBoundsProperty(this);
 		thumb.setBounds(getX(),getY(),getWidth(),getHeight());
 
+		float ratio =  getCalculatedThumbSize();
+		
 		switch(getOrientation()) {
 		
 		case HORIZONTAL :
-			thumb.setWidth(getWidth()/10);
+			thumb.setWidth(ratio);
 			if(hasEqualMinMax()) { return; }
-			final float NEW_POS_X = map(getValue(),getMinValue(),getMaxValue(),getX(),getX()+getWidth()-thumb.getWidth());
-			thumb.setX(constrain(NEW_POS_X,getX(),getX()+getWidth()-thumb.getWidth()));
+			final float newX = map(getValue(),getMinValue(),getMaxValue(),getX(),getX()+getWidth()-ratio);
+			thumb.setX(constrain(newX,getX(),getX()+getWidth()-ratio));
 			break;
 		case VERTICAL :
-			thumb.setHeight(getHeight()/10);
+			thumb.setHeight(ratio);
 			if(hasEqualMinMax()) { return; }
-			final float NEW_POS_Y = map(getValue(),getMaxValue(),getMinValue(),getY(),getY()+getHeight()-thumb.getHeight());
-			thumb.setY(constrain(NEW_POS_Y,getY(),getY()+getHeight()-thumb.getHeight()));
+			final float newY = map(getValue(),getMaxValue(),getMinValue(),getY(),getY()+getHeight()-ratio);
+			thumb.setY(constrain(newY,getY(),getY()+getHeight()-ratio));
 			break;
 		}
 		

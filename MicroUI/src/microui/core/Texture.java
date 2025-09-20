@@ -61,6 +61,10 @@ public class Texture extends SpatialView {
 		this.color.set(requireNonNull(color, "color cannot be null"));
 	}
 
+	public final void removeTexture() {
+		image = null;
+	}
+	
 	private static final void updateDimensionsOfImageCorrect(PImage image) {
 		if(image.width > ctx.width || image.height > ctx.height) {
 			image.resize((int) max(1,ctx.width) , (int) max(1,ctx.height));
