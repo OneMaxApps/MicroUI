@@ -9,11 +9,11 @@ import processing.core.PImage;
 
 // Status: Stable - Do not modify
 // Last Reviewed: 13.09.2025
-public class Texture extends SpatialView {
+public class ImageBuffer extends SpatialView {
 	private final Color color;
 	private PImage image;
 
-	public Texture() {
+	public ImageBuffer() {
 		setVisible(true);
 		color = new Color(255);
 	}

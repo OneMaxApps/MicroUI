@@ -57,7 +57,7 @@ public final class Launcher extends PApplet {
 	public void setup() {
 		MicroUI.setContext(this);
 		ThemeManager.setTheme(new ThemeGray());
-		MicroUI.setDebugModeEnabled(true);
+//		MicroUI.setDebugModeEnabled(true);
 
 		cm = ContainerManager.getInstance();
 		
@@ -71,7 +71,7 @@ public final class Launcher extends PApplet {
 	public void draw() {
 		background(164);
 
-		System.out.println(frameRate);
+		//System.out.println(frameRate);
 	}
 
 	@Override

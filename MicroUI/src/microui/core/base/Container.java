@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import microui.constants.ContainerMode;
-import microui.core.Texture;
+import microui.core.ImageBuffer;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
@@ -24,7 +24,7 @@ import processing.event.MouseEvent;
 public final class Container extends Component implements KeyPressable, Scrollable {
 	private final List<ComponentEntry> componentEntryList;
 	private final LayoutManager layoutManager;
-	private Texture backgroundImage;
+	private ImageBuffer backgroundImage;
 	private ContainerMode containerMode;
 	private int maxPriority;
 	
@@ -325,7 +325,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 		if (backgroundImage != null) {
 			return;
 		}
-		backgroundImage = new Texture();
+		backgroundImage = new ImageBuffer();
 	}
 	
 	private void removeComponentSafe(Component component) {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import microui.MicroUI;
-import microui.core.Texture;
+import microui.core.ImageBuffer;
 import microui.core.exception.RenderException;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
@@ -368,7 +368,7 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	private final class Animation extends View {
 		private static final float MAX_DIST = dist(0, 0, ctx.width, ctx.height);
 		private AnimationType animationType;
-		private final Texture prevContainerImage,currentContainerImage;
+		private final ImageBuffer prevContainerImage,currentContainerImage;
 		private float speed;
 		private int randDirX, randDirY;
 		private boolean isAnimationRunningEnabled, isNewContainerPrepared, isEasing;
@@ -377,8 +377,8 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 			super();
 			setVisible(true);
 			
-			prevContainerImage = new Texture();
-			currentContainerImage = new Texture();
+			prevContainerImage = new ImageBuffer();
+			currentContainerImage = new ImageBuffer();
 			
 			prevContainerImage.setSize(ctx.width,ctx.height);
 			currentContainerImage.setSize(ctx.width,ctx.height);
