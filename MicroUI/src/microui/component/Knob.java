@@ -3,25 +3,25 @@ package microui.component;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
+import static microui.core.style.theme.ThemeManager.getTheme;
 import static processing.core.PApplet.dist;
 import static processing.core.PApplet.map;
 
 import microui.core.RangeControl;
 import microui.core.style.Color;
-import microui.core.style.theme.ThemeManager;
 import processing.event.MouseEvent;
 
 public final class Knob extends RangeControl {
 	private static final float START = 0, END = (float) (PI*2);
 	private final Color indicatorColor;
-	private float centerX,centerY,radius;
+	private float centerX,centerY,diameter;
 	private boolean isCanDrag;
 	
 	public Knob(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setMinMaxSize(10,50);
 
-		indicatorColor = new Color(ThemeManager.getTheme().getPrimaryColor());
+		indicatorColor = new Color(getTheme().getPrimaryColor());
 		
 	}
 	
@@ -33,11 +33,11 @@ public final class Knob extends RangeControl {
 	protected void render() {
 		getMutableStroke().apply();
 		getMutableBackgroundColor().apply();
-		ctx.ellipse(centerX, centerY, radius, radius);
+		ctx.ellipse(centerX, centerY, diameter, diameter);
 		
 		indicatorOnDraw();
 		
-		if(isDragging() && isMouseInRadius()) {
+		if(isDragging() && isMouseInDiameter()) {
 			isCanDrag = true;
 		}
 		
@@ -56,12 +56,12 @@ public final class Knob extends RangeControl {
 	protected void onChangeBounds() {
 		super.onChangeBounds();
 		recalculateCenter();
-		recalculateRadius();
+		recalculateDiameter();
 	}
 
 	@Override
 	public void mouseWheel(MouseEvent mouseEvent) {
-		if(isMouseInRadius()) {
+		if(isMouseInDiameter()) {
 			getMutableScrolling().init(mouseEvent);
 		}
 	}
@@ -79,12 +79,12 @@ public final class Knob extends RangeControl {
 		centerY = getY()+getHeight()/2;
 	}
 	
-	private void recalculateRadius() {
-		radius = min(getWidth(),getHeight());
+	private void recalculateDiameter() {
+		diameter = min(getWidth(),getHeight());
 	}
 	
-	private boolean isMouseInRadius() {
-		return dist(centerX, centerY, ctx.mouseX, ctx.mouseY) < radius/2;
+	private boolean isMouseInDiameter() {
+		return dist(centerX, centerY, ctx.mouseX, ctx.mouseY) < diameter/2;
 	}
 	
 	private void indicatorOnDraw() {
@@ -96,19 +96,19 @@ public final class Knob extends RangeControl {
 		ctx.strokeWeight(getIndicatorWeight());
 
 		ctx.stroke(indicatorColor.get(),64);
-		ctx.arc(0,0,radius*.8f, radius*.8f,START,END);
+		ctx.arc(0,0,diameter*.8f, diameter*.8f,START,END);
 		
 		ctx.stroke(indicatorColor.get());
-		ctx.arc(0,0,radius*.8f, radius*.8f,START,map(getMutableValue().get(),getMutableValue().getMin(),getMutableValue().getMax(),START,END));
+		ctx.arc(0,0,diameter*.8f, diameter*.8f,START,map(getMutableValue().get(),getMutableValue().getMin(),getMutableValue().getMax(),START,END));
 		
 		if(getMutableValue().get() == getMutableValue().getMax()) {
-			ctx.ellipse(0, 0, radius/4, radius/4);
+			ctx.ellipse(0, 0, diameter/4, diameter/4);
 		}
 		
 		ctx.pop();
 	}
 	
 	private float getIndicatorWeight() {
-		return radius*.1f+abs(getMutableScrolling().get()*2);
+		return diameter*.1f+abs(getMutableScrolling().get()*2);
 	}
 }

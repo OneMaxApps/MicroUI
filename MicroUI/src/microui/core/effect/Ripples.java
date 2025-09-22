@@ -53,7 +53,7 @@ public final class Ripples extends View {
 		pg.popStyle();
 		pg.endDraw();
 
-		ctx.image(pg, component.getPadX(), component.getPadY(), component.getPadWidth(), component.getPadHeight());
+		ctx.image(pg, (int) component.getPadX(), (int) component.getPadY(), (int) component.getPadWidth(), (int) component.getPadHeight());
 	}
 
 	public boolean isEnabled() {

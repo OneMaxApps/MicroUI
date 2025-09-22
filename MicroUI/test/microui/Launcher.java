@@ -11,6 +11,7 @@ import microui.component.Slider;
 import microui.component.TextField;
 import microui.component.TextView;
 import microui.constants.ContainerMode;
+import microui.core.base.Component;
 import microui.core.base.Container;
 import microui.core.base.ContainerManager;
 import microui.core.style.theme.ThemeGray;
@@ -50,7 +51,6 @@ public final class Launcher extends PApplet {
 	@Override
 	public void settings() {
 		fullScreen();
-//		size(480,360);
 	}
 
 	@Override
@@ -63,7 +63,16 @@ public final class Launcher extends PApplet {
 		
 		cm.add(getContainerMain(),"main");
 		cm.add(getContainerAllComponents(),"all_components");
-		cm.add(getContainerEditText(),"edit_text");
+		cm.add(getContainerWith(new Button()),"Button");
+		cm.add(getContainerWith(new CheckBox()),"CheckBox");
+		cm.add(getContainerWith(new EditText()),"EditText");
+		cm.add(getContainerWith(new Knob()),"Knob");
+		cm.add(getContainerWith(new LabeledCheckBox()),"LabeledCheckBox");
+		cm.add(getContainerWith(new MenuButton()),"MenuButton");
+		cm.add(getContainerWith(new Scroll()),"Scroll");
+		cm.add(getContainerWith(new Slider()),"Slider");
+		cm.add(getContainerWith(new TextField()),"TextField");
+		cm.add(getContainerWith(new TextView()),"TextView");
 		
 	}
 
@@ -71,7 +80,7 @@ public final class Launcher extends PApplet {
 	public void draw() {
 		background(164);
 
-		//System.out.println(frameRate);
+		System.out.println(frameRate);
 	}
 
 	@Override
@@ -94,22 +103,34 @@ public final class Launcher extends PApplet {
 	
 	private Container getContainerMain() {
 		Container container = new Container(new GridLayout(3,3));
-		//container.setBackgroundImage(loadImage("C:\\Users\\002\\Desktop\\background.jpg"));
 		
 		Container ContainerMenuItem = new Container(new ColumnLayout());
 		ContainerMenuItem.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
-		ContainerMenuItem.addComponent(new Button("show all components"), new ColumnLayoutParams(.2f), () -> cm.switchOn("all_components"));
-		ContainerMenuItem.addComponent(new Button("show EditText"), new ColumnLayoutParams(.2f), () -> cm.switchOn("edit_text"));
 		
-		container.addComponent(ContainerMenuItem, new GridLayoutParams(1,1));
+		ContainerMenuItem.addComponent(new Button("show all components"), new ColumnLayoutParams(.2f), () -> cm.switchOn("all_components"));
+		
+		MenuButton menuButtonOfComponents;
+		ContainerMenuItem.addComponent(menuButtonOfComponents = new MenuButton("show component","Button","CheckBox","EditText","Knob","LabeledCheckBox","MenuButton","Scroll","Slider","TextField","TextView"), new ColumnLayoutParams(.2f));
+		
+		menuButtonOfComponents.getItem("Button").onClick(() -> cm.switchOn("Button"));
+		menuButtonOfComponents.getItem("CheckBox").onClick(() -> cm.switchOn("CheckBox"));
+		menuButtonOfComponents.getItem("EditText").onClick(() -> cm.switchOn("EditText"));
+		menuButtonOfComponents.getItem("Knob").onClick(() -> cm.switchOn("Knob"));
+		menuButtonOfComponents.getItem("LabeledCheckBox").onClick(() -> cm.switchOn("LabeledCheckBox"));
+		menuButtonOfComponents.getItem("MenuButton").onClick(() -> cm.switchOn("MenuButton"));
+		menuButtonOfComponents.getItem("Scroll").onClick(() -> cm.switchOn("Scroll"));
+		menuButtonOfComponents.getItem("Slider").onClick(() -> cm.switchOn("Slider"));
+		menuButtonOfComponents.getItem("TextField").onClick(() -> cm.switchOn("TextField"));
+		menuButtonOfComponents.getItem("TextView").onClick(() -> cm.switchOn("TextView"));
+		
+		container.addComponent(ContainerMenuItem, new GridLayoutParams(0,0));
 		
 		return container;
 	}
 	
 	private Container getContainerAllComponents() {
 		Container container = new Container(new GridLayout(5,5));
-		//container.setBackgroundImage(loadImage("C:\\Users\\002\\Desktop\\background1.jpg"));
-		
+
 		container.addComponent(new Button(), new GridLayoutParams(0,0));
 		container.addComponent(new CheckBox(), new GridLayoutParams(1,0));
 		container.addComponent(new EditText(), new GridLayoutParams(2,0));
@@ -124,11 +145,20 @@ public final class Launcher extends PApplet {
 		return container;
 	}
 	
-	private Container getContainerEditText() {
-		Container container = new Container(new GridLayout(5,5));
-		container.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
+	private Container getContainerWith(Component component) {
+		Container container = new Container(new GridLayout(5,9));
+		if(!(component instanceof CheckBox)) { 
+			container.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
+		}
+		if(component instanceof LabeledCheckBox l) { 
+			l.setText("labeled check box");
+		}
 		
-		container.addComponent(new EditText(), new GridLayoutParams(1,1,3,3));
+		if(component instanceof TextView t) { 
+			t.setText("TextView");
+		}
+		
+		container.addComponent(component, new GridLayoutParams(1,3,3,3));
 		
 		return container;
 	}
