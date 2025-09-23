@@ -1,19 +1,19 @@
 ## MicroUI: A Graphical User Interface (GUI) Library for Processing 4
 
-The MicroUI library (version 2.0.0) was developed by Islam Akhmedkhanov for creating rich user interfaces in the Processing 4 environment.
+The MicroUI library (version 2.0.0) was developed by Islam Ahmedhanov for creating rich user interfaces in the Processing 4 environment.
 
 ### I. Architectural Overview
 
-The fundamental principle of the MicroUI library is to organize all elements into Containers [Query example]. These containers are managed using the singleton pattern, ContainerManager [Query example]. To get started, you need to set the Processing context using the static method MicroUI.setContext(PApplet context) [2].
+The fundamental principle of the MicroUI library is to organize all elements into Containers. These containers are managed using the singleton pattern, ContainerManager. To get started, you need to set the Processing context using the static method MicroUI.setContext(PApplet context).
 
 ### II. Layout Systems
 
 The library provides four built-in layout systems that allow flexible placement of components within containers:
 
-1. GridLayout.
- 2. LinearLayout.
-3. RowLayout.
-4. ColumnLayout.
+1. GridLayout;
+2. LinearLayout;
+3. RowLayout;
+4. ColumnLayout;
 
 ### III. Control Components (10 Elements)
 
@@ -37,7 +37,7 @@ Below is the standard code for initializing MicroUI and adding a button to a con
 void setup() {
 fullScreen(); // Set fullscreen mode Processing
 MicroUI.setContext(this); // Set the PApplet context for MicroUI
-ContainerManager cm = ContainerManager.getInstance();  // Getting the container manager singleton [Query example]
+ContainerManager cm = ContainerManager.getInstance();  // Getting the container manager singleton
 
 // Adding a new container with the ID "id" using GridLayout
 cm.add(new Container(new GridLayout(3,3),"id");
