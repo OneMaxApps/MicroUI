@@ -1,55 +1,58 @@
-## MicroUI: Библиотека графического интерфейса пользователя (GUI) для Processing 4
+## MicroUI: A Graphical User Interface (GUI) Library for Processing 4
 
-Библиотека MicroUI (версия **2.0.0**) была разработана **Ахмедхановым Исламом** [1] для создания многофункциональных пользовательских интерфейсов в среде Processing [1, 2].
+The MicroUI library (version 2.0.0) was developed by Islam Akhmedkhanov for creating rich user interfaces in the Processing 4 environment.
 
-### I. Архитектурный обзор
+### I. Architectural Overview
 
-Фундаментальный принцип работы библиотеки MicroUI заключается в организации всех элементов в **Контейнерах** (`Containers`) [Query example]. Управление этими контейнерами осуществляется посредством паттерна синглтон — **`ContainerManager`** [Query example]. Для начала работы необходимо установить контекст Processing, используя статический метод `MicroUI.setContext(PApplet context)` [2].
+The fundamental principle of the MicroUI library is to organize all elements into Containers [Query example]. These containers are managed using the singleton pattern, ContainerManager [Query example]. To get started, you need to set the Processing context using the static method MicroUI.setContext(PApplet context) [2].
 
-### II. Системы расположения (Лайоуты)
+### II. Layout Systems
 
-Библиотека предоставляет **четыре** встроенные системы расположения, обеспечивающие гибкое размещение компонентов внутри контейнеров:
+The library provides four built-in layout systems that allow flexible placement of components within containers:
 
-1.  `GridLayout` (Сетчатое расположение).
-2.  `LinearLayout` (Линейное расположение).
-3.  `RowLayout` (Расположение по строкам).
-4.  `ColumnLayout` (Расположение по столбцам).
+1. GridLayout.
+ 2. LinearLayout.
+3. RowLayout.
+4. ColumnLayout.
 
-### III. Компоненты управления (10 элементов)
+### III. Control Components (10 Elements)
 
-MicroUI включает **десять** основных компонентов, каждый из которых обладает специфическими возможностями:
+MicroUI includes ten main components, each with specific capabilities:
 
-1.  **Button** (`Кнопка`): Является базовым элементом управления, наследуется от `AbstractButton` [3, 4]. Внутри себя компонент содержит `TextView` [3].
-2.  **CheckBox** (`Флажок`): Также наследуется от `AbstractButton` [5]. Он используется для управления булевым состоянием (`isChecked`) [6] и позволяет настроить цвет отметки (`markColor`) [6, 7].
-3.  **LabeledCheckBox** (`Флажок с меткой`): Это композитный компонент, который объединяет `CheckBox` и `TextView` в одном `Container`, используя при этом `RowLayout` для их совместного размещения [8, 9].
-4.  **TextView** (`Поле для отображения текста`): Компонент для вывода текста [10]. Он поддерживает различные режимы **автоматического изменения размера** (`AutoResizeMode`), включая `FULL`, `BIG`, `MIDDLE`, `SMALL` и `TINY` [11, 12].
-5.  **TextField** (`Поле ввода`): Компонент, предназначенный для однострочного ввода текста, реализующий интерфейс `KeyPressable` [13]. Он управляет позицией курсора (`Cursor`) и выделением (`Selection`) [14], а также поддерживает горизонтальную прокрутку для длинного текста (`scroll`) [14, 15]. Поддерживает стандартные комбинации клавиш, такие как CTRL+C, CTRL+V, CTRL+X и CTRL+A [16, 17].
-6.  **EditText** (`Многострочный редактор текста`): Более сложный компонент для многострочного редактирования, реализующий интерфейсы `Scrollable` и `KeyPressable` [18]. Он включает встроенные вертикальную (`scrollV`) и горизонтальную (`scrollH`) полосы прокрутки [19, 20], а также сложные внутренние классы для управления текстом, курсором и выделением [19, 21-23].
-7.  **Slider** (`Ползунок`): Линейный элемент управления диапазоном (`LinearRangeControl`) [24]. Он позволяет изменять значение в зависимости от положения мыши при удержании компонента [25].
-8.  **Scroll** (`Полоса прокрутки`): Также является линейным элементом управления диапазоном (`LinearRangeControl`) [26, 27]. Включает перемещаемый ползунок (`thumb`), который реализован как отдельный компонент `Button` [27], и используется для навигации по содержимому.
-9.  **Knob** (`Поворотный регулятор`): Элемент управления диапазоном (`RangeControl`), который изменяет значение при вращении мышью [28, 29]. Для визуализации текущего значения использует дугу (arc) [30].
-10. **MenuButton** (`Кнопка меню`): Расширяет функциональность стандартной кнопки, позволяя отображать выпадающий список других кнопок или вложенных подменю (`subMenu`) [31, 32]. Компонент реализует интерфейс `Scrollable`, что позволяет прокручивать элементы меню, если их много [31, 33].
+1. Button: A basic control that inherits from AbstractButton. It contains a TextView.
+2. CheckBox: Also inherits from AbstractButton. It is used to control a Boolean state (isChecked).
+3. LabeledCheckBox: A composite component that combines a CheckBox and a TextView in a single Container, using RowLayout to position them together.  4. TextView (Text View): A component for displaying text. It supports various AutoResizeMode modes, including FULL, BIG, MIDDLE, SMALL, and TINY.
+5. TextField (Input Field): A component for single-line text input that implements the KeyPressable interface. It manages the cursor position and selection, and supports horizontal scrolling for long text. It supports standard keyboard shortcuts such as CTRL+C, CTRL+V, CTRL+X, and CTRL+A.
+6. EditText (Multi-Line Text Editor): A more complex component for multi-line editing that implements the Scrollable and KeyPressable interfaces.  It includes built-in vertical (`scrollV`) and horizontal (`scrollH`) scrollbars, as well as complex internal classes for managing text, cursor, and selection.
+7. **Slider** (`Slider`): A linear range control (`LinearRangeControl`). It allows the value to change based on the mouse position while holding the component down.
+8. **Scroll** (`Scrollbar`): Also a linear range control (`LinearRangeControl`). Includes a movable thumb, which is implemented as a separate `Button` component and is used to navigate through the content.
+9. **Knob** (`Rotary`): A range control (`RangeControl`) that changes its value when rotated with the mouse. It uses an arc to visualize the current value.
+ 10. **MenuButton** (`Menu Button`): Extends the functionality of a standard button by allowing it to display a drop-down list of other buttons or nested submenus (`subMenu`). The component implements the `Scrollable` interface, allowing scrolling of menu items if there are many.
 
-### IV. Пример инициализации
+### IV. Initialization Example
 
-Ниже представлен стандартный код для инициализации MicroUI и добавления кнопки в контейнер, использующий сетчатое расположение (`GridLayout`):
+Below is the standard code for initializing MicroUI and adding a button to a container using a grid layout (`GridLayout`):
 
 ```java
 void setup() {
- fullScreen(); // Установка полноэкранного режима Processing
- MicroUI.setContext(this); // Установка контекста PApplet для MicroUI [2]
- ContainerManager cm = ContainerManager.getInstance(); // Получение синглтона менеджера контейнеров [Query example]
+fullScreen(); // Set fullscreen mode Processing
+MicroUI.setContext(this); // Set the PApplet context for MicroUI
+ContainerManager cm = ContainerManager.getInstance();  // Getting the container manager singleton [Query example]
 
- // Добавление нового контейнера с идентификатором "id", использующего GridLayout
- cm.add(new Container(new GridLayout(3,3),"id"); 
- 
- // Получение контейнера по ID и добавление в него компонента Button 
- // Компонент размещается в ячейке (1,1) с помощью GridLayoutParams
- cm.get("id").addComponent(new Button(), new GridLayoutParams(1,1)); 
+// Adding a new container with the ID "id" using GridLayout
+cm.add(new Container(new GridLayout(3,3),"id");
+
+// Getting the container by ID and adding a Button component to it
+// The component is placed in cell (1,1) using GridLayoutParams
+cm.get("id").addComponent(new Button(), new GridLayoutParams(1,1));
 
 }
 
 void draw() {
-    // Вызов отрисовки компонентов, управляемых ContainerManager.
+/* In this method, you don't need to manually call container rendering.
+ContainerManager will draw all the necessary content automatically.
+
+It's important to understand that this method should still be written, since Processing won't trigger a rendering update.
+*/
 }
 ```
