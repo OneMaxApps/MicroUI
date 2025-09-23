@@ -21,7 +21,8 @@ MicroUI includes ten main components, each with specific capabilities:
 
 1. Button: A basic control that inherits from AbstractButton. It contains a TextView.
 2. CheckBox: Also inherits from AbstractButton. It is used to control a Boolean state (isChecked).
-3. LabeledCheckBox: A composite component that combines a CheckBox and a TextView in a single Container, using RowLayout to position them together.  4. TextView (Text View): A component for displaying text. It supports various AutoResizeMode modes, including FULL, BIG, MIDDLE, SMALL, and TINY.
+3. LabeledCheckBox: A composite component that combines a CheckBox and a TextView in a single Container, using RowLayout to position them together.
+4. TextView (Text View): A component for displaying text. It supports various AutoResizeMode modes, including FULL, BIG, MIDDLE, SMALL, and TINY.
 5. TextField (Input Field): A component for single-line text input that implements the KeyPressable interface. It manages the cursor position and selection, and supports horizontal scrolling for long text. It supports standard keyboard shortcuts such as CTRL+C, CTRL+V, CTRL+X, and CTRL+A.
 6. EditText (Multi-Line Text Editor): A more complex component for multi-line editing that implements the Scrollable and KeyPressable interfaces.  It includes built-in vertical (`scrollV`) and horizontal (`scrollH`) scrollbars, as well as complex internal classes for managing text, cursor, and selection.
 7. **Slider** (`Slider`): A linear range control (`LinearRangeControl`). It allows the value to change based on the mouse position while holding the component down.
