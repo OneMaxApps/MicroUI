@@ -2,7 +2,6 @@ package microui;
 
 import microui.component.Button;
 import microui.component.CheckBox;
-import microui.component.EditText;
 import microui.component.Knob;
 import microui.component.LabeledCheckBox;
 import microui.component.MenuButton;
@@ -65,7 +64,7 @@ public final class Launcher extends PApplet {
 		cm.add(getContainerAllComponents(),"all_components");
 		cm.add(getContainerWith(new Button()),"Button");
 		cm.add(getContainerWith(new CheckBox()),"CheckBox");
-		cm.add(getContainerWith(new EditText()),"EditText");
+		//cm.add(getContainerWith(new EditText()),"EditText");
 		cm.add(getContainerWith(new Knob()),"Knob");
 		cm.add(getContainerWith(new LabeledCheckBox()),"LabeledCheckBox");
 		cm.add(getContainerWith(new MenuButton()),"MenuButton");
@@ -133,7 +132,7 @@ public final class Launcher extends PApplet {
 
 		container.addComponent(new Button(), new GridLayoutParams(0,0));
 		container.addComponent(new CheckBox(), new GridLayoutParams(1,0));
-		container.addComponent(new EditText(), new GridLayoutParams(2,0));
+		//container.addComponent(new EditText(), new GridLayoutParams(2,0));
 		container.addComponent(new LabeledCheckBox("confirm"), new GridLayoutParams(3,0));
 		container.addComponent(new MenuButton().add("one","two","three","four","five"), new GridLayoutParams(4,0));
 		container.addComponent(new Scroll(), new GridLayoutParams(0,1),"scroll");
