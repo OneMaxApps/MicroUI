@@ -7,7 +7,7 @@ import microui.util.Metrics;
 import processing.core.PGraphics;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 13.09.2025
+//Last Reviewed: 24.09.2025
 public final class Color {
 	public static final int MIN_VALUE = 0, MAX_VALUE = 255;
 	private int red,green,blue,alpha;
@@ -71,14 +71,16 @@ public final class Color {
 	}
 	
 	public int get() {
-		return hexFromARGB(alpha,red,green,blue);
+		return getHexFromARGB(alpha,red,green,blue);
 	}
 	
-	public static int hexFromARGB(float alpha, float red, float green, float blue) {
+	public static int getHexFromARGB(float alpha, float red, float green, float blue) {
 		int tmpAlpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
 		int tmpRed   = constrain(red,MIN_VALUE,MAX_VALUE);
 		int tmpGreen = constrain(green,MIN_VALUE,MAX_VALUE);
 		int tmpBlue  = constrain(blue,MIN_VALUE,MAX_VALUE);
+		
+		if(tmpAlpha == 0) return 0x01000000;
 		
 		return tmpAlpha << 24 | tmpRed << 16 | tmpGreen << 8 |  tmpBlue;
 	}

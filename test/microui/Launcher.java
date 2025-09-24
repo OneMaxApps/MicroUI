@@ -1,36 +1,15 @@
 package microui;
 
-import microui.component.Button;
-import microui.component.CheckBox;
 import microui.component.EditText;
-import microui.component.Knob;
-import microui.component.LabeledCheckBox;
-import microui.component.MenuButton;
-import microui.component.Scroll;
-import microui.component.Slider;
-import microui.component.TextField;
-import microui.component.TextView;
 import microui.constants.ContainerMode;
 import microui.core.base.Component;
 import microui.core.base.Container;
 import microui.core.base.ContainerManager;
-import microui.layout.ColumnLayout;
-import microui.layout.ColumnLayoutParams;
+import microui.core.style.Color;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
 import processing.core.PApplet;
 
-// TODO check full work life cycle of components
-// [1] Button;
-// [1] CheckBox;
-// [1] LabeledCheckBox;
-// [1] Knob;
-// [0] EditText; (need full refactor)
-// [1] MenuButton;
-// [1] Scroll;
-// [1] Slider;
-// [0] TextField;
-// [1] TextView;
 
 // NOTE: ///////////////////////////////////////////////////
 // getX,Y,Width,Height = content area;
@@ -39,7 +18,6 @@ import processing.core.PApplet;
 ////////////////////////////////////////////////////////////
 
 public final class Launcher extends PApplet {
-
 	ContainerManager cm;
 
 	public static void main(String[] args) {
@@ -48,117 +26,31 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-		fullScreen();
+//		fullScreen();
+		size(720,480);
 	}
  
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-//		ThemeManager.setTheme(new ThemeGray());
-		MicroUI.setDebugModeEnabled(true);
+		//MicroUI.setDebugModeEnabled(true);
 
 		cm = ContainerManager.getInstance();
-
-		cm.add(getContainerMain(), "main");
-		cm.add(getContainerAllComponents(), "all_components");
-		cm.add(getContainerWith(new Button()), "Button");
-		cm.add(getContainerWith(new CheckBox()), "CheckBox");
-		cm.add(getContainerWith(new EditText()), "EditText");
-		cm.add(getContainerWith(new Knob()), "Knob");
-		cm.add(getContainerWith(new LabeledCheckBox()), "LabeledCheckBox");
-		cm.add(getContainerWith(new MenuButton()), "MenuButton");
-		cm.add(getContainerWith(new Scroll()), "Scroll");
-		cm.add(getContainerWith(new Slider()), "Slider");
-		cm.add(getContainerWith(new TextField()), "TextField");
-		cm.add(getContainerWith(new TextView()), "TextView");
-
+		cm.add(getContainerWith(new EditText()), "container_main");
+		
 	}
 
 	@Override
 	public void draw() {
-		background(164);
-
-		System.out.println(frameRate);
-	}
-
-	@Override
-	public void keyPressed() {
-		super.keyPressed();
-
-		if (keyPressed) {
-			if (keyCode == 0x70) {
-				cm.switchOn("main");
-			}
-
-			if (keyCode == TAB) {
-				cm.switchOnNextContainer();
-			}
-		}
-
-	}
-
-	private Container getContainerMain() {
-		Container container = new Container(new GridLayout(3, 3));
-
-		Container ContainerMenuItem = new Container(new ColumnLayout());
-		ContainerMenuItem.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
-
-		ContainerMenuItem.addComponent(new Button("show all components"), new ColumnLayoutParams(.2f),
-				() -> cm.switchOn("all_components"));
-
-		MenuButton menuButtonOfComponents;
-		ContainerMenuItem.addComponent(
-				menuButtonOfComponents = new MenuButton("show component", "Button", "CheckBox", "EditText", "Knob",
-						"LabeledCheckBox", "MenuButton", "Scroll", "Slider", "TextField", "TextView"),
-				new ColumnLayoutParams(.2f));
-
-		menuButtonOfComponents.getItem("Button").onClick(() -> cm.switchOn("Button"));
-		menuButtonOfComponents.getItem("CheckBox").onClick(() -> cm.switchOn("CheckBox"));
-		menuButtonOfComponents.getItem("EditText").onClick(() -> cm.switchOn("EditText"));
-		menuButtonOfComponents.getItem("Knob").onClick(() -> cm.switchOn("Knob"));
-		menuButtonOfComponents.getItem("LabeledCheckBox").onClick(() -> cm.switchOn("LabeledCheckBox"));
-		menuButtonOfComponents.getItem("MenuButton").onClick(() -> cm.switchOn("MenuButton"));
-		menuButtonOfComponents.getItem("Scroll").onClick(() -> cm.switchOn("Scroll"));
-		menuButtonOfComponents.getItem("Slider").onClick(() -> cm.switchOn("Slider"));
-		menuButtonOfComponents.getItem("TextField").onClick(() -> cm.switchOn("TextField"));
-		menuButtonOfComponents.getItem("TextView").onClick(() -> cm.switchOn("TextView"));
-
-		container.addComponent(ContainerMenuItem, new GridLayoutParams(1, 0));
-
-		return container;
-	}
-
-	private Container getContainerAllComponents() {
-		Container container = new Container(new GridLayout(5, 5));
-
-		container.addComponent(new Button(), new GridLayoutParams(0, 0));
-		container.addComponent(new CheckBox(), new GridLayoutParams(1, 0));
-		container.addComponent(new EditText(), new GridLayoutParams(2, 0));
-		container.addComponent(new LabeledCheckBox("confirm"), new GridLayoutParams(3, 0));
-		container.addComponent(new MenuButton().add("one", "two", "three", "four", "five"), new GridLayoutParams(4, 0));
-		container.addComponent(new Scroll(), new GridLayoutParams(0, 1), "scroll");
-		container.addComponent(new Slider(), new GridLayoutParams(1, 1));
-		container.addComponent(new TextField(), new GridLayoutParams(2, 1));
-		container.addComponent(new TextView("TextView"), new GridLayoutParams(3, 1));
-		container.addComponent(new Knob(), new GridLayoutParams(4, 1));
-
-		return container;
+		background(32);
+		// cm.getContainerByTextId("container_main").getComponentByTextId("edit_text").setSize(mouseX,mouseY);
 	}
 
 	private Container getContainerWith(Component component) {
-		Container container = new Container(new GridLayout(5, 9));
-		if (!(component instanceof CheckBox)) {
-			container.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
-		}
-		if (component instanceof LabeledCheckBox l) {
-			l.setText("labeled check box");
-		}
-
-		if (component instanceof TextView t) {
-			t.setText("TextView");
-		}
-
-		container.addComponent(component, new GridLayoutParams(1, 3, 3, 3));
+		Container container = new Container(new GridLayout(12,12));
+		container.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
+		
+		container.addComponent(component, new GridLayoutParams(1, 1, 10, 10),"edit_text");
 
 		return container;
 	}
