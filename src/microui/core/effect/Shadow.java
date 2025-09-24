@@ -37,7 +37,7 @@ public final class Shadow extends View {
 	      for(int i = 0; i < absoluteSize; i++) {
 	    	  ctx.strokeWeight(2);
 	    	  ctx.strokeCap(SQUARE);
-	    	  ctx.stroke(color.get(),constrain(164-i*20,0,255));
+	    	  color.applyStroke();
 	    	  ctx.noFill();
 	    	  ctx.rectMode(CORNERS);
 	    	  if(bounds instanceof SpatialView) {

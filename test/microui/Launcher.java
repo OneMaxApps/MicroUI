@@ -13,25 +13,12 @@ import microui.constants.ContainerMode;
 import microui.core.base.Component;
 import microui.core.base.Container;
 import microui.core.base.ContainerManager;
-import microui.core.style.theme.ThemeGray;
-import microui.core.style.theme.ThemeManager;
 import microui.layout.ColumnLayout;
 import microui.layout.ColumnLayoutParams;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
 import processing.core.PApplet;
 
-// TODO check full work life cycle of components
-// [1] Button;
-// [1] CheckBox;
-// [1] LabeledCheckBox;
-// [1] Knob;
-// [0] EditText; (need full refactor)
-// [1] MenuButton;
-// [1] Scroll;
-// [1] Slider;
-// [0] TextField;
-// [1] TextView;
 
 // NOTE: ///////////////////////////////////////////////////
 // getX,Y,Width,Height = content area;
@@ -40,7 +27,6 @@ import processing.core.PApplet;
 ////////////////////////////////////////////////////////////
 
 public final class Launcher extends PApplet {
-
 	ContainerManager cm;
 
 	public static void main(String[] args) {
@@ -49,16 +35,17 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-		fullScreen();
+//		fullScreen();
+		size(720,480);
 	}
-
+ 
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		ThemeManager.setTheme(new ThemeGray());
-//		MicroUI.setDebugModeEnabled(true);
+		//MicroUI.setDebugModeEnabled(true);
 
 		cm = ContainerManager.getInstance();
+
 		
 		cm.add(getContainerMain(),"main");
 		cm.add(getContainerAllComponents(),"all_components");
@@ -77,10 +64,10 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void draw() {
-		background(164);
-
-		System.out.println(frameRate);
+		background(32);
+		// cm.getContainerByTextId("container_main").getComponentByTextId("edit_text").setSize(mouseX,mouseY);
 	}
+
 
 	@Override
 	public void keyPressed() {
@@ -143,22 +130,13 @@ public final class Launcher extends PApplet {
 		
 		return container;
 	}
-	
+
 	private Container getContainerWith(Component component) {
-		Container container = new Container(new GridLayout(5,9));
-		if(!(component instanceof CheckBox)) { 
-			container.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
-		}
-		if(component instanceof LabeledCheckBox l) { 
-			l.setText("labeled check box");
-		}
+		Container container = new Container(new GridLayout(12,12));
+		container.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
 		
-		if(component instanceof TextView t) { 
-			t.setText("TextView");
-		}
-		
-		container.addComponent(component, new GridLayoutParams(1,3,3,3));
-		
+		container.addComponent(component, new GridLayoutParams(1, 1, 10, 10),"edit_text");
+
 		return container;
 	}
 }

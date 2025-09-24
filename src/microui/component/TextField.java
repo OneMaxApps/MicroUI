@@ -515,7 +515,7 @@ public final class TextField extends Component implements KeyPressable {
 
 			if (blink.isBlinking()) {
 				pg.pushStyle();
-				pg.stroke(color.get());
+				color.applyStroke(pg);
 				weight.use(pg);
 				pg.line(positionX + LEFT_OFFSET, positionY, positionX + LEFT_OFFSET, height);
 				pg.popStyle();
