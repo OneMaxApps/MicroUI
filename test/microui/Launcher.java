@@ -35,8 +35,8 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-//		fullScreen();
-		size(720,480);
+		fullScreen();
+//		size(720,480);
 	}
  
 	@Override
@@ -64,7 +64,7 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void draw() {
-		background(32);
+		background(250);
 		// cm.getContainerByTextId("container_main").getComponentByTextId("edit_text").setSize(mouseX,mouseY);
 	}
 
