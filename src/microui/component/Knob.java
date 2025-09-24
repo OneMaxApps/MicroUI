@@ -95,10 +95,10 @@ public final class Knob extends RangeControl {
 		ctx.noFill();
 		ctx.strokeWeight(getIndicatorWeight());
 
-		ctx.stroke(indicatorColor.get(),64);
+		indicatorColor.apply();
 		ctx.arc(0,0,diameter*.8f, diameter*.8f,START,END);
 		
-		ctx.stroke(indicatorColor.get());
+		indicatorColor.applyStroke();
 		ctx.arc(0,0,diameter*.8f, diameter*.8f,START,map(getMutableValue().get(),getMutableValue().getMin(),getMutableValue().getMax(),START,END));
 		
 		if(getMutableValue().get() == getMutableValue().getMax()) {

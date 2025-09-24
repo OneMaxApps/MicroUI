@@ -29,7 +29,7 @@ public class ImageBuffer extends SpatialView {
 	protected void render() {
 		if (isLoaded()) {
 			ctx.pushStyle();
-			ctx.tint(color.get());
+			color.applyTint();
 			ctx.image(image, getX(), getY(),getWidth(),getHeight());
 			ctx.popStyle();
 		}

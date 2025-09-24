@@ -62,28 +62,6 @@ public final class Color {
 		}
 		set(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
 	}
-	
-	public void setHEX(int hex) {
-		setRed(hex >> 16 & 0xFF);
-		setGreen(hex >> 8 & 0xFF);
-		setBlue(hex & 0xFF);	
-		setAlpha(hex >> 24 & 0xFF);
-	}
-	
-	public int get() {
-		return getHexFromARGB(alpha,red,green,blue);
-	}
-	
-	public static int getHexFromARGB(float alpha, float red, float green, float blue) {
-		int tmpAlpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
-		int tmpRed   = constrain(red,MIN_VALUE,MAX_VALUE);
-		int tmpGreen = constrain(green,MIN_VALUE,MAX_VALUE);
-		int tmpBlue  = constrain(blue,MIN_VALUE,MAX_VALUE);
-		
-		if(tmpAlpha == 0) return 0x01000000;
-		
-		return tmpAlpha << 24 | tmpRed << 16 | tmpGreen << 8 |  tmpBlue;
-	}
 
 	public int getRed() {
 		return red;
@@ -126,6 +104,39 @@ public final class Color {
 			throw new NullPointerException("pGraphics cannot be null");
 		}
 		pGraphics.fill(red,green,blue,alpha);
+	}
+	
+	public void applyStroke() {
+		getContext().stroke(red,green,blue,alpha);
+	}
+	
+	public void applyStroke(PGraphics pGraphics) {
+		if(pGraphics == null) {
+			throw new NullPointerException("pGraphics cannot be null");
+		}
+		pGraphics.stroke(red,green,blue,alpha);
+	}
+	
+	public void applyBackground() {
+		getContext().background(red,green,blue,alpha);
+	}
+	
+	public void applyBackground(PGraphics pGraphics) {
+		if(pGraphics == null) {
+			throw new NullPointerException("pGraphics cannot be null");
+		}
+		pGraphics.background(red,green,blue,alpha);
+	}
+	
+	public void applyTint() {
+		getContext().tint(red,green,blue,alpha);
+	}
+	
+	public void applyTint(PGraphics pGraphics) {
+		if(pGraphics == null) {
+			throw new NullPointerException("pGraphics cannot be null");
+		}
+		pGraphics.tint(red,green,blue,alpha);
 	}
 
 	public boolean isTransparent() { return alpha == 0; }

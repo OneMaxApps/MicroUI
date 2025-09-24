@@ -103,7 +103,7 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 		scrollV.setVisible(isFocused);
 
 		graphics.beginDraw();
-		graphics.background(getMutableBackgroundColor().get());
+		getMutableBackgroundColor().applyBackground(graphics);
 		items.draw(graphics);
 		cursor.draw(graphics);
 		graphics.endDraw();
@@ -923,7 +923,7 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 				
 				pg.pushStyle();
 				pg.noStroke();
-				pg.fill(selectColor.get());
+				selectColor.apply(pg);
 				if (isFullSelected) {
 					pg.rect(-scrollH.getValue(), getInsideY(), getTextWidth(), textSize);
 				}
@@ -1136,7 +1136,7 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 				float dynamicHeight = abs(
 						map(duration, 0, MAX_DURATION, -items.getTextSize() / 2, items.getTextSize() / 2)) / 2;
 				pg.pushStyle();
-				pg.stroke(color.get());
+				color.applyStroke(pg);
 				pg.strokeWeight(2);
 				pg.line(posX, posY + dynamicHeight, posX, posY + items.getTextSize() - dynamicHeight);
 				pg.popStyle();

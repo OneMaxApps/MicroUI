@@ -37,7 +37,7 @@ public final class Stroke {
 
 	public void apply() {
 		getContext().strokeCap(SQUARE);
-		getContext().stroke(color.get());
+		color.applyStroke();
 		getContext().strokeWeight(weight);
 	}
 	
@@ -46,7 +46,7 @@ public final class Stroke {
 			throw new NullPointerException("pGraphics cannot be null");
 		}
 		pGraphics.strokeCap(SQUARE);
-		pGraphics.stroke(color.get());
+		color.applyStroke(pGraphics);
 		pGraphics.strokeWeight(weight);
 	}
 
