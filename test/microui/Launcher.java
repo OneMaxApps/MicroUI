@@ -48,16 +48,16 @@ public final class Launcher extends PApplet {
 
 		//cm.add(getContainerMain(),"main");
 		//cm.add(getContainerAllComponents(),"all_components");
-		cm.add(getContainerWith(new Button().onClick(() -> background(random(255)))),"Button");
-		cm.add(getContainerWith(new CheckBox()),"CheckBox");
-		//cm.add(getContainerWith(new EditText()),"EditText");
-		cm.add(getContainerWith(new Knob()),"Knob");
-		cm.add(getContainerWith(new LabeledCheckBox()),"LabeledCheckBox");
-		cm.add(getContainerWith(new MenuButton()),"MenuButton");
-		cm.add(getContainerWith(new Scroll()),"Scroll");
-		cm.add(getContainerWith(new Slider()),"Slider");
-		cm.add(getContainerWith(new TextField()),"TextField");
-		cm.add(getContainerWith(new TextView()),"TextView");
+		cm.add(getContainerWith(new Button().onLeaveLong(() -> background(random(255)))),"Button");
+//		cm.add(getContainerWith(new CheckBox()),"CheckBox");
+//		//cm.add(getContainerWith(new EditText()),"EditText");
+//		cm.add(getContainerWith(new Knob()),"Knob");
+//		cm.add(getContainerWith(new LabeledCheckBox()),"LabeledCheckBox");
+//		cm.add(getContainerWith(new MenuButton()),"MenuButton");
+//		cm.add(getContainerWith(new Scroll()),"Scroll");
+//		cm.add(getContainerWith(new Slider()),"Slider");
+//		cm.add(getContainerWith(new TextField()),"TextField");
+//		cm.add(getContainerWith(new TextView()),"TextView");
 		
 	}
 
