@@ -134,7 +134,7 @@ public abstract class View implements Visible {
 	 * <p>
 	 * Calls the {@link #render() method} only if the element is visible.
 	 */
-	protected void draw() {
+	public void draw() {
 		if(!ContainerManager.isInitialized()) {
 			throw new RenderException("ContainerManager is not initialized");
 		}

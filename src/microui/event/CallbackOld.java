@@ -9,13 +9,13 @@ import microui.core.base.Component;
 import microui.core.base.SpatialView;
 import processing.core.PApplet;
 
-public final class Callback {
+public final class CallbackOld {
 	private static PApplet app = MicroUI.getContext();
 	private static final int ONE_SECOND = 1000, TWO_SECONDS = 2000, THREE_SECONDS = 3000, THREE_PIXELS = 3;
 
 	private SpatialView bounds;
 
-	private final EnumMap<EventType, ArrayList<Listener>> eventList = new EnumMap<>(EventType.class);
+	private final EnumMap<EventTypeOld, ArrayList<Listener>> eventList = new EnumMap<>(EventTypeOld.class);
 
 	private boolean hasClickedStateTriggered, isHold, isEnabled, isClicked, isDragged;
 
@@ -24,7 +24,7 @@ public final class Callback {
 	private long clickedTimePrev, clickedTimeNow, delta, pressStartTime, currentPressDuration, longPressThreshold,
 			doubleClickThreshold, insideTimerStart, timerInside, insideTimeThreshold;
 
-	public Callback(SpatialView otherBounds) {
+	public CallbackOld(SpatialView otherBounds) {
 		bounds = otherBounds;
 		isEnabled = true;
 
@@ -110,26 +110,26 @@ public final class Callback {
 		});
 	}
 
-	public final void clear(EventType type) {
+	public final void clear(EventTypeOld type) {
 		clearList(type);
 	}
 
-	public final void remove(EventType type, int index) {
+	public final void remove(EventTypeOld type, int index) {
 		safeRemove(eventList.get(type), index);
 	}
 
-	public final void remove(EventType type, Listener listener) {
+	public final void remove(EventTypeOld type, Listener listener) {
 		safeRemove(eventList.get(type), listener);
 	}
 
 	public final void remove(Listener listener) {
-		for (EventType type : eventList.keySet()) {
+		for (EventTypeOld type : eventList.keySet()) {
 			safeRemove(eventList.get(type), listener);
 		}
 
 	}
 
-	public final void addListener(EventType type, Listener listener) {
+	public final void addListener(EventTypeOld type, Listener listener) {
 		eventList.putIfAbsent(type, new ArrayList<Listener>());
 		eventList.get(type).add(listener);
 
@@ -342,7 +342,7 @@ public final class Callback {
 		}
 	}
 
-	private final void clearList(EventType type) {
+	private final void clearList(EventTypeOld type) {
 		if (eventList.get(type) != null) {
 			eventList.get(type).clear();
 		}

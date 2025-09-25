@@ -46,7 +46,6 @@ public final class Launcher extends PApplet {
 
 		cm = ContainerManager.getInstance();
 
-		
 		cm.add(getContainerMain(),"main");
 		cm.add(getContainerAllComponents(),"all_components");
 		cm.add(getContainerWith(new Button()),"Button");
@@ -64,7 +63,7 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void draw() {
-		background(250);
+		background(32);
 		// cm.getContainerByTextId("container_main").getComponentByTextId("edit_text").setSize(mouseX,mouseY);
 	}
 

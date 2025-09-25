@@ -2,23 +2,23 @@ package microui.core.base;
 
 import static java.util.Objects.requireNonNull;
 import static microui.core.style.theme.ThemeManager.getTheme;
-import static microui.event.EventType.CLICK;
-import static microui.event.EventType.DOUBLE_CLICK;
-import static microui.event.EventType.DRAGGED;
-import static microui.event.EventType.DRAGGING;
-import static microui.event.EventType.HOLD_END;
-import static microui.event.EventType.HOLD_START;
-import static microui.event.EventType.LONG_PRESSED;
-import static microui.event.EventType.MOUSE_INSIDE;
-import static microui.event.EventType.MOUSE_INSIDE_LONG;
-import static microui.event.EventType.MOUSE_OUTSIDE;
-import static microui.event.EventType.PRESS;
-import static microui.event.EventType.RELEASE;
-import static microui.event.EventType.SHAKE;
+import static microui.event.EventTypeOld.CLICK;
+import static microui.event.EventTypeOld.DOUBLE_CLICK;
+import static microui.event.EventTypeOld.DRAGGED;
+import static microui.event.EventTypeOld.DRAGGING;
+import static microui.event.EventTypeOld.HOLD_END;
+import static microui.event.EventTypeOld.HOLD_START;
+import static microui.event.EventTypeOld.LONG_PRESSED;
+import static microui.event.EventTypeOld.MOUSE_INSIDE;
+import static microui.event.EventTypeOld.MOUSE_INSIDE_LONG;
+import static microui.event.EventTypeOld.MOUSE_OUTSIDE;
+import static microui.event.EventTypeOld.PRESS;
+import static microui.event.EventTypeOld.RELEASE;
+import static microui.event.EventTypeOld.SHAKE;
 
 import microui.MicroUI;
 import microui.core.style.Color;
-import microui.event.Callback;
+import microui.event.CallbackOld;
 import microui.event.Event;
 import microui.event.Listener;
 import microui.feedback.Tooltip;
@@ -30,7 +30,7 @@ public abstract class Component extends SpatialView {
 	private final Margin margin;
 	private final Color backgroundColor;
 	private final Event event;
-	private final Callback callback;
+	private final CallbackOld callback;
 	private Tooltip tooltip;
 
 	public Component(float x, float y, float width, float height) {
@@ -43,7 +43,7 @@ public abstract class Component extends SpatialView {
 		margin = new Margin();
 		backgroundColor = getTheme().getBackgroundColor();
 		event = new Event(this);
-		callback = new Callback(this);
+		callback = new CallbackOld(this);
 
 		setPaddingEnabled(true);
 		setMarginEnabled(true);

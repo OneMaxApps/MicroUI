@@ -1,0 +1,17 @@
+package microui.event;
+
+public enum EventTypeOld {
+	CLICK,
+	DOUBLE_CLICK,
+	DRAGGED,
+	DRAGGING,
+	HOLD_START,
+	MOUSE_INSIDE,
+	MOUSE_INSIDE_LONG,
+	MOUSE_OUTSIDE,
+	LONG_PRESSED,
+	PRESS,
+	RELEASE,
+	HOLD_END,
+	SHAKE;
+}

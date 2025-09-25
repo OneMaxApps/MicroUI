@@ -7,8 +7,8 @@ import microui.core.TextController;
 import microui.core.base.Container;
 import microui.core.base.SpatialView;
 import microui.core.style.Color;
-import microui.event.Callback;
-import microui.event.EventType;
+import microui.event.CallbackOld;
+import microui.event.EventTypeOld;
 import microui.service.GlobalTooltip;
 
 
@@ -20,31 +20,31 @@ public final class Tooltip extends SpatialView {
 	private Container container;
 	private boolean canBeVisible,additionalCondition,isEnabled;
 	
-	public Tooltip(Callback callback) {
+	public Tooltip(CallbackOld callback) {
 
 		color = GlobalTooltip.DEFAULT_COLOR;
 		
 		text = new Text();
 		
-		callback.addListener(EventType.MOUSE_INSIDE_LONG, () -> {
+		callback.addListener(EventTypeOld.MOUSE_INSIDE_LONG, () -> {
 			canBeVisible = additionalCondition && (!text.isEmpty() || container != null);
 		});
 		
-		callback.addListener(EventType.MOUSE_OUTSIDE, () -> {
+		callback.addListener(EventTypeOld.MOUSE_OUTSIDE, () -> {
 			if(canBeVisible) {
 				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
 		
-		callback.addListener(EventType.SHAKE, () -> {
+		callback.addListener(EventTypeOld.SHAKE, () -> {
 			if(canBeVisible) {
 				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
 		
-		callback.addListener(EventType.PRESS, () -> {
+		callback.addListener(EventTypeOld.PRESS, () -> {
 			if(canBeVisible) {
 				callback.resetInsideTimer();
 				canBeVisible = false;
@@ -79,28 +79,28 @@ public final class Tooltip extends SpatialView {
 		this.isEnabled = isEnabled;
 	}
 	
-	public final void setCallbacksFor(Callback callback) {
+	public final void setCallbacksFor(CallbackOld callback) {
 		if(callback == null) { return; }
 		
-		callback.addListener(EventType.MOUSE_INSIDE_LONG, () -> {
+		callback.addListener(EventTypeOld.MOUSE_INSIDE_LONG, () -> {
 			canBeVisible = additionalCondition && (!text.isEmpty() || container != null);
 		});
 		
-		callback.addListener(EventType.MOUSE_OUTSIDE, () -> {
+		callback.addListener(EventTypeOld.MOUSE_OUTSIDE, () -> {
 			if(canBeVisible) {
 				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
 		
-		callback.addListener(EventType.SHAKE, () -> {
+		callback.addListener(EventTypeOld.SHAKE, () -> {
 			if(canBeVisible) {
 				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
 		
-		callback.addListener(EventType.PRESS, () -> {
+		callback.addListener(EventTypeOld.PRESS, () -> {
 			if(canBeVisible) {
 				callback.resetInsideTimer();
 				canBeVisible = false;
