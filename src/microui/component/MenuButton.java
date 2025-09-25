@@ -38,7 +38,7 @@ public class MenuButton extends Button implements Scrollable {
 		calculateMarkBounds();
 		scrolling = new Scrolling();
 
-		onClick(() -> {
+		onClickOld(() -> {
 			isOpen = !isOpen;
 			if (!isOpen) {
 				closeAllSubMenus();

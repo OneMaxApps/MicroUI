@@ -15,7 +15,7 @@ public abstract class LinearRangeControl extends RangeControl {
 
 		getMutableValue().setOnChangeValueListener(() -> requestUpdate());
 		
-		onPress(() -> valueChangeEnd = true);
+		onPressOld(() -> valueChangeEnd = true);
 
 		
 		orientation = Orientation.HORIZONTAL;

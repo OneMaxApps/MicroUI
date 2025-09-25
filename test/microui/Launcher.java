@@ -35,8 +35,8 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void settings() {
-		fullScreen();
-//		size(720,480);
+//		fullScreen();
+		size(720,480);
 	}
  
 	@Override
@@ -46,9 +46,9 @@ public final class Launcher extends PApplet {
 
 		cm = ContainerManager.getInstance();
 
-		cm.add(getContainerMain(),"main");
-		cm.add(getContainerAllComponents(),"all_components");
-		cm.add(getContainerWith(new Button()),"Button");
+		//cm.add(getContainerMain(),"main");
+		//cm.add(getContainerAllComponents(),"all_components");
+		cm.add(getContainerWith(new Button().onClick(() -> background(random(255)))),"Button");
 		cm.add(getContainerWith(new CheckBox()),"CheckBox");
 		//cm.add(getContainerWith(new EditText()),"EditText");
 		cm.add(getContainerWith(new Knob()),"Knob");
@@ -97,16 +97,16 @@ public final class Launcher extends PApplet {
 		MenuButton menuButtonOfComponents;
 		ContainerMenuItem.addComponent(menuButtonOfComponents = new MenuButton("show component","Button","CheckBox","EditText","Knob","LabeledCheckBox","MenuButton","Scroll","Slider","TextField","TextView"), new ColumnLayoutParams(.2f));
 		
-		menuButtonOfComponents.getItem("Button").onClick(() -> cm.switchOn("Button"));
-		menuButtonOfComponents.getItem("CheckBox").onClick(() -> cm.switchOn("CheckBox"));
-		menuButtonOfComponents.getItem("EditText").onClick(() -> cm.switchOn("EditText"));
-		menuButtonOfComponents.getItem("Knob").onClick(() -> cm.switchOn("Knob"));
-		menuButtonOfComponents.getItem("LabeledCheckBox").onClick(() -> cm.switchOn("LabeledCheckBox"));
-		menuButtonOfComponents.getItem("MenuButton").onClick(() -> cm.switchOn("MenuButton"));
-		menuButtonOfComponents.getItem("Scroll").onClick(() -> cm.switchOn("Scroll"));
-		menuButtonOfComponents.getItem("Slider").onClick(() -> cm.switchOn("Slider"));
-		menuButtonOfComponents.getItem("TextField").onClick(() -> cm.switchOn("TextField"));
-		menuButtonOfComponents.getItem("TextView").onClick(() -> cm.switchOn("TextView"));
+		menuButtonOfComponents.getItem("Button").onClickOld(() -> cm.switchOn("Button"));
+		menuButtonOfComponents.getItem("CheckBox").onClickOld(() -> cm.switchOn("CheckBox"));
+		menuButtonOfComponents.getItem("EditText").onClickOld(() -> cm.switchOn("EditText"));
+		menuButtonOfComponents.getItem("Knob").onClickOld(() -> cm.switchOn("Knob"));
+		menuButtonOfComponents.getItem("LabeledCheckBox").onClickOld(() -> cm.switchOn("LabeledCheckBox"));
+		menuButtonOfComponents.getItem("MenuButton").onClickOld(() -> cm.switchOn("MenuButton"));
+		menuButtonOfComponents.getItem("Scroll").onClickOld(() -> cm.switchOn("Scroll"));
+		menuButtonOfComponents.getItem("Slider").onClickOld(() -> cm.switchOn("Slider"));
+		menuButtonOfComponents.getItem("TextField").onClickOld(() -> cm.switchOn("TextField"));
+		menuButtonOfComponents.getItem("TextView").onClickOld(() -> cm.switchOn("TextView"));
 		
 		container.addComponent(ContainerMenuItem, new GridLayoutParams(0,0));
 		
@@ -131,10 +131,10 @@ public final class Launcher extends PApplet {
 	}
 
 	private Container getContainerWith(Component component) {
-		Container container = new Container(new GridLayout(12,12));
+		Container container = new Container(new GridLayout(11,11));
 		container.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
 		
-		container.addComponent(component, new GridLayoutParams(1, 1, 10, 10),"edit_text");
+		container.addComponent(component, new GridLayoutParams(5,5),"edit_text");
 
 		return container;
 	}

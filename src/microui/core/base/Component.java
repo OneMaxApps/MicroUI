@@ -20,6 +20,8 @@ import microui.MicroUI;
 import microui.core.style.Color;
 import microui.event.CallbackOld;
 import microui.event.Event;
+import microui.event.EventType;
+import microui.event.InteractionHandler;
 import microui.event.Listener;
 import microui.feedback.Tooltip;
 
@@ -31,6 +33,7 @@ public abstract class Component extends SpatialView {
 	private final Color backgroundColor;
 	private final Event event;
 	private final CallbackOld callback;
+	private final InteractionHandler interactionHandler;
 	private Tooltip tooltip;
 
 	public Component(float x, float y, float width, float height) {
@@ -44,7 +47,8 @@ public abstract class Component extends SpatialView {
 		backgroundColor = getTheme().getBackgroundColor();
 		event = new Event(this);
 		callback = new CallbackOld(this);
-
+		interactionHandler = new InteractionHandler(this);
+		
 		setPaddingEnabled(true);
 		setMarginEnabled(true);
 	}
@@ -64,6 +68,8 @@ public abstract class Component extends SpatialView {
 		event.listen();
 
 		callback.listen();
+		
+		interactionHandler.listen();
 
 		if (tooltip != null) {
 			tooltip.listen();
@@ -112,8 +118,83 @@ public abstract class Component extends SpatialView {
 	public final boolean isHolding() {
 		return event.isHolding();
 	}
-
+	
+	
+	
+	public final Component onHover(Listener listener) {
+		interactionHandler.addListener(EventType.HOVER, listener);
+		
+		return this;
+	}
+	
+	public final Component onPress(Listener listener) {
+		interactionHandler.addListener(EventType.PRESS, listener);
+		
+		return this;
+	}
+	
+	public final Component onPressed(Listener listener) {
+		interactionHandler.addListener(EventType.PRESSED, listener);
+		
+		return this;
+	}
+	
+	public final Component onRelease(Listener listener) {
+		interactionHandler.addListener(EventType.RELEASE, listener);
+		
+		return this;
+	}
+	
+	public final Component onReleased(Listener listener) {
+		interactionHandler.addListener(EventType.RELEASED, listener);
+		
+		return this;
+	}
+	
+	public final Component onLongPress(Listener listener) {
+		interactionHandler.addListener(EventType.LONG_PRESS, listener);
+		
+		return this;
+	}
+	
+	public final Component onLongPressed(Listener listener) {
+		interactionHandler.addListener(EventType.LONG_PRESSED, listener);
+		
+		return this;
+	}
+	
+	public final Component onEnter(Listener listener) {
+		interactionHandler.addListener(EventType.ENTER, listener);
+		
+		return this;
+	}
+	
+	public final Component onLeave(Listener listener) {
+		interactionHandler.addListener(EventType.LEAVE, listener);
+		
+		return this;
+	}
+	
+	public final Component onEnterLong(Listener listener) {
+		interactionHandler.addListener(EventType.ENTER_LONG, listener);
+		
+		return this;
+	}
+	
+	public final Component onLeaveLong(Listener listener) {
+		interactionHandler.addListener(EventType.LEAVE_LONG, listener);
+		
+		return this;
+	}
+	
 	public final Component onClick(Listener listener) {
+		interactionHandler.addListener(EventType.CLICK, listener);
+		
+		return this;
+	}
+	
+
+	public final Component onClickOld(Listener listener) {
 		callback.addListener(CLICK, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
@@ -154,17 +235,17 @@ public abstract class Component extends SpatialView {
 		return this;
 	}
 
-	public final Component onLongPress(Listener listener) {
+	public final Component onLongPressOld(Listener listener) {
 		callback.addListener(LONG_PRESSED, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
-	public final Component onPress(Listener listener) {
+	public final Component onPressOld(Listener listener) {
 		callback.addListener(PRESS, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
-	public final Component onRelease(Listener listener) {
+	public final Component onReleaseOld(Listener listener) {
 		callback.addListener(RELEASE, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}

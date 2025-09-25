@@ -16,7 +16,7 @@ public class CheckBox extends AbstractButton {
 	public CheckBox(float x, float y) {
 		super(x, y, DEFAULT_SIZE, DEFAULT_SIZE);
 		setMinMaxSize(DEFAULT_SIZE);
-		onClick(() -> toggle());
+		onClickOld(() -> toggle());
 		markColor = new Color(getTheme().getPrimaryColor());
 	}
 
@@ -66,7 +66,7 @@ public class CheckBox extends AbstractButton {
 		if (listener == null) {
 			throw new NullPointerException("on the state changed listener cannot be null");
 		}
-		onClick(listener);
+		onClickOld(listener);
 	}
 
 	private void markOnDraw() {
