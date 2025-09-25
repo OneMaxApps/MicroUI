@@ -13,9 +13,9 @@ public final class InteractionHandler {
 
 	public InteractionHandler(Component component) {
 		super();
-		
+
 		detector = new EventDetector();
-		
+
 		dispatcher = new EventDispatcher();
 
 		if (component == null) {
@@ -27,71 +27,75 @@ public final class InteractionHandler {
 
 	public void listen() {
 		detector.update();
-		
-		if(detector.isPress()) {
+
+		if (detector.isPress()) {
 			dispatcher.dispatch(EventType.PRESS);
 		}
-		
-		if(detector.isPressed()) {
+
+		if (detector.isPressed()) {
 			dispatcher.dispatch(EventType.PRESSED);
 		}
-		
-		if(detector.isRelease()) {
+
+		if (detector.isRelease()) {
 			dispatcher.dispatch(EventType.RELEASE);
 		}
-		
-		if(detector.isReleased()) {
+
+		if (detector.isReleased()) {
 			dispatcher.dispatch(EventType.RELEASED);
 		}
-		
-		if(detector.isLongPress()) {
+
+		if (detector.isLongPress()) {
 			dispatcher.dispatch(EventType.LONG_PRESS);
 		}
-		
-		if(detector.isLongPressed()) {
+
+		if (detector.isLongPressed()) {
 			dispatcher.dispatch(EventType.LONG_PRESSED);
 		}
-		
-		if(detector.isEnter()) {
+
+		if (detector.isEnter()) {
 			dispatcher.dispatch(EventType.ENTER);
 		}
-		
-		if(detector.isLeave()) {
+
+		if (detector.isLeave()) {
 			dispatcher.dispatch(EventType.LEAVE);
 		}
 
-		if(detector.isEnterLong()) {
+		if (detector.isEnterLong()) {
 			dispatcher.dispatch(EventType.ENTER_LONG);
 		}
-		
-		if(detector.isLeaveLong()) {
+
+		if (detector.isLeaveLong()) {
 			dispatcher.dispatch(EventType.LEAVE_LONG);
 		}
-		
-		if(detector.isClick()) {
+
+		if (detector.isClick()) {
 			dispatcher.dispatch(EventType.CLICK);
 		}
 		
-		if(detector.isHover()) {
+		if (detector.isDoubleClick()) {
+			dispatcher.dispatch(EventType.DOUBLE_CLICK);
+		}
+
+		if (detector.isHover()) {
 			dispatcher.dispatch(EventType.HOVER);
 		}
-		
-		
+
 	}
 
 	public void addListener(EventType eventType, Listener listener) {
 		dispatcher.addListenerSafe(eventType, listener);
 	}
-	
+
 	public void removeListener(EventType eventType, Listener listener) {
 		dispatcher.removeListenerSafe(eventType, listener);
 	}
-	
+
 	private class EventDetector {
 		private static final long DEFAULT_THRESHOLD = 500;
-		private long enterTime,leaveTime;
+		private static final long DEFAULT_DOUBLE_CLICK_THRESHOLD = 200;
+		private long enterTime, leaveTime;
 		private boolean isHover;
-		
+
 		private final PressDetector pressDetector;
 		private final ReleaseDetector releaseDetector;
 		private final LongPressDetector longPressDetector;
@@ -100,10 +104,11 @@ public final class InteractionHandler {
 		private final EnterLongDetector enterLongDetector;
 		private final LeaveLongDetector leaveLongDetector;
 		private final ClickDetector clickDetector;
+		private final DoubleClickDetector doubleClickDetector;
 		
 		public EventDetector() {
 			super();
-			
+
 			pressDetector = new PressDetector();
 			releaseDetector = new ReleaseDetector();
 			longPressDetector = new LongPressDetector();
@@ -112,50 +117,55 @@ public final class InteractionHandler {
 			enterLongDetector = new EnterLongDetector();
 			leaveLongDetector = new LeaveLongDetector();
 			clickDetector = new ClickDetector();
+			doubleClickDetector = new DoubleClickDetector();
 		}
-		
+
 		public void update() {
-			if(isHover) {
-				leaveTime = 0;
+			if (isHover) {
+				leaveTime = -1;
 				updateEnterTime();
 			} else {
-				enterTime = 0;
+				enterTime = -1;
 				updateLeaveTime();
 			}
 		}
-		
+
 		public boolean isPress() {
 			return pressDetector.isDetected();
 		}
-		
+
 		public boolean isRelease() {
 			return releaseDetector.isDetected();
 		}
-		
+
 		public boolean isLongPress() {
 			return longPressDetector.isDetected();
 		}
-		
+
 		public boolean isEnter() {
 			return enterDetector.isDetected();
 		}
-		
+
 		public boolean isLeave() {
 			return leaveDetector.isDetected();
 		}
-		
+
 		public boolean isEnterLong() {
 			return enterLongDetector.isDetected();
 		}
-		
+
 		public boolean isLeaveLong() {
 			return leaveLongDetector.isDetected();
 		}
-		
+
 		public boolean isClick() {
 			return clickDetector.isDetected();
 		}
 		
+		public boolean isDoubleClick() {
+			return doubleClickDetector.isDetected();
+		}
+
 		public boolean isPressed() {
 			return isHover && MicroUI.getContext().mousePressed;
 		}
@@ -163,63 +173,62 @@ public final class InteractionHandler {
 		public boolean isReleased() {
 			return !isPressed();
 		}
-		
+
 		public boolean isLongPressed() {
-			if(isPressed() && System.currentTimeMillis()-pressDetector.getNowPressTime()  >= longPressDetector.getLongPressThreshold()) {
+			if (isPressed() && System.currentTimeMillis() - pressDetector.getNowPressTime() >= longPressDetector
+					.getLongPressThreshold()) {
 				return true;
 			}
-			
+
 			return false;
 		}
-		
+
 		public boolean isHover() {
-			
+
 			int mx = MicroUI.getContext().mouseX;
 			int my = MicroUI.getContext().mouseY;
-			
+
 			int cx = (int) component.getPadX();
 			int cy = (int) component.getPadY();
 			int cw = (int) component.getPadWidth();
 			int ch = (int) component.getPadHeight();
-			
-			isHover = (mx > cx && mx < cx+cw && my > cy && my < cy+ch);
-			
+
+			isHover = (mx > cx && mx < cx + cw && my > cy && my < cy + ch);
+
 			return isHover;
 		}
-		
+
 		private void updateEnterTime() {
-			if(enterTime == 0) {
+			if (enterTime == -1) {
 				enterTime = System.currentTimeMillis();
 			}
 		}
-		
+
 		private void updateLeaveTime() {
-			if(leaveTime == 0) {
+			if (leaveTime == -1) {
 				leaveTime = System.currentTimeMillis();
 			}
 		}
-		
+
 		private final class PressDetector {
 			private boolean isPressHookCalled;
-			private long prevPressTime,nowPressTime;
-			
+			private long prevPressTime, nowPressTime;
+
 			public PressDetector() {
 				super();
 				prevPressTime = nowPressTime = System.currentTimeMillis();
 			}
 
-
-
 			public boolean isDetected() {
-				if(!MicroUI.getContext().mousePressed) {
+				if (!MicroUI.getContext().mousePressed) {
 					isPressHookCalled = false;
 				}
-				
-				if(!isPressHookCalled && isHover() && isPressed()) {
-				isPressHookCalled = true;
-				prevPressTime = nowPressTime;
-				nowPressTime = System.currentTimeMillis();
-				return true;
+
+				if (!isPressHookCalled && isHover() && isPressed()) {
+					isPressHookCalled = true;
+					prevPressTime = nowPressTime;
+					nowPressTime = System.currentTimeMillis();
+					return true;
 				}
 				return false;
 			}
@@ -233,125 +242,131 @@ public final class InteractionHandler {
 			}
 
 		}
-		
+
 		private final class ReleaseDetector {
 			private boolean isReleaseHookCalled;
-			
+
 			public ReleaseDetector() {
 				isReleaseHookCalled = true;
 			}
-			
+
 			public boolean isDetected() {
-				if(isPressed()) {
+				if (isPressed()) {
 					isReleaseHookCalled = false;
 				}
-				
-				if(!MicroUI.getContext().mousePressed && !isReleaseHookCalled) {
+
+				if (!MicroUI.getContext().mousePressed && !isReleaseHookCalled) {
 					isReleaseHookCalled = true;
 					return true;
 				}
-				
+
 				return false;
 			}
-			
+
 		}
-		
+
 		private final class LongPressDetector {
 			private boolean isLongPressHookCalled;
 			private long longPressThreshold;
-			
-			
+
 			public LongPressDetector() {
 				super();
 				longPressThreshold = DEFAULT_THRESHOLD;
 			}
 
 			public boolean isDetected() {
-				if(!MicroUI.getContext().mousePressed) {	
+				if (!MicroUI.getContext().mousePressed) {
 					isLongPressHookCalled = false;
 				}
-				
-				if(!isLongPressHookCalled && isPressed() && System.currentTimeMillis()-pressDetector.getNowPressTime()  >= longPressThreshold) {
+
+				if (!isLongPressHookCalled && isPressed()
+						&& System.currentTimeMillis() - pressDetector.getNowPressTime() >= longPressThreshold) {
 					isLongPressHookCalled = true;
 					return true;
 				}
-				
+
 				return false;
 			}
-			
+
 			public long getLongPressThreshold() {
 				return longPressThreshold;
 			}
 		}
-		
+
 		private final class EnterDetector {
 			private boolean isEnterHookCalled;
-			
+
 			public boolean isDetected() {
-				if(!isHover()) { isEnterHookCalled = false; }
-				
-				if(!isEnterHookCalled) {
-					if(isHover()) {
+				if (!isHover()) {
+					isEnterHookCalled = false;
+				}
+
+				if (!isEnterHookCalled) {
+					if (isHover()) {
 						isEnterHookCalled = true;
 						return true;
 					}
 				}
-				
+
 				return false;
 			}
 		}
-		
+
 		private final class LeaveDetector {
 			private boolean isLeaveHookCalled;
-			
+
 			public LeaveDetector() {
 				super();
 				isLeaveHookCalled = true;
 			}
 
 			public boolean isDetected() {
-				if(isHover()) { isLeaveHookCalled = false; }
-				
-				if(!isLeaveHookCalled) {
-					if(!isHover()) {
+				if (isHover()) {
+					isLeaveHookCalled = false;
+				}
+
+				if (!isLeaveHookCalled) {
+					if (!isHover()) {
 						isLeaveHookCalled = true;
 						return true;
 					}
 				}
-				
+
 				return false;
 			}
-			
+
 		}
-		
+
 		private final class EnterLongDetector {
 			private boolean isEnterLongHookCalled;
 			private long enterLongThreshold;
-			
+
 			public EnterLongDetector() {
 				super();
 				enterLongThreshold = DEFAULT_THRESHOLD;
 			}
 
 			public boolean isDetected() {
-				if(!isHover()) { isEnterLongHookCalled = false; }
-				
-				if(!isEnterLongHookCalled) {
-					if(isHover() && System.currentTimeMillis()-enterTime >= enterLongThreshold) {
+				if (!isHover()) {
+					isEnterLongHookCalled = false;
+				}
+
+				if (!isEnterLongHookCalled) {
+					if (isHover() && System.currentTimeMillis() - enterTime >= enterLongThreshold) {
 						isEnterLongHookCalled = true;
 						return true;
 					}
 				}
-				
+
 				return false;
 			}
-			
+
 		}
-		
+
 		private final class LeaveLongDetector {
 			private boolean isLeaveLongHookCalled;
 			private long leaveLongThreshold;
-			
+
 			public LeaveLongDetector() {
 				super();
 				leaveLongThreshold = DEFAULT_THRESHOLD;
@@ -359,38 +374,69 @@ public final class InteractionHandler {
 			}
 
 			public boolean isDetected() {
-				if(isHover()) { isLeaveLongHookCalled = false; }
-				
-				if(!isLeaveLongHookCalled) {
-					if(!isHover() && System.currentTimeMillis()-leaveTime >= leaveLongThreshold) {
+				if (isHover()) {
+					isLeaveLongHookCalled = false;
+				}
+
+				if (!isLeaveLongHookCalled) {
+					if (!isHover() && System.currentTimeMillis() - leaveTime >= leaveLongThreshold) {
 						isLeaveLongHookCalled = true;
 						return true;
 					}
 				}
-				
+
 				return false;
 			}
-			
+
 		}
-		
+
 		private final class ClickDetector {
-			private boolean isPressed,isHover,isCanCallHook;
-			
+			private boolean isPressed, isHover, isCanCallHook;
+
 			public boolean isDetected() {
 				isPressed = isPressed();
 				isHover = isHover();
-				
-				if(isCanCallHook && !isPressed && isHover) {
+
+				if (isCanCallHook && !isPressed && isHover) {
 					isCanCallHook = false;
 					return true;
 				}
-				
-				if(isPressed) {
+
+				if (isPressed) {
 					isCanCallHook = true;
 				}
-				
-				if(!isHover) {
+
+				if (!isHover) {
 					isCanCallHook = false;
+				}
+
+				return false;
+			}
+		}
+
+		private final class DoubleClickDetector {
+			private ClickDetector clickDetector;
+			private long threshold;
+			private int clickCount;
+
+			public DoubleClickDetector() {
+				super();
+				threshold = DEFAULT_DOUBLE_CLICK_THRESHOLD;
+				clickDetector = new ClickDetector();
+			}
+
+			public boolean isDetected() {	
+				if(System.currentTimeMillis()-pressDetector.getNowPressTime() > threshold) {
+					clickCount = 0;
+				}
+				
+				if(clickDetector.isDetected()) {
+					clickCount++;
+				}
+				
+				if (clickCount == 2) {
+					clickCount = 0;
+					return true;
 				}
 				
 				return false;
@@ -407,12 +453,12 @@ public final class InteractionHandler {
 		}
 
 		public void dispatch(EventType eventType) {
-			if(listeners.get(eventType) != null) {
+			if (listeners.get(eventType) != null) {
 				System.out.println("dispatch called");
 				listeners.get(eventType).forEach(Listener::action);
 			}
 		}
-		
+
 		public void addListenerSafe(EventType eventType, Listener listener) {
 			if (eventType == null) {
 				throw new NullPointerException("eventType cannot be null");
@@ -425,20 +471,20 @@ public final class InteractionHandler {
 			listeners.putIfAbsent(eventType, new ArrayList<Listener>());
 			listeners.get(eventType).add(listener);
 		}
-		
+
 		public void removeListenerSafe(EventType eventType, Listener listener) {
 			if (eventType == null) {
 				throw new NullPointerException("eventType cannot be null");
 			}
-			
+
 			if (listener == null) {
 				throw new NullPointerException("listener cannot be null");
 			}
-			
-			if(listeners.get(eventType) == null || !listeners.get(eventType).contains(listener)) {
+
+			if (listeners.get(eventType) == null || !listeners.get(eventType).contains(listener)) {
 				throw new IllegalStateException("listener is not found");
 			}
-			
+
 			listeners.get(eventType).remove(listener);
 		}
 	}

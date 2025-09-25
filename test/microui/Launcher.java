@@ -48,7 +48,7 @@ public final class Launcher extends PApplet {
 
 		//cm.add(getContainerMain(),"main");
 		//cm.add(getContainerAllComponents(),"all_components");
-		cm.add(getContainerWith(new Button().onLeaveLong(() -> background(random(255)))),"Button");
+		cm.add(getContainerWith(new Button().onDoubleClick(() -> background(random(255)))),"Button");
 //		cm.add(getContainerWith(new CheckBox()),"CheckBox");
 //		//cm.add(getContainerWith(new EditText()),"EditText");
 //		cm.add(getContainerWith(new Knob()),"Knob");

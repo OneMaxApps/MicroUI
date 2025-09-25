@@ -17,7 +17,7 @@ public enum EventType {
 	LEAVE_LONG, // EDGE [1]
 
 	CLICK, // EDGE [1]
-	DOUBLE_CLICK, // EDGE  here
+	DOUBLE_CLICK, // EDGE [1]
 
 	DRAG_START, // EDGE
 	DRAGGING, // LEVEL

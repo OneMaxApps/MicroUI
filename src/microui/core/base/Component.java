@@ -193,13 +193,19 @@ public abstract class Component extends SpatialView {
 		return this;
 	}
 	
+	public final Component onDoubleClick(Listener listener) {
+		interactionHandler.addListener(EventType.DOUBLE_CLICK, listener);
+		
+		return this;
+	}
+	
 
 	public final Component onClickOld(Listener listener) {
 		callback.addListener(CLICK, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
 
-	public final Component onDoubleClick(Listener listener) {
+	public final Component onDoubleClickOld(Listener listener) {
 		callback.addListener(DOUBLE_CLICK, requireNonNull(listener, "listener cannot be null"));
 		return this;
 	}
