@@ -32,7 +32,7 @@ public final class LabeledCheckBox extends Component {
 		hover = new Hover(this);
 		hover.setColor(new Color(32,16));
 		
-		onClickOld(() -> {
+		onClick(() -> {
 			if(checkBox.isMouseOutside()) {
 				checkBox.toggle();	
 			}

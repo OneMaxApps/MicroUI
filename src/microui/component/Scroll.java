@@ -22,7 +22,7 @@ public class Scroll extends LinearRangeControl {
 		thumb.setTextVisible(false);
 		thumb.setBackgroundColor(getTheme().getPrimaryColor());
 		
-		thumb.onHold(() -> {
+		thumb.onDragging(() -> {
 			calcDistFromMouseToThumb();
 			
 			switch(getOrientation()) {
@@ -41,7 +41,7 @@ public class Scroll extends LinearRangeControl {
 			onStartChangeValue();
 		});
 		
-		thumb.onHoldEnd(() -> needRecalculateDistToThumb = true);
+		thumb.onDragEnd(() -> needRecalculateDistToThumb = true);
 		
 		setThumbSizeRatio(.1f);
 		

@@ -75,6 +75,19 @@ public final class InteractionHandler {
 		if (detector.isDoubleClick()) {
 			dispatcher.dispatch(EventType.DOUBLE_CLICK);
 		}
+		
+		if (detector.isDragStart()) {
+			dispatcher.dispatch(EventType.DRAG_START);
+		}
+		
+		if (detector.isDragging()) {
+			dispatcher.dispatch(EventType.DRAGGING);
+		}
+		
+		if (detector.isDragEnd()) {
+			dispatcher.dispatch(EventType.DRAG_END);
+		}
+		
 
 		if (detector.isHover()) {
 			dispatcher.dispatch(EventType.HOVER);
@@ -88,6 +101,38 @@ public final class InteractionHandler {
 
 	public void removeListener(EventType eventType, Listener listener) {
 		dispatcher.removeListenerSafe(eventType, listener);
+	}
+	
+	public long getEnterLongThreshold() {
+		return detector.enterLongDetector.getEnterLongThreshold();
+	}
+
+	public void setEnterLongThreshold(long enterLongThreshold) {
+		detector.enterLongDetector.setEnterLongThreshold(enterLongThreshold);
+	}
+	
+	public long getLongPressThreshold() {
+		return detector.longPressDetector.getLongPressThreshold();
+	}
+
+	public void setLongPressThreshold(long longPressThreshold) {
+		detector.longPressDetector.setLongPressThreshold(longPressThreshold);
+	}
+	
+	public long getLeaveLongThreshold() {
+		return detector.leaveLongDetector.getLeaveLongThreshold();
+	}
+
+	public void setLeaveLongThreshold(long leaveLongThreshold) {
+		detector.leaveLongDetector.setLeaveLongThreshold(leaveLongThreshold);
+	}
+	
+	public long getDoubleClickThreshold() {
+		return detector.doubleClickDetector.getThreshold();
+	}
+
+	public void setDoubleClickThreshold(long threshold) {
+		detector.doubleClickDetector.setThreshold(threshold);
 	}
 
 	private class EventDetector {
@@ -105,6 +150,9 @@ public final class InteractionHandler {
 		private final LeaveLongDetector leaveLongDetector;
 		private final ClickDetector clickDetector;
 		private final DoubleClickDetector doubleClickDetector;
+		private final DragStartDetector dragStartDetector;
+		private final DraggingDetector draggingDetector;
+		private final DragEndDetector dragEndDetector;
 		
 		public EventDetector() {
 			super();
@@ -118,15 +166,16 @@ public final class InteractionHandler {
 			leaveLongDetector = new LeaveLongDetector();
 			clickDetector = new ClickDetector();
 			doubleClickDetector = new DoubleClickDetector();
+			dragStartDetector = new DragStartDetector();
+			draggingDetector = new DraggingDetector();
+			dragEndDetector = new DragEndDetector();
 		}
 
 		public void update() {
 			if (isHover) {
-				leaveTime = -1;
-				updateEnterTime();
-			} else {
-				enterTime = -1;
 				updateLeaveTime();
+			} else {
+				updateEnterTime();
 			}
 		}
 
@@ -165,6 +214,18 @@ public final class InteractionHandler {
 		public boolean isDoubleClick() {
 			return doubleClickDetector.isDetected();
 		}
+		
+		public boolean isDragStart() {
+			return dragStartDetector.isDetected();
+		}
+		
+		public boolean isDragging() {
+			return draggingDetector.isDetected();
+		}
+		
+		public boolean isDragEnd() {
+			return dragEndDetector.isDetected();
+		}
 
 		public boolean isPressed() {
 			return isHover && MicroUI.getContext().mousePressed;
@@ -175,7 +236,7 @@ public final class InteractionHandler {
 		}
 
 		public boolean isLongPressed() {
-			if (isPressed() && System.currentTimeMillis() - pressDetector.getNowPressTime() >= longPressDetector
+			if (isPressed() && System.currentTimeMillis() - pressDetector.getPressTime() >= longPressDetector
 					.getLongPressThreshold()) {
 				return true;
 			}
@@ -199,24 +260,20 @@ public final class InteractionHandler {
 		}
 
 		private void updateEnterTime() {
-			if (enterTime == -1) {
 				enterTime = System.currentTimeMillis();
-			}
 		}
 
 		private void updateLeaveTime() {
-			if (leaveTime == -1) {
 				leaveTime = System.currentTimeMillis();
-			}
 		}
 
 		private final class PressDetector {
 			private boolean isPressHookCalled;
-			private long prevPressTime, nowPressTime;
+			private long pressTime;
 
 			public PressDetector() {
 				super();
-				prevPressTime = nowPressTime = System.currentTimeMillis();
+				pressTime = System.currentTimeMillis();
 			}
 
 			public boolean isDetected() {
@@ -226,28 +283,25 @@ public final class InteractionHandler {
 
 				if (!isPressHookCalled && isHover() && isPressed()) {
 					isPressHookCalled = true;
-					prevPressTime = nowPressTime;
-					nowPressTime = System.currentTimeMillis();
+					pressTime = System.currentTimeMillis();
 					return true;
 				}
 				return false;
 			}
 
-			public long getPrevPressTime() {
-				return prevPressTime;
-			}
-
-			public long getNowPressTime() {
-				return nowPressTime;
+			public long getPressTime() {
+				return pressTime;
 			}
 
 		}
 
 		private final class ReleaseDetector {
 			private boolean isReleaseHookCalled;
-
+			private long releaseTime;
+			
 			public ReleaseDetector() {
 				isReleaseHookCalled = true;
+				releaseTime = System.currentTimeMillis();
 			}
 
 			public boolean isDetected() {
@@ -257,12 +311,17 @@ public final class InteractionHandler {
 
 				if (!MicroUI.getContext().mousePressed && !isReleaseHookCalled) {
 					isReleaseHookCalled = true;
+					releaseTime = System.currentTimeMillis();
 					return true;
 				}
 
 				return false;
 			}
 
+			public long getReleaseTime() {
+				return releaseTime;
+			}
+			
 		}
 
 		private final class LongPressDetector {
@@ -280,7 +339,7 @@ public final class InteractionHandler {
 				}
 
 				if (!isLongPressHookCalled && isPressed()
-						&& System.currentTimeMillis() - pressDetector.getNowPressTime() >= longPressThreshold) {
+						&& System.currentTimeMillis() - pressDetector.getPressTime() >= longPressThreshold) {
 					isLongPressHookCalled = true;
 					return true;
 				}
@@ -291,6 +350,16 @@ public final class InteractionHandler {
 			public long getLongPressThreshold() {
 				return longPressThreshold;
 			}
+
+			public void setLongPressThreshold(long longPressThreshold) {
+				if(longPressThreshold < 0) {
+					throw new IllegalArgumentException("long press threshold cannot be less than 0");
+				}
+				
+				this.longPressThreshold = longPressThreshold;
+			}
+			
+			
 		}
 
 		private final class EnterDetector {
@@ -344,21 +413,34 @@ public final class InteractionHandler {
 			public EnterLongDetector() {
 				super();
 				enterLongThreshold = DEFAULT_THRESHOLD;
+				isEnterLongHookCalled = false;
 			}
 
 			public boolean isDetected() {
+				
 				if (!isHover()) {
 					isEnterLongHookCalled = false;
 				}
 
 				if (!isEnterLongHookCalled) {
-					if (isHover() && System.currentTimeMillis() - enterTime >= enterLongThreshold) {
+					if (isHover() && System.currentTimeMillis()-enterTime >= enterLongThreshold) {
 						isEnterLongHookCalled = true;
 						return true;
 					}
 				}
 
 				return false;
+			}
+
+			public long getEnterLongThreshold() {
+				return enterLongThreshold;
+			}
+
+			public void setEnterLongThreshold(long enterLongThreshold) {
+				if(enterLongThreshold < 0) {
+					throw new IllegalArgumentException("enter long threshold cannot be less than 0");
+				}
+				this.enterLongThreshold = enterLongThreshold;
 			}
 
 		}
@@ -386,6 +468,18 @@ public final class InteractionHandler {
 				}
 
 				return false;
+			}
+
+			public long getLeaveLongThreshold() {
+				return leaveLongThreshold;
+			}
+
+			public void setLeaveLongThreshold(long leaveLongThreshold) {
+				if(leaveLongThreshold < 0) {
+					throw new IllegalArgumentException("leave long threshold cannot be less than 0");
+				}
+				
+				this.leaveLongThreshold = leaveLongThreshold;
 			}
 
 		}
@@ -426,7 +520,7 @@ public final class InteractionHandler {
 			}
 
 			public boolean isDetected() {	
-				if(System.currentTimeMillis()-pressDetector.getNowPressTime() > threshold) {
+				if(System.currentTimeMillis()-releaseDetector.getReleaseTime() > threshold) {
 					clickCount = 0;
 				}
 				
@@ -441,8 +535,96 @@ public final class InteractionHandler {
 				
 				return false;
 			}
+
+			public long getThreshold() {
+				return threshold;
+			}
+
+			public void setThreshold(long threshold) {
+				if(threshold < 0) {
+					throw new IllegalArgumentException("double click threshold cannot be less than 0");
+				}
+				this.threshold = threshold;
+			}
+			
 		}
-	}
+		
+		private final class DragStartDetector {
+			private boolean isHookCalled;
+			
+			public boolean isDetected() {
+				if(!MicroUI.getContext().mousePressed) { isHookCalled = false; }
+				
+				if(!isHookCalled && isPressed() && isMouseMoved()) {
+					isHookCalled = true;
+					return true;
+				}
+				
+				return false;
+			}
+			
+			private boolean isMouseMoved() {
+				int mx = MicroUI.getContext().mouseX;
+				int my = MicroUI.getContext().mouseY;
+				int pmx = MicroUI.getContext().pmouseX;
+				int pmy = MicroUI.getContext().pmouseY;
+				
+				return mx != pmx || my != pmy;
+			}
+		}
+		
+		private final class DraggingDetector {
+			private final DragStartDetector dragStartDetector;
+			
+			private boolean isDragging;
+			
+			public DraggingDetector() {
+				super();
+				dragStartDetector = new DragStartDetector();
+			}
+
+			public boolean isDetected() {
+				if(dragStartDetector.isDetected()) {
+					isDragging = true;
+				}
+				
+				if(!MicroUI.getContext().mousePressed) {
+					isDragging = false;
+				}
+				
+				return isDragging;
+			}
+			
+			
+		}
+		
+		private final class DragEndDetector {
+			private final DragStartDetector dragStartDetector;
+			private boolean isDragEnd;
+			
+			public DragEndDetector() {
+				super();
+				this.dragStartDetector = new DragStartDetector();
+			}
+			
+			public boolean isDetected() {
+				
+				
+				if(dragStartDetector.isDetected()) {
+					isDragEnd = true;
+				}
+				
+				if(!dragStartDetector.isDetected() && isDragEnd && !MicroUI.getContext().mousePressed) {
+					isDragEnd = false;
+					return true;
+				}
+				
+				return false;
+			}
+			
+			
+		}
+}
 
 	private final class EventDispatcher {
 		private final EnumMap<EventType, ArrayList<Listener>> listeners;
@@ -454,7 +636,6 @@ public final class InteractionHandler {
 
 		public void dispatch(EventType eventType) {
 			if (listeners.get(eventType) != null) {
-				System.out.println("dispatch called");
 				listeners.get(eventType).forEach(Listener::action);
 			}
 		}

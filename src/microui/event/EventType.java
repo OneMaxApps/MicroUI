@@ -19,9 +19,9 @@ public enum EventType {
 	CLICK, // EDGE [1]
 	DOUBLE_CLICK, // EDGE [1]
 
-	DRAG_START, // EDGE
-	DRAGGING, // LEVEL
-	DRAG_END, // EDGE
+	DRAG_START, // EDGE [1]
+	DRAGGING, // LEVEL [1]
+	DRAG_END, // EDGE [1]
 	
 	HOVER; // LEVEL [1]
 }

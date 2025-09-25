@@ -2,19 +2,6 @@ package microui.core.base;
 
 import static java.util.Objects.requireNonNull;
 import static microui.core.style.theme.ThemeManager.getTheme;
-import static microui.event.EventTypeOld.CLICK;
-import static microui.event.EventTypeOld.DOUBLE_CLICK;
-import static microui.event.EventTypeOld.DRAGGED;
-import static microui.event.EventTypeOld.DRAGGING;
-import static microui.event.EventTypeOld.HOLD_END;
-import static microui.event.EventTypeOld.HOLD_START;
-import static microui.event.EventTypeOld.LONG_PRESSED;
-import static microui.event.EventTypeOld.MOUSE_INSIDE;
-import static microui.event.EventTypeOld.MOUSE_INSIDE_LONG;
-import static microui.event.EventTypeOld.MOUSE_OUTSIDE;
-import static microui.event.EventTypeOld.PRESS;
-import static microui.event.EventTypeOld.RELEASE;
-import static microui.event.EventTypeOld.SHAKE;
 
 import microui.MicroUI;
 import microui.core.style.Color;
@@ -26,7 +13,7 @@ import microui.event.Listener;
 import microui.feedback.Tooltip;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 20.09.2025
+//Last Reviewed: 26.09.2025
 public abstract class Component extends SpatialView {
 	private final Padding padding;
 	private final Margin margin;
@@ -199,70 +186,21 @@ public abstract class Component extends SpatialView {
 		return this;
 	}
 	
-
-	public final Component onClickOld(Listener listener) {
-		callback.addListener(CLICK, requireNonNull(listener, "listener cannot be null"));
+	public final Component onDragStart(Listener listener) {
+		interactionHandler.addListener(EventType.DRAG_START, listener);
+		
 		return this;
 	}
-
-	public final Component onDoubleClickOld(Listener listener) {
-		callback.addListener(DOUBLE_CLICK, requireNonNull(listener, "listener cannot be null"));
-		return this;
-	}
-
-	public final Component onDragged(Listener listener) {
-		callback.addListener(DRAGGED, requireNonNull(listener, "listener cannot be null"));
-		return this;
-	}
-
+	
 	public final Component onDragging(Listener listener) {
-		callback.addListener(DRAGGING, requireNonNull(listener, "listener cannot be null"));
+		interactionHandler.addListener(EventType.DRAGGING, listener);
+		
 		return this;
 	}
-
-	public final Component onHold(Listener listener) {
-		callback.addListener(HOLD_START, requireNonNull(listener, "listener cannot be null"));
-		return this;
-	}
-
-	public final Component onMouseInside(Listener listener) {
-		callback.addListener(MOUSE_INSIDE, requireNonNull(listener, "listener cannot be null"));
-		return this;
-	}
-
-	public final Component onMouseInsideLong(Listener listener) {
-
-		callback.addListener(MOUSE_INSIDE_LONG, requireNonNull(listener, "listener cannot be null"));
-		return this;
-	}
-
-	public final Component onMouseOutside(Listener listener) {
-		callback.addListener(MOUSE_OUTSIDE, requireNonNull(listener, "listener cannot be null"));
-		return this;
-	}
-
-	public final Component onLongPressOld(Listener listener) {
-		callback.addListener(LONG_PRESSED, requireNonNull(listener, "listener cannot be null"));
-		return this;
-	}
-
-	public final Component onPressOld(Listener listener) {
-		callback.addListener(PRESS, requireNonNull(listener, "listener cannot be null"));
-		return this;
-	}
-
-	public final Component onReleaseOld(Listener listener) {
-		callback.addListener(RELEASE, requireNonNull(listener, "listener cannot be null"));
-		return this;
-	}
-
-	public final Component onHoldEnd(Listener listener) {
-		callback.addListener(HOLD_END, requireNonNull(listener, "listener cannot be null"));
-		return this;
-	}
-
-	public final Component onShake(Listener listener) {
-		callback.addListener(SHAKE, requireNonNull(listener, "listener cannot be null"));
+	
+	public final Component onDragEnd(Listener listener) {
+		interactionHandler.addListener(EventType.DRAG_END, listener);
+		
 		return this;
 	}
 

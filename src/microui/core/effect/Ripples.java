@@ -93,7 +93,7 @@ public final class Ripples extends View {
 	}
 	
 	private void initCallbackForComponent() {
-		component.onClickOld(() -> {
+		component.onClick(() -> {
 			if (pg == null) {
 				createGraphics();
 				animation.recalculateMaxRadius();

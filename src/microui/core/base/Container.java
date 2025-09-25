@@ -125,7 +125,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 
 	public Container addComponent(Component component, LayoutParams layoutParams, int id, Listener onClickListener) {
 		addComponent(component, layoutParams, id);
-		component.onClickOld(onClickListener);
+		component.onClick(onClickListener);
 		return this;
 	}
 
@@ -137,7 +137,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 
 	public Container addComponent(Component component, LayoutParams layoutParams, String textId,Listener onClickListener) {
 		addComponent(component, layoutParams, textId);
-		component.onClickOld(onClickListener);
+		component.onClick(onClickListener);
 		return this;
 	}
 
@@ -148,7 +148,7 @@ public final class Container extends Component implements KeyPressable, Scrollab
 
 	public Container addComponent(Component component, LayoutParams layoutParams, Listener onClickListener) {
 		addComponent(component, layoutParams);
-		component.onClickOld(onClickListener);
+		component.onClick(onClickListener);
 		return this;
 	}
 

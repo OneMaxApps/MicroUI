@@ -46,18 +46,18 @@ public final class Launcher extends PApplet {
 
 		cm = ContainerManager.getInstance();
 
-		//cm.add(getContainerMain(),"main");
-		//cm.add(getContainerAllComponents(),"all_components");
-		cm.add(getContainerWith(new Button().onDoubleClick(() -> background(random(255)))),"Button");
-//		cm.add(getContainerWith(new CheckBox()),"CheckBox");
-//		//cm.add(getContainerWith(new EditText()),"EditText");
-//		cm.add(getContainerWith(new Knob()),"Knob");
-//		cm.add(getContainerWith(new LabeledCheckBox()),"LabeledCheckBox");
-//		cm.add(getContainerWith(new MenuButton()),"MenuButton");
-//		cm.add(getContainerWith(new Scroll()),"Scroll");
-//		cm.add(getContainerWith(new Slider()),"Slider");
-//		cm.add(getContainerWith(new TextField()),"TextField");
-//		cm.add(getContainerWith(new TextView()),"TextView");
+		cm.add(getContainerMain(),"main");
+		cm.add(getContainerAllComponents(),"all_components");
+		cm.add(getContainerWith(new Button().onDragEnd(() -> background(random(255)))),"Button");
+		cm.add(getContainerWith(new CheckBox()),"CheckBox");
+		//cm.add(getContainerWith(new EditText()),"EditText");
+		cm.add(getContainerWith(new Knob()),"Knob");
+		cm.add(getContainerWith(new LabeledCheckBox()),"LabeledCheckBox");
+		cm.add(getContainerWith(new MenuButton()),"MenuButton");
+		cm.add(getContainerWith(new Scroll()),"Scroll");
+		cm.add(getContainerWith(new Slider()),"Slider");
+		cm.add(getContainerWith(new TextField()),"TextField");
+		cm.add(getContainerWith(new TextView()),"TextView");
 		
 	}
 
@@ -97,16 +97,16 @@ public final class Launcher extends PApplet {
 		MenuButton menuButtonOfComponents;
 		ContainerMenuItem.addComponent(menuButtonOfComponents = new MenuButton("show component","Button","CheckBox","EditText","Knob","LabeledCheckBox","MenuButton","Scroll","Slider","TextField","TextView"), new ColumnLayoutParams(.2f));
 		
-		menuButtonOfComponents.getItem("Button").onClickOld(() -> cm.switchOn("Button"));
-		menuButtonOfComponents.getItem("CheckBox").onClickOld(() -> cm.switchOn("CheckBox"));
-		menuButtonOfComponents.getItem("EditText").onClickOld(() -> cm.switchOn("EditText"));
-		menuButtonOfComponents.getItem("Knob").onClickOld(() -> cm.switchOn("Knob"));
-		menuButtonOfComponents.getItem("LabeledCheckBox").onClickOld(() -> cm.switchOn("LabeledCheckBox"));
-		menuButtonOfComponents.getItem("MenuButton").onClickOld(() -> cm.switchOn("MenuButton"));
-		menuButtonOfComponents.getItem("Scroll").onClickOld(() -> cm.switchOn("Scroll"));
-		menuButtonOfComponents.getItem("Slider").onClickOld(() -> cm.switchOn("Slider"));
-		menuButtonOfComponents.getItem("TextField").onClickOld(() -> cm.switchOn("TextField"));
-		menuButtonOfComponents.getItem("TextView").onClickOld(() -> cm.switchOn("TextView"));
+		menuButtonOfComponents.getItem("Button").onClick(() -> cm.switchOn("Button"));
+		menuButtonOfComponents.getItem("CheckBox").onClick(() -> cm.switchOn("CheckBox"));
+		menuButtonOfComponents.getItem("EditText").onClick(() -> cm.switchOn("EditText"));
+		menuButtonOfComponents.getItem("Knob").onClick(() -> cm.switchOn("Knob"));
+		menuButtonOfComponents.getItem("LabeledCheckBox").onClick(() -> cm.switchOn("LabeledCheckBox"));
+		menuButtonOfComponents.getItem("MenuButton").onClick(() -> cm.switchOn("MenuButton"));
+		menuButtonOfComponents.getItem("Scroll").onClick(() -> cm.switchOn("Scroll"));
+		menuButtonOfComponents.getItem("Slider").onClick(() -> cm.switchOn("Slider"));
+		menuButtonOfComponents.getItem("TextField").onClick(() -> cm.switchOn("TextField"));
+		menuButtonOfComponents.getItem("TextView").onClick(() -> cm.switchOn("TextView"));
 		
 		container.addComponent(ContainerMenuItem, new GridLayoutParams(0,0));
 		
