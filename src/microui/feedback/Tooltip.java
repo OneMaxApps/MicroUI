@@ -7,8 +7,8 @@ import microui.core.TextController;
 import microui.core.base.Container;
 import microui.core.base.SpatialView;
 import microui.core.style.Color;
-import microui.event.CallbackOld;
-import microui.event.EventTypeOld;
+import microui.event.EventType;
+import microui.event.InteractionHandler;
 import microui.service.GlobalTooltip;
 
 
@@ -20,33 +20,33 @@ public final class Tooltip extends SpatialView {
 	private Container container;
 	private boolean canBeVisible,additionalCondition,isEnabled;
 	
-	public Tooltip(CallbackOld callback) {
+	public Tooltip(InteractionHandler interactionHandle) {
 
 		color = GlobalTooltip.DEFAULT_COLOR;
 		
 		text = new Text();
 		
-		callback.addListener(EventTypeOld.MOUSE_INSIDE_LONG, () -> {
+		interactionHandle.addListener(EventType.ENTER_LONG, () -> {
 			canBeVisible = additionalCondition && (!text.isEmpty() || container != null);
 		});
 		
-		callback.addListener(EventTypeOld.MOUSE_OUTSIDE, () -> {
+		interactionHandle.addListener(EventType.LEAVE, () -> {
 			if(canBeVisible) {
-				callback.resetInsideTimer();
+//				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
 		
-		callback.addListener(EventTypeOld.SHAKE, () -> {
-			if(canBeVisible) {
-				callback.resetInsideTimer();
-				canBeVisible = false;
-			}
-		});
+//		interactionHandle.addListener(EventTypeOld.SHAKE, () -> {
+//			if(canBeVisible) {
+//				callback.resetInsideTimer();
+//				canBeVisible = false;
+//			}
+//		});
 		
-		callback.addListener(EventTypeOld.PRESS, () -> {
+		interactionHandle.addListener(EventType.PRESS, () -> {
 			if(canBeVisible) {
-				callback.resetInsideTimer();
+//				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
@@ -79,30 +79,30 @@ public final class Tooltip extends SpatialView {
 		this.isEnabled = isEnabled;
 	}
 	
-	public final void setCallbacksFor(CallbackOld callback) {
-		if(callback == null) { return; }
+	public final void setCallbacksFor(InteractionHandler interactionHandle) {
+		if(interactionHandle == null) { return; }
 		
-		callback.addListener(EventTypeOld.MOUSE_INSIDE_LONG, () -> {
+		interactionHandle.addListener(EventType.ENTER_LONG, () -> {
 			canBeVisible = additionalCondition && (!text.isEmpty() || container != null);
 		});
 		
-		callback.addListener(EventTypeOld.MOUSE_OUTSIDE, () -> {
+		interactionHandle.addListener(EventType.LEAVE, () -> {
 			if(canBeVisible) {
-				callback.resetInsideTimer();
+//				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});
 		
-		callback.addListener(EventTypeOld.SHAKE, () -> {
-			if(canBeVisible) {
-				callback.resetInsideTimer();
-				canBeVisible = false;
-			}
-		});
+//		interactionHandle.addListener(EventTypeOld.SHAKE, () -> {
+//			if(canBeVisible) {
+//				callback.resetInsideTimer();
+//				canBeVisible = false;
+//			}
+//		});
 		
-		callback.addListener(EventTypeOld.PRESS, () -> {
+		interactionHandle.addListener(EventType.PRESS, () -> {
 			if(canBeVisible) {
-				callback.resetInsideTimer();
+//				callback.resetInsideTimer();
 				canBeVisible = false;
 			}
 		});

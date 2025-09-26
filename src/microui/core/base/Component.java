@@ -5,7 +5,6 @@ import static microui.core.style.theme.ThemeManager.getTheme;
 
 import microui.MicroUI;
 import microui.core.style.Color;
-import microui.event.CallbackOld;
 import microui.event.Event;
 import microui.event.EventType;
 import microui.event.InteractionHandler;
@@ -19,7 +18,6 @@ public abstract class Component extends SpatialView {
 	private final Margin margin;
 	private final Color backgroundColor;
 	private final Event event;
-	private final CallbackOld callback;
 	private final InteractionHandler interactionHandler;
 	private Tooltip tooltip;
 
@@ -33,7 +31,6 @@ public abstract class Component extends SpatialView {
 		margin = new Margin();
 		backgroundColor = getTheme().getBackgroundColor();
 		event = new Event(this);
-		callback = new CallbackOld(this);
 		interactionHandler = new InteractionHandler(this);
 		
 		setPaddingEnabled(true);
@@ -53,8 +50,6 @@ public abstract class Component extends SpatialView {
 		super.draw();
 
 		event.listen();
-
-		callback.listen();
 		
 		interactionHandler.listen();
 
@@ -495,17 +490,12 @@ public abstract class Component extends SpatialView {
 		return this;
 	}
 
-	protected final Component setCallbackListener(SpatialView bounds) {
-		callback.setListener(requireNonNull(bounds, "bounds cannot be null"));
-		return this;
-	}
-
 	protected final Color getMutableBackgroundColor() {
 		return backgroundColor;
 	}
 
 	private Tooltip getOrCreateTooltip() {
-		return tooltip == null ? tooltip = new Tooltip(callback) : tooltip;
+		return tooltip == null ? tooltip = new Tooltip(interactionHandler) : tooltip;
 	}
 
 	private void debugOnDraw() {
