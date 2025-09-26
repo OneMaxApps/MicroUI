@@ -1,7 +1,5 @@
 package microui.util;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -16,7 +14,13 @@ public final class Metrics {
 		if(object == null) {
 			throw new NullPointerException("object for registration in Metrics cannot be null");
 		}
-		metrics.put(object.getClass().getSimpleName(),metrics.getOrDefault(object.getClass().getSimpleName(), 0)+1);
+		String name = object.getClass().getSimpleName();
+		
+		if(name.isEmpty()) {
+			name = "Anonim class: "+object.getClass().getName();
+		}
+		
+		metrics.put(name,metrics.getOrDefault(name, 0)+1);
 	}
 	
 	public static void printAll() {
@@ -30,7 +34,12 @@ public final class Metrics {
 	}
 	
 	public static void print(String className) {
-		System.out.println(requireNonNull(className,"className cannot be null")+ " : " +metrics.getOrDefault(className, 0));
+		
+		if(className == null) {
+			throw new NullPointerException("the className cannot be null");
+		}
+		
+		System.out.println(className + " : " +metrics.getOrDefault(className, 0));
 	}
 	
 	public static void clear() {
