@@ -5,6 +5,7 @@ import java.util.EnumMap;
 
 import microui.MicroUI;
 import microui.core.base.Component;
+import microui.util.Metrics;
 
 public final class InteractionHandler {
 	private final EventDetector detector;
@@ -23,6 +24,8 @@ public final class InteractionHandler {
 		}
 
 		this.component = component;
+		
+		Metrics.register(this);
 	}
 
 	public void listen() {

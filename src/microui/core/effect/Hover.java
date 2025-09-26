@@ -40,7 +40,7 @@ public final class Hover extends View {
 	@Override
 	protected void render() {
 		ctx.noStroke();
-		if(component.isMouseInside()) {
+		if(component.isEnter()) {
 			if(timer < timerMax) { timer+=speed; }
 		} else {
 			if(timer > 0) { timer-=speed*2; }

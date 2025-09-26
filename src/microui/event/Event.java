@@ -1,226 +1,225 @@
 package microui.event;
 
-import static java.util.Objects.requireNonNull;
-import static microui.MicroUI.getContext;
-
 import microui.MicroUI;
 import microui.core.base.Component;
 import microui.core.base.SpatialView;
-import microui.util.Metrics;
-import processing.core.PApplet;
 
-public class Event {
-	private static PApplet app = getContext();
-	private static final int MIN_SHAKE_DIST = 3;
-	private static final boolean[] keys = new boolean[Character.MAX_VALUE + 1];
-
-	private float x, y, w, h;
-	private byte wasPressed, longPressed, clickCounter;
-	private int secondsSinceMouseInside;
-	private boolean isHolding, isDragged, isEnabled;
+public final class Event {
+	private final ClickDetector clickDetector;
+	private final DoubleClickDetector doubleClickDetector;
+	private final ReleaseDetector releaseDetector;
+	private final DraggingDetector draggingDetector;
 	private SpatialView spatialView;
-
+	
 	public Event(SpatialView spatialView) {
-		setListener(spatialView);
-		isEnabled = true;
-		Metrics.register(this);
+		super();
+		
+		clickDetector = new ClickDetector();
+		doubleClickDetector = new DoubleClickDetector();
+		releaseDetector = new ReleaseDetector();
+		draggingDetector = new DraggingDetector();
+		
+		if(spatialView == null) {
+			throw new NullPointerException("spatialView in Event cannot be null");
+		}
+		
+		this.spatialView = spatialView;
 	}
 	
-	public Event() {
-		isEnabled = true;
-		Metrics.register(this);
-	}
-
-	public final void setListener(SpatialView spatialView) {
-		this.spatialView = requireNonNull(spatialView, "spatialView cannot be null");
-	}
-
 	public void listen() {
-		if(spatialView == null) {
-			throw new NullPointerException("Event system not have object for listening");
-		}
-		if (spatialView instanceof Component component) {
-			listener(component.getPadX(), component.getPadY(), component.getPadWidth(), component.getPadHeight());
+		releaseDetector.update();
+	}
+	
+	public boolean isEnter() {
+		int mx = MicroUI.getContext().mouseX;
+		int my = MicroUI.getContext().mouseY;
+		
+		int sx,sy,sw,sh;
+		
+		if(spatialView instanceof Component c) {
+			sx = (int) c.getPadX();
+			sy = (int) c.getPadY();
+			sw = (int) c.getPadWidth();
+			sh = (int) c.getPadHeight();
 		} else {
-			listener(spatialView.getX(), spatialView.getY(), spatialView.getWidth(), spatialView.getHeight());
+			sx = (int) spatialView.getX();
+			sy = (int) spatialView.getY();
+			sw = (int) spatialView.getWidth();
+			sh = (int) spatialView.getHeight();
 		}
+		
+		return (mx > sx && mx < sx+sw) && (my > sy && my < sy+sh);
+	}
+	
+	public boolean isLeave() {
+		return !isEnter();
+	}
+	
+	public boolean isPressed() {
+		return MicroUI.getContext().mousePressed && isEnter();
+	}
+	
+	public boolean isClicked() {
+		return clickDetector.isDetected();
+	}
+	
+	public boolean isDoubleClicked() {
+		return doubleClickDetector.isDetected();
+	}
+	
+	public boolean isDragging() {
+		return draggingDetector.isDetected();
+	}
+	
+	public long getDoubleClickThreshold() {
+		return doubleClickDetector.getThreshold();
 	}
 
-	public void listen(float x, float y, float w, float h) {
-		listener(x, y, w, h);
+	public void setDoubleClickThreshold(long threshold) {
+		doubleClickDetector.setThreshold(threshold);
 	}
+	
+	private final class ClickDetector {
+		private boolean isPressed, isEnter, isCanCallHook;
 
-	private final void listener(final float x, final float y, final float w, final float h) {
-		if (!isEnabled) {
-			return;
-		}
+		public boolean isDetected() {
+			isPressed = isPressed();
+			isEnter = isEnter();
 
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
-
-		if (!app.mousePressed) {
-			isHolding = isDragged = false;
-		}
-
-		if (pressed()) {
-			wasPressed = 1;
-			if (app.frameCount % 60 == 0) {
-				longPressed++;
+			if (isCanCallHook && !isPressed && isEnter) {
+				isCanCallHook = false;
+				return true;
 			}
-		} else {
-			longPressed = 0;
-		}
 
-		if (outside()) {
-			wasPressed = 0;
-			secondsSinceMouseInside = 0;
-		}
-
-		if (isMouseShaking()) {
-			secondsSinceMouseInside = 0;
-		}
-
-	}
-
-	public final void setEnable(boolean enable) {
-		this.isEnabled = enable;
-	}
-
-	public final boolean isEnable() {
-		return isEnabled;
-	}
-
-	public static final boolean isMouseShaking() {
-		return app.mouseX - app.pmouseX > MIN_SHAKE_DIST || app.mouseY - app.pmouseY > MIN_SHAKE_DIST;
-	}
-
-	public boolean inside() {
-		if (w < 0 && h < 0) {
-			return app.mouseX > x + w && app.mouseX < x && app.mouseY > y + h && app.mouseY < y;
-		}
-
-		if (w < 0) {
-			return app.mouseX > x + w && app.mouseX < x && app.mouseY > y && app.mouseY < y + h;
-		}
-
-		if (h < 0) {
-			return app.mouseX > x && app.mouseX < x + w && app.mouseY > y + h && app.mouseY < y;
-		}
-
-		return app.mouseX > x && app.mouseX < x + w && app.mouseY > y && app.mouseY < y + h;
-	}
-
-	public boolean inside(final int targetOfSeconds) {
-
-		if (inside() && secondsSinceMouseInside != targetOfSeconds) {
-			if (app.frameCount % 60 == 0) {
-				secondsSinceMouseInside++;
+			if (isPressed) {
+				isCanCallHook = true;
 			}
-		}
 
-		return inside() && secondsSinceMouseInside == targetOfSeconds;
-	}
-
-	public boolean outside() {
-		return !inside();
-	}
-
-	public boolean pressed() {
-		return inside() && app.mousePressed;
-	}
-
-	public boolean longPressed(int seconds) {
-		if (pressed() && longPressed >= seconds) {
-			return true;
-		}
-		return false;
-	}
-
-	public boolean isHolding() {
-		if (pressed()) {
-			return isHolding = true;
-		} else {
-			return isHolding;
-		}
-
-	}
-
-	public boolean dragging() {
-		return isHolding() && (app.mouseX != app.pmouseX || app.mouseY != app.pmouseY);
-	}
-
-	public boolean dragged() {
-		if (dragging()) {
-			isDragged = true;
-		}
-
-		return isDragged;
-	}
-
-	public boolean clicked() {
-		if (inside() && !pressed() && wasPressed == 1) {
-			wasPressed = 0;
-			secondsSinceMouseInside = 0;
-			return true;
-		}
-		return false;
-	}
-
-	public boolean clicked(int count) {
-		if (count <= 0) {
-			throw new IllegalArgumentException("count cannot be less than 1");
-		}
-		if (clickCounter == count) {
-			clickCounter = 0;
-		} else {
-			if (clicked()) {
-				clickCounter++;
-			} else {
-				if (clickCounter != 0 && app.frameCount % 30 == 0) {
-					clickCounter--;
-				}
+			if (!isEnter) {
+				isCanCallHook = false;
 			}
+
+			return false;
 		}
-		return clickCounter == count;
 	}
+	
+	private final class DoubleClickDetector {
+		private static final long DEFAULT_DOUBLE_CLICK_THRESHOLD = 200;
+		private ClickDetector clickDetector;
+		private long threshold;
+		private int clickCount;
 
-	/**
-	 * Updating inside states of keys.
-	 * <p>
-	 * He must be called first in PApplet method keyPressed() for correct
-	 * initialization.
-	 * </p>
-	 */
-	public static final void keyPressed() {
-		keys[MicroUI.getContext().key] = true;
-		keys[MicroUI.getContext().keyCode] = true;
-	}
-
-	public static final boolean checkKey(int ch) {
-		return keys[ch];
-	}
-
-	/**
-	 * Updating inside states of keys.
-	 * <p>
-	 * He must be called first in PApplet method keyReleased() for correct
-	 * initialization.
-	 * </p>
-	 */
-	public static final void keyReleased() {
-		for (int i = 0; i < keys.length; i++) {
-			keys[i] = false;
+		public DoubleClickDetector() {
+			super();
+			threshold = DEFAULT_DOUBLE_CLICK_THRESHOLD;
+			clickDetector = new ClickDetector();
 		}
 
-	}
+		public boolean isDetected() {	
+			if(System.currentTimeMillis()-releaseDetector.getReleaseTime() > threshold) {
+				clickCount = 0;
+			}
+			
+			if(clickDetector.isDetected()) {
+				clickCount++;
+			}
+			
+			if (clickCount == 2) {
+				clickCount = 0;
+				return true;
+			}
+			
+			return false;
+		}
 
-	public final void resetState() {
-		keyReleased();
-		longPressed = wasPressed = clickCounter = 0;
-		secondsSinceMouseInside = 0;
-		isHolding = isDragged = false;
-	}
+		public long getThreshold() {
+			return threshold;
+		}
 
+		public void setThreshold(long threshold) {
+			if(threshold < 0) {
+				throw new IllegalArgumentException("double click threshold cannot be less than 0");
+			}
+			this.threshold = threshold;
+		}
+		
+	}
+	
+	private final class ReleaseDetector {
+		private boolean isReleaseHookCalled;
+		private long releaseTime;
+		
+		public ReleaseDetector() {
+			isReleaseHookCalled = true;
+			releaseTime = System.currentTimeMillis();
+		}
+
+		public boolean update() {
+			if (isPressed()) {
+				isReleaseHookCalled = false;
+			}
+
+			if (!MicroUI.getContext().mousePressed && !isReleaseHookCalled) {
+				isReleaseHookCalled = true;
+				releaseTime = System.currentTimeMillis();
+				return true;
+			}
+
+			return false;
+		}
+
+		public long getReleaseTime() {
+			return releaseTime;
+		}
+		
+	}
+	
+	private final class DragStartDetector {
+		private boolean isHookCalled;
+		
+		public boolean isDetected() {
+			if(!MicroUI.getContext().mousePressed) { isHookCalled = false; }
+			
+			if(!isHookCalled && isPressed() && isMouseMoved()) {
+				isHookCalled = true;
+				return true;
+			}
+			
+			return false;
+		}
+		
+		private boolean isMouseMoved() {
+			int mx = MicroUI.getContext().mouseX;
+			int my = MicroUI.getContext().mouseY;
+			int pmx = MicroUI.getContext().pmouseX;
+			int pmy = MicroUI.getContext().pmouseY;
+			
+			return mx != pmx || my != pmy;
+		}
+	}
+	
+	private final class DraggingDetector {
+		private final DragStartDetector dragStartDetector;
+		
+		private boolean isDragging;
+		
+		public DraggingDetector() {
+			super();
+			dragStartDetector = new DragStartDetector();
+		}
+
+		public boolean isDetected() {
+			if(dragStartDetector.isDetected()) {
+				isDragging = true;
+			}
+			
+			if(!MicroUI.getContext().mousePressed) {
+				isDragging = false;
+			}
+			
+			return isDragging;
+		}
+		
+		
+	}
 }

@@ -5,6 +5,7 @@ import static microui.core.style.theme.ThemeManager.getTheme;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import microui.core.base.SpatialView;
 import microui.core.interfaces.Scrollable;
 import microui.core.style.Color;
 import microui.event.Event;
@@ -331,7 +332,7 @@ public class MenuButton extends Button implements Scrollable {
 
 		inside = checkInsideToAnyIn();
 
-		if (ctx.mousePressed && isMouseOutside() && !inside) {
+		if (ctx.mousePressed && isLeave() && !inside) {
 			close();
 		}
 
@@ -339,7 +340,7 @@ public class MenuButton extends Button implements Scrollable {
 
 	private final boolean checkInsideToAnyIn() {
 		boolean insideState = false;
-		if (scrolling.event.inside()) {
+		if (scrolling.event.isEnter()) {
 			insideState = true;
 		}
 
@@ -480,28 +481,36 @@ public class MenuButton extends Button implements Scrollable {
 	}
 
 	private final class Scrolling {
-		final Event event;
+		private final Event event;
+		private final SpatialView spatial;
 		boolean enable;
 
 		Scrolling() {
-			event = new Event();
+			spatial = new SpatialView() {
+				@Override
+				protected void render() {
+				}
+			};
+			
+			event = new Event(spatial);
 			enable = true;
 		}
 
 		final void update() {
+			event.listen();
 			if (itemList.isEmpty()) {
 				return;
 			}
 
 			if (isRoot) {
-				event.listen(itemList.get(0).getX(), getY() + getHeight(), itemList.get(0).getWidth(), listHeight);
+				spatial.setBounds(itemList.get(0).getX(), getY() + getHeight(), itemList.get(0).getWidth(), listHeight);
 			} else {
-				event.listen(itemList.get(0).getX(), getY(), itemList.get(0).getWidth(), listHeight);
+				spatial.setBounds(itemList.get(0).getX(), getY(), itemList.get(0).getWidth(), listHeight);
 			}
 		}
 
 		final void init(final MouseEvent e) {
-			if (!enable || !event.inside() || itemList.size() <= 1) {
+			if (!enable || !event.isEnter() || itemList.size() <= 1) {
 				return;
 			}
 

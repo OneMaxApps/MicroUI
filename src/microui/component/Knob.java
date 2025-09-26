@@ -23,6 +23,11 @@ public final class Knob extends RangeControl {
 
 		indicatorColor = new Color(getTheme().getPrimaryColor());
 		
+		onDragging(() -> {
+			if(isMouseInDiameter()) {
+				isCanDrag = true;
+			}
+		});
 	}
 	
 	public Knob() {
@@ -37,9 +42,7 @@ public final class Knob extends RangeControl {
 		
 		indicatorOnDraw();
 		
-		if(isDragging() && isMouseInDiameter()) {
-			isCanDrag = true;
-		}
+		
 		
 		if(!ctx.mousePressed) {
 			isCanDrag = false;

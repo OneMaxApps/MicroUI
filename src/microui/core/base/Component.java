@@ -30,8 +30,8 @@ public abstract class Component extends SpatialView {
 		padding = new Padding();
 		margin = new Margin();
 		backgroundColor = getTheme().getBackgroundColor();
-		event = new Event(this);
 		interactionHandler = new InteractionHandler(this);
+		event = new Event(this);
 		
 		setPaddingEnabled(true);
 		setMarginEnabled(true);
@@ -68,41 +68,31 @@ public abstract class Component extends SpatialView {
 		this.backgroundColor.set(color);
 		return this;
 	}
-
+	
 	public final boolean isClicked() {
-		return event.clicked();
+		return event.isClicked();
 	}
 
-	public final boolean isClicked(int count) {
-		return event.clicked(count);
+	public final boolean isDoubleClicked() {
+		return event.isDoubleClicked();
 	}
-
-	public final boolean isDragged() {
-		return event.dragged();
-	}
-
-	public final boolean isDragging() {
-		return event.dragging();
-	}
-
+	
 	public final boolean isPressed() {
-		return event.pressed();
+		return event.isPressed();
 	}
 
-	public final boolean isMouseInside() {
-		return event.inside();
+	public final boolean isEnter() {
+		return event.isEnter();
 	}
 
-	public final boolean isMouseOutside() {
-		return event.outside();
+	public final boolean isLeave() {
+		return event.isLeave();
+	}
+	
+	public final boolean isDragging() {
+		return event.isDragging();
 	}
 
-	public final boolean isHolding() {
-		return event.isHolding();
-	}
-	
-	
-	
 	public final Component onHover(Listener listener) {
 		interactionHandler.addListener(EventType.HOVER, listener);
 		
@@ -482,11 +472,6 @@ public abstract class Component extends SpatialView {
 
 	protected final Component setTooltipAdditionalCondition(boolean condition) {
 		getOrCreateTooltip().setAdditionalCondition(condition);
-		return this;
-	}
-
-	protected final Component setEventListener(SpatialView bounds) {
-		event.setListener(requireNonNull(bounds, "bounds cannot be null"));
 		return this;
 	}
 

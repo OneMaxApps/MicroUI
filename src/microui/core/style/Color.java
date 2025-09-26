@@ -14,7 +14,7 @@ public final class Color {
 	
 	public Color(float red, float green, float blue, float alpha) {
 		set(red, green, blue, alpha);
-		Metrics.register("Color");
+		Metrics.register(this);
 	}
 	
 	public Color(float red, float green, float blue) {

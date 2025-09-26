@@ -18,7 +18,7 @@ public final class Stroke {
 		if(color == null) {
 			throw new NullPointerException("color cannot be null");
 		}
-		Metrics.register("Stroke");
+		Metrics.register(this);
 		this.color = new Color(color);
 		setWeight(weight);
 	}

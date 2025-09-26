@@ -15,14 +15,14 @@ import microui.core.ImageBuffer;
 import microui.core.exception.RenderException;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
-import microui.event.Event;
+import microui.event.KeyboardManager;
 import microui.service.GlobalTooltip;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 18.09.2025
+//Last Reviewed: 26.09.2025
 public final class ContainerManager extends View implements Scrollable, KeyPressable {
 	private static ContainerManager instance;
 	private final List<Container> containerList;
@@ -74,11 +74,11 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 
 	public void keyEvent(KeyEvent keyEvent) {
 		if (keyEvent.getAction() == KeyEvent.PRESS) {
-			Event.keyPressed();
+			KeyboardManager.keyPressed();
 			keyPressed();
 		}
 		if (keyEvent.getAction() == KeyEvent.RELEASE) {
-			Event.keyReleased();
+			KeyboardManager.keyReleased();
 		}
 	}
 

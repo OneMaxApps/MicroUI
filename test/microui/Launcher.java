@@ -17,6 +17,7 @@ import microui.layout.ColumnLayout;
 import microui.layout.ColumnLayoutParams;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
+import microui.util.Metrics;
 import processing.core.PApplet;
 
 
@@ -65,6 +66,7 @@ public final class Launcher extends PApplet {
 	public void draw() {
 		background(250);
 		// cm.getContainerByTextId("container_main").getComponentByTextId("edit_text").setSize(mouseX,mouseY);
+		Metrics.printAll();
 	}
 
 

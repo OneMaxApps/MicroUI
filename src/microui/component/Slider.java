@@ -18,20 +18,7 @@ public class Slider extends LinearRangeControl {
 		
 		setValue(0, 100, 0);
 
-	}
-
-	public Slider() {
-		this(0,0,0,0);
-		setWidth(getMaxWidth());
-		setPosition(ctx.width/2-getWidth()/2,ctx.height/2-getHeight()/2);
-	}
-
-	@Override
-	protected void render() {
-		super.render();
-		indicator.draw();
-
-		if (isHolding()) {
+		onDragging(() -> {
 			switch (getOrientation()) {
 			case HORIZONTAL:
 				setValue(map(ctx.mouseX, getX(), getX() + getWidth(), getMinValue(), getMaxValue()));
@@ -44,8 +31,19 @@ public class Slider extends LinearRangeControl {
 
 			onStartChangeValue();
 			onChangeValue();
+		});
+	}
 
-		}
+	public Slider() {
+		this(0,0,0,0);
+		setWidth(getMaxWidth());
+		setPosition(ctx.width/2-getWidth()/2,ctx.height/2-getHeight()/2);
+	}
+
+	@Override
+	protected void render() {
+		super.render();
+		indicator.draw();
 
 	}
 

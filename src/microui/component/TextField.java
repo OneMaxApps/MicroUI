@@ -23,7 +23,7 @@ import microui.core.base.Component;
 import microui.core.interfaces.KeyPressable;
 import microui.core.style.Color;
 import microui.core.style.Stroke;
-import microui.event.Event;
+import microui.event.KeyboardManager;
 import microui.util.Clipboard;
 import microui.util.Metrics;
 import microui.util.Value;
@@ -133,7 +133,7 @@ public final class TextField extends Component implements KeyPressable {
 			selection.reset();
 		}
 
-		if (isHolding()) {
+		if (isDragging()) {
 			if (text.isEmpty()) {
 				return;
 			}
@@ -164,7 +164,7 @@ public final class TextField extends Component implements KeyPressable {
 			selection.setStarted(false);
 		}
 
-		if (isClicked(2)) {
+		if (isDoubleClicked()) {
 			if (selection.isSelected()) {
 				selection.reset();
 			} else {
@@ -174,7 +174,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 
 	private final boolean mustNotHaveFocus() {
-		return ctx.mousePressed && isMouseOutside() && !isHolding();
+		return ctx.mousePressed && isLeave() && !isDragging();
 	}
 
 	private final void updateScrollMax() {
@@ -241,11 +241,11 @@ public final class TextField extends Component implements KeyPressable {
 
 		cursor.blink.reset();
 
-		if (Event.checkKey(CONTROL)) {
-			if (Event.checkKey(VK_C)) {
+		if (KeyboardManager.checkKey(CONTROL)) {
+			if (KeyboardManager.checkKey(VK_C)) {
 				Clipboard.set(selection.getText());
 			}
-			if (Event.checkKey(VK_V)) {
+			if (KeyboardManager.checkKey(VK_V)) {
 				if (Clipboard.isEmpty()) {
 					return;
 				}
@@ -257,7 +257,7 @@ public final class TextField extends Component implements KeyPressable {
 				}
 			}
 
-			if (Event.checkKey(VK_X)) {
+			if (KeyboardManager.checkKey(VK_X)) {
 				if (selection.isSelectedAll()) {
 					Clipboard.set(selection.getText());
 					text.clear();
@@ -272,7 +272,7 @@ public final class TextField extends Component implements KeyPressable {
 				}
 			}
 
-			if (Event.checkKey(VK_A)) {
+			if (KeyboardManager.checkKey(VK_A)) {
 				selection.selectAll();
 			}
 			return;
