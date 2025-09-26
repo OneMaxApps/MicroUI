@@ -17,7 +17,6 @@ import microui.layout.ColumnLayout;
 import microui.layout.ColumnLayoutParams;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
-import microui.util.Metrics;
 import processing.core.PApplet;
 
 
@@ -29,15 +28,14 @@ import processing.core.PApplet;
 
 public final class Launcher extends PApplet {
 	ContainerManager cm;
-
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
 
 	@Override
 	public void settings() {
-		fullScreen();
-//		size(720,480);
+//		fullScreen();
+		size(720,480);
 	}
  
 	@Override
@@ -65,8 +63,9 @@ public final class Launcher extends PApplet {
 	@Override
 	public void draw() {
 		background(250);
+
 		// cm.getContainerByTextId("container_main").getComponentByTextId("edit_text").setSize(mouseX,mouseY);
-		Metrics.printAll();
+		// Metrics.printAll();
 	}
 
 

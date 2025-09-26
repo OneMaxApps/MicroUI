@@ -21,7 +21,7 @@ public final class LabeledCheckBox extends Component {
 	public LabeledCheckBox(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setMinSize(DEFAULT_SIZE);
-		setMaxSize(ctx.width,DEFAULT_SIZE);
+		setMaxSize(ctx.width/2,DEFAULT_SIZE);
 		
 		checkBox = new CheckBox();
 		checkBox.setPriority(1);
@@ -53,12 +53,15 @@ public final class LabeledCheckBox extends Component {
 	}
 	
 	public LabeledCheckBox(String label) {
-		this(ctx.width * .3f, ctx.height * .45f, ctx.width * .4f,ctx.height * .1f);
+		this(0,0,DEFAULT_SIZE,DEFAULT_SIZE);
+		setSize(getMaxWidth(),getMaxHeight());
+		setPosition(ctx.width/2-getMaxWidth()/2,ctx.height/2-getMaxHeight()/2);
+		
 		setText(label);
 	}
 	
 	public LabeledCheckBox() {
-		this(ctx.width * .3f, ctx.height * .45f, ctx.width * .4f,ctx.height * .1f);	
+		this("");
 	}
 
 	@Override

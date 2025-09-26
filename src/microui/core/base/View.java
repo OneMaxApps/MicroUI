@@ -3,6 +3,7 @@ package microui.core.base;
 import static java.util.Objects.requireNonNull;
 import static microui.MicroUI.getContext;
 
+import microui.MicroUI;
 import microui.core.exception.RenderException;
 import microui.core.interfaces.Visible;
 import microui.util.Metrics;
@@ -122,10 +123,7 @@ public abstract class View implements Visible {
 		this.textId = textId;
 	}
 
-	/**
-	 * Abstract method for sub-classes for implementation them drawing logic 
-	 */
-	protected abstract void render();
+	
 	
 	/**
 	 * Renders the element if it is visible. Automatically manages Processing styles
@@ -135,12 +133,14 @@ public abstract class View implements Visible {
 	 * Calls the {@link #render() method} only if the element is visible.
 	 */
 	public void draw() {
-		if(!ContainerManager.isInitialized()) {
-			throw new RenderException("ContainerManager is not initialized");
-		}
-		
-		if(!ContainerManager.isCanDraw()) {
-			throw new RenderException("Cannot draw outside from ContainerManager");
+		if(!MicroUI.isFlexibleRenderModeEnabled()) {
+			if(!ContainerManager.isInitialized()) {
+				throw new RenderException("ContainerManager is not initialized");
+			}
+			
+			if(!ContainerManager.isCanDraw()) {
+				throw new RenderException("Cannot draw outside from ContainerManager");
+			}
 		}
 		
 		if (isVisible()) {
@@ -150,5 +150,10 @@ public abstract class View implements Visible {
 		}
 
 	}
+	
+	/**
+	 * Abstract method for sub-classes for implementation them drawing logic 
+	 */
+	protected abstract void render();
 
 }

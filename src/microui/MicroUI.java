@@ -14,6 +14,7 @@ public final class MicroUI {
 	private static final String VERSION = MAJOR+"."+MINOR+"."+PATCH;
 	
 	private static boolean isDebugModeEnabled;
+	private static boolean isFlexibleRenderModeEnabled;
 	
 	private MicroUI() {}
 
@@ -23,19 +24,28 @@ public final class MicroUI {
 		}
 	}
 	
-	public static final PApplet getContext() {
+	public static PApplet getContext() {
 		return ctx;
 	}
 	
-	public static final String getVersion() {
+	public static String getVersion() {
 		return VERSION;
 	}
 
-	public static final boolean isDebugModeEnabled() {
+	public static boolean isDebugModeEnabled() {
 		return isDebugModeEnabled;
 	}
 
-	public static final void setDebugModeEnabled(boolean isDebugModeEnabled) {	
+	public static void setDebugModeEnabled(boolean isDebugModeEnabled) {	
 		MicroUI.isDebugModeEnabled = isDebugModeEnabled;
 	}
+
+	public static boolean isFlexibleRenderModeEnabled() {
+		return isFlexibleRenderModeEnabled;
+	}
+
+	public static void setFlexibleRenderModeEnabled(boolean isFlexibleRenderModeEnabled) {
+		MicroUI.isFlexibleRenderModeEnabled = isFlexibleRenderModeEnabled;
+	}
+	
 }

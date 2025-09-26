@@ -53,16 +53,18 @@ public class MenuButton extends Button implements Scrollable {
 	}
 
 	public MenuButton(String title) {
-		this(title, ctx.width * .3f, ctx.height * .45f, ctx.width * .4f, ctx.height * .1f);
+		this(title,0,0,0,0);
+		setSize(getMaxWidth(),getMaxHeight());
+		setPosition(ctx.width/2-getMaxWidth()/2,ctx.height/2-getMaxHeight()/2);
 	}
 
 	public MenuButton(String title, String... items) {
-		this(title, ctx.width * .3f, ctx.height * .45f, ctx.width * .4f, ctx.height * .1f);
+		this(title);
 		add(items);
 	}
 
 	public MenuButton() {
-		this("Menu Button", ctx.width * .3f, ctx.height * .45f, ctx.width * .4f, ctx.height * .1f);
+		this("Menu Button");
 	}
 
 	@Override

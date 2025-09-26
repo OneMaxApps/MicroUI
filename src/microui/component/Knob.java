@@ -31,7 +31,9 @@ public final class Knob extends RangeControl {
 	}
 	
 	public Knob() {
-		this(ctx.width*.45f,ctx.height*.45f,ctx.width*.1f,ctx.height*.1f);
+		this(0,0,0,0);
+		setSize(getMaxWidth(),getMaxHeight());
+		setPosition(ctx.width/2-getMaxWidth()/2,ctx.height/2-getMaxHeight()/2);
 	}
 
 	@Override

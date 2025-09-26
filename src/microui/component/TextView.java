@@ -40,7 +40,9 @@ public final class TextView extends Component {
 	}
 
 	public TextView(String text) {
-		this(ctx.width * .4f, ctx.height * .45f, ctx.width * .2f, ctx.height * .1f);
+		this(0,0,0,0);
+		setSize(getMaxWidth(),getMaxHeight());
+		setPosition(ctx.width/2-getMaxWidth()/2,ctx.height/2-getMaxHeight()/2);
 		setText(text);
 	}
 
@@ -50,6 +52,7 @@ public final class TextView extends Component {
 
 	@Override
 	protected void render() {
+		ctx.noStroke();
 		getMutableBackgroundColor().apply();
 		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 

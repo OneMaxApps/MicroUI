@@ -28,8 +28,9 @@ public class Button extends AbstractButton {
 	}
 
 	public Button(String text) {
-		this(requireNonNull(text, "text cannot be null"), ctx.width * .3f, ctx.height * .45f, ctx.width * .4f,
-				ctx.height * .1f);
+		this(requireNonNull(text, "text cannot be null"), 0,0,0,0);
+		setSize(getMaxWidth(),getMaxHeight());
+		setPosition(ctx.width/2-getMaxWidth()/2,ctx.height/2-getMaxHeight()/2);
 	}
 
 	public Button() {

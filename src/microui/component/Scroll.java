@@ -51,8 +51,9 @@ public class Scroll extends LinearRangeControl {
 	
 	public Scroll() {
 		this(0,0,0,0);
-		setWidth(getMaxWidth());
-		setPosition(ctx.width/2-getWidth()/2,ctx.height/2-getHeight()/2);
+		setSize(getMaxWidth(),getMaxHeight());
+		setPosition(ctx.width/2-getMaxWidth()/2,ctx.height/2-getMaxHeight()/2);
+
 	}
 
 	@Override
