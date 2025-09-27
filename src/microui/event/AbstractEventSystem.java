@@ -2,25 +2,28 @@ package microui.event;
 
 import microui.MicroUI;
 import microui.core.base.Component;
+import microui.core.base.SpatialView;
 import microui.util.Metrics;
 
 public abstract class AbstractEventSystem {
-	private Component component;
+	private SpatialView spatialView;
 	private final EventDetector detector;
 
-	public AbstractEventSystem(Component component) {
-		if (component == null) {
-			throw new NullPointerException("component cannot be null");
+	public AbstractEventSystem(SpatialView spatialView) {
+		if (spatialView == null) {
+			throw new NullPointerException("spatialView cannot be null");
 		}
 
-		this.component = component;
+		this.spatialView = spatialView;
 
 		detector = new EventDetector();
 
 		Metrics.register(this);
 	}
 	
-	public abstract void listen();
+	public void listen() {
+		detector.update();
+	}
 
 	public final EventDetector getDetector() {
 		return detector;
@@ -61,8 +64,7 @@ public abstract class AbstractEventSystem {
 	protected final class EventDetector {
 		private static final long DEFAULT_THRESHOLD = 500;
 		private static final long DEFAULT_DOUBLE_CLICK_THRESHOLD = 200;
-		private long enterTime, leaveTime;
-		private boolean isHover;
+		private boolean isHover,isPressed;
 
 		private final PressDetector pressDetector;
 		private final ReleaseDetector releaseDetector;
@@ -95,11 +97,8 @@ public abstract class AbstractEventSystem {
 		}
 
 		public void update() {
-			if (isHover) {
-				updateLeaveTime();
-			} else {
-				updateEnterTime();
-			}
+			isHover = isHover();
+			isPressed =  isPressed();
 		}
 
 		public boolean isPress() {
@@ -155,16 +154,7 @@ public abstract class AbstractEventSystem {
 		}
 
 		public boolean isReleased() {
-			return !isPressed();
-		}
-
-		public boolean isLongPressed() {
-			if (isPressed() && System.currentTimeMillis() - pressDetector.getPressTime() >= longPressDetector
-					.getLongPressThreshold()) {
-				return true;
-			}
-
-			return false;
+			return !isPressed;
 		}
 
 		public boolean isHover() {
@@ -172,22 +162,23 @@ public abstract class AbstractEventSystem {
 			int mx = MicroUI.getContext().mouseX;
 			int my = MicroUI.getContext().mouseY;
 
-			int cx = (int) component.getPadX();
-			int cy = (int) component.getPadY();
-			int cw = (int) component.getPadWidth();
-			int ch = (int) component.getPadHeight();
-
-			isHover = (mx > cx && mx < cx + cw && my > cy && my < cy + ch);
+			int x,y,w,h;
+			
+			if(spatialView instanceof Component component) {
+				x = (int) component.getPadX();
+				y = (int) component.getPadY();
+				w = (int) component.getPadWidth();
+				h = (int) component.getPadHeight();
+			} else {
+				x = (int) spatialView.getX();
+				y = (int) spatialView.getY();
+				w = (int) spatialView.getWidth();
+				h = (int) spatialView.getHeight();
+			}
+			
+			isHover = (mx > x && mx < x + w && my > y && my < y + h);
 
 			return isHover;
-		}
-
-		private void updateEnterTime() {
-			enterTime = System.currentTimeMillis();
-		}
-
-		private void updateLeaveTime() {
-			leaveTime = System.currentTimeMillis();
 		}
 
 		private final class PressDetector {
@@ -204,7 +195,7 @@ public abstract class AbstractEventSystem {
 					isPressHookCalled = false;
 				}
 
-				if (!isPressHookCalled && isHover() && isPressed()) {
+				if (!isPressHookCalled && isHover && isPressed) {
 					isPressHookCalled = true;
 					pressTime = System.currentTimeMillis();
 					return true;
@@ -228,7 +219,7 @@ public abstract class AbstractEventSystem {
 			}
 
 			public boolean isDetected() {
-				if (isPressed()) {
+				if (isPressed) {
 					isReleaseHookCalled = false;
 				}
 
@@ -248,21 +239,25 @@ public abstract class AbstractEventSystem {
 		}
 
 		private final class LongPressDetector {
+			private final PressDetector pressDetectorInternal;
 			private boolean isLongPressHookCalled;
 			private long longPressThreshold;
 
 			public LongPressDetector() {
 				super();
+				pressDetectorInternal = new PressDetector();
 				longPressThreshold = DEFAULT_THRESHOLD;
 			}
 
 			public boolean isDetected() {
+				pressDetectorInternal.isDetected();
+				
 				if (!MicroUI.getContext().mousePressed) {
 					isLongPressHookCalled = false;
 				}
 
-				if (!isLongPressHookCalled && isPressed()
-						&& System.currentTimeMillis() - pressDetector.getPressTime() >= longPressThreshold) {
+				if (!isLongPressHookCalled && isPressed
+						&& System.currentTimeMillis() - pressDetectorInternal.getPressTime() >= longPressThreshold) {
 					isLongPressHookCalled = true;
 					return true;
 				}
@@ -286,14 +281,16 @@ public abstract class AbstractEventSystem {
 
 		private final class EnterDetector {
 			private boolean isEnterHookCalled;
-
+			private long enterTime;
+			
 			public boolean isDetected() {
-				if (!isHover()) {
+				if (!isHover) {
 					isEnterHookCalled = false;
 				}
 
 				if (!isEnterHookCalled) {
-					if (isHover()) {
+					if (isHover) {
+						enterTime = System.currentTimeMillis();
 						isEnterHookCalled = true;
 						return true;
 					}
@@ -301,24 +298,31 @@ public abstract class AbstractEventSystem {
 
 				return false;
 			}
+
+			public long getEnterTime() {
+				return enterTime;
+			}
+			
 		}
 
 		private final class LeaveDetector {
 			private boolean isLeaveHookCalled;
-
+			private long leaveTime;
+			
 			public LeaveDetector() {
 				super();
 				isLeaveHookCalled = true;
 			}
 
 			public boolean isDetected() {
-				if (isHover()) {
+				if (isHover) {
 					isLeaveHookCalled = false;
 				}
 
 				if (!isLeaveHookCalled) {
-					if (!isHover()) {
+					if (!isHover) {
 						isLeaveHookCalled = true;
+						leaveTime = System.currentTimeMillis();
 						return true;
 					}
 				}
@@ -326,26 +330,33 @@ public abstract class AbstractEventSystem {
 				return false;
 			}
 
+			public long getLeaveTime() {
+				return leaveTime;
+			}
+
 		}
 
 		private final class EnterLongDetector {
+			private final EnterDetector enterDetectorInternal;
 			private boolean isEnterLongHookCalled;
 			private long enterLongThreshold;
 
 			public EnterLongDetector() {
 				super();
+				enterDetectorInternal = new EnterDetector();
 				enterLongThreshold = DEFAULT_THRESHOLD;
 				isEnterLongHookCalled = false;
 			}
 
 			public boolean isDetected() {
-
-				if (!isHover()) {
+				enterDetectorInternal.isDetected();
+				
+				if (!isHover) {
 					isEnterLongHookCalled = false;
 				}
 
 				if (!isEnterLongHookCalled) {
-					if (isHover() && System.currentTimeMillis() - enterTime >= enterLongThreshold) {
+					if (isHover && System.currentTimeMillis() - enterDetectorInternal.getEnterTime() >= enterLongThreshold) {
 						isEnterLongHookCalled = true;
 						return true;
 					}
@@ -368,22 +379,26 @@ public abstract class AbstractEventSystem {
 		}
 
 		private final class LeaveLongDetector {
+			private final LeaveDetector leaveDetectorInternal;
 			private boolean isLeaveLongHookCalled;
 			private long leaveLongThreshold;
 
 			public LeaveLongDetector() {
 				super();
+				leaveDetectorInternal = new LeaveDetector();
 				leaveLongThreshold = DEFAULT_THRESHOLD;
 				isLeaveLongHookCalled = true;
 			}
 
 			public boolean isDetected() {
-				if (isHover()) {
+				leaveDetectorInternal.isDetected();
+				
+				if (isHover) {
 					isLeaveLongHookCalled = false;
 				}
 
 				if (!isLeaveLongHookCalled) {
-					if (!isHover() && System.currentTimeMillis() - leaveTime >= leaveLongThreshold) {
+					if (!isHover && System.currentTimeMillis() - leaveDetectorInternal.getLeaveTime() >= leaveLongThreshold) {
 						isLeaveLongHookCalled = true;
 						return true;
 					}
@@ -407,11 +422,9 @@ public abstract class AbstractEventSystem {
 		}
 
 		private final class ClickDetector {
-			private boolean isPressed, isHover, isCanCallHook;
+			private boolean isCanCallHook;
 
 			public boolean isDetected() {
-				isPressed = isPressed();
-				isHover = isHover();
 
 				if (isCanCallHook && !isPressed && isHover) {
 					isCanCallHook = false;
@@ -431,22 +444,27 @@ public abstract class AbstractEventSystem {
 		}
 
 		private final class DoubleClickDetector {
-			private ClickDetector clickDetector;
+			private final ClickDetector clickDetectorInternal;
+			private final ReleaseDetector releaseDetectorInternal;
 			private long threshold;
 			private int clickCount;
 
 			public DoubleClickDetector() {
 				super();
 				threshold = DEFAULT_DOUBLE_CLICK_THRESHOLD;
-				clickDetector = new ClickDetector();
+				clickDetectorInternal = new ClickDetector();
+				releaseDetectorInternal = new ReleaseDetector();
 			}
 
 			public boolean isDetected() {
-				if (System.currentTimeMillis() - releaseDetector.getReleaseTime() > threshold) {
+				// background update state for local using
+				releaseDetectorInternal.isDetected();
+				
+				if (System.currentTimeMillis() - releaseDetectorInternal.getReleaseTime() > threshold) {
 					clickCount = 0;
 				}
 
-				if (clickDetector.isDetected()) {
+				if (clickDetectorInternal.isDetected()) {
 					clickCount++;
 				}
 
@@ -479,7 +497,7 @@ public abstract class AbstractEventSystem {
 					isHookCalled = false;
 				}
 
-				if (!isHookCalled && isPressed() && isMouseMoved()) {
+				if (!isHookCalled && isPressed && isMouseMoved()) {
 					isHookCalled = true;
 					return true;
 				}

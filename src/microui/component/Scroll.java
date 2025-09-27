@@ -88,7 +88,7 @@ public class Scroll extends LinearRangeControl {
 	}
 	
 	public final boolean isThumbClicked() {
-		return thumb.isClicked();
+		return thumb.isClick();
 	}
 	
 	public final Color getThumbRipplesColor() {

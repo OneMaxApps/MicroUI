@@ -69,28 +69,64 @@ public abstract class Component extends SpatialView {
 		return this;
 	}
 	
-	public final boolean isClicked() {
-		return event.isClicked();
+	public boolean isPress() {
+		return event.isPress();
 	}
 
-	public final boolean isDoubleClicked() {
-		return event.isDoubleClicked();
-	}
-	
-	public final boolean isPressed() {
-		return event.isPressed();
+	public boolean isRelease() {
+		return event.isRelease();
 	}
 
-	public final boolean isEnter() {
+	public boolean isLongPress() {
+		return event.isLongPress();
+	}
+
+	public boolean isEnter() {
 		return event.isEnter();
 	}
 
-	public final boolean isLeave() {
+	public boolean isLeave() {
 		return event.isLeave();
 	}
-	
-	public final boolean isDragging() {
+
+	public boolean isEnterLong() {
+		return event.isEnterLong();
+	}
+
+	public boolean isLeaveLong() {
+		return event.isLeaveLong();
+	}
+
+	public boolean isClick() {
+		return event.isClick();
+	}
+
+	public boolean isDoubleClick() {
+		return event.isDoubleClick();
+	}
+
+	public boolean isDragStart() {
+		return event.isDragStart();
+	}
+
+	public boolean isDragging() {
 		return event.isDragging();
+	}
+
+	public boolean isDragEnd() {
+		return event.isDragEnd();
+	}
+
+	public boolean isPressed() {
+		return event.isPressed();
+	}
+
+	public boolean isReleased() {
+		return event.isReleased();
+	}
+
+	public boolean isHover() {
+		return event.isHover();
 	}
 
 	public final Component onHover(Listener listener) {
@@ -125,12 +161,6 @@ public abstract class Component extends SpatialView {
 	
 	public final Component onLongPress(Listener listener) {
 		interactionHandler.addListener(EventType.LONG_PRESS, listener);
-		
-		return this;
-	}
-	
-	public final Component onLongPressed(Listener listener) {
-		interactionHandler.addListener(EventType.LONG_PRESSED, listener);
 		
 		return this;
 	}

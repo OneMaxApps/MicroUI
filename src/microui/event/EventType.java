@@ -9,7 +9,6 @@ public enum EventType {
 	RELEASED, // LEVEL [1]
 	
 	LONG_PRESS, // EDGE [1] 
-	LONG_PRESSED, // LEVEL [1]
 	
 	ENTER, // EDGE [1]
 	LEAVE, // EDGE [1] 

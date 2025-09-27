@@ -3,13 +3,13 @@ package microui.event;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-import microui.core.base.Component;
+import microui.core.base.SpatialView;
 
 public final class InteractionHandler extends AbstractEventSystem {
 	private final EventDispatcher dispatcher;
 
-	public InteractionHandler(Component component) {
-		super(component);
+	public InteractionHandler(SpatialView spatialView) {
+		super(spatialView);
 		
 		dispatcher = new EventDispatcher();
 		
@@ -17,8 +17,8 @@ public final class InteractionHandler extends AbstractEventSystem {
 	
 	@Override
 	public void listen() {
-		getDetector().update();
-
+		super.listen();
+		
 		if (getDetector().isPress()) {
 			dispatcher.dispatch(EventType.PRESS);
 		}
@@ -37,10 +37,6 @@ public final class InteractionHandler extends AbstractEventSystem {
 
 		if (getDetector().isLongPress()) {
 			dispatcher.dispatch(EventType.LONG_PRESS);
-		}
-
-		if (getDetector().isLongPressed()) {
-			dispatcher.dispatch(EventType.LONG_PRESSED);
 		}
 
 		if (getDetector().isEnter()) {
@@ -79,7 +75,6 @@ public final class InteractionHandler extends AbstractEventSystem {
 			dispatcher.dispatch(EventType.DRAG_END);
 		}
 		
-
 		if (getDetector().isHover()) {
 			dispatcher.dispatch(EventType.HOVER);
 		}

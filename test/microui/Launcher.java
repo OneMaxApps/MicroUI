@@ -28,6 +28,8 @@ import processing.core.PApplet;
 
 public final class Launcher extends PApplet {
 	ContainerManager cm;
+	Button button;
+	
 	public static void main(String[] args) {
 		PApplet.main("microui.Launcher");
 	}
@@ -47,7 +49,7 @@ public final class Launcher extends PApplet {
 
 		cm.add(getContainerMain(),"main");
 		cm.add(getContainerAllComponents(),"all_components");
-		cm.add(getContainerWith(new Button().onDragEnd(() -> background(random(255)))),"Button");
+		cm.add(getContainerWith(button = new Button()),"Button");
 		cm.add(getContainerWith(new CheckBox()),"CheckBox");
 		//cm.add(getContainerWith(new EditText()),"EditText");
 		cm.add(getContainerWith(new Knob()),"Knob");
@@ -63,7 +65,7 @@ public final class Launcher extends PApplet {
 	@Override
 	public void draw() {
 		background(250);
-
+		
 		// cm.getContainerByTextId("container_main").getComponentByTextId("edit_text").setSize(mouseX,mouseY);
 		// Metrics.printAll();
 	}

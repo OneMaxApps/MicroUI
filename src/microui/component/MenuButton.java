@@ -468,7 +468,7 @@ public class MenuButton extends Button implements Scrollable {
 			Button item = itemList.get(i);
 			item.draw();
 
-			if (item.isClicked()) {
+			if (item.isClick()) {
 				selectedId = i;
 				closeAllSubMenusWithoutSelected();
 
@@ -512,7 +512,7 @@ public class MenuButton extends Button implements Scrollable {
 		}
 
 		final void init(final MouseEvent e) {
-			if (!enable || !event.isEnter() || itemList.size() <= 1) {
+			if (!enable || !event.isHover() || itemList.size() <= 1) {
 				return;
 			}
 

@@ -19,18 +19,11 @@ public class Slider extends LinearRangeControl {
 		setValue(0, 100, 0);
 
 		onDragging(() -> {
-			switch (getOrientation()) {
-			case HORIZONTAL:
-				setValue(map(ctx.mouseX, getX(), getX() + getWidth(), getMinValue(), getMaxValue()));
-				break;
-			case VERTICAL:
-				setValue(map(ctx.mouseY, getY(), getY() + getHeight(), getMaxValue(), getMinValue()));
-				break;
-			}
-			updateIndicatorBounds();
-
-			onStartChangeValue();
-			onChangeValue();
+			recalculateIndicatorBounds();
+		});
+		
+		onPress(() -> {
+			recalculateIndicatorBounds();
 		});
 	}
 
@@ -81,6 +74,21 @@ public class Slider extends LinearRangeControl {
 
 	public final void setIndicatorColor(Color color) {
 		indicator.color.set(color);
+	}
+	
+	private void recalculateIndicatorBounds() {
+		switch (getOrientation()) {
+		case HORIZONTAL:
+			setValue(map(ctx.mouseX, getX(), getX() + getWidth(), getMinValue(), getMaxValue()));
+			break;
+		case VERTICAL:
+			setValue(map(ctx.mouseY, getY(), getY() + getHeight(), getMaxValue(), getMinValue()));
+			break;
+		}
+		updateIndicatorBounds();
+
+		onStartChangeValue();
+		onChangeValue();
 	}
 
 	private final class Rect extends SpatialView {

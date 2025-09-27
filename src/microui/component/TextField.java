@@ -166,7 +166,7 @@ public final class TextField extends Component implements KeyPressable {
 			selection.setStarted(false);
 		}
 
-		if (isDoubleClicked()) {
+		if (isDoubleClick()) {
 			if (selection.isSelected()) {
 				selection.reset();
 			} else {

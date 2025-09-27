@@ -33,7 +33,7 @@ public final class LabeledCheckBox extends Component {
 		hover.setColor(new Color(32,16));
 		
 		onClick(() -> {
-			if(checkBox.isLeave()) {
+			if(!checkBox.isHover()) {
 				checkBox.toggle();	
 			}
 		});
