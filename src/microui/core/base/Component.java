@@ -9,7 +9,7 @@ import microui.event.Event;
 import microui.event.EventType;
 import microui.event.InteractionHandler;
 import microui.event.Listener;
-import microui.feedback.Tooltip;
+import microui.feedback.TooltipOld;
 
 //Status: STABLE - Do not modify
 //Last Reviewed: 26.09.2025
@@ -19,7 +19,7 @@ public abstract class Component extends SpatialView {
 	private final Color backgroundColor;
 	private final Event event;
 	private final InteractionHandler interactionHandler;
-	private Tooltip tooltip;
+	private TooltipOld tooltip;
 
 	public Component(float x, float y, float width, float height) {
 		super(x, y, width, height);
@@ -509,8 +509,8 @@ public abstract class Component extends SpatialView {
 		return backgroundColor;
 	}
 
-	private Tooltip getOrCreateTooltip() {
-		return tooltip == null ? tooltip = new Tooltip(interactionHandler) : tooltip;
+	private TooltipOld getOrCreateTooltip() {
+		return tooltip == null ? tooltip = new TooltipOld(interactionHandler) : tooltip;
 	}
 
 	private void debugOnDraw() {
