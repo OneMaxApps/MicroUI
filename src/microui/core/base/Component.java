@@ -10,6 +10,7 @@ import microui.event.EventType;
 import microui.event.InteractionHandler;
 import microui.event.Listener;
 import microui.feedback.Tooltip;
+import microui.feedback.TooltipContent;
 import microui.feedback.TooltipOld;
 
 //Status: STABLE - Do not modify
@@ -472,24 +473,12 @@ public abstract class Component extends SpatialView {
 	
 	// NEW TOOLTIP API //////////////////////////////////
 	
-	public final String getTooltipText() {
-		return tooltip.getText();
+	public final TooltipContent getTooltipContent() {
+		return tooltip.getContent();
 	}
 	
-	public final Component setTooltipText(String text) {
-		tooltip.setText(text);
-		return this;
-	}
-	
-	public final Component setTooltipText(String[] text) {
-		StringBuilder sb = new StringBuilder();
-		
-		for(int i = 0; i < text.length; i++) {
-			sb.append(text[i]);
-		}
-		
-		tooltip.setText(sb.toString());
-		return this;
+	public final void setTooltipContent(TooltipContent tooltipContent) {
+		tooltip.setContent(tooltipContent);
 	}
 
 	////////////////////////////////////////////////////

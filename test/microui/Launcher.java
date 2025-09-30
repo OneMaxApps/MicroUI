@@ -87,13 +87,10 @@ public final class Launcher extends PApplet {
 		Container ContainerMenuItem = new Container(new ColumnLayout());
 		ContainerMenuItem.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
 		
-		ContainerMenuItem.addComponent(new Button("show all components")
-										  .setTooltipText("text about something in to tooltip"), new ColumnLayoutParams(.2f), () -> cm.switchOn("all_components"));
+		ContainerMenuItem.addComponent(new Button("show all components") , new ColumnLayoutParams(.2f), () -> cm.switchOn("all_components"));
 		
 		MenuButton menuButtonOfComponents;
 		ContainerMenuItem.addComponent(menuButtonOfComponents = new MenuButton("show component","Button","CheckBox","EditText","Knob","LabeledCheckBox","MenuButton","Scroll","Slider","TextField","TextView"), new ColumnLayoutParams(.2f));
-		
-		menuButtonOfComponents.setTooltipText(loadStrings("C:\\Users\\002\\Desktop\\text_for_tooltip.txt"));
 		
 		menuButtonOfComponents.getItem("Button").onClick(() -> cm.switchOn("Button"));
 		menuButtonOfComponents.getItem("CheckBox").onClick(() -> cm.switchOn("CheckBox"));
