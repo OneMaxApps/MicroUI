@@ -9,6 +9,7 @@ import microui.event.Event;
 import microui.event.EventType;
 import microui.event.InteractionHandler;
 import microui.event.Listener;
+import microui.feedback.Tooltip;
 import microui.feedback.TooltipOld;
 
 //Status: STABLE - Do not modify
@@ -19,20 +20,22 @@ public abstract class Component extends SpatialView {
 	private final Color backgroundColor;
 	private final Event event;
 	private final InteractionHandler interactionHandler;
-	private TooltipOld tooltip;
+	private TooltipOld tooltipOld;
+	private final Tooltip tooltip;
 
 	public Component(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setVisible(true);
 		setConstrainDimensionsEnabled(true);
 		setNegativeDimensionsEnabled(false);
-		
+
 		padding = new Padding();
 		margin = new Margin();
 		backgroundColor = getTheme().getBackgroundColor();
-		interactionHandler = new InteractionHandler(this);
 		event = new Event(this);
-		
+		interactionHandler = new InteractionHandler(this);
+		tooltip = new Tooltip(this);
+
 		setPaddingEnabled(true);
 		setMarginEnabled(true);
 	}
@@ -50,13 +53,15 @@ public abstract class Component extends SpatialView {
 		super.draw();
 
 		event.listen();
-		
+
 		interactionHandler.listen();
 
-		if (tooltip != null) {
-			tooltip.listen();
+		if (tooltipOld != null) {
+			tooltipOld.listen();
 		}
-
+		
+		tooltip.listen();
+		
 		debugOnDraw();
 	}
 
@@ -68,7 +73,7 @@ public abstract class Component extends SpatialView {
 		this.backgroundColor.set(color);
 		return this;
 	}
-	
+
 	public boolean isPress() {
 		return event.isPress();
 	}
@@ -131,91 +136,91 @@ public abstract class Component extends SpatialView {
 
 	public final Component onHover(Listener listener) {
 		interactionHandler.addListener(EventType.HOVER, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onPress(Listener listener) {
 		interactionHandler.addListener(EventType.PRESS, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onPressed(Listener listener) {
 		interactionHandler.addListener(EventType.PRESSED, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onRelease(Listener listener) {
 		interactionHandler.addListener(EventType.RELEASE, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onReleased(Listener listener) {
 		interactionHandler.addListener(EventType.RELEASED, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onLongPress(Listener listener) {
 		interactionHandler.addListener(EventType.LONG_PRESS, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onEnter(Listener listener) {
 		interactionHandler.addListener(EventType.ENTER, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onLeave(Listener listener) {
 		interactionHandler.addListener(EventType.LEAVE, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onEnterLong(Listener listener) {
 		interactionHandler.addListener(EventType.ENTER_LONG, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onLeaveLong(Listener listener) {
 		interactionHandler.addListener(EventType.LEAVE_LONG, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onClick(Listener listener) {
 		interactionHandler.addListener(EventType.CLICK, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onDoubleClick(Listener listener) {
 		interactionHandler.addListener(EventType.DOUBLE_CLICK, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onDragStart(Listener listener) {
 		interactionHandler.addListener(EventType.DRAG_START, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onDragging(Listener listener) {
 		interactionHandler.addListener(EventType.DRAGGING, listener);
-		
+
 		return this;
 	}
-	
+
 	public final Component onDragEnd(Listener listener) {
 		interactionHandler.addListener(EventType.DRAG_END, listener);
-		
+
 		return this;
 	}
 
@@ -464,11 +469,37 @@ public abstract class Component extends SpatialView {
 		setAbsolutePosition(x, y);
 	}
 
+	
+	// NEW TOOLTIP API //////////////////////////////////
+	
 	public final String getTooltipText() {
-		return tooltip == null ? "" : tooltip.getText().getAsString();
+		return tooltip.getText();
+	}
+	
+	public final Component setTooltipText(String text) {
+		tooltip.setText(text);
+		return this;
+	}
+	
+	public final Component setTooltipText(String[] text) {
+		StringBuilder sb = new StringBuilder();
+		
+		for(int i = 0; i < text.length; i++) {
+			sb.append(text[i]);
+		}
+		
+		tooltip.setText(sb.toString());
+		return this;
 	}
 
-	public final Component setTooltipText(String text) {
+	////////////////////////////////////////////////////
+	
+	
+	public final String getTooltipTextOld() {
+		return tooltipOld == null ? "" : tooltipOld.getText().getAsString();
+	}
+
+	public final Component setTooltipTextOld(String text) {
 		getOrCreateTooltip().getText().set(requireNonNull(text, "text cannot be null"));
 		return this;
 	}
@@ -510,7 +541,7 @@ public abstract class Component extends SpatialView {
 	}
 
 	private TooltipOld getOrCreateTooltip() {
-		return tooltip == null ? tooltip = new TooltipOld(interactionHandler) : tooltip;
+		return tooltipOld == null ? tooltipOld = new TooltipOld(interactionHandler) : tooltipOld;
 	}
 
 	private void debugOnDraw() {

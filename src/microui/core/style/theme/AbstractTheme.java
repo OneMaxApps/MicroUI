@@ -15,4 +15,11 @@ public abstract class AbstractTheme {
 	public abstract Color getCursorColor();
 	public abstract Color getEditableBackgroundColor();
 	
+	public Color getTooltipBackgroundColor() {
+		return new Color(255);
+	}
+	
+	public Color getTooltipTextColor() {
+		return new Color(0);
+	}
 }

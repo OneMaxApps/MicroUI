@@ -17,6 +17,7 @@ import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import microui.event.KeyboardManager;
 import microui.service.GlobalTooltipOld;
+import microui.service.TooltipManager;
 import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -30,13 +31,16 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 	private static boolean isInitialized, isCanDraw;
 	private boolean isAnimationEnabled;
 	private Container prevContainer, currentContainer;
-
+	private final TooltipManager tooltipManager;
+	
 	private ContainerManager() {
 		setVisible(true);
 		containerList = new ArrayList<Container>();
 		animation = new Animation();
 		setAnimationEnabled(true);
 
+		tooltipManager = TooltipManager.getInstance();
+		
 		getContext().registerMethod("keyPressed", this);
 		getContext().registerMethod("keyEvent", this);
 		getContext().registerMethod("mouseEvent", this);
@@ -52,6 +56,8 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 				currentContainer.draw();
 			}
 		}
+		
+		tooltipManager.draw();
 	}
 
 	@Override
