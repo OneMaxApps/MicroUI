@@ -5,6 +5,7 @@ import static java.lang.Math.min;
 import static microui.core.style.theme.ThemeManager.getTheme;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.CORNER;
+import static processing.core.PConstants.TOP;
 
 import microui.constants.AutoResizeMode;
 import microui.core.base.Component;
@@ -18,7 +19,7 @@ public final class TextView extends Component {
 	private String text;
 	private AutoResizeMode autoResizeMode;
 	private float textSize, autoTextSize;
-	private boolean isAutoResizeModeEnabled, isCenterModeEnabled;
+	private boolean isAutoResizeModeEnabled, isCenterModeEnabled,isClipModeEnabled;
 
 	public TextView(String text, float x, float y, float width, float height) {
 		super(x, y, width, height);
@@ -33,6 +34,7 @@ public final class TextView extends Component {
 		setAutoResizeModeEnabled(true);
 		setAutoResizeMode(AutoResizeMode.BIG);
 		setCenterModeEnabled(true);
+		setClipModeEnabled(true);
 	}
 
 	public TextView(float x, float y, float width, float height) {
@@ -64,7 +66,7 @@ public final class TextView extends Component {
 			ctx.textFont(font);
 		}
 
-		ctx.textAlign(isCenterModeEnabled ? CENTER : CORNER, CENTER);
+		
 
 		if (isAutoResizeModeEnabled()) {
 			ctx.textSize(autoTextSize);
@@ -72,7 +74,21 @@ public final class TextView extends Component {
 			ctx.textSize(getTextSize());
 		}
 		textColor.apply();
-		ctx.text(text, getX(), getY(), getWidth(), getHeight());
+		if(isClipModeEnabled()) {
+			ctx.textAlign(isCenterModeEnabled ? CENTER : CORNER, CENTER);
+			ctx.text(text, getX(), getY(), getWidth(), getHeight());
+		} else {
+			ctx.textAlign(isCenterModeEnabled ? CENTER : CORNER, TOP);
+			ctx.text(text, getX(), getY());
+		}
+	}
+
+	public boolean isClipModeEnabled() {
+		return isClipModeEnabled;
+	}
+
+	public void setClipModeEnabled(boolean isClipModeEnabled) {
+		this.isClipModeEnabled = isClipModeEnabled;
 	}
 
 	public float getTextSize() {

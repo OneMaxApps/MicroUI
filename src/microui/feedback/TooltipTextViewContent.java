@@ -1,74 +1,99 @@
 package microui.feedback;
 
+import static java.lang.Math.max;
 import static microui.core.style.theme.ThemeManager.getTheme;
-import static processing.core.PConstants.LEFT;
-import static processing.core.PConstants.TOP;
 
-import microui.core.style.Color;
+import microui.component.TextView;
 
 public final class TooltipTextViewContent extends TooltipContent {
-	private static final int PADDING_AROUND = 4;
 	private static final int DEFAULT_TEXT_SIZE = 12;
-	private final Color textColor;
-	private String text;
-	private int textSize;
-
+	private final TextView textView;
+	private boolean isDirtySize;
 	public TooltipTextViewContent(String text) {
 		super();
 		setVisible(true);
+		setConstrainDimensionsEnabled(true);
+		setMinMaxSize(8,8,ctx.width,ctx.height);
 		
-		textColor = getTheme().getTooltipTextColor();
-		setText(text);
-		setTextSize(DEFAULT_TEXT_SIZE);
-	}
+		textView = new TextView(text);
+		textView.setConstrainDimensionsEnabled(false);
+		textView.setBackgroundColor(getTheme().getTooltipBackgroundColor());
+		textView.setTextColor(getTheme().getTooltipTextColor());
+		textView.setAutoResizeModeEnabled(false);
+		textView.setTextSize(DEFAULT_TEXT_SIZE);
+		textView.setCenterModeEnabled(false);
+		textView.setPadding(4,5);
+		textView.setClipModeEnabled(false);
 
-	public String getText() {
-		return text;
+		isDirtySize = true;
 	}
-
-	public void setText(String text) {
-		if (text == null) {
-			throw new NullPointerException("the text for tooltip cannot be null");
-		}
-		this.text = text;
-	}
-
-	public int getTextSize() {
-		return textSize;
-	}
-
-	public void setTextSize(int textSize) {
-		if (textSize < 4) {
-			throw new IllegalArgumentException("text size cannot be lower than 4");
-		}
-		this.textSize = textSize;
-	}
-
-	public Color getTextColor() {
-		return new Color(textColor);
-	}
-
-	public void setTextColor(Color color) {
-		textColor.set(color);
-	}
-
+	
 	@Override
 	public boolean isPrepared() {
-		if(text.isEmpty()) {
+		if(textView.getText().isEmpty()) {
 			return false;
 		}
+		prepareSize();
 		
 		return true;
 	}
 	
-	@Override
-	protected void render() {
-		getMutableBackgroundColor().apply();
-		ctx.rect(getX() - PADDING_AROUND, getY() - PADDING_AROUND, getWidth() + PADDING_AROUND * 2, getHeight() + PADDING_AROUND * 2);
-		textColor.apply();
-		ctx.textSize(textSize);
-		ctx.textAlign(LEFT, TOP);
-		ctx.text(text, getX(), getY());
+	public String getText() {
+		return textView.getText();
 	}
 	
+	public void setText(String text) {
+		textView.setText(text);
+		isDirtySize = true;
+	}
+	
+	public float getTextSize() {
+		return textView.getTextSize();
+	}
+	
+	public void setTextSize(float textSize) {
+		textView.setTextSize(textSize);
+		isDirtySize = true;
+	}
+	
+	@Override
+	protected void render() {
+		textView.draw();
+	}
+
+	@Override
+	protected void onChangePositions() {
+		super.onChangePositions();
+		
+		textView.setPositionFrom(this);
+	}
+	
+	private void prepareSize() {
+		if(!isDirtySize) { return; }
+		
+		final String[] lines = textView.getText().split("\n");
+		
+		float maxTextWidth = 0;
+		
+		ctx.pushStyle();
+		ctx.textSize(textView.getTextSize());
+		if(textView.getFont() != null) {
+			ctx.textFont(textView.getFont());
+		}
+		for(int i = 0; i < lines.length; i++) {
+			maxTextWidth = max(maxTextWidth, ctx.textWidth(lines[i]));
+		}
+		
+		float totalHeight = (ctx.textAscent()+ctx.textDescent())*(lines.length);
+			  
+		for(int i = 0; i < lines.length; i++) {
+			totalHeight += ctx.textDescent();
+		}
+		
+		ctx.popStyle();
+		
+		textView.setSize(maxTextWidth,totalHeight);
+		
+		isDirtySize = false;
+	}
 }
