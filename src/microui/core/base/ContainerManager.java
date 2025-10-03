@@ -16,7 +16,6 @@ import microui.core.exception.RenderException;
 import microui.core.interfaces.KeyPressable;
 import microui.core.interfaces.Scrollable;
 import microui.event.KeyboardManager;
-import microui.service.GlobalTooltipOld;
 import microui.service.TooltipManager;
 import processing.core.PImage;
 import processing.event.KeyEvent;
@@ -66,7 +65,6 @@ public final class ContainerManager extends View implements Scrollable, KeyPress
 			throw new RenderException("ContainerManager calling draw() only inside");
 		}
 		super.draw();
-		GlobalTooltipOld.draw();
 		debugOnDraw();
 	}
 

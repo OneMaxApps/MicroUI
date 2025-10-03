@@ -11,7 +11,7 @@ import microui.event.InteractionHandler;
 import microui.event.Listener;
 import microui.feedback.Tooltip;
 import microui.feedback.TooltipContent;
-import microui.feedback.TooltipOld;
+import microui.feedback.TooltipTextViewContent;
 
 //Status: STABLE - Do not modify
 //Last Reviewed: 26.09.2025
@@ -21,7 +21,6 @@ public abstract class Component extends SpatialView {
 	private final Color backgroundColor;
 	private final Event event;
 	private final InteractionHandler interactionHandler;
-	private TooltipOld tooltipOld;
 	private final Tooltip tooltip;
 
 	public Component(float x, float y, float width, float height) {
@@ -56,10 +55,6 @@ public abstract class Component extends SpatialView {
 		event.listen();
 
 		interactionHandler.listen();
-
-		if (tooltipOld != null) {
-			tooltipOld.listen();
-		}
 		
 		tooltip.listen();
 		
@@ -476,57 +471,32 @@ public abstract class Component extends SpatialView {
 	public final void setTooltipContent(TooltipContent tooltipContent) {
 		tooltip.setContent(tooltipContent);
 	}
+	
+	public final TooltipContent getTooltipContent() {
+		return tooltip.getContent();
+	}
+	
+	// Sugar API
+	public final void setTooltipText(String text) {
+		if(tooltip.getContent() instanceof TooltipTextViewContent content) {
+			content.setText(text);
+		} else {
+			tooltip.setContent(new TooltipTextViewContent(text));
+		}
+	}
+	
+	public final String getTooltipText() {
+		if(tooltip.getContent() instanceof TooltipTextViewContent content) {
+			return content.getText();
+		}
+		
+		throw new IllegalStateException("tooltip not instance of TooltipTextViewContent");
+	}
 
 	////////////////////////////////////////////////////
-	
-	
-	public final String getTooltipTextOld() {
-		return tooltipOld == null ? "" : tooltipOld.getText().getAsString();
-	}
-
-	public final Component setTooltipTextOld(String text) {
-		getOrCreateTooltip().getText().set(requireNonNull(text, "text cannot be null"));
-		return this;
-	}
-
-	public final boolean isTooltipEnabled() {
-		return getOrCreateTooltip().isEnabled();
-	}
-
-	public final Component setTooltipEnabled(boolean enabled) {
-		getOrCreateTooltip().setEnabled(enabled);
-		return this;
-	}
-
-	public final Color getTooltipColor() {
-		return getOrCreateTooltip().getColor();
-	}
-
-	public final Component setTooltipColor(Color color) {
-		getOrCreateTooltip().setColor(requireNonNull(color, "color cannot be null"));
-		return this;
-	}
-
-	public final Color getTooltipTextColor() {
-		return getOrCreateTooltip().getText().getColor();
-	}
-
-	public final Component setTooltipTextColor(Color color) {
-		getOrCreateTooltip().getText().setColor(requireNonNull(color, "color cannot be null"));
-		return this;
-	}
-
-	protected final Component setTooltipAdditionalCondition(boolean condition) {
-		getOrCreateTooltip().setAdditionalCondition(condition);
-		return this;
-	}
 
 	protected final Color getMutableBackgroundColor() {
 		return backgroundColor;
-	}
-
-	private TooltipOld getOrCreateTooltip() {
-		return tooltipOld == null ? tooltipOld = new TooltipOld(interactionHandler) : tooltipOld;
 	}
 
 	private void debugOnDraw() {

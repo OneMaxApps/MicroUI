@@ -1,6 +1,7 @@
 package microui.component;
 
 import static microui.component.CheckBox.DEFAULT_SIZE;
+import static processing.core.PConstants.LEFT;
 
 import microui.constants.ContainerMode;
 import microui.core.base.Component;
@@ -40,7 +41,7 @@ public final class LabeledCheckBox extends Component {
 		
 		textView.setPadding(20,0);
 		textView.setAutoResizeModeEnabled(false);
-		textView.setCenterModeEnabled(false);
+		textView.setAlignX(LEFT);
 		textView.setTextSize(DEFAULT_SIZE);
 		textView.setConstrainDimensionsEnabled(true);
 		textView.setMaxSize(ctx.width,DEFAULT_SIZE);

@@ -27,15 +27,7 @@ public class ComponentLauncher extends PApplet {
 		ContainerManager cm = ContainerManager.getInstance();
 		cm.add(new Container(new GridLayout(5,5)).addComponent(button = new Button(), new GridLayoutParams(2,2,1,1)));
 		
-		button.setTooltipContent(new TooltipTextViewContent("textView = new TextView(text);\r\n"
-				+ "		textView.setConstrainDimensionsEnabled(false);\r\n"
-				+ "		textView.setBackgroundColor(getTheme().getTooltipBackgroundColor());\r\n"
-				+ "		textView.setTextColor(getTheme().getTooltipTextColor());\r\n"
-				+ "		textView.setAutoResizeModeEnabled(false);\r\n"
-				+ "		textView.setTextSize(DEFAULT_TEXT_SIZE);\r\n"
-				+ "		textView.setCenterModeEnabled(false);\r\n"
-				+ "		textView.setPadding(4,5);\r\n"
-				+ "		textView.setClipModeEnabled(false);"));
+		button.setTooltipContent(new TooltipTextViewContent("textView"));
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package microui.feedback;
 
 import static java.lang.Math.max;
 import static microui.core.style.theme.ThemeManager.getTheme;
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.TOP;
 
 import microui.component.TextView;
 
@@ -22,10 +24,11 @@ public final class TooltipTextViewContent extends TooltipContent {
 		textView.setTextColor(getTheme().getTooltipTextColor());
 		textView.setAutoResizeModeEnabled(false);
 		textView.setTextSize(DEFAULT_TEXT_SIZE);
-		textView.setCenterModeEnabled(false);
 		textView.setPadding(4,5);
 		textView.setClipModeEnabled(false);
-
+		textView.setAlignX(LEFT);
+		textView.setAlignY(TOP);
+		
 		isDirtySize = true;
 	}
 	
@@ -85,18 +88,20 @@ public final class TooltipTextViewContent extends TooltipContent {
 			maxTextWidth = max(maxTextWidth, ctx.textWidth(lines[i]));
 		}
 		
-		float totalHeight = (ctx.textAscent()+ctx.textDescent())*(lines.length);
-			  
-		for(int i = 0; i < lines.length; i++) {
-			totalHeight += ctx.textDescent();
+		float totalTextHeight = (ctx.textAscent()+ctx.textDescent())*(lines.length);
+		
+		if(lines.length > 1) {
+			for(int i = 0; i < lines.length; i++) {
+				totalTextHeight += ctx.textDescent();
+			}
 		}
 		
 		ctx.popStyle();
 		
 		float correctWidth = maxTextWidth + textView.getPaddingLeft()+textView.getPaddingRight();
-		float correctHeight = totalHeight + textView.getPaddingTop()+textView.getPaddingBottom();
+		float correctHeight = totalTextHeight + textView.getPaddingTop()+textView.getPaddingBottom();
 		
-		textView.setSize(maxTextWidth,totalHeight);
+		textView.setSize(maxTextWidth,totalTextHeight);
 		setSize(correctWidth,correctHeight);
 		getTooltip().setSizeFrom(this);
 		

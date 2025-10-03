@@ -3,8 +3,10 @@ package microui.component;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static microui.core.style.theme.ThemeManager.getTheme;
+import static processing.core.PConstants.BOTTOM;
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.CORNER;
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.RIGHT;
 import static processing.core.PConstants.TOP;
 
 import microui.constants.AutoResizeMode;
@@ -19,8 +21,9 @@ public final class TextView extends Component {
 	private String text;
 	private AutoResizeMode autoResizeMode;
 	private float textSize, autoTextSize;
-	private boolean isAutoResizeModeEnabled, isCenterModeEnabled,isClipModeEnabled;
-
+	private int alignX, alignY;
+	private boolean isAutoResizeModeEnabled,isClipModeEnabled;
+	
 	public TextView(String text, float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setMinSize(10);
@@ -33,8 +36,9 @@ public final class TextView extends Component {
 		setTextSize(max(1, min(width, height)));
 		setAutoResizeModeEnabled(true);
 		setAutoResizeMode(AutoResizeMode.BIG);
-		setCenterModeEnabled(true);
 		setClipModeEnabled(true);
+		setAlignX(CENTER);
+		setAlignY(CENTER);
 	}
 
 	public TextView(float x, float y, float width, float height) {
@@ -52,35 +56,27 @@ public final class TextView extends Component {
 		this(DEFAULT_TEXT);
 	}
 
-	@Override
-	protected void render() {
-		ctx.noStroke();
-		getMutableBackgroundColor().apply();
-		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
+	public int getAlignX() {
+		return alignX;
+	}
 
-		if (text == DEFAULT_TEXT) {
-			return;
+	public void setAlignX(int alignX) {
+		if(alignX != LEFT && alignX != CENTER && alignX != RIGHT) {
+			throw new IllegalArgumentException("alignX for text must be only LEFT, CENTER or RIGHT");
 		}
+		this.alignX = alignX;
+	}
 
-		if (font != null) {
-			ctx.textFont(font);
+	public int getAlignY() {
+		return alignY;
+	}
+
+	public void setAlignY(int alignY) {
+		if(alignY != TOP && alignY != CENTER && alignY != BOTTOM) {
+			throw new IllegalArgumentException("alignY for text must be only TOP, CENTER or BOTTOM");
 		}
-
 		
-
-		if (isAutoResizeModeEnabled()) {
-			ctx.textSize(autoTextSize);
-		} else {
-			ctx.textSize(getTextSize());
-		}
-		textColor.apply();
-		if(isClipModeEnabled()) {
-			ctx.textAlign(isCenterModeEnabled ? CENTER : CORNER, CENTER);
-			ctx.text(text, getX(), getY(), getWidth(), getHeight());
-		} else {
-			ctx.textAlign(isCenterModeEnabled ? CENTER : CORNER, TOP);
-			ctx.text(text, getX(), getY());
-		}
+		this.alignY = alignY;
 	}
 
 	public boolean isClipModeEnabled() {
@@ -145,20 +141,44 @@ public final class TextView extends Component {
 		this.autoResizeMode = autoResizeMode;
 	}
 
-	public boolean isCenterModeEnabled() {
-		return isCenterModeEnabled;
-	}
-
-	public void setCenterModeEnabled(boolean isEnabled) {
-		this.isCenterModeEnabled = isEnabled;
-	}
-
 	public Color getTextColor() {
 		return new Color(textColor);
 	}
 
 	public void setTextColor(Color color) {
 		textColor.set(color);
+	}
+	
+	@Override
+	protected void render() {
+		ctx.noStroke();
+		getMutableBackgroundColor().apply();
+		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
+
+		if (text == DEFAULT_TEXT) {
+			return;
+		}
+
+		if (font != null) {
+			ctx.textFont(font);
+		}
+
+		
+
+		if (isAutoResizeModeEnabled()) {
+			ctx.textSize(autoTextSize);
+		} else {
+			ctx.textSize(getTextSize());
+		}
+		textColor.apply();
+		ctx.textAlign(alignX, alignY);
+		
+		if(isClipModeEnabled()) {
+			ctx.text(text, getX(), getY(), getWidth(), getHeight());
+		} else {
+			ctx.text(text, getX(), getY());
+		}
+		
 	}
 
 	@Override
