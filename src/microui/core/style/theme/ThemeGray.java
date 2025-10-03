@@ -58,5 +58,14 @@ public class ThemeGray extends AbstractTheme {
 	public Color getEditableBackgroundColor() {
 		return new Color(232);
 	}
+	
+	@Override
+	public Color getTooltipBackgroundColor() {
+		return new Color(200);
+	}
 
+	@Override
+	public Color getTooltipTextColor() {
+		return new Color(32);
+	}
 }

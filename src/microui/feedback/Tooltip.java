@@ -7,15 +7,14 @@ import microui.util.Metrics;
 
 public final class Tooltip extends SpatialView {
 	private TooltipContent content;
-	private boolean isAdditionalCondition;
 	
 	public Tooltip(Component component) {
 		super();
 		setConstrainDimensionsEnabled(false);
-		setAdditionalCondition(true);
+		setNegativeDimensionsEnabled(false);
 		
 		component.onEnterLong(() -> {
-			if(content != null && content.isPrepared() && isAdditionalCondition()) {
+			if(content != null && content.isPrepared()) {
 				setVisible(true);
 			}
 		});
@@ -24,7 +23,7 @@ public final class Tooltip extends SpatialView {
 			setVisible(false);
 		});
 		
-		component.onClick(() -> setVisible(false));
+		component.onPress(() -> setVisible(false));
 
 		Metrics.register(this);
 
@@ -35,16 +34,8 @@ public final class Tooltip extends SpatialView {
 			TooltipManager.setTooltip(this);
 		}
 	}
-	
-	public boolean isAdditionalCondition() {
-		return isAdditionalCondition;
-	}
 
-	public void setAdditionalCondition(boolean isAdditionalCondition) {
-		this.isAdditionalCondition = isAdditionalCondition;
-	}
-
-	public TooltipContent getContent() {
+	public final TooltipContent getContent() {
 		return content;
 	}
 
@@ -53,10 +44,9 @@ public final class Tooltip extends SpatialView {
 			throw new NullPointerException("the content for tooltip cannot be null");
 		}
 		this.content = content;
+		content.setTooltip(this);
 	}
 	
-	
-
 	@Override
 	protected void render() {
 		content.draw();

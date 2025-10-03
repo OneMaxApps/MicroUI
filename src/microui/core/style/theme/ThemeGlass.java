@@ -59,4 +59,14 @@ public class ThemeGlass extends AbstractTheme {
 		return new Color(200,32);
 	}
 	
+	@Override
+	public Color getTooltipBackgroundColor() {
+		return new Color(200,200,232,200);
+	}
+
+	@Override
+	public Color getTooltipTextColor() {
+		return new Color(0);
+	}
+	
 }

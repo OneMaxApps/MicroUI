@@ -59,5 +59,13 @@ public class ThemeWhite extends AbstractTheme {
 		return new Color(255);
 	}
 	
-	
+	@Override
+	public Color getTooltipBackgroundColor() {
+		return new Color(255);
+	}
+
+	@Override
+	public Color getTooltipTextColor() {
+		return new Color(0);
+	}
 }

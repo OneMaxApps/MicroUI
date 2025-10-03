@@ -58,4 +58,16 @@ public class ThemeBlack extends AbstractTheme {
 	public Color getEditableBackgroundColor() {
 		return new Color(128);
 	}
+
+	@Override
+	public Color getTooltipBackgroundColor() {
+		return new Color(0,200);
+	}
+
+	@Override
+	public Color getTooltipTextColor() {
+		return new Color(255);
+	}
+	
+	
 }

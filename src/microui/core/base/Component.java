@@ -473,10 +473,6 @@ public abstract class Component extends SpatialView {
 	
 	// NEW TOOLTIP API //////////////////////////////////
 	
-	public final TooltipContent getTooltipContent() {
-		return tooltip.getContent();
-	}
-	
 	public final void setTooltipContent(TooltipContent tooltipContent) {
 		tooltip.setContent(tooltipContent);
 	}

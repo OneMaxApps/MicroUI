@@ -16,13 +16,9 @@ public final class TooltipManager extends View {
 	@Override
 	protected void render() {
 		if (tooltip != null && tooltip.isVisible()) {
-			tooltip.setPosition(getCorrectTooltipPositionX(), ctx.mouseY);
+			tooltip.setPosition(getCorrectPositionX(), getCorrectPositionY());
 			tooltip.draw();
 		}
-	}
-
-	public static Tooltip getTooltip() {
-		return tooltip;
 	}
 
 	public static void setTooltip(Tooltip tooltip) {
@@ -36,11 +32,15 @@ public final class TooltipManager extends View {
 		return INSTANCE;
 	}
 
-	private float getCorrectTooltipPositionX() {
+	private float getCorrectPositionX() {
 		return constrain(ctx.mouseX + LEFT_PADDING, 0, ctx.width - tooltip.getWidth());
 	}
+	
+	private float getCorrectPositionY() {
+		return constrain(ctx.mouseY, 0, ctx.height - tooltip.getHeight());
+	}
 
-	private static final float constrain(float value, float min, float max) {
+	private static float constrain(float value, float min, float max) {
 		return value < min ? min : value > max ? max : value;
 	}
 }

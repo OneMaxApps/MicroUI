@@ -18,7 +18,7 @@ public class ComponentLauncher extends PApplet {
 
 	@Override
 	public void settings() {
-		size(800,480);
+		size(800,240);
 	}
 
 	@Override

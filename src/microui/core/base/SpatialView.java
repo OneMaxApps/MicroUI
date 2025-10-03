@@ -10,7 +10,7 @@ import static microui.core.base.SpatialView.HooksUpdateMode.REACTIVE;
 import microui.MicroUI;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 20.09.2025
+//Last Reviewed: 03.10.2025
 public abstract class SpatialView extends View {
 	private static final int DEFAULT_MIN_SIZE = 1;
 	private static final int DEFAULT_MAX_SIZE = 1000;
@@ -400,7 +400,7 @@ public abstract class SpatialView extends View {
 		setNegativeDimensionsEnabled(other.isNegativeDimensionsEnabled());
 	}
 
-	protected void onChangePositions() {
+	protected void onChangePosition() {
 	}
 
 	protected void onChangeDimensions() {
@@ -433,7 +433,7 @@ public abstract class SpatialView extends View {
 	 * </p>
 	 */
 	protected final void requestUpdate() {
-		onChangePositions();
+		onChangePosition();
 		onChangeDimensions();
 		onChangeBounds();
 	}
@@ -447,7 +447,7 @@ public abstract class SpatialView extends View {
 		if (isPosDirty || isDimDirty) {
 			onChangeBounds();
 			if (isPosDirty) {
-				onChangePositions();
+				onChangePosition();
 			}
 			if (isDimDirty) {
 				onChangeDimensions();

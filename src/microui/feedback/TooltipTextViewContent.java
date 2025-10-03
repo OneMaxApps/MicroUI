@@ -9,6 +9,7 @@ public final class TooltipTextViewContent extends TooltipContent {
 	private static final int DEFAULT_TEXT_SIZE = 12;
 	private final TextView textView;
 	private boolean isDirtySize;
+	
 	public TooltipTextViewContent(String text) {
 		super();
 		setVisible(true);
@@ -62,8 +63,8 @@ public final class TooltipTextViewContent extends TooltipContent {
 	}
 
 	@Override
-	protected void onChangePositions() {
-		super.onChangePositions();
+	protected void onChangePosition() {
+		super.onChangePosition();
 		
 		textView.setPositionFrom(this);
 	}
@@ -92,7 +93,12 @@ public final class TooltipTextViewContent extends TooltipContent {
 		
 		ctx.popStyle();
 		
+		float correctWidth = maxTextWidth + textView.getPaddingLeft()+textView.getPaddingRight();
+		float correctHeight = totalHeight + textView.getPaddingTop()+textView.getPaddingBottom();
+		
 		textView.setSize(maxTextWidth,totalHeight);
+		setSize(correctWidth,correctHeight);
+		getTooltip().setSizeFrom(this);
 		
 		isDirtySize = false;
 	}
