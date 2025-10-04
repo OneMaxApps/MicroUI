@@ -6,6 +6,8 @@ import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.TOP;
 
 import microui.component.TextView;
+import microui.core.style.Color;
+import microui.core.style.GradientColor;
 
 public final class TooltipTextViewContent extends TooltipContent {
 	private static final int DEFAULT_TEXT_SIZE = 12;
@@ -20,7 +22,12 @@ public final class TooltipTextViewContent extends TooltipContent {
 		
 		textView = new TextView(text);
 		textView.setConstrainDimensionsEnabled(false);
-		textView.setBackgroundColor(getTheme().getTooltipBackgroundColor());
+		textView.setBackgroundColor(
+				new GradientColor(
+						new Color(0,0),
+						getTheme().getTooltipBackgroundColor(),
+						() -> true)
+				);
 		textView.setTextColor(getTheme().getTooltipTextColor());
 		textView.setAutoResizeModeEnabled(false);
 		textView.setTextSize(DEFAULT_TEXT_SIZE);

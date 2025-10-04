@@ -7,13 +7,13 @@ import microui.util.Metrics;
 import processing.core.PGraphics;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 24.09.2025
-public final class Color {
+//Last Reviewed: 04.10.2025
+public class Color {
 	public static final int MIN_VALUE = 0, MAX_VALUE = 255;
 	private int red,green,blue,alpha;
 	
 	public Color(float red, float green, float blue, float alpha) {
-		set(red, green, blue, alpha);
+		setInternal(red, green, blue, alpha);
 		Metrics.register(this);
 	}
 	
@@ -45,7 +45,7 @@ public final class Color {
 	}
 	
 	public void set(float red, float green, float blue) {
-		set(red,green,blue,MAX_VALUE);
+		set(getRed(),getGreen(),getBlue(),MAX_VALUE);
 	}
 	
 	public void set(float gray, float alpha) {
@@ -96,52 +96,59 @@ public final class Color {
 	}
 	
 	public void apply() {
-		getContext().fill(red,green,blue,alpha);
+		getContext().fill(getRed(),getGreen(),getBlue(),getAlpha());
 	}
 	
 	public void apply(PGraphics pGraphics) {
 		if(pGraphics == null) {
 			throw new NullPointerException("pGraphics cannot be null");
 		}
-		pGraphics.fill(red,green,blue,alpha);
+		pGraphics.fill(getRed(),getGreen(),getBlue(),getAlpha());
 	}
 	
 	public void applyStroke() {
-		getContext().stroke(red,green,blue,alpha);
+		getContext().stroke(getRed(),getGreen(),getBlue(),getAlpha());
 	}
 	
 	public void applyStroke(PGraphics pGraphics) {
 		if(pGraphics == null) {
 			throw new NullPointerException("pGraphics cannot be null");
 		}
-		pGraphics.stroke(red,green,blue,alpha);
+		pGraphics.stroke(getRed(),getGreen(),getBlue(),getAlpha());
 	}
 	
 	public void applyBackground() {
-		getContext().background(red,green,blue,alpha);
+		getContext().background(getRed(),getGreen(),getBlue(),getAlpha());
 	}
 	
 	public void applyBackground(PGraphics pGraphics) {
 		if(pGraphics == null) {
 			throw new NullPointerException("pGraphics cannot be null");
 		}
-		pGraphics.background(red,green,blue,alpha);
+		pGraphics.background(getRed(),getGreen(),getBlue(),getAlpha());
 	}
 	
 	public void applyTint() {
-		getContext().tint(red,green,blue,alpha);
+		getContext().tint(getRed(),getGreen(),getBlue(),getAlpha());
 	}
 	
 	public void applyTint(PGraphics pGraphics) {
 		if(pGraphics == null) {
 			throw new NullPointerException("pGraphics cannot be null");
 		}
-		pGraphics.tint(red,green,blue,alpha);
+		pGraphics.tint(getRed(),getGreen(),getBlue(),getAlpha());
 	}
 
-	public boolean isTransparent() { return alpha == 0; }
+	public final boolean isTransparent() { return alpha == 0; }
 	
-	private static int constrain(float value, float min, float max) {
+	protected static int constrain(float value, float min, float max) {
 		return (int) (value < min ? min : value > max ? max : value);
+	}
+	
+	private void setInternal(float red, float green, float blue, float alpha) {
+		this.red   = constrain(red,MIN_VALUE,MAX_VALUE);
+		this.green = constrain(green,MIN_VALUE,MAX_VALUE);
+		this.blue  = constrain(blue,MIN_VALUE,MAX_VALUE);
+		this.alpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
 	}
 }

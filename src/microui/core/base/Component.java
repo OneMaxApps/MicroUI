@@ -16,9 +16,9 @@ import microui.feedback.TooltipTextViewContent;
 //Status: STABLE - Do not modify
 //Last Reviewed: 26.09.2025
 public abstract class Component extends SpatialView {
+	private Color backgroundColor;
 	private final Padding padding;
 	private final Margin margin;
-	private final Color backgroundColor;
 	private final Event event;
 	private final InteractionHandler interactionHandler;
 	private final Tooltip tooltip;
@@ -66,7 +66,13 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final Component setBackgroundColor(Color color) {
-		this.backgroundColor.set(color);
+		
+		if(color == null) {
+			throw new NullPointerException("the color cannot be null");
+		}
+		
+		backgroundColor = color;
+		
 		return this;
 	}
 
