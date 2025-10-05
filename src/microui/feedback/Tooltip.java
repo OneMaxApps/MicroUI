@@ -7,6 +7,7 @@ import microui.util.Metrics;
 
 public final class Tooltip extends SpatialView {
 	private TooltipContent content;
+	private boolean isMustBeClosed;
 	
 	public Tooltip(Component component) {
 		super();
@@ -14,22 +15,29 @@ public final class Tooltip extends SpatialView {
 		setNegativeDimensionsEnabled(false);
 		
 		component.onEnterLong(() -> {
-			if(content != null && content.isPrepared()) {
+			if(content != null && content.isPreparedShow()) {
 				setVisible(true);
 			}
 		});
 
 		component.onLeave(() -> {
-			setVisible(false);
+			isMustBeClosed = true;
 		});
 		
-		component.onPress(() -> setVisible(false));
+		component.onPress(() -> {
+			isMustBeClosed = true;
+		});
 
 		Metrics.register(this);
 
 	}
 
 	public void listen() {
+		if(isMustBeClosed && content != null && content.isPreparedClose()) {
+			setVisible(false);
+			isMustBeClosed = false;
+		}
+		
 		if (isVisible()) {
 			TooltipManager.setTooltip(this);
 		}

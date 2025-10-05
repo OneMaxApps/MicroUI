@@ -15,7 +15,7 @@ public abstract class AbstractButton extends Component {
 	
 	public AbstractButton(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		getMutableBackgroundColor().set(getTheme().getBackgroundColor());
+		setBackgroundColor(getTheme().getBackgroundColor());
 		ripples = new Ripples(this);
 		hover = new Hover(this);
 		stroke = new Stroke();
@@ -26,7 +26,7 @@ public abstract class AbstractButton extends Component {
 	protected void render() {
 		ctx.pushStyle();
 		stroke.apply();
-		getMutableBackgroundColor().apply();
+		getBackgroundColor().apply();
 		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		ripples.draw();
 		hover.draw();

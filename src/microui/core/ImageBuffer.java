@@ -10,7 +10,7 @@ import processing.core.PImage;
 // Status: Stable - Do not modify
 // Last Reviewed: 13.09.2025
 public class ImageBuffer extends SpatialView {
-	private final Color color;
+	private Color color;
 	private PImage image;
 
 	public ImageBuffer() {
@@ -54,11 +54,16 @@ public class ImageBuffer extends SpatialView {
 	}
 
 	public final Color getColor() {
-		return new Color(color);
+		return color;
 	}
 
 	public final void setColor(Color color) {
-		this.color.set(requireNonNull(color, "color cannot be null"));
+		if(color == null) {
+			throw new NullPointerException("the color cannot be null");
+		}
+		
+		this.color = color;
+		
 	}
 
 	public final void removeTexture() {

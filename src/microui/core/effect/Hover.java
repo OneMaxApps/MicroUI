@@ -11,8 +11,8 @@ import microui.core.style.Color;
 //Status: STABLE - Do not modify
 //Last Reviewed: 16.09.2025
 public final class Hover extends View {
-	private final Color color;
 	private final Component component;
+	private Color color;
 	private float timer, timerMax, speed;
 	private boolean isEnabled;
 
@@ -63,12 +63,13 @@ public final class Hover extends View {
 	}
 
 	public Color getColor() {
-		return new Color(color);
+		return color;
 	}
 
 	public void setColor(Color color) {
-		requireNonNull(color, "color cannot be null");
-		this.color.set(color);
+		if(color == null) {
+			throw new NullPointerException("the color cannot be null");
+		}
 	}
 
 	public float getSpeed() {

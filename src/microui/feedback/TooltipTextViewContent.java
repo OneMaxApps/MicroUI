@@ -22,13 +22,9 @@ public final class TooltipTextViewContent extends TooltipContent {
 		
 		textView = new TextView(text);
 		textView.setConstrainDimensionsEnabled(false);
-		textView.setBackgroundColor(
-				new GradientColor(
-						new Color(0,0),
-						getTheme().getTooltipBackgroundColor(),
-						() -> true)
-				);
-		textView.setTextColor(getTheme().getTooltipTextColor());
+		textView.setBackgroundColor(new GradientColor(new Color(0,0),getTheme().getTooltipBackgroundColor(),() -> true));
+		
+		textView.setTextColor(new GradientColor(new Color(0,0),getTheme().getTooltipTextColor(),() -> true));
 		textView.setAutoResizeModeEnabled(false);
 		textView.setTextSize(DEFAULT_TEXT_SIZE);
 		textView.setPadding(4,5);
@@ -38,9 +34,9 @@ public final class TooltipTextViewContent extends TooltipContent {
 		
 		isDirtySize = true;
 	}
-	
+
 	@Override
-	public boolean isPrepared() {
+	public boolean isPreparedShow() {
 		if(textView.getText().isEmpty()) {
 			return false;
 		}
@@ -48,7 +44,20 @@ public final class TooltipTextViewContent extends TooltipContent {
 		
 		return true;
 	}
-	
+
+	@Override
+	public boolean isPreparedClose() {
+		if(textView.getBackgroundColor() instanceof GradientColor gradientColor) {
+			gradientColor.resetAnimationProgress();
+		}
+		
+		if(textView.getTextColor() instanceof GradientColor gradientColor) {
+			gradientColor.resetAnimationProgress();
+		}
+		
+		return true;
+	}
+
 	public String getText() {
 		return textView.getText();
 	}

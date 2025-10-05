@@ -109,7 +109,7 @@ public final class Ripples extends View {
 	}
 
 	private final class Animation {
-		private final Color color;
+		private Color color;
 		private float maxRadius;
 		private int startX, startY, radius;
 		private boolean isPositionPrepared;
@@ -136,7 +136,7 @@ public final class Ripples extends View {
 		}
 
 		Color getColor() {
-			return new Color(color);
+			return color;
 		}
 
 		void setColor(Color color) {
@@ -144,7 +144,7 @@ public final class Ripples extends View {
 				throw new NullPointerException("color cannot be null");
 			}
 
-			this.color.set(color);
+			this.color = color;
 		}
 
 		void preparePosition() {

@@ -10,7 +10,7 @@ import microui.event.Listener;
 
 public class CheckBox extends AbstractButton {
 	public static final int DEFAULT_SIZE = 16;
-	private final Color markColor;
+	private Color markColor;
 	private boolean isChecked;
 
 	public CheckBox(float x, float y) {
@@ -51,7 +51,7 @@ public class CheckBox extends AbstractButton {
 	}
 
 	public final Color getMarkColor() {
-		return new Color(markColor);
+		return markColor;
 	}
 
 	public final void setMarkColor(Color color) {
@@ -59,7 +59,7 @@ public class CheckBox extends AbstractButton {
 			throw new NullPointerException("the mark color cannot be null");
 		}
 
-		markColor.set(color);
+		markColor = color;
 	}
 
 	public final void onStateChangedListener(Listener listener) {

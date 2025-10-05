@@ -16,7 +16,7 @@ import processing.core.PFont;
 
 public final class TextView extends Component {
 	private static final String DEFAULT_TEXT = "";
-	private final Color textColor;
+	private Color textColor;
 	private PFont font;
 	private String text;
 	private AutoResizeMode autoResizeMode;
@@ -29,7 +29,7 @@ public final class TextView extends Component {
 		setMinSize(10);
 		setMaxSize(100, 40);
 
-		getMutableBackgroundColor().set(0, 0);
+		setBackgroundColor(new Color(0,0));
 		setTextColor(textColor = getTheme().getTextViewColor());
 
 		setText(text);
@@ -142,17 +142,20 @@ public final class TextView extends Component {
 	}
 
 	public Color getTextColor() {
-		return new Color(textColor);
+		return textColor;
 	}
 
 	public void setTextColor(Color color) {
-		textColor.set(color);
+		if(color == null) {
+			throw new NullPointerException("the color cannot be null");
+		}
+		textColor = color;
 	}
 	
 	@Override
 	protected void render() {
 		ctx.noStroke();
-		getMutableBackgroundColor().apply();
+		getBackgroundColor().apply();
 		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 
 		if (text == DEFAULT_TEXT) {
@@ -162,8 +165,6 @@ public final class TextView extends Component {
 		if (font != null) {
 			ctx.textFont(font);
 		}
-
-		
 
 		if (isAutoResizeModeEnabled()) {
 			ctx.textSize(autoTextSize);

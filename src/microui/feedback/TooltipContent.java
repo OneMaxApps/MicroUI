@@ -12,8 +12,9 @@ public abstract class TooltipContent extends SpatialView {
 
 	}
 	
-	public abstract boolean isPrepared();
-
+	public abstract boolean isPreparedShow();
+	public abstract boolean isPreparedClose();
+	
 	protected final Tooltip getTooltip() {
 		if(tooltip == null) {
 			throw new IllegalStateException("tooltip is not initialized");

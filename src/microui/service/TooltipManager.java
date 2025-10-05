@@ -15,7 +15,7 @@ public final class TooltipManager extends View {
 
 	@Override
 	protected void render() {
-		if (tooltip != null && tooltip.isVisible()) {
+		if (tooltip != null) {
 			tooltip.setPosition(getCorrectPositionX(), getCorrectPositionY());
 			tooltip.draw();
 		}

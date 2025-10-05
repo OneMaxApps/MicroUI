@@ -62,7 +62,7 @@ public abstract class Component extends SpatialView {
 	}
 
 	public final Color getBackgroundColor() {
-		return new Color(backgroundColor);
+		return backgroundColor;
 	}
 
 	public final Component setBackgroundColor(Color color) {
@@ -500,10 +500,6 @@ public abstract class Component extends SpatialView {
 	}
 
 	////////////////////////////////////////////////////
-
-	protected final Color getMutableBackgroundColor() {
-		return backgroundColor;
-	}
 
 	private void debugOnDraw() {
 		if (MicroUI.isDebugModeEnabled()) {

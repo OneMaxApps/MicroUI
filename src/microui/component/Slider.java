@@ -69,11 +69,11 @@ public class Slider extends LinearRangeControl {
 	}
 
 	public final Color getIndicatorColor() {
-		return new Color(indicator.color);
+		return indicator.color;
 	}
 
 	public final void setIndicatorColor(Color color) {
-		indicator.color.set(color);
+		indicator.color = color;
 	}
 	
 	private void recalculateIndicatorBounds() {
@@ -93,7 +93,7 @@ public class Slider extends LinearRangeControl {
 
 	private final class Rect extends SpatialView {
 		public final Stroke stroke;
-		public final Color color;
+		public Color color;
 
 		private Rect(float x, float y, float w, float h) {
 			super(x, y, w, h);

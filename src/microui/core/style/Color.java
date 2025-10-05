@@ -13,7 +13,7 @@ public class Color {
 	private int red,green,blue,alpha;
 	
 	public Color(float red, float green, float blue, float alpha) {
-		setInternal(red, green, blue, alpha);
+		set(red, green, blue, alpha);
 		Metrics.register(this);
 	}
 	
@@ -37,62 +37,20 @@ public class Color {
 		this(128);
 	}
 	
-	public void set(float red, float green, float blue, float alpha) {
-		this.red   = constrain(red,MIN_VALUE,MAX_VALUE);
-		this.green = constrain(green,MIN_VALUE,MAX_VALUE);
-		this.blue  = constrain(blue,MIN_VALUE,MAX_VALUE);
-		this.alpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
-	}
-	
-	public void set(float red, float green, float blue) {
-		set(getRed(),getGreen(),getBlue(),MAX_VALUE);
-	}
-	
-	public void set(float gray, float alpha) {
-		set(gray,gray,gray,alpha);
-	}
-	
-	public void set(float gray) {
-		set(gray,MAX_VALUE);
-	}
-	
-	public void set(Color color) {
-		if(color == null) {
-			throw new NullPointerException("color cannot be null");
-		}
-		set(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
-	}
-
 	public int getRed() {
 		return red;
 	}
-
-	public void setRed(float red) {
-		this.red = constrain(red,MIN_VALUE,MAX_VALUE);
-	}
-
+	
 	public int getGreen() {
 		return green;
 	}
-
-	public void setGreen(float green) {
-		this.green = constrain(green,MIN_VALUE,MAX_VALUE);
-	}
-
+	
 	public int getBlue() {
 		return blue;
 	}
-
-	public void setBlue(float blue) {
-		this.blue = constrain(blue,MIN_VALUE,MAX_VALUE);
-	}
-
+	
 	public int getAlpha() {
 		return alpha;
-	}
-
-	public void setAlpha(float alpha) {
-		this.alpha = constrain(alpha,MIN_VALUE,MAX_VALUE);
 	}
 	
 	public void apply() {
@@ -145,7 +103,7 @@ public class Color {
 		return (int) (value < min ? min : value > max ? max : value);
 	}
 	
-	private void setInternal(float red, float green, float blue, float alpha) {
+	private void set(float red, float green, float blue, float alpha) {
 		this.red   = constrain(red,MIN_VALUE,MAX_VALUE);
 		this.green = constrain(green,MIN_VALUE,MAX_VALUE);
 		this.blue  = constrain(blue,MIN_VALUE,MAX_VALUE);

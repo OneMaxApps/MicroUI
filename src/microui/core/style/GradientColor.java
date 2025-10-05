@@ -1,5 +1,7 @@
 package microui.core.style;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static processing.core.PApplet.map;
 
 import java.util.function.BooleanSupplier;
@@ -10,6 +12,7 @@ public final class GradientColor extends Color {
 	private final Color start,end;
 	private final BooleanSupplier condition;
 	private float progressStart,progress,progressEnd,progressSpeed;
+	private boolean isRevertModeEnabled;
 	
 	public GradientColor(Color start, Color end, BooleanSupplier condition) {
 		super();
@@ -30,14 +33,26 @@ public final class GradientColor extends Color {
 		this.condition = condition;
 		
 		progressEnd = 1;
-		setProgressSpeed(.1f);
+		setProgressSpeed(.05f);
 	}
 
-	public final float getProgressSpeed() {
+	public void resetAnimationProgress() {
+		progress = 0;
+	}
+	
+	public boolean isRevertModeEnabled() {
+		return isRevertModeEnabled;
+	}
+
+	public void setRevertModeEnabled(boolean isRevertModeEnabled) {
+		this.isRevertModeEnabled = isRevertModeEnabled;
+	}
+
+	public float getProgressSpeed() {
 		return progressSpeed;
 	}
 	
-	public final void setProgressSpeed(float progressSpeed) {
+	public void setProgressSpeed(float progressSpeed) {
 		if(progressSpeed <= 0 || progressSpeed >= 1) {
 			throw new IllegalArgumentException("progress speed must be between 0 and 1");
 		}
@@ -46,71 +61,22 @@ public final class GradientColor extends Color {
 
 	@Override
 	public int getRed() {
-		super.setRed(lerp(start.getRed(),end.getRed()));
-		return super.getRed();
+		return lerp(start.getRed(),end.getRed());
 	}
 
 	@Override
 	public int getGreen() {
-		super.setGreen(lerp(start.getGreen(),end.getGreen()));
-		return super.getGreen();
+		return lerp(start.getGreen(),end.getGreen());
 	}
 
 	@Override
 	public int getBlue() {
-		super.setBlue(lerp(start.getBlue(),end.getBlue()));
-		return super.getBlue();
+		return lerp(start.getBlue(),end.getBlue());
 	}
 
 	@Override
 	public int getAlpha() {
-		super.setAlpha(lerp(start.getAlpha(),end.getAlpha()));
-		return super.getAlpha();
-	}
-	
-	@Override
-	public void set(float red, float green, float blue, float alpha) {
-		throw new UnsupportedOperationException("cannot change color in to GradientColor object");
-	}
-
-	@Override
-	public void set(float red, float green, float blue) {
-		throw new UnsupportedOperationException("cannot change color in to GradientColor object");
-	}
-
-	@Override
-	public void set(float gray, float alpha) {
-		throw new UnsupportedOperationException("cannot change color in to GradientColor object");
-	}
-
-	@Override
-	public void set(float gray) {
-		throw new UnsupportedOperationException("cannot change color in to GradientColor object");
-	}
-
-	@Override
-	public void set(Color color) {
-		throw new UnsupportedOperationException("cannot change color in to GradientColor object");
-	}
-
-	@Override
-	public void setRed(float red) {
-		throw new UnsupportedOperationException("cannot change color in to GradientColor object");
-	}
-
-	@Override
-	public void setGreen(float green) {
-		throw new UnsupportedOperationException("cannot change color in to GradientColor object");
-	}
-
-	@Override
-	public void setBlue(float blue) {
-		throw new UnsupportedOperationException("cannot change color in to GradientColor object");
-	}
-
-	@Override
-	public void setAlpha(float alpha) {
-		throw new UnsupportedOperationException("cannot change color in to GradientColor object");
+		return lerp(start.getAlpha(),end.getAlpha());
 	}
 
 	@Override
@@ -168,12 +134,18 @@ public final class GradientColor extends Color {
 	private void updateProgress() {
 		if(condition.getAsBoolean()) {
 			if(progress < progressEnd) {
-				progress += progressSpeed;
+				progress = min(progress+progressSpeed,progressEnd);
 			}
 		} else {
-			if(progress > progressStart) {
-				progress -= progressSpeed;
+			if(isRevertModeEnabled()) {
+				progress = progressStart;
+			} else {
+				if(progress > progressStart) {
+					progress = max(progress-progressSpeed, progressStart);
+				}
 			}
+			
+			
 		}
 	}
 }

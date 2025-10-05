@@ -52,9 +52,9 @@ public final class TextField extends Component implements KeyPressable {
 		setMaxHeight(40);
 
 		stroke = new Stroke();
-
-		getMutableBackgroundColor().set(getTheme().getEditableBackgroundColor());
-
+		
+		setBackgroundColor(getTheme().getEditableBackgroundColor());
+		
 		text = new Text();
 		cursor = new Cursor();
 		selection = new Selection();
@@ -77,7 +77,7 @@ public final class TextField extends Component implements KeyPressable {
 		checkDimensions();
 
 		ctx.pushStyle();
-		getMutableBackgroundColor().apply();
+		getBackgroundColor().apply();
 		ctx.rect(getX(), getY(), getWidth(), getHeight());
 
 		pg.beginDraw();

@@ -13,7 +13,7 @@ import processing.event.MouseEvent;
 
 public final class Knob extends RangeControl {
 	private static final float START = 0, END = (float) (PI*2);
-	private final Color indicatorColor;
+	private Color indicatorColor;
 	private float centerX,centerY,diameter;
 	private boolean isCanDrag;
 	
@@ -39,7 +39,7 @@ public final class Knob extends RangeControl {
 	@Override
 	protected void render() {
 		getMutableStroke().apply();
-		getMutableBackgroundColor().apply();
+		getBackgroundColor().apply();
 		ctx.ellipse(centerX, centerY, diameter, diameter);
 		
 		indicatorOnDraw();
@@ -72,11 +72,14 @@ public final class Knob extends RangeControl {
 	}
 	
 	public Color getIndicatorColor() {
-		return new Color(indicatorColor);
+		return indicatorColor;
 	}
 	
 	public void setIndicatorColor(Color color) {
-		indicatorColor.set(color);
+		if(color == null) {
+			throw new NullPointerException("the color cannot be null");
+		}
+		indicatorColor = color;
 	}
 	
 	private void recalculateCenter() {

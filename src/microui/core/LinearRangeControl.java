@@ -27,7 +27,7 @@ public abstract class LinearRangeControl extends RangeControl {
 
 		ctx.pushStyle();
 		getMutableStroke().apply();
-		getMutableBackgroundColor().apply();
+		getBackgroundColor().apply();
 		ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
 		ctx.popStyle();
 
