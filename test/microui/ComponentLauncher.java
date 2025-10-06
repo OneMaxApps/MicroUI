@@ -31,15 +31,7 @@ public class ComponentLauncher extends PApplet {
 		
 		//frameRate(2);
 		
-		button.setTooltipText("import microui.component.Button;\r\n"
-				+ "import microui.core.base.Container;\r\n"
-				+ "import microui.core.base.ContainerManager;\r\n"
-				+ "import microui.core.style.Color;\r\n"
-				+ "import microui.core.style.GradientColor;\r\n"
-				+ "import microui.layout.GridLayout;\r\n"
-				+ "import microui.layout.GridLayoutParams;\r\n"
-				+ "import microui.util.Metrics;\r\n"
-				+ "import processing.core.PApplet;");
+		button.setTooltipText("here you can set your own custom text for hint");
 		button.setBackgroundColor(new GradientColor(new Color(232), new Color(200), () -> button.isHover()));
 	}
 

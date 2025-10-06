@@ -6,13 +6,14 @@ import static processing.core.PApplet.map;
 
 import microui.core.base.Component;
 import microui.core.base.View;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 
 //Status: STABLE - Do not modify
 //Last Reviewed: 16.09.2025
 public final class Hover extends View {
 	private final Component component;
-	private Color color;
+	private AbstractColor color;
 	private float timer, timerMax, speed;
 	private boolean isEnabled;
 
@@ -62,11 +63,11 @@ public final class Hover extends View {
 
 	}
 
-	public Color getColor() {
+	public AbstractColor getColor() {
 		return color;
 	}
 
-	public void setColor(Color color) {
+	public void setColor(AbstractColor color) {
 		if(color == null) {
 			throw new NullPointerException("the color cannot be null");
 		}

@@ -21,6 +21,7 @@ import static processing.core.PConstants.RIGHT;
 import microui.core.TextController;
 import microui.core.base.Component;
 import microui.core.interfaces.KeyPressable;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 import microui.core.style.Stroke;
 import microui.event.KeyboardManager;
@@ -114,7 +115,7 @@ public final class TextField extends Component implements KeyPressable {
 		return cursor;
 	}
 
-	public final Color getSelectionColor() {
+	public final AbstractColor getSelectionColor() {
 		return selection.color;
 	}
 
@@ -352,7 +353,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 
 	public final class Text extends TextController {
-		private final Color color;
+		private final AbstractColor color;
 		private final Size size;
 		private final Font font;
 		private float x, y;
@@ -385,7 +386,7 @@ public final class TextField extends Component implements KeyPressable {
 			updatePositionX();
 		}
 
-		public final Color getColor() {
+		public final AbstractColor getColor() {
 			return color;
 		}
 
@@ -493,7 +494,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 
 	public final class Cursor {
-		private final Color color;
+		private final AbstractColor color;
 		private final Size weight;
 		private final Blink blink;
 		private final Column column;
@@ -524,7 +525,7 @@ public final class TextField extends Component implements KeyPressable {
 
 		}
 
-		public final Color getColor() {
+		public final AbstractColor getColor() {
 			return color;
 		}
 
@@ -692,7 +693,7 @@ public final class TextField extends Component implements KeyPressable {
 	}
 
 	private final class Selection {
-		private final Color color;
+		private final AbstractColor color;
 		private float x, y, w, h;
 		private int startColumn, endColumn;
 		private boolean isStarted;

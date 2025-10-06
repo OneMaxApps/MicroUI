@@ -5,6 +5,7 @@ import static processing.core.PApplet.map;
 
 import microui.core.LinearRangeControl;
 import microui.core.base.SpatialView;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 import microui.core.style.Stroke;
 
@@ -60,19 +61,19 @@ public class Slider extends LinearRangeControl {
 		indicator.stroke.setWeight(weight);
 	}
 
-	public final Color getIndicatorStrokeColor() {
+	public final AbstractColor getIndicatorStrokeColor() {
 		return indicator.stroke.getColor();
 	}
 
-	public final void setIndicatorStrokeColor(Color color) {
+	public final void setIndicatorStrokeColor(AbstractColor color) {
 		indicator.stroke.setColor(color);
 	}
 
-	public final Color getIndicatorColor() {
+	public final AbstractColor getIndicatorColor() {
 		return indicator.color;
 	}
 
-	public final void setIndicatorColor(Color color) {
+	public final void setIndicatorColor(AbstractColor color) {
 		indicator.color = color;
 	}
 	
@@ -93,7 +94,7 @@ public class Slider extends LinearRangeControl {
 
 	private final class Rect extends SpatialView {
 		public final Stroke stroke;
-		public Color color;
+		public AbstractColor color;
 
 		private Rect(float x, float y, float w, float h) {
 			super(x, y, w, h);

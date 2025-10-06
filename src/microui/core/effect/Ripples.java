@@ -7,6 +7,7 @@ import static processing.core.PApplet.map;
 
 import microui.core.base.Component;
 import microui.core.base.View;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 import microui.core.style.theme.ThemeManager;
 import microui.util.Metrics;
@@ -60,11 +61,11 @@ public final class Ripples extends View {
 		return isEnabled;
 	}
 
-	public Color getColor() {
+	public AbstractColor getColor() {
 		return animation.getColor();
 	}
 
-	public void setColor(Color color) {
+	public void setColor(AbstractColor color) {
 		animation.setColor(color);
 	}
 
@@ -109,7 +110,7 @@ public final class Ripples extends View {
 	}
 
 	private final class Animation {
-		private Color color;
+		private AbstractColor color;
 		private float maxRadius;
 		private int startX, startY, radius;
 		private boolean isPositionPrepared;
@@ -135,11 +136,11 @@ public final class Ripples extends View {
 			}
 		}
 
-		Color getColor() {
+		AbstractColor getColor() {
 			return color;
 		}
 
-		void setColor(Color color) {
+		void setColor(AbstractColor color) {
 			if (color == null) {
 				throw new NullPointerException("color cannot be null");
 			}

@@ -11,10 +11,10 @@ import processing.core.PGraphics;
 //Last Reviewed: 13.09.2025
 public final class Stroke {
 	private static final int DEFAULT_STROKE_WEIGHT = 1;
-	private Color color;
+	private AbstractColor color;
 	private float weight;
 
-	public Stroke(Color color, float weight) {
+	public Stroke(AbstractColor color, float weight) {
 		if(color == null) {
 			throw new NullPointerException("color cannot be null");
 		}
@@ -23,7 +23,7 @@ public final class Stroke {
 		setWeight(weight);
 	}
 	
-	public Stroke(Color color) {
+	public Stroke(AbstractColor color) {
 		this(color,DEFAULT_STROKE_WEIGHT);
 	}
 	
@@ -70,11 +70,11 @@ public final class Stroke {
 		weight = stroke.getWeight();
 	}
 
-	public Color getColor() {
+	public AbstractColor getColor() {
 		return color;
 	}
 
-	public void setColor(Color color) {
+	public void setColor(AbstractColor color) {
 		if(color == null) {
 			throw new NullPointerException("color cannot be null");
 		}

@@ -6,12 +6,10 @@ import static processing.core.PApplet.map;
 
 import java.util.function.BooleanSupplier;
 
-import processing.core.PGraphics;
-
-public final class GradientColor extends Color {
+public final class GradientColor extends AbstractColor {
 	private final Color start,end;
 	private final BooleanSupplier condition;
-	private float progressStart,progress,progressEnd,progressSpeed;
+	private float progressStart,progressCurrent,progressEnd,progressSpeed;
 	private boolean isRevertModeEnabled;
 	
 	public GradientColor(Color start, Color end, BooleanSupplier condition) {
@@ -37,7 +35,7 @@ public final class GradientColor extends Color {
 	}
 
 	public void resetAnimationProgress() {
-		progress = 0;
+		progressCurrent = 0;
 	}
 	
 	public boolean isRevertModeEnabled() {
@@ -80,68 +78,26 @@ public final class GradientColor extends Color {
 	}
 
 	@Override
-	public void apply() {
+	protected void preApply() {
+		super.preApply();
 		updateProgress();
-		super.apply();
-	}
-
-	@Override
-	public void apply(PGraphics pGraphics) {
-		updateProgress();
-		super.apply(pGraphics);
-	}
-
-	@Override
-	public void applyStroke() {
-		updateProgress();
-		super.applyStroke();
-	}
-
-	@Override
-	public void applyStroke(PGraphics pGraphics) {
-		updateProgress();
-		super.applyStroke(pGraphics);
-	}
-
-	@Override
-	public void applyBackground() {
-		updateProgress();
-		super.applyBackground();
-	}
-
-	@Override
-	public void applyBackground(PGraphics pGraphics) {
-		updateProgress();
-		super.applyBackground(pGraphics);
-	}
-
-	@Override
-	public void applyTint() {
-		updateProgress();
-		super.applyTint();
-	}
-
-	@Override
-	public void applyTint(PGraphics pGraphics) {
-		updateProgress();
-		super.applyTint(pGraphics);
 	}
 
 	private int lerp(int start, int end) {
-		return (int) map(progress,progressStart,progressEnd,start,end);
+		return (int) map(progressCurrent,progressStart,progressEnd,start,end);
 	}
 	
 	private void updateProgress() {
 		if(condition.getAsBoolean()) {
-			if(progress < progressEnd) {
-				progress = min(progress+progressSpeed,progressEnd);
+			if(progressCurrent < progressEnd) {
+				progressCurrent = min(progressCurrent+progressSpeed,progressEnd);
 			}
 		} else {
 			if(isRevertModeEnabled()) {
-				progress = progressStart;
+				progressCurrent = progressStart;
 			} else {
-				if(progress > progressStart) {
-					progress = max(progress-progressSpeed, progressStart);
+				if(progressCurrent > progressStart) {
+					progressCurrent = max(progressCurrent-progressSpeed, progressStart);
 				}
 			}
 			

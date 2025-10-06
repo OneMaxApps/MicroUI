@@ -5,7 +5,7 @@ import static microui.constants.AutoResizeMode.BIG;
 import static microui.core.style.theme.ThemeManager.getTheme;
 
 import microui.core.AbstractButton;
-import microui.core.style.Color;
+import microui.core.style.AbstractColor;
 import processing.core.PFont;
 
 public class Button extends AbstractButton {
@@ -59,11 +59,11 @@ public class Button extends AbstractButton {
 		textView.setFont(requireNonNull(font, "font cannot be null"));
 	}
 
-	public final Color getTextColor() {
+	public final AbstractColor getTextColor() {
 		return textView.getTextColor();
 	}
 
-	public final void setTextColor(Color color) {
+	public final void setTextColor(AbstractColor color) {
 		textView.setTextColor(color);
 	}
 

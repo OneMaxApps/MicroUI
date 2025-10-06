@@ -11,12 +11,13 @@ import static processing.core.PConstants.TOP;
 
 import microui.constants.AutoResizeMode;
 import microui.core.base.Component;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 import processing.core.PFont;
 
 public final class TextView extends Component {
 	private static final String DEFAULT_TEXT = "";
-	private Color textColor;
+	private AbstractColor textColor;
 	private PFont font;
 	private String text;
 	private AutoResizeMode autoResizeMode;
@@ -141,11 +142,11 @@ public final class TextView extends Component {
 		this.autoResizeMode = autoResizeMode;
 	}
 
-	public Color getTextColor() {
+	public AbstractColor getTextColor() {
 		return textColor;
 	}
 
-	public void setTextColor(Color color) {
+	public void setTextColor(AbstractColor color) {
 		if(color == null) {
 			throw new NullPointerException("the color cannot be null");
 		}

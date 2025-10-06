@@ -8,12 +8,13 @@ import static processing.core.PApplet.dist;
 import static processing.core.PApplet.map;
 
 import microui.core.RangeControl;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 import processing.event.MouseEvent;
 
 public final class Knob extends RangeControl {
 	private static final float START = 0, END = (float) (PI*2);
-	private Color indicatorColor;
+	private AbstractColor indicatorColor;
 	private float centerX,centerY,diameter;
 	private boolean isCanDrag;
 	
@@ -71,11 +72,11 @@ public final class Knob extends RangeControl {
 		}
 	}
 	
-	public Color getIndicatorColor() {
+	public AbstractColor getIndicatorColor() {
 		return indicatorColor;
 	}
 	
-	public void setIndicatorColor(Color color) {
+	public void setIndicatorColor(AbstractColor color) {
 		if(color == null) {
 			throw new NullPointerException("the color cannot be null");
 		}

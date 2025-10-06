@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static microui.core.style.theme.ThemeManager.getTheme;
 
 import microui.MicroUI;
-import microui.core.style.Color;
+import microui.core.style.AbstractColor;
 import microui.event.Event;
 import microui.event.EventType;
 import microui.event.InteractionHandler;
@@ -16,7 +16,7 @@ import microui.feedback.TooltipTextViewContent;
 //Status: STABLE - Do not modify
 //Last Reviewed: 26.09.2025
 public abstract class Component extends SpatialView {
-	private Color backgroundColor;
+	private AbstractColor backgroundColor;
 	private final Padding padding;
 	private final Margin margin;
 	private final Event event;
@@ -61,11 +61,11 @@ public abstract class Component extends SpatialView {
 		debugOnDraw();
 	}
 
-	public final Color getBackgroundColor() {
+	public final AbstractColor getBackgroundColor() {
 		return backgroundColor;
 	}
 
-	public final Component setBackgroundColor(Color color) {
+	public final Component setBackgroundColor(AbstractColor color) {
 		
 		if(color == null) {
 			throw new NullPointerException("the color cannot be null");

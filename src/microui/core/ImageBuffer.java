@@ -4,13 +4,14 @@ import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 
 import microui.core.base.SpatialView;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 import processing.core.PImage;
 
 // Status: Stable - Do not modify
 // Last Reviewed: 13.09.2025
 public class ImageBuffer extends SpatialView {
-	private Color color;
+	private AbstractColor color;
 	private PImage image;
 
 	public ImageBuffer() {
@@ -53,11 +54,11 @@ public class ImageBuffer extends SpatialView {
 		return image;
 	}
 
-	public final Color getColor() {
+	public final AbstractColor getColor() {
 		return color;
 	}
 
-	public final void setColor(Color color) {
+	public final void setColor(AbstractColor color) {
 		if(color == null) {
 			throw new NullPointerException("the color cannot be null");
 		}

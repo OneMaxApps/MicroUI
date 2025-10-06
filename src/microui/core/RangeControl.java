@@ -2,7 +2,7 @@ package microui.core;
 
 import microui.core.base.Component;
 import microui.core.interfaces.Scrollable;
-import microui.core.style.Color;
+import microui.core.style.AbstractColor;
 import microui.core.style.Stroke;
 import microui.util.Value;
 import processing.event.MouseEvent;
@@ -68,11 +68,11 @@ public abstract class RangeControl extends Component implements Scrollable {
 		stroke.setWeight(weight);
 	}
 
-	public final Color getStrokeColor() {
+	public final AbstractColor getStrokeColor() {
 		return stroke.getColor();
 	}
 
-	public final void setStrokeColor(Color color) {
+	public final void setStrokeColor(AbstractColor color) {
 		stroke.setColor(color);
 	}
 

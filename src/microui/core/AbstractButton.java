@@ -5,7 +5,7 @@ import static microui.core.style.theme.ThemeManager.getTheme;
 import microui.core.base.Component;
 import microui.core.effect.Hover;
 import microui.core.effect.Ripples;
-import microui.core.style.Color;
+import microui.core.style.AbstractColor;
 import microui.core.style.Stroke;
 
 public abstract class AbstractButton extends Component {
@@ -33,11 +33,11 @@ public abstract class AbstractButton extends Component {
 		ctx.popStyle();
 	}
 
-	public final Color getRipplesColor() {
+	public final AbstractColor getRipplesColor() {
 		return ripples.getColor();
 	}
 
-	public final void setRipplesColor(Color color) {
+	public final void setRipplesColor(AbstractColor color) {
 		ripples.setColor(color);
 	}
 
@@ -57,11 +57,11 @@ public abstract class AbstractButton extends Component {
 		hover.setEnabled(isEnabled);
 	}
 	
-	public Color getHoverColor() {
+	public AbstractColor getHoverColor() {
 		return hover.getColor();
 	}
 	
-	public void setHoverColor(Color color) {
+	public void setHoverColor(AbstractColor color) {
 		hover.setColor(color);
 	}
 	
@@ -81,11 +81,11 @@ public abstract class AbstractButton extends Component {
 		stroke.setWeight(weight);
 	}
 
-	public final Color getStrokeColor() {
+	public final AbstractColor getStrokeColor() {
 		return stroke.getColor();
 	}
 
-	public final void setStrokeColor(Color color) {
+	public final void setStrokeColor(AbstractColor color) {
 		stroke.setColor(color);
 	}
 

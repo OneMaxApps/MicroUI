@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import microui.core.base.SpatialView;
 import microui.core.interfaces.Scrollable;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 import microui.event.Event;
 import processing.event.MouseEvent;
@@ -20,7 +21,7 @@ public class MenuButton extends Button implements Scrollable {
 	private float listHeight;
 	private float markX, markY, markW, markH;
 
-	private final Color indicatorColor;
+	private final AbstractColor indicatorColor;
 
 	private final ArrayList<Button> itemList;
 	private final Scrolling scrolling;
@@ -212,7 +213,7 @@ public class MenuButton extends Button implements Scrollable {
 		return itemList.size();
 	}
 
-	public final void setItemsColor(final Color color) {
+	public final void setItemsColor(final AbstractColor color) {
 		for (Button item : itemList) {
 			item.setBackgroundColor(color);
 

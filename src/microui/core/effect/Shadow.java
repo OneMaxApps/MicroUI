@@ -8,11 +8,12 @@ import static processing.core.PConstants.SQUARE;
 
 import microui.core.base.SpatialView;
 import microui.core.base.View;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 
 @Deprecated
 public final class Shadow extends View {
-	  private final Color color;
+	  private final AbstractColor color;
 	  private final SpatialView bounds;
 	  private int leftSize,rightSize,upSize,downSize;
 	  private byte absoluteSize;
@@ -52,7 +53,7 @@ public final class Shadow extends View {
 	    }
 	  }
 	  
-      public final Color getColor() {
+      public final AbstractColor getColor() {
 	  	return color;
 	  }
 	  

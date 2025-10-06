@@ -6,7 +6,7 @@ import static processing.core.PApplet.map;
 
 import microui.constants.Orientation;
 import microui.core.LinearRangeControl;
-import microui.core.style.Color;
+import microui.core.style.AbstractColor;
 
 public class Scroll extends LinearRangeControl {
 	private final Button thumb;
@@ -91,11 +91,11 @@ public class Scroll extends LinearRangeControl {
 		return thumb.isClick();
 	}
 	
-	public final Color getThumbRipplesColor() {
+	public final AbstractColor getThumbRipplesColor() {
 		return thumb.getRipplesColor();
 	}
 
-	public final void setThumbRipplesColor(Color color) {
+	public final void setThumbRipplesColor(AbstractColor color) {
 		thumb.setRipplesColor(color);
 	}
 
@@ -115,11 +115,11 @@ public class Scroll extends LinearRangeControl {
 		thumb.setHoverEnabled(isEnabled);
 	}
 	
-	public Color getThumbHoverColor() {
+	public AbstractColor getThumbHoverColor() {
 		return thumb.getHoverColor();
 	}
 	
-	public void setThumbHoverColor(Color color) {
+	public void setThumbHoverColor(AbstractColor color) {
 		thumb.setHoverColor(color);
 	}
 	
@@ -139,11 +139,11 @@ public class Scroll extends LinearRangeControl {
 		thumb.setStrokeWeight(weight);
 	}
 
-	public final Color getThumbStrokeColor() {
+	public final AbstractColor getThumbStrokeColor() {
 		return thumb.getStrokeColor();
 	}
 
-	public final void setThumbStrokeColor(Color color) {
+	public final void setThumbStrokeColor(AbstractColor color) {
 		thumb.setStrokeColor(color);
 	}
 	

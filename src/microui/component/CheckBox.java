@@ -5,12 +5,13 @@ import static microui.core.style.theme.ThemeManager.getTheme;
 import static processing.core.PConstants.PROJECT;
 
 import microui.core.AbstractButton;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 import microui.event.Listener;
 
 public class CheckBox extends AbstractButton {
 	public static final int DEFAULT_SIZE = 16;
-	private Color markColor;
+	private AbstractColor markColor;
 	private boolean isChecked;
 
 	public CheckBox(float x, float y) {
@@ -50,11 +51,11 @@ public class CheckBox extends AbstractButton {
 		isChecked = !isChecked;
 	}
 
-	public final Color getMarkColor() {
+	public final AbstractColor getMarkColor() {
 		return markColor;
 	}
 
-	public final void setMarkColor(Color color) {
+	public final void setMarkColor(AbstractColor color) {
 		if (color == null) {
 			throw new NullPointerException("the mark color cannot be null");
 		}

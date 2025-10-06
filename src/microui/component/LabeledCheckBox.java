@@ -7,6 +7,7 @@ import microui.constants.ContainerMode;
 import microui.core.base.Component;
 import microui.core.base.Container;
 import microui.core.effect.Hover;
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 import microui.event.Listener;
 import microui.layout.RowLayout;
@@ -89,11 +90,11 @@ public final class LabeledCheckBox extends Component {
 		return this;
 	}
 	
-	public Color getHoverColor() {
+	public AbstractColor getHoverColor() {
 		return hover.getColor();
 	}
 	
-	public LabeledCheckBox setHoverColor(Color color) {
+	public LabeledCheckBox setHoverColor(AbstractColor color) {
 		hover.setColor(color);
 		return this;
 	}
@@ -121,11 +122,11 @@ public final class LabeledCheckBox extends Component {
 		return this;
 	}
 
-	public Color getMarkColor() {
+	public AbstractColor getMarkColor() {
 		return checkBox.getMarkColor();
 	}
 
-	public LabeledCheckBox setMarkColor(Color color) {
+	public LabeledCheckBox setMarkColor(AbstractColor color) {
 		checkBox.setMarkColor(color);
 		return this;
 	}
@@ -153,11 +154,11 @@ public final class LabeledCheckBox extends Component {
 		return this;
 	}
 
-	public Color getTextColor() {
+	public AbstractColor getTextColor() {
 		return textView.getTextColor();
 	}
 
-	public LabeledCheckBox setTextColor(Color color) {
+	public LabeledCheckBox setTextColor(AbstractColor color) {
 		textView.setTextColor(color);
 		return this;
 	}
