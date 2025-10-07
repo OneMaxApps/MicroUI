@@ -62,7 +62,7 @@ public abstract class AbstractEventSystem {
 	}
 
 	protected final class EventDetector {
-		private static final long DEFAULT_THRESHOLD = 500;
+		private static final long DEFAULT_THRESHOLD = 1000;
 		private static final long DEFAULT_DOUBLE_CLICK_THRESHOLD = 200;
 		private boolean isHover,isPressed;
 

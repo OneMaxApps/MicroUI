@@ -1,16 +1,17 @@
 package microui.feedback;
 
 import microui.core.base.Component;
-import microui.core.base.SpatialView;
+import microui.core.base.ContentView;
 import microui.service.TooltipManager;
 import microui.util.Metrics;
 
-public final class Tooltip extends SpatialView {
+public final class Tooltip extends ContentView {
 	private TooltipContent content;
 	private boolean isMustBeClosed;
 	
 	public Tooltip(Component component) {
 		super();
+		setVisible(false);
 		setConstrainDimensionsEnabled(false);
 		setNegativeDimensionsEnabled(false);
 		
@@ -57,13 +58,18 @@ public final class Tooltip extends SpatialView {
 	
 	@Override
 	protected void render() {
-		content.draw();
+		if(content != null) {
+			content.draw();
+		}
 	}
 
 	@Override
-	protected void onChangeBounds() {
-		super.onChangeBounds();
-		content.setBoundsFrom(this);
+	protected void onChangePosition() {
+		super.onChangePosition();
+		
+		if(content != null) {
+			content.setPositionFrom(this);
+		}
 	}
 	
 }

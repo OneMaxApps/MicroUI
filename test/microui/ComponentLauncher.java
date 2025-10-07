@@ -19,7 +19,8 @@ public class ComponentLauncher extends PApplet {
 
 	@Override
 	public void settings() {
-		size(640,480);
+//		size(640,480);
+		fullScreen();
 	}
 
 	@Override
@@ -27,15 +28,9 @@ public class ComponentLauncher extends PApplet {
 		MicroUI.setContext(this);
 		//MicroUI.setDebugModeEnabled(true);
 		ContainerManager cm = ContainerManager.getInstance();
-		cm.add(new Container(new GridLayout(5,5)).addComponent(button = new Button(), new GridLayoutParams(2,2,1,1)));
+		cm.add(new Container(new GridLayout(5,5)).addComponent(button = new Button("INFO"), new GridLayoutParams(2,2,1,1)));
 		
-		//frameRate(2);
-		
-		button.setTooltipText("MicroUI.setContext(this);\r\n"
-				+ "		//MicroUI.setDebugModeEnabled(true);\r\n"
-				+ "		ContainerManager cm = ContainerManager.getInstance();\r\n"
-				+ "		cm.add(new Container(new GridLayout(5,5)).addComponent(button = new Button(), new GridLayoutParams(2,2,1,1)));\r\n"
-				+ "");
+		button.setTooltipText("MicroUI tooltip system is ready\nMicroUI tooltip system is ready\nMicroUI tooltip system is ready\nMicroUI tooltip system is ready");
 		button.setBackgroundColor(new GradientColor(new Color(232), new Color(200), () -> button.isHover()));
 	}
 

@@ -7,9 +7,12 @@ import static processing.core.PApplet.map;
 import java.util.function.BooleanSupplier;
 
 public final class GradientColor extends AbstractColor {
+	private static final int PROGRESS_START = 0;
+	private static final int PROGRESS_END = 1;
+	
 	private final Color start,end;
 	private final BooleanSupplier condition;
-	private float progressStart,progressCurrent,progressEnd,progressSpeed;
+	private float progressCurrent,progressSpeed;
 
 	public GradientColor(Color start, Color end, BooleanSupplier condition) {
 		super();
@@ -29,7 +32,6 @@ public final class GradientColor extends AbstractColor {
 		this.end = end;
 		this.condition = condition;
 		
-		progressEnd = 1;
 		setProgressSpeed(.05f);
 	}
 
@@ -75,17 +77,17 @@ public final class GradientColor extends AbstractColor {
 	}
 
 	private int lerp(int start, int end) {
-		return (int) map(progressCurrent,progressStart,progressEnd,start,end);
+		return (int) map(progressCurrent,PROGRESS_START,PROGRESS_END,start,end);
 	}
 	
 	private void updateProgress() {
 		if(condition.getAsBoolean()) {
-			if(progressCurrent < progressEnd) {
-				progressCurrent = min(progressCurrent+progressSpeed,progressEnd);
+			if(progressCurrent < PROGRESS_END) {
+				progressCurrent = min(progressCurrent+progressSpeed,PROGRESS_END);
 			}
 		} else {
-			if(progressCurrent > progressStart) {
-				progressCurrent = max(progressCurrent-progressSpeed, progressStart);
+			if(progressCurrent > PROGRESS_START) {
+				progressCurrent = max(progressCurrent-progressSpeed, PROGRESS_END);
 			}
 		}
 	}

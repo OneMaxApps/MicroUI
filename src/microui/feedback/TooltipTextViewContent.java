@@ -2,8 +2,6 @@ package microui.feedback;
 
 import static java.lang.Math.max;
 import static microui.core.style.theme.ThemeManager.getTheme;
-import static microui.service.TooltipManager.LEFT_PADDING;
-import static processing.core.PApplet.constrain;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.TOP;
 
@@ -21,6 +19,7 @@ public final class TooltipTextViewContent extends TooltipContent {
 		setVisible(true);
 		setConstrainDimensionsEnabled(true);
 		setMinMaxSize(8,8,ctx.width,ctx.height);
+		setMarginLeft(10);
 		
 		textView = new TextView(text);
 		textView.setConstrainDimensionsEnabled(false);
@@ -58,6 +57,7 @@ public final class TooltipTextViewContent extends TooltipContent {
 		}
 		
 		return true;
+		
 	}
 
 	public String getText() {
@@ -87,9 +87,7 @@ public final class TooltipTextViewContent extends TooltipContent {
 	protected void onChangePosition() {
 		super.onChangePosition();
 		
-		textView.setX(constrain(ctx.mouseX+LEFT_PADDING,textView.getPaddingLeft(),ctx.width-(textView.getWidth()+textView.getPaddingRight())));
-		textView.setY(constrain(ctx.mouseY,textView.getPaddingTop(),ctx.height-(textView.getHeight()+textView.getPaddingBottom())));
-		
+		textView.setAbsolutePositionFrom(this);
 	}
 	
 	private void prepareSize() {
@@ -119,9 +117,13 @@ public final class TooltipTextViewContent extends TooltipContent {
 		ctx.popStyle();
 		
 		textView.setSize(maxTextWidth,totalTextHeight);
+		textView.setMarginFrom(this);
+		
 		setSize(textView.getPadWidth(),textView.getPadHeight());
 		getTooltip().setSizeFrom(this);
+		getTooltip().setMarginFrom(this);
 		
 		isDirtySize = false;
+		
 	}
 }

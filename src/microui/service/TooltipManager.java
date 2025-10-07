@@ -4,7 +4,6 @@ import microui.core.base.View;
 import microui.feedback.Tooltip;
 
 public final class TooltipManager extends View {
-	public static final int LEFT_PADDING = 14;
 	private static final TooltipManager INSTANCE = new TooltipManager();
 	private static Tooltip tooltip;
 
@@ -16,7 +15,7 @@ public final class TooltipManager extends View {
 	@Override
 	protected void render() {
 		if (tooltip != null) {
-			tooltip.setPosition(getCorrectPositionX(), getCorrectPositionY());
+			tooltip.setAbsolutePosition(getCorrectPositionX(), getCorrectPositionY());
 			tooltip.draw();
 		}
 	}
@@ -33,11 +32,11 @@ public final class TooltipManager extends View {
 	}
 
 	private float getCorrectPositionX() {
-		return constrain(ctx.mouseX + LEFT_PADDING, 0, ctx.width - tooltip.getWidth());
+		return constrain(ctx.mouseX, 0, ctx.width - tooltip.getAbsoluteWidth());
 	}
 	
 	private float getCorrectPositionY() {
-		return constrain(ctx.mouseY, 0, ctx.height - tooltip.getHeight());
+		return constrain(ctx.mouseY, 0, ctx.height - tooltip.getAbsoluteHeight());
 	}
 
 	private static float constrain(float value, float min, float max) {

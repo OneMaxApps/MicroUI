@@ -1,9 +1,7 @@
 package microui.core.base;
 
-import static java.util.Objects.requireNonNull;
 import static microui.core.style.theme.ThemeManager.getTheme;
 
-import microui.MicroUI;
 import microui.core.style.AbstractColor;
 import microui.event.Event;
 import microui.event.EventType;
@@ -14,10 +12,8 @@ import microui.feedback.TooltipContent;
 import microui.feedback.TooltipTextViewContent;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 26.09.2025
-public abstract class Component extends SpatialView {
-	private final Padding padding;
-	private final Margin margin;
+//Last Reviewed: 07.10.2025
+public abstract class Component extends ContentView {
 	private final Event event;
 	private final InteractionHandler interactionHandler;
 	private final Tooltip tooltip;
@@ -25,19 +21,12 @@ public abstract class Component extends SpatialView {
 	
 	public Component(float x, float y, float width, float height) {
 		super(x, y, width, height);
-		setVisible(true);
-		setConstrainDimensionsEnabled(true);
-		setNegativeDimensionsEnabled(false);
 
-		padding = new Padding();
-		margin = new Margin();
-		backgroundColor = getTheme().getBackgroundColor();
+		setBackgroundColor(getTheme().getBackgroundColor());
 		event = new Event(this);
 		interactionHandler = new InteractionHandler(this);
 		tooltip = new Tooltip(this);
-
-		setPaddingEnabled(true);
-		setMarginEnabled(true);
+		
 	}
 
 	public Component() {
@@ -58,7 +47,6 @@ public abstract class Component extends SpatialView {
 		
 		tooltip.listen();
 		
-		debugOnDraw();
 	}
 
 	public final AbstractColor getBackgroundColor() {
@@ -226,252 +214,6 @@ public abstract class Component extends SpatialView {
 		return this;
 	}
 
-	public final Component setPaddingLeft(float left) {
-		padding.setLeft(left);
-
-		return this;
-	}
-
-	public final Component setPaddingRight(float right) {
-		padding.setRight(right);
-
-		return this;
-	}
-
-	public final Component setPaddingTop(float top) {
-		padding.setTop(top);
-
-		return this;
-	}
-
-	public final Component setPaddingBottom(float bottom) {
-		padding.setBottom(bottom);
-
-		return this;
-	}
-
-	public final Component setPadding(float left, float right, float top, float bottom) {
-		padding.setLeft(left);
-		padding.setRight(right);
-		padding.setTop(top);
-		padding.setBottom(bottom);
-		return this;
-	}
-
-	public final Component setPadding(float paddingHorizontal, float paddingVertical) {
-		setPadding(paddingHorizontal, paddingHorizontal, paddingVertical, paddingVertical);
-		return this;
-	}
-
-	public final Component setPadding(float padding) {
-		setPadding(padding, padding);
-		return this;
-	}
-
-	public final Component copyPaddingFrom(Component otherComponent) {
-		setPadding(requireNonNull(otherComponent, "other component cannot be null").getPaddingLeft(),
-				otherComponent.getPaddingRight(), otherComponent.getPaddingTop(), otherComponent.getPaddingBottom());
-		return this;
-	}
-
-	public final float getPaddingLeft() {
-		return padding.getLeft();
-	}
-
-	public final float getPaddingRight() {
-		return padding.getRight();
-	}
-
-	public final float getPaddingTop() {
-		return padding.getTop();
-	}
-
-	public final float getPaddingBottom() {
-		return padding.getBottom();
-	}
-
-	public final float getPadX() {
-		return getX() - getPaddingLeft();
-	}
-
-	public final float getPadY() {
-		return getY() - getPaddingTop();
-	}
-
-	public final float getPadWidth() {
-		return getWidth() + getPaddingRight() + getPaddingLeft();
-	}
-
-	public final float getPadHeight() {
-		return getHeight() + getPaddingBottom() + getPaddingTop();
-	}
-
-	public final boolean isPaddingEnabled() {
-		return padding.isEnabled();
-	}
-
-	public final Component setPaddingEnabled(boolean isEnabled) {
-		padding.setEnabled(isEnabled);
-		return this;
-	}
-
-	public final Component resetPadding() {
-		setPadding(0);
-		return this;
-	}
-
-	public final boolean hasPadding() {
-		return padding.isEnabled()
-				&& (padding.getLeft() > 0 || padding.getRight() > 0 || padding.getTop() > 0 || padding.getBottom() > 0);
-	}
-
-	public final float getMarginLeft() {
-		return margin.getLeft();
-	}
-
-	public final float getMarginRight() {
-		return margin.getRight();
-	}
-
-	public final float getMarginTop() {
-		return margin.getTop();
-	}
-
-	public final float getMarginBottom() {
-		return margin.getBottom();
-	}
-
-	public final Component setMargin(float left, float right, float top, float bottom) {
-		margin.setLeft(left);
-		margin.setRight(right);
-		margin.setTop(top);
-		margin.setBottom(bottom);
-		return this;
-	}
-
-	public final Component setMarginLeft(float left) {
-		margin.setLeft(left);
-		return this;
-	}
-
-	public final Component setMarginRight(float right) {
-		margin.setRight(right);
-		return this;
-	}
-
-	public final Component setMarginTop(float top) {
-		margin.setTop(top);
-		return this;
-	}
-
-	public final Component setMarginBottom(float bottom) {
-		margin.setBottom(bottom);
-		return this;
-	}
-
-	public final Component setMargin(float marginHorizontal, float marginVertical) {
-		setMargin(marginHorizontal, marginHorizontal, marginVertical, marginVertical);
-		return this;
-	}
-
-	public final Component setMargin(float margin) {
-		setMargin(margin, margin);
-		return this;
-	}
-
-	public final Component copyMarginFrom(Component otherComponent) {
-		setMargin(requireNonNull(otherComponent, "other component cannot be null").getMarginLeft(),
-				otherComponent.getMarginRight(), otherComponent.getMarginTop(), otherComponent.getMarginBottom());
-		return this;
-	}
-
-	public final Component resetMargin() {
-		setMargin(0);
-		return this;
-	}
-
-	public final boolean isMarginEnabled() {
-		return margin.isEnabled();
-	}
-
-	public final Component setMarginEnabled(boolean isEnabled) {
-		margin.setEnabled(isEnabled);
-		return this;
-	}
-
-	public final boolean hasMargin() {
-		return margin.isEnabled()
-				&& (margin.getLeft() > 0 || margin.getRight() > 0 || margin.getTop() > 0 || margin.getBottom() > 0);
-	}
-
-	public final float getAbsoluteX() {
-		return getPadX() - getMarginLeft();
-	}
-
-	public final float getAbsoluteY() {
-		return getPadY() - getMarginTop();
-	}
-
-	public final float getAbsoluteWidth() {
-		return getPadWidth() + getMarginLeft() + getMarginRight();
-	}
-
-	public final float getAbsoluteHeight() {
-		return getPadHeight() + getMarginTop() + getMarginBottom();
-	}
-
-	public final void setAbsoluteX(float x) {
-		setX(x + getMarginLeft() + getPaddingLeft());
-	}
-
-	public final void setAbsoluteY(float y) {
-		setY(y + getMarginTop() + getPaddingTop());
-	}
-
-	public final void setAbsoluteWidth(float width) {
-		setWidth(width - (getMarginLeft() + getMarginRight()) - (getPaddingLeft() + getPaddingRight()));
-	}
-
-	public final void setAbsoluteHeight(float height) {
-		setHeight(height - (getMarginTop() + getMarginBottom()) - (getPaddingTop() + getPaddingBottom()));
-	}
-
-	public final void setAbsolutePosition(float x, float y) {
-		setAbsoluteX(x);
-		setAbsoluteY(y);
-	}
-
-	/**
-	 * Resize using margin. this method can change real width and height but it's
-	 * don't ignore constrain system. Also this method can't modify margin
-	 * parameters
-	 * 
-	 * @param width  change real width with using margin
-	 * @param height change real height with using margin
-	 * 
-	 */
-	public final void setAbsoluteSize(float width, float height) {
-		setAbsoluteWidth(width);
-		setAbsoluteHeight(height);
-	}
-
-	/**
-	 * Change bounds using margin. this method can change real bounds, but it's
-	 * don't ignore constrain system. Also this method can't modify margin
-	 * parameters
-	 * 
-	 * @param x      change position with margin left
-	 * @param y      change position with margin top
-	 * @param width  change real width with using margin
-	 * @param height change real height with using margin
-	 * 
-	 */
-	public final void setAbsoluteBounds(float x, float y, float width, float height) {
-		setAbsoluteSize(width, height);
-		setAbsolutePosition(x, y);
-	}
-
-	
 	// NEW TOOLTIP API //////////////////////////////////
 	
 	public final void setTooltipContent(TooltipContent tooltipContent) {
@@ -501,170 +243,4 @@ public abstract class Component extends SpatialView {
 
 	////////////////////////////////////////////////////
 
-	private void debugOnDraw() {
-		if (MicroUI.isDebugModeEnabled()) {
-			ctx.pushStyle();
-			ctx.noFill();
-			ctx.strokeWeight(4);
-
-			// for showing margin area (Red rectangle)
-			ctx.stroke(200, 0, 0, 100);
-			ctx.rect(getAbsoluteX(), getAbsoluteY(), getAbsoluteWidth(), getAbsoluteHeight());
-
-			// for showing pad area (Green rectangle)
-			ctx.stroke(0, 200, 0, 100);
-			ctx.rect(getPadX(), getPadY(), getPadWidth(), getPadHeight());
-
-			// for showing content area (Blue rectangle)
-			ctx.stroke(0, 0, 200, 100);
-			ctx.rect(getX(), getY(), getWidth(), getHeight());
-
-			ctx.noStroke();
-			ctx.popStyle();
-		}
-	}
-
-	private final class Padding {
-		float left, right, top, bottom;
-		boolean isEnabled;
-
-		boolean isEnabled() {
-			return isEnabled;
-		}
-
-		void setEnabled(boolean isEnabled) {
-			this.isEnabled = isEnabled;
-			if (isEnabled) {
-				checkCorrectState();
-			}
-		}
-
-		float getLeft() {
-			return isEnabled ? left : 0;
-		}
-
-		float getRight() {
-			return isEnabled ? right : 0;
-		}
-
-		float getTop() {
-			return isEnabled ? top : 0;
-		}
-
-		float getBottom() {
-			return isEnabled ? bottom : 0;
-		}
-
-		void setLeft(float left) {
-			if (!isCorrectNewValue(this.left, left)) {
-				return;
-			}
-			this.left = left;
-		}
-
-		void setRight(float right) {
-			if (!isCorrectNewValue(this.right, right)) {
-				return;
-			}
-			this.right = right;
-		}
-
-		void setTop(float top) {
-			if (!isCorrectNewValue(this.top, top)) {
-				return;
-			}
-			this.top = top;
-		}
-
-		void setBottom(float bottom) {
-			if (!isCorrectNewValue(this.bottom, bottom)) {
-				return;
-			}
-			this.bottom = bottom;
-		}
-
-		boolean isCorrectNewValue(float currentValue, float newValue) {
-			if (newValue < 0) {
-				throw new IllegalArgumentException("padding cannot be less than zero");
-			}
-
-			if (newValue == currentValue) {
-				return false;
-			}
-
-			return true;
-		}
-
-		void checkCorrectState() {
-			if (isNegativeDimensionsEnabled()) {
-				throw new IllegalStateException("negative dimensions must be disabled for using Padding system");
-			}
-		}
-
-	}
-
-	private final class Margin {
-		private float left, right, top, bottom;
-		private boolean isEnabled;
-
-		float getLeft() {
-			return isEnabled ? left : 0;
-		}
-
-		float getRight() {
-			return isEnabled ? right : 0;
-		}
-
-		float getTop() {
-			return isEnabled ? top : 0;
-		}
-
-		float getBottom() {
-			return isEnabled ? bottom : 0;
-		}
-
-		void setLeft(float left) {
-			checkValue(left);
-			this.left = left;
-		}
-
-		void setRight(float right) {
-			checkValue(right);
-			this.right = right;
-		}
-
-		void setTop(float top) {
-			checkValue(top);
-			this.top = top;
-		}
-
-		void setBottom(float bottom) {
-			checkValue(bottom);
-			this.bottom = bottom;
-		}
-
-		boolean isEnabled() {
-			return isEnabled;
-		}
-
-		void setEnabled(boolean isEnabled) {
-			this.isEnabled = isEnabled;
-
-			if (isEnabled) {
-				checkCorrectState();
-			}
-		}
-
-		void checkValue(float value) {
-			if (value < 0) {
-				throw new IllegalArgumentException("margin cannot be less than zero");
-			}
-		}
-
-		void checkCorrectState() {
-			if (isNegativeDimensionsEnabled()) {
-				throw new IllegalStateException("negative dimensions must be disabled for using Margin system");
-			}
-		}
-	}
 }

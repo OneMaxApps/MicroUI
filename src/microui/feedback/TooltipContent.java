@@ -1,15 +1,15 @@
 package microui.feedback;
 
-import microui.core.base.SpatialView;
+import microui.core.base.ContentView;
 
-public abstract class TooltipContent extends SpatialView {
+public abstract class TooltipContent extends ContentView {
 	private Tooltip tooltip;
 	
 	public TooltipContent() {
 		super();
+		setVisible(false);
 		setConstrainDimensionsEnabled(false);
 		setNegativeDimensionsEnabled(false);
-
 	}
 	
 	public abstract boolean isPreparedShow();
