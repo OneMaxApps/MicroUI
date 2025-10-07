@@ -10,8 +10,7 @@ public final class GradientColor extends AbstractColor {
 	private final Color start,end;
 	private final BooleanSupplier condition;
 	private float progressStart,progressCurrent,progressEnd,progressSpeed;
-	private boolean isRevertModeEnabled;
-	
+
 	public GradientColor(Color start, Color end, BooleanSupplier condition) {
 		super();
 		if(start == null) {
@@ -36,14 +35,6 @@ public final class GradientColor extends AbstractColor {
 
 	public void resetAnimationProgress() {
 		progressCurrent = 0;
-	}
-	
-	public boolean isRevertModeEnabled() {
-		return isRevertModeEnabled;
-	}
-
-	public void setRevertModeEnabled(boolean isRevertModeEnabled) {
-		this.isRevertModeEnabled = isRevertModeEnabled;
 	}
 
 	public float getProgressSpeed() {
@@ -93,15 +84,9 @@ public final class GradientColor extends AbstractColor {
 				progressCurrent = min(progressCurrent+progressSpeed,progressEnd);
 			}
 		} else {
-			if(isRevertModeEnabled()) {
-				progressCurrent = progressStart;
-			} else {
-				if(progressCurrent > progressStart) {
-					progressCurrent = max(progressCurrent-progressSpeed, progressStart);
-				}
+			if(progressCurrent > progressStart) {
+				progressCurrent = max(progressCurrent-progressSpeed, progressStart);
 			}
-			
-			
 		}
 	}
 }

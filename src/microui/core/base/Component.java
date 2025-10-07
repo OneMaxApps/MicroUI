@@ -16,13 +16,13 @@ import microui.feedback.TooltipTextViewContent;
 //Status: STABLE - Do not modify
 //Last Reviewed: 26.09.2025
 public abstract class Component extends SpatialView {
-	private AbstractColor backgroundColor;
 	private final Padding padding;
 	private final Margin margin;
 	private final Event event;
 	private final InteractionHandler interactionHandler;
 	private final Tooltip tooltip;
-
+	private AbstractColor backgroundColor;
+	
 	public Component(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		setVisible(true);

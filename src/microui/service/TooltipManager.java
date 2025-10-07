@@ -4,9 +4,9 @@ import microui.core.base.View;
 import microui.feedback.Tooltip;
 
 public final class TooltipManager extends View {
+	public static final int LEFT_PADDING = 14;
 	private static final TooltipManager INSTANCE = new TooltipManager();
 	private static Tooltip tooltip;
-	private static final int LEFT_PADDING = 14;
 
 	private TooltipManager() {
 		super();
