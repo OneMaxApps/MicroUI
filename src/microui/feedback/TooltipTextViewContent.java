@@ -12,7 +12,7 @@ import microui.core.style.GradientColor;
 public final class TooltipTextViewContent extends TooltipContent {
 	private static final int DEFAULT_TEXT_SIZE = 12;
 	private final TextView textView;
-	private boolean isDirtySize;
+	private boolean isSizeDirty;
 	
 	public TooltipTextViewContent(String text) {
 		super();
@@ -33,7 +33,7 @@ public final class TooltipTextViewContent extends TooltipContent {
 		textView.setAlignX(LEFT);
 		textView.setAlignY(TOP);
 		
-		isDirtySize = true;
+		isSizeDirty = true;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public final class TooltipTextViewContent extends TooltipContent {
 	
 	public void setText(String text) {
 		textView.setText(text);
-		isDirtySize = true;
+		isSizeDirty = true;
 	}
 	
 	public float getTextSize() {
@@ -75,7 +75,7 @@ public final class TooltipTextViewContent extends TooltipContent {
 	
 	public void setTextSize(float textSize) {
 		textView.setTextSize(textSize);
-		isDirtySize = true;
+		isSizeDirty = true;
 	}
 	
 	@Override
@@ -91,7 +91,7 @@ public final class TooltipTextViewContent extends TooltipContent {
 	}
 	
 	private void prepareSize() {
-		if(!isDirtySize) { return; }
+		if(!isSizeDirty) { return; }
 		
 		final String[] lines = textView.getText().split("\n");
 		
@@ -120,10 +120,8 @@ public final class TooltipTextViewContent extends TooltipContent {
 		textView.setMarginFrom(this);
 		
 		setSize(textView.getPadWidth(),textView.getPadHeight());
-		getTooltip().setSizeFrom(this);
-		getTooltip().setMarginFrom(this);
 		
-		isDirtySize = false;
+		isSizeDirty = false;
 		
 	}
 }

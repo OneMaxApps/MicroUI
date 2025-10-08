@@ -1,19 +1,21 @@
 package microui.feedback;
 
 import microui.core.base.Component;
-import microui.core.base.ContentView;
+import microui.core.base.View;
 import microui.service.TooltipManager;
 import microui.util.Metrics;
 
-public final class Tooltip extends ContentView {
+public final class Tooltip extends View {
 	private TooltipContent content;
 	private boolean isMustBeClosed;
 	
 	public Tooltip(Component component) {
 		super();
 		setVisible(false);
-		setConstrainDimensionsEnabled(false);
-		setNegativeDimensionsEnabled(false);
+		
+		if(component == null) {
+			throw new NullPointerException("the component for Tooltip cannot be null");
+		}
 		
 		component.onEnterLong(() -> {
 			if(content != null && content.isPreparedShow()) {
@@ -63,13 +65,4 @@ public final class Tooltip extends ContentView {
 		}
 	}
 
-	@Override
-	protected void onChangePosition() {
-		super.onChangePosition();
-		
-		if(content != null) {
-			content.setPositionFrom(this);
-		}
-	}
-	
 }

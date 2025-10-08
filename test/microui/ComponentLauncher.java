@@ -26,7 +26,7 @@ public class ComponentLauncher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		//MicroUI.setDebugModeEnabled(true);
+		MicroUI.setDebugModeEnabled(true);
 		ContainerManager cm = ContainerManager.getInstance();
 		cm.add(new Container(new GridLayout(5,5)).addComponent(button = new Button("INFO"), new GridLayoutParams(2,2,1,1)));
 		
