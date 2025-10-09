@@ -1,71 +1,72 @@
 package microui.core.style.theme;
 
+import microui.core.style.AbstractColor;
 import microui.core.style.Color;
 
 public class ThemeBlack extends AbstractTheme {
 
 	@Override
-	public Color getBackgroundColor() {
+	public AbstractColor getBackgroundColor() {
 		return new Color(32);
 	}
 
 	@Override
-	public Color getTextViewColor() {
+	public AbstractColor getTextViewColor() {
 		return new Color(200);
 	}
 
 	@Override
-	public Color getButtonTextColor() {
+	public AbstractColor getButtonTextColor() {
 		return new Color(164);
 	}
 
 	@Override
-	public Color getStrokeColor() {
+	public AbstractColor getStrokeColor() {
 		return new Color(0);
 	}
 
 	@Override
-	public Color getHoverColor() {
+	public AbstractColor getHoverColor() {
 		return new Color(200,24);
 	}
 
 	@Override
-	public Color getRipplesColor() {
+	public AbstractColor getRipplesColor() {
 		return new Color(100,10);
 	}
 
 	@Override
-	public Color getPrimaryColor() {
+	public AbstractColor getPrimaryColor() {
 		return new Color(232,128);
 	}
 
 	@Override
-	public Color getEditableTextColor() {
+	public AbstractColor getEditableTextColor() {
 		return new Color(254);
 	}
 
 	@Override
-	public Color getSelectColor() {
+	public AbstractColor getSelectColor() {
 		return new Color(0, 0, 154, 32);
 	}
 	
 	@Override
-	public Color getCursorColor() {
+	public AbstractColor getCursorColor() {
 		return new Color(255,232);
 	}
 	
 	@Override
-	public Color getEditableBackgroundColor() {
+	public AbstractColor getEditableBackgroundColor() {
 		return new Color(128);
 	}
 
 	@Override
-	public Color getTooltipBackgroundColor() {
+	public AbstractColor getTooltipBackgroundColor() {
 		return new Color(0,200);
 	}
 
 	@Override
-	public Color getTooltipTextColor() {
+	public AbstractColor getTooltipTextColor() {
 		return new Color(255);
 	}
 	

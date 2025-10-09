@@ -1,19 +1,19 @@
 package microui.core.style.theme;
 
-import microui.core.style.Color;
+import microui.core.style.AbstractColor;
 
 public abstract class AbstractTheme {
-	public abstract Color getBackgroundColor();
-	public abstract Color getTextViewColor();
-	public abstract Color getButtonTextColor();
-	public abstract Color getStrokeColor();
-	public abstract Color getHoverColor();
-	public abstract Color getRipplesColor();
-	public abstract Color getPrimaryColor();
-	public abstract Color getEditableTextColor();
-	public abstract Color getSelectColor();
-	public abstract Color getCursorColor();
-	public abstract Color getEditableBackgroundColor();
-	public abstract Color getTooltipBackgroundColor();
-	public abstract Color getTooltipTextColor();
+	public abstract AbstractColor getBackgroundColor();
+	public abstract AbstractColor getTextViewColor();
+	public abstract AbstractColor getButtonTextColor();
+	public abstract AbstractColor getStrokeColor();
+	public abstract AbstractColor getHoverColor();
+	public abstract AbstractColor getRipplesColor();
+	public abstract AbstractColor getPrimaryColor();
+	public abstract AbstractColor getEditableTextColor();
+	public abstract AbstractColor getSelectColor();
+	public abstract AbstractColor getCursorColor();
+	public abstract AbstractColor getEditableBackgroundColor();
+	public abstract AbstractColor getTooltipBackgroundColor();
+	public abstract AbstractColor getTooltipTextColor();
 }

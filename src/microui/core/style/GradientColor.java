@@ -10,11 +10,11 @@ public final class GradientColor extends AbstractColor {
 	private static final int PROGRESS_START = 0;
 	private static final int PROGRESS_END = 1;
 	
-	private final Color start,end;
+	private final AbstractColor start,end;
 	private final BooleanSupplier condition;
 	private float progressCurrent,progressSpeed;
 
-	public GradientColor(Color start, Color end, BooleanSupplier condition) {
+	public GradientColor(AbstractColor start, AbstractColor end, BooleanSupplier condition) {
 		super();
 		if(start == null) {
 			throw new NullPointerException("the start color for GradientColor cannot be null");
