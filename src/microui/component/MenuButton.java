@@ -8,7 +8,6 @@ import java.util.Arrays;
 import microui.core.base.SpatialView;
 import microui.core.interfaces.Scrollable;
 import microui.core.style.AbstractColor;
-import microui.core.style.Color;
 import microui.event.Event;
 import processing.event.MouseEvent;
 
@@ -49,7 +48,7 @@ public class MenuButton extends Button implements Scrollable {
 			}
 		});
 
-		indicatorColor = new Color(getTheme().getPrimaryColor());
+		indicatorColor = getTheme().getPrimaryColor();
 
 	}
 

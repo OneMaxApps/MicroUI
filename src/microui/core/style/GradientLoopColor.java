@@ -1,5 +1,7 @@
 package microui.core.style;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 11.10.2025
 public class GradientLoopColor extends AbstractGradientColor {
 	private boolean isLoopEnabled;
 	

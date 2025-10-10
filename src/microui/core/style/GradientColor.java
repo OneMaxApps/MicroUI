@@ -2,6 +2,8 @@ package microui.core.style;
 
 import java.util.function.BooleanSupplier;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 11.10.2025
 public final class GradientColor extends AbstractGradientColor {
 	
 	private final BooleanSupplier condition;
@@ -14,6 +16,8 @@ public final class GradientColor extends AbstractGradientColor {
 		}
 
 		this.condition = condition;
+		
+		getAnimator().setSpeed(.025f);
 	}
 
 	public void resetAnimationProgress() {

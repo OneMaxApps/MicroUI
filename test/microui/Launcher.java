@@ -2,7 +2,7 @@ package microui;
 
 import microui.component.Button;
 import microui.component.CheckBox;
-import microui.component.EditTextDeprecated;
+import microui.component.EditText;
 import microui.component.Knob;
 import microui.component.LabeledCheckBox;
 import microui.component.MenuButton;
@@ -18,6 +18,7 @@ import microui.layout.ColumnLayout;
 import microui.layout.ColumnLayoutParams;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
+import microui.util.Metrics;
 import processing.core.PApplet;
 
 
@@ -44,15 +45,16 @@ public final class Launcher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		//MicroUI.setDebugModeEnabled(true);
-
+//		MicroUI.setDebugModeEnabled(true);
+		//ThemeManager.setTheme(new ThemeGlass());
+		
 		cm = ContainerManager.getInstance();
 
 		cm.add(getContainerMain(),"main");
 		cm.add(getContainerAllComponents(),"all_components");
 		cm.add(getContainerWith(button = new Button()),"Button");
 		cm.add(getContainerWith(new CheckBox()),"CheckBox");
-		cm.add(getContainerWith(new EditTextDeprecated()),"EditText");
+		cm.add(getContainerWith(new EditText()),"EditText");
 		cm.add(getContainerWith(new Knob()),"Knob");
 		cm.add(getContainerWith(new LabeledCheckBox()),"LabeledCheckBox");
 		cm.add(getContainerWith(new MenuButton()),"MenuButton");
@@ -65,10 +67,10 @@ public final class Launcher extends PApplet {
 
 	@Override
 	public void draw() {
-		background(250);
+		background(100);
 		
 		// cm.getContainerByTextId("container_main").getComponentByTextId("edit_text").setSize(mouseX,mouseY);
-		// Metrics.printAll();
+		 Metrics.printAll();
 	}
 
 
@@ -122,7 +124,7 @@ public final class Launcher extends PApplet {
 
 		container.addComponent(new Button(), new GridLayoutParams(0,0));
 		container.addComponent(new CheckBox(), new GridLayoutParams(1,0));
-		container.addComponent(new EditTextDeprecated(), new GridLayoutParams(2,0));
+		container.addComponent(new EditText(), new GridLayoutParams(2,0));
 		container.addComponent(new LabeledCheckBox("confirm"), new GridLayoutParams(3,0));
 		container.addComponent(new MenuButton().add("one","two","three","four","five"), new GridLayoutParams(4,0));
 		container.addComponent(new Scroll(), new GridLayoutParams(0,1),"scroll");
@@ -138,8 +140,12 @@ public final class Launcher extends PApplet {
 		Container container = new Container(new GridLayout(11,11));
 		//container.setContainerMode(ContainerMode.IGNORE_CONSTRAINTS);
 		
-		container.addComponent(component, new GridLayoutParams(5,5),"edit_text");
-
+		if(component instanceof EditText) {
+			container.addComponent(component, new GridLayoutParams(1,1,9,9),"edit_text");
+		} else {
+			container.addComponent(component, new GridLayoutParams(5,5),"edit_text");
+		}
+		
 		return container;
 	}
 }

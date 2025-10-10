@@ -2,6 +2,8 @@ package microui.core.style;
 
 import static processing.core.PApplet.map;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 11.10.2025
 public abstract class AbstractGradientColor extends AbstractColor {
 	private final AbstractColor start,end;
 	private final Animator animator;
@@ -55,7 +57,7 @@ public abstract class AbstractGradientColor extends AbstractColor {
 	public int getGreen() {
 		return lerp(getStart().getGreen(),getEnd().getGreen());
 	}
-
+ 
 	@Override
 	public int getBlue() {
 		return lerp(getStart().getBlue(),getEnd().getBlue());

@@ -6,25 +6,24 @@ import static processing.core.PApplet.map;
 import microui.core.LinearRangeControl;
 import microui.core.base.SpatialView;
 import microui.core.style.AbstractColor;
-import microui.core.style.Color;
 import microui.core.style.Stroke;
 
 public class Slider extends LinearRangeControl {
 
-	private final Rect indicator;
+	private final Rect progress;
 
 	public Slider(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		indicator = new Rect(x,y,w,h);
+		progress = new Rect(x,y,w,h);
 		
 		setValue(0, 100, 0);
 
 		onDragging(() -> {
-			recalculateIndicatorBounds();
+			recalculateProgressBounds();
 		});
 		
 		onPress(() -> {
-			recalculateIndicatorBounds();
+			recalculateProgressBounds();
 		});
 	}
 
@@ -37,14 +36,14 @@ public class Slider extends LinearRangeControl {
 	@Override
 	protected void render() {
 		super.render();
-		indicator.draw();
+		progress.draw();
 
 	}
 
 	@Override
 	protected void onChangeBounds() {
 		super.onChangeBounds();
-		updateIndicatorBounds();
+		updateProgressBounds();
 	}
 
 	@Override
@@ -53,31 +52,31 @@ public class Slider extends LinearRangeControl {
 		onChangeBounds();
 	}
 
-	public final float getIndicatorStrokeWeight() {
-		return indicator.stroke.getWeight();
+	public final float getProgressStrokeWeight() {
+		return progress.stroke.getWeight();
 	}
 
-	public final void setIndicatorStrokeWeight(int weight) {
-		indicator.stroke.setWeight(weight);
+	public final void setProgressStrokeWeight(int weight) {
+		progress.stroke.setWeight(weight);
 	}
 
-	public final AbstractColor getIndicatorStrokeColor() {
-		return indicator.stroke.getColor();
+	public final AbstractColor getProgressStrokeColor() {
+		return progress.stroke.getColor();
 	}
 
-	public final void setIndicatorStrokeColor(AbstractColor color) {
-		indicator.stroke.setColor(color);
+	public final void setProgressStrokeColor(AbstractColor color) {
+		progress.stroke.setColor(color);
 	}
 
-	public final AbstractColor getIndicatorColor() {
-		return indicator.color;
+	public final AbstractColor getProgressColor() {
+		return progress.color;
 	}
 
-	public final void setIndicatorColor(AbstractColor color) {
-		indicator.color = color;
+	public final void setProgressColor(AbstractColor color) {
+		progress.color = color;
 	}
 	
-	private void recalculateIndicatorBounds() {
+	private void recalculateProgressBounds() {
 		switch (getOrientation()) {
 		case HORIZONTAL:
 			setValue(map(ctx.mouseX, getX(), getX() + getWidth(), getMinValue(), getMaxValue()));
@@ -86,7 +85,7 @@ public class Slider extends LinearRangeControl {
 			setValue(map(ctx.mouseY, getY(), getY() + getHeight(), getMaxValue(), getMinValue()));
 			break;
 		}
-		updateIndicatorBounds();
+		updateProgressBounds();
 
 		onStartChangeValue();
 		onChangeValue();
@@ -103,7 +102,7 @@ public class Slider extends LinearRangeControl {
 
 			stroke = new Stroke();
 			stroke.setWeight(1);
-			color = new Color(getTheme().getPrimaryColor());
+			color = getTheme().getPrimaryColor();
 		}
 
 		@Override
@@ -118,24 +117,24 @@ public class Slider extends LinearRangeControl {
 
 	}
 	
-	private void updateIndicatorBounds() {
-		if (indicator == null) {
+	private void updateProgressBounds() {
+		if (progress == null) {
 			return;
 		}
 
-		indicator.setBounds(getX(),getY(),getWidth(),getHeight());
+		progress.setBounds(getX(),getY(),getWidth(),getHeight());
 
 		switch (getOrientation()) {
 
 		case HORIZONTAL:
-			indicator.setWidth(map(getValue(), getMinValue(), getMaxValue(), 0, getWidth()));
+			progress.setWidth(map(getValue(), getMinValue(), getMaxValue(), 0, getWidth()));
 
 			break;
 
 		case VERTICAL:
-			indicator.setY(getY() + getHeight());
-			indicator.setWidth(getWidth());
-			indicator.setHeight(map(getValue(), getMinValue(), getMaxValue(), 0, -getHeight()));
+			progress.setY(getY() + getHeight());
+			progress.setWidth(getWidth());
+			progress.setHeight(map(getValue(), getMinValue(), getMaxValue(), 0, -getHeight()));
 			break;
 
 		}

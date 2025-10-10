@@ -5,6 +5,8 @@ import static microui.MicroUI.getContext;
 import microui.util.Metrics;
 import processing.core.PGraphics;
 
+//Status: STABLE - Do not modify
+//Last Reviewed: 11.10.2025
 public abstract class AbstractColor {
 	public static final int MIN_VALUE = 0, MAX_VALUE = 255;
 	

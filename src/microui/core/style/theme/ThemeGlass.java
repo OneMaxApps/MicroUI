@@ -2,12 +2,13 @@ package microui.core.style.theme;
 
 import microui.core.style.AbstractColor;
 import microui.core.style.Color;
+import microui.core.style.GradientLoopColor;
 
 public class ThemeGlass extends AbstractTheme {
 
 	@Override
 	public AbstractColor getBackgroundColor() {
-		return new Color(200,32);
+		return new GradientLoopColor(new Color(200,200,255,32), new Color(255,32));
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class ThemeGlass extends AbstractTheme {
 
 	@Override
 	public AbstractColor getPrimaryColor() {
-		return new Color(0,0,164,64);
+		return new GradientLoopColor(new Color(100,200,232,100), new Color(164,164,232,32));
 	}
 
 	@Override

@@ -10,12 +10,10 @@ import static java.awt.event.KeyEvent.VK_PAGE_UP;
 import static java.awt.event.KeyEvent.VK_V;
 import static java.awt.event.KeyEvent.VK_X;
 import static java.lang.Math.max;
-import static microui.component.EditTextDeprecated.CharValidate.isValidChar;
+import static microui.component.EditText.CharValidate.isValidChar;
 import static microui.constants.Orientation.VERTICAL;
 import static microui.core.style.theme.ThemeManager.getTheme;
-import static processing.core.PApplet.abs;
 import static processing.core.PApplet.constrain;
-import static processing.core.PApplet.map;
 import static processing.core.PApplet.min;
 import static processing.core.PConstants.BACKSPACE;
 import static processing.core.PConstants.CENTER;
@@ -45,7 +43,7 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-public class EditTextDeprecated extends Component implements Scrollable, KeyPressable {
+public class EditText extends Component implements Scrollable, KeyPressable {
 	private static final int LEFT_PADDING_FOR_TEXT = 10;
 
 	private boolean isFocused;
@@ -60,9 +58,9 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 	private PGraphics graphics;
 	private PFont font;
 	
-	public EditTextDeprecated(float x, float y, float w, float h) {
+	public EditText(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		setMinMaxSize(40,20,200,100);
+		setMinMaxSize(40,20,ctx.width,ctx.height);
 
 		setBackgroundColor(getTheme().getEditableBackgroundColor());
 		
@@ -92,7 +90,7 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 		
 	}
 
-	public EditTextDeprecated() {
+	public EditText() {
 		this(ctx.width * .1f, ctx.height * .1f, ctx.width * .8f, ctx.height * .8f);
 	}
 
@@ -452,7 +450,7 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 	}
 
 	private void updateValueForScrollV() {
-		if (items.getTotalHeight() > EditTextDeprecated.this.getHeight()) {
+		if (items.getTotalHeight() > EditText.this.getHeight()) {
 			scrollV.setMinValue(getHeight() - items.getTotalHeight());
 		} else {
 			scrollV.setMinValue(0);
@@ -506,7 +504,7 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 				}
 
 				cursor.goInEnd();
-				if (cursor.getPosY() > EditTextDeprecated.this.getHeight() * .9f) {
+				if (cursor.getPosY() > EditText.this.getHeight() * .9f) {
 					scrollV.appendValue(-items.getTextSize());
 				}
 			}
@@ -550,7 +548,7 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 	private void keyEnd() {
 		cursor.setCurrentColumn(cursor.getMaxCharsInRow());
 
-		if (getCurrentItem().getTextWidth() > EditTextDeprecated.this.getWidth()) {
+		if (getCurrentItem().getTextWidth() > EditText.this.getWidth()) {
 			scrollH.setValue(scrollH.getMaxValue() * .5f);
 		}
 	}
@@ -564,7 +562,7 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 	private void clearAllSelectedText() {
 		selection.unselect();
 		items.clear();
-		while (items.getTotalHeight() < EditTextDeprecated.this.getHeight()) {
+		while (items.getTotalHeight() < EditText.this.getHeight()) {
 			items.add("");
 		}
 		cursor.setCurrentRow(0);
@@ -874,7 +872,7 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 			}
 
 			private void draw(final PGraphics pg) {
-				listeningView.setBounds(EditTextDeprecated.this.getX(),getItemY(),EditTextDeprecated.this.getWidth(),getItemHeight());
+				listeningView.setBounds(EditText.this.getX(),getItemY(),EditText.this.getWidth(),getItemHeight());
 
 				if (!Objects.isNull(pg)) {
 					textOnDraw(pg);
@@ -1141,12 +1139,10 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 			}
 
 			if (duration < MAX_DURATION / 2) {
-				float dynamicHeight = abs(
-						map(duration, 0, MAX_DURATION, -items.getTextSize() / 2, items.getTextSize() / 2)) / 2;
 				pg.pushStyle();
 				color.applyStroke(pg);
 				pg.strokeWeight(2);
-				pg.line(posX, posY + dynamicHeight, posX, posY + items.getTextSize() - dynamicHeight);
+				pg.line(posX, posY, posX, posY + items.getTextSize());
 				pg.popStyle();
 			}
 
@@ -1262,7 +1258,7 @@ public class EditTextDeprecated extends Component implements Scrollable, KeyPres
 				}
 				endColumn = cursor.getCurrentColumn();
 
-				if (items.getTotalHeight() > EditTextDeprecated.this.getHeight()) {
+				if (items.getTotalHeight() > EditText.this.getHeight()) {
 
 					if (cursor.getPosY() < getHeight() * .2f) {
 						scrollV.appendValue(getHeight() * .02f);

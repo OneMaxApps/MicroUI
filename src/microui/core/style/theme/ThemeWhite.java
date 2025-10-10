@@ -2,28 +2,29 @@ package microui.core.style.theme;
 
 import microui.core.style.AbstractColor;
 import microui.core.style.Color;
+import microui.core.style.GradientColor;
 import microui.core.style.GradientLoopColor;
 
 public class ThemeWhite extends AbstractTheme {
 
 	@Override
 	public AbstractColor getBackgroundColor() {
-		return new GradientLoopColor(new Color(232), new Color(232,232,255));
+		return Color.GRAY_232L;
 	}
 
 	@Override
 	public AbstractColor getTextViewColor() {
-		return new Color(0);
+		return Color.BLACK;
 	}
 	
 	@Override
 	public AbstractColor getButtonTextColor() {
-		return new Color(0);
+		return Color.BLACK;
 	}
 
 	@Override
 	public AbstractColor getStrokeColor() {
-		return new Color(0);
+		return Color.BLACK;
 	}
 
 	@Override
@@ -33,17 +34,17 @@ public class ThemeWhite extends AbstractTheme {
 
 	@Override
 	public AbstractColor getRipplesColor() {
-		return new Color(255);
+		return Color.WHITE;
 	}
 
 	@Override
 	public AbstractColor getPrimaryColor() {
-		return new Color(128);
+		return Color.GRAY_128L;
 	}
 
 	@Override
 	public AbstractColor getEditableTextColor() {
-		return new Color(0);
+		return Color.BLACK;
 	}
 
 	@Override
@@ -58,16 +59,17 @@ public class ThemeWhite extends AbstractTheme {
 
 	@Override
 	public AbstractColor getEditableBackgroundColor() {
-		return new Color(255);
+		return Color.WHITE;
 	}
 	
 	@Override
 	public AbstractColor getTooltipBackgroundColor() {
-		return new Color(255);
+		return new GradientColor(new Color(232,0), Color.GRAY_232L, () -> true);
+
 	}
 
 	@Override
 	public AbstractColor getTooltipTextColor() {
-		return new Color(0);
+		return new GradientColor(Color.TRANSPARENT, new GradientLoopColor(Color.BLACK, new Color(0,154)), () -> true);
 	}
 }

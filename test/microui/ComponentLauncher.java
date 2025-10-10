@@ -24,11 +24,12 @@ public class ComponentLauncher extends PApplet {
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		//MicroUI.setDebugModeEnabled(true);
+//		MicroUI.setDebugModeEnabled(true);
+//		ThemeManager.setTheme(new ThemeBlack());
 		ContainerManager cm = ContainerManager.getInstance();
 		cm.add(new Container(new GridLayout(5,5)).addComponent(button = new Button("INFO"), new GridLayoutParams(2,2,1,1)));
 		
-		button.setTooltipText("MicroUI tooltip system is ready\nMicroUI tooltip system is ready\nMicroUI tooltip system is ready\nMicroUI tooltip system is ready");
+		button.setTooltipText("if you can see this, it's means that it's working");
 		//button.setBackgroundColor(new OGradientLoopColor(new Color(255,255,0), new Color(255,0,0)));
 	}
 

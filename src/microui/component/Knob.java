@@ -9,7 +9,6 @@ import static processing.core.PApplet.map;
 
 import microui.core.RangeControl;
 import microui.core.style.AbstractColor;
-import microui.core.style.Color;
 import processing.event.MouseEvent;
 
 public final class Knob extends RangeControl {
@@ -22,7 +21,7 @@ public final class Knob extends RangeControl {
 		super(x, y, width, height);
 		setMinMaxSize(10,50);
 
-		indicatorColor = new Color(getTheme().getPrimaryColor());
+		indicatorColor = getTheme().getPrimaryColor();
 		
 		onDragging(() -> {
 			if(isMouseInDiameter()) {

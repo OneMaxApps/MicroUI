@@ -3,8 +3,28 @@ package microui.core.style;
 import static java.util.Objects.requireNonNull;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 04.10.2025
+//Last Reviewed: 11.10.2025
 public class Color extends AbstractColor {
+	public static final Color RED = new Color(255,0,0);
+	public static final Color GREEN = new Color(0,255,0);
+	public static final Color BLUE = new Color(0,0,255);
+	public static final Color YELLOW = new Color(255,255,0);
+	public static final Color PINK = new Color(255,0,255);
+	public static final Color SKY = new Color(0,255,255);
+	
+	public static final Color BLACK = new Color(0);
+	public static final Color GRAY_8L = new Color(8);
+	public static final Color GRAY_16L = new Color(16);
+	public static final Color GRAY_32L = new Color(32);
+	public static final Color GRAY_64L = new Color(64);
+	public static final Color GRAY_128L = new Color(128);
+	public static final Color GRAY_164L = new Color(164);
+	public static final Color GRAY_200L = new Color(200);
+	public static final Color GRAY_232L = new Color(232);
+	public static final Color WHITE = new Color(255);
+	
+	public static final Color TRANSPARENT = new Color(0,0);
+	
 	private final int red,green,blue,alpha;
 	
 	public Color(float red, float green, float blue, float alpha) {
