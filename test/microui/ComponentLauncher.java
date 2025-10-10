@@ -3,8 +3,6 @@ package microui;
 import microui.component.Button;
 import microui.core.base.Container;
 import microui.core.base.ContainerManager;
-import microui.core.style.Color;
-import microui.core.style.GradientLoopColor;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
 import processing.core.PApplet;

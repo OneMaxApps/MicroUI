@@ -8,12 +8,6 @@ public final class Event extends AbstractEventSystem {
 		super(spatialView);
 		
 	}
-	
-	@Override
-	public void listen() {
-		super.listen();
-		// call update for some level-type events
-	}
 
 	public boolean isPress() {
 		return getDetector().isPress();
