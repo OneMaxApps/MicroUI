@@ -6,30 +6,18 @@ import static processing.core.PApplet.map;
 
 import java.util.function.BooleanSupplier;
 
-public final class GradientColor extends AbstractColor {
-	private static final int PROGRESS_START = 0;
-	private static final int PROGRESS_END = 1;
+public final class GradientColor extends AbstractGradientColor {
 	
-	private final AbstractColor start,end;
 	private final BooleanSupplier condition;
 	private float progressCurrent,progressSpeed;
 
 	public GradientColor(AbstractColor start, AbstractColor end, BooleanSupplier condition) {
-		super();
-		if(start == null) {
-			throw new NullPointerException("the start color for GradientColor cannot be null");
-		}
-		
-		if(end == null) {
-			throw new NullPointerException("the end color for GradientColor cannot be null");
-		}
+		super(start,end);
 		
 		if(condition == null) {
 			throw new NullPointerException("the condition for GradientColor cannot be null");
 		}
-		
-		this.start = start;
-		this.end = end;
+
 		this.condition = condition;
 		
 		setProgressSpeed(.05f);
@@ -52,22 +40,22 @@ public final class GradientColor extends AbstractColor {
 
 	@Override
 	public int getRed() {
-		return lerp(start.getRed(),end.getRed());
+		return lerp(getStart().getRed(),getEnd().getRed());
 	}
 
 	@Override
 	public int getGreen() {
-		return lerp(start.getGreen(),end.getGreen());
+		return lerp(getStart().getGreen(),getEnd().getGreen());
 	}
 
 	@Override
 	public int getBlue() {
-		return lerp(start.getBlue(),end.getBlue());
+		return lerp(getStart().getBlue(),getEnd().getBlue());
 	}
 
 	@Override
 	public int getAlpha() {
-		return lerp(start.getAlpha(),end.getAlpha());
+		return lerp(getStart().getAlpha(),getEnd().getAlpha());
 	}
 
 	@Override
@@ -77,17 +65,17 @@ public final class GradientColor extends AbstractColor {
 	}
 
 	private int lerp(int start, int end) {
-		return (int) map(progressCurrent,PROGRESS_START,PROGRESS_END,start,end);
+		return (int) map(progressCurrent,START_PROGRESS,END_PROGRESS,start,end);
 	}
 	
 	private void updateProgress() {
 		if(condition.getAsBoolean()) {
-			if(progressCurrent < PROGRESS_END) {
-				progressCurrent = min(progressCurrent+progressSpeed,PROGRESS_END);
+			if(progressCurrent < END_PROGRESS) {
+				progressCurrent = min(progressCurrent+progressSpeed,END_PROGRESS);
 			}
 		} else {
-			if(progressCurrent > PROGRESS_START) {
-				progressCurrent = max(progressCurrent-progressSpeed, PROGRESS_END);
+			if(progressCurrent > START_PROGRESS) {
+				progressCurrent = max(progressCurrent-progressSpeed, START_PROGRESS);
 			}
 		}
 	}

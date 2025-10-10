@@ -4,7 +4,7 @@ import microui.component.Button;
 import microui.core.base.Container;
 import microui.core.base.ContainerManager;
 import microui.core.style.Color;
-import microui.core.style.GradientColor;
+import microui.core.style.GradientLoopColor;
 import microui.layout.GridLayout;
 import microui.layout.GridLayoutParams;
 import processing.core.PApplet;
@@ -19,19 +19,19 @@ public class ComponentLauncher extends PApplet {
 
 	@Override
 	public void settings() {
-//		size(640,480);
-		fullScreen();
+		size(640,480);
+//		fullScreen();
 	}
 
 	@Override
 	public void setup() {
 		MicroUI.setContext(this);
-		MicroUI.setDebugModeEnabled(true);
+		//MicroUI.setDebugModeEnabled(true);
 		ContainerManager cm = ContainerManager.getInstance();
 		cm.add(new Container(new GridLayout(5,5)).addComponent(button = new Button("INFO"), new GridLayoutParams(2,2,1,1)));
 		
 		button.setTooltipText("MicroUI tooltip system is ready\nMicroUI tooltip system is ready\nMicroUI tooltip system is ready\nMicroUI tooltip system is ready");
-		button.setBackgroundColor(new GradientColor(new Color(232), new Color(200), () -> button.isHover()));
+		//button.setBackgroundColor(new OGradientLoopColor(new Color(255,255,0), new Color(255,0,0)));
 	}
 
 	@Override
