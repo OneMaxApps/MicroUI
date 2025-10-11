@@ -6,6 +6,7 @@ import java.util.function.BooleanSupplier;
 
 import microui.core.base.SpatialView;
 import microui.util.SpatialState;
+import microui.util.Timer;
 
 public final class SpatialAnimator {
 	private boolean isEnabled;
@@ -81,7 +82,7 @@ public final class SpatialAnimator {
 		if(!isEnabled() || targetSpatialView == null) { return; }
 
 		if(timer.isComplete()) {
-			timer.setStartEnabled(condition.getAsBoolean());
+			timer.setIncrementing(condition.getAsBoolean());
 		}
 		
 		timer.update();
@@ -100,54 +101,5 @@ public final class SpatialAnimator {
 	
 	private float lerp(float start, float end) {
 		return map(timer.getCurrent(), Timer.START, Timer.END, start, end);
-	}
-
-	private static final class Timer {
-		private static final float DEFAULT_SPEED = .05f;
-		private static final int START = 0;
-		private static final int END = 1;
-		private float current,speed;
-		private boolean isStartEnabled;
-		
-		public Timer() {
-			super();
-			setSpeed(DEFAULT_SPEED);
-		}
-		
-		public void update() {
-			setCurrent(isStartEnabled() ? getCurrent()+getSpeed() : getCurrent()-getSpeed());
-		}
-
-		public float getCurrent() {
-			return current;
-		}
-
-		public void setCurrent(float current) {
-			this.current = current < START ? START : current > END ? END : current;
-		}
-		
-		public float getSpeed() {
-			return speed;
-		}
-
-		public void setSpeed(float speed) {
-			if(speed < 0 || speed > 1) {
-				throw new IllegalArgumentException("speed for SpatialAnimator must be between 0 and 1");
-			}
-			
-			this.speed = speed;
-		}
-
-		public boolean isStartEnabled() {
-			return isStartEnabled;
-		}
-
-		public void setStartEnabled(boolean isStartEnabled) {
-			this.isStartEnabled = isStartEnabled;
-		}
-		
-		public boolean isComplete() {
-			return current == START || current == END;
-		}
 	}
 }
