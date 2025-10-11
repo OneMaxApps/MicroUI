@@ -8,9 +8,10 @@ import static java.util.Objects.requireNonNull;
 import static microui.core.base.SpatialView.HooksUpdateMode.REACTIVE;
 
 import microui.MicroUI;
+import microui.core.effect.SpatialAnimator;
 
 //Status: STABLE - Do not modify
-//Last Reviewed: 03.10.2025
+//Last Reviewed: 11.10.2025
 public abstract class SpatialView extends View {
 	private static final int DEFAULT_MIN_SIZE = 1;
 	private static final int DEFAULT_MAX_SIZE = 1000;
@@ -22,6 +23,8 @@ public abstract class SpatialView extends View {
 
 	private HooksUpdateMode hooksUpdateMode;
 
+	private SpatialAnimator spatialAnimator;
+	
 	public SpatialView(float x, float y, float width, float height) {
 		initDefaultMinMaxSize();
 		setBounds(x, y, width, height);
@@ -60,6 +63,23 @@ public abstract class SpatialView extends View {
 			debugOnDraw();	
 		}
 		
+		if(spatialAnimator != null) {
+			spatialAnimator.update();
+		}
+	}
+	
+	public final SpatialAnimator getSpatialAnimator() {
+		return spatialAnimator;
+	}
+
+	public final void setSpatialAnimator(SpatialAnimator spatialAnimator) {
+		if(spatialAnimator == null) {
+			throw new NullPointerException("the spatialAnimator object cannot be null");
+		}
+		
+		this.spatialAnimator = spatialAnimator;
+		
+		spatialAnimator.setTargetSpatialView(this);
 	}
 
 	public final float getX() {
